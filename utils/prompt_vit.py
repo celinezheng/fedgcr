@@ -31,7 +31,7 @@ MODEL_ZOO = {
 class VptCfgNode():
     def __init__(self):
         super().__init__()
-        self.NUM_TOKENS = 50
+        self.NUM_TOKENS = 4
         self.DEEP = False
         self.DROPOUT = 0.0
         self.LOCATION = "prepend"
@@ -52,7 +52,7 @@ class VptCfgNode():
 
 def get_vpt_cfg(args):
     prompt_cfg = VptCfgNode()
-    prompt_cfg.DEEP = args.deep
+    # prompt_cfg.DEEP = args.deep
     return prompt_cfg
     
 
@@ -66,11 +66,7 @@ class PromptViT(nn.Module):
     def __init__(self, args, model_type="sup_vitb16_imagenet21k", vis=False):
         super().__init__()
 
-        if args.model=='prompt':
-            prompt_cfg = get_vpt_cfg(args)
-        else:
-            prompt_cfg = None
-        #print(prompt_cfg)
+        prompt_cfg = get_vpt_cfg(args)
         self.froze_enc = False
         self.model_type = model_type
         self.build_backbone(

@@ -228,7 +228,7 @@ class ViT(nn.Module):
         feat = self.network.encoder(x)
          # Classifier "token" as used by standard language architectures
         x = feat[:, 0]
-
+        feat = feat[:, 1:5]
         # x = self.network.heads(x)
         return feat, x
 

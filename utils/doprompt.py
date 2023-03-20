@@ -46,24 +46,21 @@ class ERM(Algorithm):
                                   hparams)
         self.global_iter = 0
         self.featurizer = networks.Featurizer(input_shape, self.hparams)
-        self.featurizer.requires_grad_ = False
+        for param in self.featurizer.parameters():
+            param.requires_grad = False
         self.classifier = networks.Classifier(
             self.featurizer.n_outputs,
             num_classes,
             self.hparams['nonlinear_classifier'])
         print(self.featurizer.n_outputs, self.hparams['nonlinear_classifier'])
-        # self.classifier = networks.ProjandDeci(
-        #     self.featurizer.n_outputs,
-        #     256,
-        #     num_classes,
-        #     )
         self.network = nn.Sequential(self.featurizer, self.classifier)
         if self.hparams['vit_base_16']:
             optimizer = torch.optim.AdamW
         else:
             optimizer = torch.optim.Adam
-        
-        if self.hparams["lr"] > 0:
+        self.fulltune = False
+
+        if self.hparams["lr"] > 0 and self.fulltune:
             # full finetune
             self.optimizer = optimizer(
                 [
@@ -114,11 +111,9 @@ class PrependPrompt():
     def __exit__(self, exc_type, exc_value, exc_traceback):
         self.hook.remove()
 
-
 class DoPrompt(ERM):
     def __init__(self, input_shape=(3, 224, 224), num_classes=10, num_domains=4, hparams=None):
         super().__init__(input_shape, num_classes, num_domains, hparams)
-        print(self.hparams['lambda'])
         self.num_domains = num_domains
         self.hidden_dim = self.featurizer.network.hidden_dim
         # self.prompt_dim = self.hparams['prompt_dim']
@@ -144,6 +139,7 @@ class DoPrompt(ERM):
             lr=self.hparams["lr_project"],
             weight_decay=self.hparams["wd_project"],
         )
+        
         self.optimizer = torch.optim.AdamW(
             [
                 # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
@@ -175,15 +171,15 @@ class DoPrompt(ERM):
         gt = gt.unsqueeze(-1).repeat(1, 1, self.prompt_dim)
         return gt
     
+    
     @torch.no_grad()
     def forward_pk_feature(self, all_x, client_idx):
         domain_prompts = self.minibatch_domain_prompt(client_idx, all_x.shape[0])
         with PrependPrompt(self.featurizer, domain_prompts):
-            # all_logit = self.network(all_x)
-            # feature, x = self.featurizer.forward_vit_feature(all_x)
-            x = self.featurizer(all_x)
+            feature, _ = self.featurizer.forward_vit_feature(all_x)
+            # cls = self.featurizer(all_x)
             
-        return x
+        return feature, domain_prompts
     
     # todo
     def forward_pa_feature(self, all_x, all_z):
@@ -192,12 +188,10 @@ class DoPrompt(ERM):
         all_bias = F.softmax(all_bias, dim=1)
         domain_prompts = self.x_domain_prompt_comb(all_bias)
         with PrependPrompt(self.featurizer, domain_prompts):
-            # all_logit = self.network(all_x)
-            # feature, x = self.featurizer.forward_vit_feature(all_x)
-            x = self.featurizer(all_x)
-            logits = self.classifier(x)
+            feature, cls = self.featurizer.forward_vit_feature(all_x)
+            logits = self.classifier(cls)
 
-        return logits, x
+        return logits, domain_prompts, feature
 
     def forward_prompt(self, all_x, client_idx):
         domain_prompts = self.minibatch_domain_prompt(client_idx, all_x.shape[0])
@@ -224,27 +218,22 @@ class DoPrompt(ERM):
         self.optimizer.zero_grad()
         self.project_opt.zero_grad()
         
-        disc_labels = torch.full((all_x.shape[0], ), client_idx, dtype=torch.int64, device=device)
         
         # domain prompt learning
         all_logit = self.forward_prompt(all_x, client_idx)
         loss_dp = F.cross_entropy(all_logit, all_y)
         loss_dp.backward()
-        # self.prompt_opt.step()
 
         # prompt adapter learning
         self.network.eval()
         all_z = self.forward_raw(all_x)
-        # feature_k = self.forward_pk_feature(all_x, client_idx)
         self.network.train()
         
+        disc_labels = torch.full((all_x.shape[0], ), client_idx, dtype=torch.int64, device=device)
         all_logit, all_bias = self.forward_second(all_x, all_z)
-        # all_logit, feature_a = self.forward_pa_feature(all_x, all_z)
         gt_bias = self.all_bias_gt(disc_labels, all_bias)
-        # loss_sim = F.l1_loss(feature_k, feature_a)
-        loss_a = F.cross_entropy(all_logit, all_y)
         loss_w = F.binary_cross_entropy(all_bias, gt_bias)
-        # (loss_a + self.hparams['lambda'] * loss_sim).backward()
+        loss_a = F.cross_entropy(all_logit, all_y)
         (loss_a + self.hparams['lambda'] * loss_w).backward()
         
         pred = all_logit.data.max(1)[1]
@@ -273,26 +262,26 @@ class DoPrompt(ERM):
         loss_dp = F.cross_entropy(all_logit, all_y)
         loss_dp.backward()
         self.prompt_opt.step()
-        
+
         # prompt adapter learning
         self.network.eval()
         all_z = self.forward_raw(all_x)
-        feature_k = self.forward_pk_feature(all_x, client_idx)
+        # teacher_logit = self.forward_prompt(all_x, client_idx)
+        # cls represent patch importance
         self.network.train()
         
-        # all_logit, all_bias = self.forward_second(all_x, all_z)
-        all_logit, feature_a = self.forward_pa_feature(all_x, all_z)
-        # gt_bias = self.all_bias_gt(disc_labels, all_bias)
-        # loss_sim = F.l1_loss(feature_k, feature_a)
-        # loss_sim = F.mse_loss(feature_k, feature_a)
-        target = torch.ones(feature_a.shape[0]).to(device)
-        loss_sim = F.cosine_embedding_loss(feature_k, feature_a, target)
+        feat_k, pk = self.forward_pk_feature(all_x, client_idx)
+        all_logit, pa, feat_a = self.forward_pa_feature(all_x, all_z)
+        loss_sim = F.mse_loss(feat_a, feat_k)
+        # loss_a = loss_fn_kd(all_logit, all_y, teacher_logit)
+
         loss_a = F.cross_entropy(all_logit, all_y)
         (loss_a + self.hparams['lambda'] * loss_sim).backward()
         # (loss_a + 0.1 * loss_sim).backward()
         
         pred = all_logit.data.max(1)[1]
         correct = pred.eq(all_y.view(-1)).sum().item()
+        
         self.optimizer.step()
         self.project_opt.step()
 
