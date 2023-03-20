@@ -10,126 +10,24 @@ import torch.nn as nn
 import torch.optim as optim
 
 import pickle as pkl
-from utils.data_utils import DomainNetDataset
 from utils.prompt_vit import PromptViT
 import argparse
 import time
 import copy
-import torchvision.transforms as transforms
 import random
 import numpy as np
 from utils.doprompt import DoPrompt
 from domainbed import hparams_registry, misc
 import json
-from utils.util import train, train_doprompt, test, communication, train_fedprox
+from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data
 
 def write_log(msg):
-    log_path = f'../logs/domainnet_{args.expname}'
+    log_path = f'../logs/{args.dataset}_{args.expname}'
     if not os.path.exists(log_path):
         os.makedirs(log_path)
     with open(os.path.join(log_path, f'{args.mode}_lsim={args.lsim}.log'), 'a') as logfile:
         logfile.write(msg)
       
-def prepare_data(args):
-    data_base_path = '../../data'
-    transform_train = transforms.Compose([
-            transforms.Resize([224, 224]),            
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomRotation((-30,30)),
-            transforms.ToTensor(),
-    ])
-
-    transform_test = transforms.Compose([
-            transforms.Resize([224, 224]),            
-            transforms.ToTensor(),
-    ])
-    
-    # clipart
-    clipart_trainset = DomainNetDataset(data_base_path, 'clipart', transform=transform_train)
-    clipart_testset = DomainNetDataset(data_base_path, 'clipart', transform=transform_test, train=False)
-    # infograph
-    infograph_trainset = DomainNetDataset(data_base_path, 'infograph', transform=transform_train)
-    infograph_testset = DomainNetDataset(data_base_path, 'infograph', transform=transform_test, train=False)
-    # painting
-    painting_trainset = DomainNetDataset(data_base_path, 'painting', transform=transform_train)
-    painting_testset = DomainNetDataset(data_base_path, 'painting', transform=transform_test, train=False)
-    # quickdraw
-    quickdraw_trainset = DomainNetDataset(data_base_path, 'quickdraw', transform=transform_train)
-    quickdraw_testset = DomainNetDataset(data_base_path, 'quickdraw', transform=transform_test, train=False)
-    # real
-    real_trainset = DomainNetDataset(data_base_path, 'real', transform=transform_train)
-    real_testset = DomainNetDataset(data_base_path, 'real', transform=transform_test, train=False)
-    # sketch
-    sketch_trainset = DomainNetDataset(data_base_path, 'sketch', transform=transform_train)
-    sketch_testset = DomainNetDataset(data_base_path, 'sketch', transform=transform_test, train=False)
-
-    data_len = [len(clipart_trainset), len(infograph_trainset), len(painting_trainset), len(quickdraw_trainset), len(real_trainset), len(sketch_trainset)]
-    total_data = sum(data_len)
-    print(total_data)
-    client_weights = [di/total_data for di in data_len]
-    train_ratio = 0.05
-    valid_ratio = 0.05
-    
-    val_len, train_len = valid_ratio * len(clipart_trainset), train_ratio * len(clipart_trainset)
-    val_len, train_len = int(val_len), int(train_len)
-    clipart_valset   = torch.utils.data.Subset(clipart_trainset, list(range(len(clipart_trainset)))[-val_len:])
-    clipart_trainset = torch.utils.data.Subset(clipart_trainset, list(range(train_len)))
-    
-    val_len, train_len = valid_ratio * len(infograph_trainset), train_ratio * len(infograph_trainset)
-    val_len, train_len = int(val_len), int(train_len)
-    infograph_valset   = torch.utils.data.Subset(infograph_trainset, list(range(len(infograph_trainset)))[-val_len:])
-    infograph_trainset = torch.utils.data.Subset(infograph_trainset, list(range(train_len)))
-    
-    val_len, train_len = valid_ratio * len(painting_trainset), train_ratio * len(painting_trainset)
-    val_len, train_len = int(val_len), int(train_len)
-    painting_valset   = torch.utils.data.Subset(painting_trainset, list(range(len(painting_trainset)))[-val_len:])
-    painting_trainset = torch.utils.data.Subset(painting_trainset, list(range(train_len)))
-
-    val_len, train_len = valid_ratio * len(quickdraw_trainset), train_ratio * len(quickdraw_trainset)
-    val_len, train_len = int(val_len), int(train_len)
-    quickdraw_valset   = torch.utils.data.Subset(quickdraw_trainset, list(range(len(quickdraw_trainset)))[-val_len:])
-    quickdraw_trainset = torch.utils.data.Subset(quickdraw_trainset, list(range(train_len)))
-
-    val_len, train_len = valid_ratio * len(real_trainset), train_ratio * len(real_trainset)
-    val_len, train_len = int(val_len), int(train_len)
-    real_valset   = torch.utils.data.Subset(real_trainset, list(range(len(real_trainset)))[-val_len:])
-    real_trainset = torch.utils.data.Subset(real_trainset, list(range(train_len)))
-
-    val_len, train_len = valid_ratio * len(sketch_trainset), train_ratio * len(sketch_trainset)
-    val_len, train_len = int(val_len), int(train_len)
-    sketch_valset   = torch.utils.data.Subset(sketch_trainset, list(range(len(sketch_trainset)))[-val_len:])
-    sketch_trainset = torch.utils.data.Subset(sketch_trainset, list(range(train_len)))
-
-    clipart_train_loader = torch.utils.data.DataLoader(clipart_trainset, batch_size=args.batch, shuffle=True)
-    clipart_val_loader   = torch.utils.data.DataLoader(clipart_valset, batch_size=args.batch, shuffle=False)
-    clipart_test_loader  = torch.utils.data.DataLoader(clipart_testset, batch_size=args.batch, shuffle=False)
-
-    infograph_train_loader = torch.utils.data.DataLoader(infograph_trainset, batch_size=args.batch, shuffle=True)
-    infograph_val_loader = torch.utils.data.DataLoader(infograph_valset, batch_size=args.batch, shuffle=False)
-    infograph_test_loader = torch.utils.data.DataLoader(infograph_testset, batch_size=args.batch, shuffle=False)
-
-    painting_train_loader = torch.utils.data.DataLoader(painting_trainset, batch_size=args.batch, shuffle=True)
-    painting_val_loader = torch.utils.data.DataLoader(painting_valset, batch_size=args.batch, shuffle=False)
-    painting_test_loader = torch.utils.data.DataLoader(painting_testset, batch_size=args.batch, shuffle=False)
-
-    quickdraw_train_loader = torch.utils.data.DataLoader(quickdraw_trainset, batch_size=args.batch, shuffle=True)
-    quickdraw_val_loader = torch.utils.data.DataLoader(quickdraw_valset, batch_size=args.batch, shuffle=False)
-    quickdraw_test_loader = torch.utils.data.DataLoader(quickdraw_testset, batch_size=args.batch, shuffle=False)
-
-    real_train_loader = torch.utils.data.DataLoader(real_trainset, batch_size=args.batch, shuffle=True)
-    real_val_loader = torch.utils.data.DataLoader(real_valset, batch_size=args.batch, shuffle=False)
-    real_test_loader = torch.utils.data.DataLoader(real_testset, batch_size=args.batch, shuffle=False)
-
-    sketch_train_loader = torch.utils.data.DataLoader(sketch_trainset, batch_size=args.batch, shuffle=True)
-    sketch_val_loader = torch.utils.data.DataLoader(sketch_valset, batch_size=args.batch, shuffle=False)
-    sketch_test_loader = torch.utils.data.DataLoader(sketch_testset, batch_size=args.batch, shuffle=False)
-    
-
-    train_loaders = [clipart_train_loader, infograph_train_loader, painting_train_loader, quickdraw_train_loader, real_train_loader, sketch_train_loader]
-    val_loaders = [clipart_val_loader, infograph_val_loader, painting_val_loader, quickdraw_val_loader, real_val_loader, sketch_val_loader]
-    test_loaders = [clipart_test_loader, infograph_test_loader, painting_test_loader, quickdraw_test_loader, real_test_loader, sketch_test_loader]
-    print(client_weights)
-    return train_loaders, val_loaders, test_loaders, client_weights
 
 if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -148,11 +46,12 @@ if __name__ == '__main__':
     parser.add_argument('--wk_iters', type = int, default=1, help = 'optimization iters in local worker between communication')
     parser.add_argument('--mode', type = str, default='DoPrompt', help='[FedBN | FedAvg | DoPrompt]')
     parser.add_argument('--mu', type=float, default=1e-3, help='The hyper parameter for fedprox')
-    parser.add_argument('--save_path', type = str, default='../checkpoint/domainnet', help='path to save the checkpoint')
+    parser.add_argument('--save_path', type = str, default='../checkpoint', help='path to save the checkpoint')
     parser.add_argument('--resume', action='store_true', help ='resume training from the save path checkpoint')
     parser.add_argument('--deep', action='store_true', help ='deep prompt')
     parser.add_argument('--lsim', action='store_true', help ='lsim loss for adapter')
     parser.add_argument('--dataset', type=str, default='digit')
+    parser.add_argument('--percent', type = float, default= 0.2, help ='percentage of dataset to train')
     parser.add_argument('--num_classes', type = int, default=10, help ='number of classes')
     parser.add_argument('--model', type = str, default='prompt', help='prompt | vit-linear')
     parser.add_argument('--hparams', type=str,
@@ -162,7 +61,7 @@ if __name__ == '__main__':
     parser.add_argument('--expname', type=str, default='prompt-sim')
     args = parser.parse_args()
 
-    exp_folder = f'fed_domainnet_{args.expname}'
+    exp_folder = f'fed_{args.dataset}_{args.expname}'
 
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
@@ -171,6 +70,7 @@ if __name__ == '__main__':
 
     write_log('==={}===\n'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     write_log('===Setting===\n')
+    write_log('    dataset: {}\n'.format(args.dataset))
     write_log('    lr: {}\n'.format(args.lr))
     write_log('    batch: {}\n'.format(args.batch))
     write_log('    iters: {}\n'.format(args.iters))
@@ -184,14 +84,22 @@ if __name__ == '__main__':
     if args.hparams:
         hparams.update(json.loads(args.hparams))
     
-    train_loaders, val_loaders, test_loaders, client_weights = prepare_data(args)
+    if args.dataset.lower()[:6] == 'domain':
+        # name of each datasets
+        datasets = ['Clipart', 'Infograph', 'Painting', 'Quickdraw', 'Real', 'Sketch']
+    elif args.dataset.lower()[:5] == 'digit':
+        datasets = ['MNIST', 'SVHN', 'USPS', 'SynthDigits', 'MNIST-M']
+    elif args.dataset.lower()[:6] == 'office':
+        datasets = ['Amazon', 'Caltech', 'DSLR', 'Webcam']
+    else:
+        import warnings
+        warnings.warn("invalid args.dataset")
+        exit(0)
+    train_loaders, val_loaders, test_loaders = prepare_data(args)
 
-    
-    # name of each datasets
-    datasets = ['Clipart', 'Infograph', 'Painting', 'Quickdraw', 'Real', 'Sketch']
     # federated client number
     client_num = len(datasets)
-    # client_weights = [1/client_num for i in range(client_num)]
+    client_weights = [1/client_num for i in range(client_num)]
     
     # setup model
     if args.mode.lower() == 'fedavg':
