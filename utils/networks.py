@@ -79,6 +79,19 @@ class Project(nn.Module):
         x = self.output(x)
         return x
 
+class MetaNet(nn.Module):
+    def __init__(self, n_inputs, prompt_num, token_dim, mlp_width) -> None:
+        super().__init__()
+        self.input = nn.Linear(n_inputs, mlp_width)
+        self.output = nn.Linear(mlp_width, prompt_num*token_dim)
+        self.prompt_num = prompt_num
+        self.token_dim = token_dim
+
+    def forward(self, x):
+        x = self.input(x)
+        x = F.relu(x)
+        x = self.output(x)
+        return x
 
 class ResNet(torch.nn.Module):
     """ResNet with the softmax chopped off and the batchnorm frozen"""

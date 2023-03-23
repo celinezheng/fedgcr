@@ -1,25 +1,42 @@
-# python fed_digits.py --wk_iters 5 --iters 10 --expname 0.01data --mode FedAvg --lr 1e-2
-# python fed_digits.py --hparams '{"lr_classifier": 1e-3}' --lsim --wk_iters 10 --iters 5 --expname 0.01data
-# python fed_digits.py --hparams '{"lr_classifier": 1e-3}' --wk_iters 10 --iters 5 --expname 0.01data
-# python fed_digits.py --expname 0.01data --mode FedAvg --test
-# python fed_digits.py --lsim --expname 0.01data --test
-# python fed_digits.py --expname 0.01data --test
-
-# python fed_office.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --lsim --wk_iters 10 --iters 5 --expname mse-prompt-out-0.6data
-# python fed_domainnet.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --lsim --wk_iters 10 --iters 5 --expname mse-prompt-out-0.3data
-# python fed_digits.py --wk_iters 10 --iters 5 --expname 0.1data --mode FedAvg 
-# python fed_office.py --wk_iters 10 --iters 5 --expname 0.6data --mode FedAvg 
-python train.py --dataset digit --percent 0.05 --wk_iters 2 --iters 2 --expname init --mode FedAvg --lr 1e-2
-python train.py --dataset office --percent 1 --wk_iters 2 --iters 2 --expname init --mode FedAvg --lr 1e-2
-python train.py --dataset domainnet --percent 0.05 --wk_iters 2 --iters 2 --expname init --mode FedAvg --lr 1e-2
-# python fed_domainnet.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --wk_iters 5 --iters 10 --expname 0.05datadiff
-# python fed_domainnet.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --lsim --wk_iters 5 --iters 10 --expname 0.05datadiff --resume
-# python fed_digits.py --expname 0.1data --test --mode FedAvg
-# python fed_digits.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --lsim --expname mse-prompt-out-0.1data --test
+# python train.py --dataset office --percent 1 --wk_iters 5 --iters 10 --expname baseline --mode FedPer --lr 1e-2
+# python train.py --dataset digit --percent 0.1 --wk_iters 5 --iters 20 --expname 2ClientPerDomain --mode FedPrompt --lr 1e-2
+# python train.py --dataset digit --percent 0.1 --wk_iters 5 --iters 20 --expname 2ClientPerDomain --mode DoPrompt --lr 1e-2 --resume
+# python train.py --dataset digit --percent 0.1 --wk_iters 1 --iters 1 --expname uneven --mode FedPrompt --lr 1e-2
+# python train.py --dataset digit --percent 0.1 --wk_iters 5 --iters 10 --expname uneven --mode FedPrompt --lr 1e-2
+# python train.py --dataset digit --percent 0.1 --wk_iters 5 --iters 10 --expname uneven --mode DoPrompt --lr 1e-2
+# python train.py --dataset digit --percent 0.1 --expname uneven --mode DoPrompt --lr 1e-2 --test --batch 8
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 40 --expname uneven --mode DoPrompt --lr 1e-2 --resume
+python train.py --dataset digit --percent 0.1 --wk_iters 5 --iters 10 --expname uneven_alignonce --mode FedPrompt --lr 1e-2
+python train.py --dataset digit --percent 0.1 --expname uneven_alignonce --mode FedPrompt --lr 1e-2 --test --batch 8
+python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname uneven_alignonce --mode FedPrompt --lr 1e-2
+python train.py --dataset domainnet --percent 0.05 --expname uneven_alignonce --mode FedPrompt --lr 1e-2 --test --batch 8
 
 
-# python fed_office.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --wk_iters 10 --iters 5
-# python fed_domainnet.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}'  --lsim --wk_iters 10 --iters 3
-# python fed_domainnet.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}'  --wk_iters 10 --iters 3
-# python fed_domainnet.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --lsim --test --batch 1
-# python fed_domainnet.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --test --batch 12
+# python train.py --dataset dkomainnet --percent 0.05 --expname uneven --mode DoPrompt --lr 1e-2 --test --batch 8
+
+
+### dg
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname dg_uneven --target_domain Clipart --mode FedPrompt --lr 1e-2
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname dg_uneven --target_domain Clipart --mode DoPrompt --lr 1e-2
+# python train.py --dataset domainnet --percent 0.05 --expname dg --target_domain Clipart --mode FedPrompt --test --batch 8
+# python train.py --dataset domainnet --percent 0.05 --expname dg --target_domain Clipart --mode DoPrompt --test --batch 8
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname dg_uneven --target_domain Infograph --mode FedPrompt --lr 1e-2
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname dg_uneven --target_domain Infograph --mode DoPrompt --lr 1e-2
+# python train.py --dataset domainnet --percent 0.05 --expname dg --target_domain Infograph --mode FedPrompt --test --batch 8
+# python train.py --dataset domainnet --percent 0.05 --expname dg --target_domain Infograph --mode DoPrompt --test --batch 8
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname dg_uneven --target_domain Painting --mode FedPrompt --lr 1e-2
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname dg_uneven --target_domain Painting --mode DoPrompt --lr 1e-2
+# python train.py --dataset domainnet --percent 0.05 --expname dg --target_domain Painting --mode FedPrompt --test --batch 8
+# python train.py --dataset domainnet --percent 0.05 --expname dg --target_domain Painting --mode DoPrompt --test --batch 8
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname dg_uneven --target_domain QuickDraw --mode FedPrompt --lr 1e-2
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname dg_uneven --target_domain QuickDraw --mode DoPrompt --lr 1e-2
+# python train.py --dataset domainnet --percent 0.05 --expname dg --target_domain QuickDraw --mode FedPrompt --test --batch 8
+# python train.py --dataset domainnet --percent 0.05 --expname dg --target_domain QuickDraw --mode DoPrompt --test --batch 8
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname dg_uneven --target_domain Real --mode FedPrompt --lr 1e-2
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname dg_uneven --target_domain Real --mode DoPrompt --lr 1e-2
+# python train.py --dataset domainnet --percent 0.05 --expname dg --target_domain Real --mode FedPrompt --test --batch 8
+# python train.py --dataset domainnet --percent 0.05 --expname dg --target_domain Real --mode DoPrompt --test --batch 8
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname dg_uneven --target_domain Sketch --mode FedPrompt --lr 1e-2
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname dg_uneven --target_domain Sketch --mode DoPrompt --lr 1e-2
+# python train.py --dataset domainnet --percent 0.05 --expname dg --target_domain Sketch --mode FedPrompt --test --batch 8
+# python train.py --dataset domainnet --percent 0.05 --expname dg --target_domain Sketch --mode DoPrompt --test --batch 8
