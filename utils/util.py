@@ -387,20 +387,30 @@ def prepare_digit_uneven(args):
     mnistm_testset = torch.utils.data.Subset(mnistm_testset, list(range(len(mnistm_testset)))[:test_len]) 
 
     # min_data_len = min(len(dataset)) * args.persent
-    min_data_len = min(len(mnist_trainset), len(svhn_trainset), len(usps_trainset), len(synth_trainset), len(mnistm_trainset))
-    min_data_len = int(0.25 * min_data_len)
-    val_len = int(min_data_len * 0.4)
-    train_len = int(min_data_len * 0.6)
-    client_nums = {
-        'MNIST': 4, 
-        'SVHN': 3, 
-        'USPS': 1, 
-        'SynthDigits': 1, 
-        'MNIST-M': 1, 
-        }
+    ori_data_len = min(len(mnist_trainset), len(svhn_trainset), len(usps_trainset), len(synth_trainset), len(mnistm_trainset))
+    min_data_len = int(0.25 * ori_data_len)
+    if 'uneven-1' in args.expname.lower():
+        client_nums = {
+            'MNIST': 4, 
+            'SVHN': 3, 
+            'USPS': 1, 
+            'SynthDigits': 1, 
+            'MNIST-M': 1, 
+            }
+    elif 'uneven-2' in args.expname.lower():
+        min_data_len = int(0.2 * ori_data_len)
+        client_nums = {
+            'MNIST': 5, 
+            'SVHN': 2, 
+            'USPS': 1, 
+            'SynthDigits': 1, 
+            'MNIST-M': 1, 
+            }
     if 'uneven' not in args.expname:
         for domain in client_nums.keys():
             client_nums[domain] = 2
+    val_len = int(min_data_len * 0.4)
+    train_len = int(min_data_len * 0.6)
     print(client_nums)
     
     train_sets = {
@@ -848,6 +858,25 @@ def train_fedprompt(gidx, model, train_loader, prompt_bank, device):
 
     return loss_all/len(train_iter), correct/num_data
 
+def train_CoCoOP(model, train_loader, device):
+    model.train()
+    num_data = 0
+    correct = 0
+    loss_all = 0
+    train_iter = iter(train_loader)
+    # for step in range(len(train_iter)):
+    for step in tqdm(range(len(train_iter))):
+        x, y = next(train_iter)
+        x = x.to(device).float()
+        y = y.to(device).long()
+        num_data += y.size(0)
+        result = model.update(x, y)
+
+        loss_all += result['loss']
+        correct += result['correct']
+
+    return loss_all/len(train_iter), correct/num_data
+
 def train_fedprox(args, server_model, model, train_loader, optimizer, loss_fun, device):
     model.train()
     num_data = 0
@@ -988,6 +1017,16 @@ def communication(args, group_cnt, server_model, models, client_weights, client_
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
                     print(key)
+        elif args.mode.lower() == 'cocoop':
+            for key in server_model.state_dict().keys():
+                if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
+                    print(key)
+                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
+                    for client_idx in range(client_num):
+                        temp += client_weights[client_idx] * models[client_idx].state_dict()[key]
+                    server_model.state_dict()[key].data.copy_(temp)
+                    for client_idx in range(client_num):
+                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
         elif args.mode.lower() == 'fedprompt':
             for key in server_model.state_dict().keys():
                 if  'prompt' not in key:

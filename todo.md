@@ -1,3 +1,8 @@
 - meta loss might push away domain prompts
 - new setting: align once
 - add sample specific prompt
+- implement promptfl
+- implement CoCoOP in FL setting
+- run another uneven setting
+- run ablation test on different module
+- run on domain generalization setting

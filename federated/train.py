@@ -5,6 +5,7 @@ import sys, os
 base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(base_path)
 import numpy as np
+import math
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -16,10 +17,10 @@ import time
 import copy
 import random
 import numpy as np
-from utils.doprompt import DoPrompt, FedPrompt
+from utils.doprompt import DoPrompt, FedPrompt, CoCoOP
 from domainbed import hparams_registry, misc
 import json
-from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log
+from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log, train_CoCoOP
 from utils import util
       
 
@@ -92,9 +93,10 @@ if __name__ == '__main__':
     if 'dg' in args.expname.lower():
         domain_num -= 1
     train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
-
     # federated client number
     client_num = len(train_loaders)
+    if 'sqrt' in args.expname.lower():
+        domain_num = int(math.sqrt(client_num))
     client_weights = [1/client_num for i in range(client_num)]
     prompt_bank = None
     # setup model
@@ -116,6 +118,8 @@ if __name__ == '__main__':
         # prompt_bank = remap(all_pi, prompt_bank)
         prompt_bank = util.random_replace(all_pi, prompt_bank)
         print(prompt_bank.shape)
+    elif args.mode.lower() == 'cocoop':
+        server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
     else:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args).to(device)
@@ -190,7 +194,7 @@ if __name__ == '__main__':
     
     # Start training
     for a_iter in range(start_iter, args.iters):
-        if args.mode.lower() not in ['doprompt', 'fedprompt']:
+        if args.mode.lower() not in ['doprompt', 'fedprompt', 'cocoop']:
             optimizers = [optim.SGD(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
         else:
             optimizers = [None for _ in range(client_num)]
@@ -214,12 +218,15 @@ if __name__ == '__main__':
                         if wi == args.wk_iters-1:
                             print(f"gidx of client-{client_idx} is {gidx}")
                     train_fedprompt(gidx, model, train_loaders[client_idx], prompt_bank, device)
+                elif args.mode.lower() == 'cocoop':
+                    train_CoCoOP(model, train_loaders[client_idx], device)
                 else:
                     train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
         
         with torch.no_grad():
             # Aggregation
-            server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, client_num, domain_num, prompt_bank)
+            if args.mode.lower() != 'solo':
+                server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, client_num, domain_num, prompt_bank)
 
             # Report loss after aggregation
             for client_idx, model in enumerate(models):
