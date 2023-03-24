@@ -1,0 +1,2 @@
+- meta loss might push away domain prompts
+- new setting: align once

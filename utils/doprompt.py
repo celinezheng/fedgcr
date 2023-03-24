@@ -350,14 +350,19 @@ class FedPrompt(ERM):
         all_z = self.featurizer(all_x)
         return all_z
         
+    def forward_proj(self, x, z):
+        img_proj = self.project(z)
+        sample_prompt = img_proj.reshape((img_proj.shape[0], self.prompt_num, self.featurizer.network.hidden_dim)).cuda()
+        pi_repeat = self.prompt_tokens.repeat((x.shape[0], 1, 1)).to(self.prompt_tokens.device)
+        comb_prompt = torch.concat((sample_prompt, pi_repeat), dim=1)
+        with PrependPrompt(self.featurizer, comb_prompt):
+            logit = self.network(x)
+        return img_proj, logit
     
-    def update(self, x, y, prompt_bank, device):
+    def update(self, x, y, prompt_bank, gidx, device):
         self.prompt_opt.zero_grad()
         self.optimizer.zero_grad()
         self.project_opt.zero_grad()
-        # print(self.prompt_tokens[0][0])
-        
-        # disc_labels = torch.full((all_x.shape[0], ), client_idx, dtype=torch.int64, device=device)
         
         # domain prompt learning
         all_logit = self.forward_prompt(x)
@@ -369,13 +374,22 @@ class FedPrompt(ERM):
         self.network.eval()
         hint = self.forward_raw(x)
         self.network.train()
+        # todo with gmap
         img_proj = self.project(hint)
+        # server as new prompt for classification
+        
+        #if gidx == -1:
         reshape_pb = torch.concat((self.prompt_tokens.detach().unsqueeze(0), prompt_bank))
+        labels = torch.zeros(x.shape[0], dtype=torch.long).to(device)
+        # else:
+        #     reshape_pb = prompt_bank
+        #     # reshape_pb[gidx].data.copy_(self.prompt_tokens.detach())
+        #     labels = torch.zeros(x.shape[0], dtype=torch.long).fill_(gidx).to(device)
+        
+        
         reshape_pb = torch.reshape(reshape_pb, (reshape_pb.shape[0], self.hidden_dim*self.prompt_num))
-
         anchor_dot_contrast = torch.matmul(reshape_pb, img_proj.T).to(device)
 
-        labels = torch.zeros(x.shape[0], dtype=torch.long).to(device)
         # print(labels.shape, anchor_dot_contrast.shape)
         loss_con = F.cross_entropy(anchor_dot_contrast.T, labels)
         loss_con.backward()

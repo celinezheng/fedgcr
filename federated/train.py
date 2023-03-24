@@ -130,7 +130,6 @@ if __name__ == '__main__':
     models = [copy.deepcopy(server_model).to(device) for idx in range(client_num)]
     best_changed = False
 
-
     if args.test:
         write_log(args, 'Loading snapshots...\n')
         checkpoint = torch.load(SAVE_PATH)
@@ -188,6 +187,7 @@ if __name__ == '__main__':
         best_epoch = 0
         best_acc = [0. for j in range(client_num)] 
         start_iter = 0
+    gmap = {}
     
     # Start training
     for a_iter in range(start_iter, args.iters):
@@ -209,13 +209,18 @@ if __name__ == '__main__':
                 elif args.mode.lower() == 'doprompt':
                     train_doprompt(args, model, train_loaders[client_idx], client_idx, device)
                 elif args.mode.lower() == 'fedprompt':
-                    train_fedprompt(args, model, train_loaders[client_idx], prompt_bank, device)
+                    if len(gmap) == 0: gidx = -1
+                    else: 
+                        gidx = gmap[client_idx]
+                        if wi == args.wk_iters-1:
+                            print(f"gidx of client-{client_idx} is {gidx}")
+                    train_fedprompt(gidx, model, train_loaders[client_idx], prompt_bank, device)
                 else:
                     train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
         
         with torch.no_grad():
             # Aggregation
-            server_model, models, prompt_bank = communication(args, a_iter, server_model, models, client_weights, client_num, domain_num, prompt_bank)
+            server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, client_num, domain_num, prompt_bank)
 
             # Report loss after aggregation
             for client_idx, model in enumerate(models):
@@ -259,7 +264,7 @@ if __name__ == '__main__':
                         'a_iter': a_iter
                     }, SAVE_PATH)
                     best_changed = False
-                    
+                # todo save gmap
                 else:
                     torch.save({
                         'server_model': server_model.state_dict(),

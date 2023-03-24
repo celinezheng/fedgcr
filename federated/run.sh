@@ -8,8 +8,8 @@
 # python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 40 --expname uneven --mode DoPrompt --lr 1e-2 --resume
 python train.py --dataset digit --percent 0.1 --wk_iters 5 --iters 10 --expname uneven_alignonce --mode FedPrompt --lr 1e-2
 python train.py --dataset digit --percent 0.1 --expname uneven_alignonce --mode FedPrompt --lr 1e-2 --test --batch 8
-python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname uneven_alignonce --mode FedPrompt --lr 1e-2
-python train.py --dataset domainnet --percent 0.05 --expname uneven_alignonce --mode FedPrompt --lr 1e-2 --test --batch 8
+# python train.py --dataset domainnet --percent 0.05 --wk_iters 5 --iters 10 --expname uneven_alignonce --mode FedPrompt --lr 1e-2
+# python train.py --dataset domainnet --percent 0.05 --expname uneven_alignonce --mode FedPrompt --lr 1e-2 --test --batch 8
 
 
 # python train.py --dataset dkomainnet --percent 0.05 --expname uneven --mode DoPrompt --lr 1e-2 --test --batch 8

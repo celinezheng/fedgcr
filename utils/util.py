@@ -826,7 +826,7 @@ def train_doprompt(args, model, train_loader, client_idx, device):
 
     return loss_all/len(train_iter), correct/num_data
 
-def train_fedprompt(args, model, train_loader, prompt_bank, device):
+def train_fedprompt(gidx, model, train_loader, prompt_bank, device):
     model.train()
     num_data = 0
     correct = 0
@@ -838,7 +838,7 @@ def train_fedprompt(args, model, train_loader, prompt_bank, device):
         x = x.to(device).float()
         y = y.to(device).long()
         num_data += y.size(0)
-        result = model.update(x, y, prompt_bank, device)
+        result = model.update(x, y, prompt_bank, gidx, device)
 
         loss_all += result['loss']
         correct += result['correct']
@@ -938,7 +938,8 @@ def random_replace(all_pi, prompt_bank):
     return all_pi[perm].detach().clone()
 
 ################# Key Function ########################
-def communication(args, round, server_model, models, client_weights, client_num, domain_num, prompt_bank=None):
+def communication(args, group_cnt, server_model, models, client_weights, client_num, domain_num, prompt_bank=None):
+    gmap = {}
     alpha = 0.99
     if args.mode.lower() != 'fedprompt':
         prompt_bank = None
@@ -998,7 +999,7 @@ def communication(args, round, server_model, models, client_weights, client_num,
                     print(key)
                     cnt = [0 for i in range(domain_num)]
                     all_pi = None
-                    if round == 0:
+                    if group_cnt == 0:
                         for client_idx in range(client_num):
                             pi = models[client_idx].state_dict()[key].unsqueeze(0)
                             if client_idx == 0:
@@ -1009,6 +1010,7 @@ def communication(args, round, server_model, models, client_weights, client_num,
                     temp = torch.zeros_like(prompt_bank, dtype=torch.float32)
                     for client_idx in range(client_num):
                         didx = get_domain_idx(models[client_idx].state_dict()[key], prompt_bank)
+                        gmap[client_idx] = didx
                         cnt[didx] += 1
                         temp[didx] += models[client_idx].state_dict()[key]
                         # temp = prompt_bank[didx].data*(1-alpha) + alpha*models[client_idx].state_dict()[key]
@@ -1039,4 +1041,4 @@ def communication(args, round, server_model, models, client_weights, client_num,
                     for client_idx in range(len(client_weights)):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
 
-    return server_model, models, prompt_bank
+    return server_model, models, prompt_bank, gmap
