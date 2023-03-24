@@ -9,7 +9,7 @@ def write_log(args, msg):
     log_path = f'../logs/{args.dataset}_{args.expname}'
     if not os.path.exists(log_path):
         os.makedirs(log_path)
-    with open(os.path.join(log_path, f'{args.mode}_lsim={args.lsim}.log'), 'a') as logfile:
+    with open(os.path.join(log_path, f'{args.mode}.log'), 'a') as logfile:
         logfile.write(msg)
 
 def prepare_domainnet(args):
@@ -147,6 +147,10 @@ def prepare_domainnet_uneven(args):
         'Real': 1, 
         'Sketch':1
         }
+    if 'uneven' not in args.expname:
+        for domain in client_nums.keys():
+            client_nums[domain] = 2   
+    print(client_nums)
     test_sets = {
         'Clipart': clipart_testset, 
         'Infograph': infograph_testset, 
@@ -394,6 +398,11 @@ def prepare_digit_uneven(args):
         'SynthDigits': 1, 
         'MNIST-M': 1, 
         }
+    if 'uneven' not in args.expname:
+        for domain in client_nums.keys():
+            client_nums[domain] = 2
+    print(client_nums)
+    
     train_sets = {
         'MNIST': mnist_trainset, 
         'SVHN': synth_trainset, 
@@ -769,15 +778,9 @@ def prepare_office(args):
 
 def prepare_data(args):
     if args.dataset.lower()[:6] == 'domain':
-        if 'uneven' in args.expname:
-            return prepare_domainnet_uneven(args)
-        else:
-            return prepare_domainnet_multi(args), None
+        return prepare_domainnet_uneven(args)
     elif args.dataset.lower()[:5] == 'digit':
-        if 'uneven' in args.expname:
-            return prepare_digit_uneven(args)
-        else:
-            return prepare_digit_multi(args), None
+        return prepare_digit_uneven(args)
     elif args.dataset.lower()[:6] == 'office':
         return prepare_office(args)
 

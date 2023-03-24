@@ -43,7 +43,6 @@ if __name__ == '__main__':
     parser.add_argument('--save_path', type = str, default='../checkpoint', help='path to save the checkpoint')
     parser.add_argument('--resume', action='store_true', help ='resume training from the save path checkpoint')
     parser.add_argument('--deep', action='store_true', help ='deep prompt')
-    parser.add_argument('--lsim', action='store_true', help ='lsim loss for adapter')
     parser.add_argument('--dataset', type=str, default='digit')
     parser.add_argument('--percent', type = float, default= 0.2, help ='percentage of dataset to train')
     parser.add_argument('--num_classes', type = int, default=10, help ='number of classes')
@@ -61,7 +60,7 @@ if __name__ == '__main__':
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
         os.makedirs(args.save_path)
-    SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_lsim={args.lsim}')
+    SAVE_PATH = os.path.join(args.save_path, f'{args.mode}')
 
     write_log(args, '==={}===\n'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     write_log(args, '===Setting===\n')

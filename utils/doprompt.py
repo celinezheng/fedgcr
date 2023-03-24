@@ -375,7 +375,8 @@ class FedPrompt(ERM):
         hint = self.forward_raw(x)
         self.network.train()
         # todo with gmap
-        img_proj = self.project(hint)
+        img_proj, logit = self.forward_proj(x, hint)
+        loss_m = F.cross_entropy(logit, y)
         # server as new prompt for classification
         
         #if gidx == -1:
@@ -392,7 +393,7 @@ class FedPrompt(ERM):
 
         # print(labels.shape, anchor_dot_contrast.shape)
         loss_con = F.cross_entropy(anchor_dot_contrast.T, labels)
-        loss_con.backward()
+        (loss_con + loss_m).backward()
         pred = all_logit.data.max(1)[1]
         correct = pred.eq(y.view(-1)).sum().item()
 
@@ -405,7 +406,7 @@ class FedPrompt(ERM):
         }
     
     def forward(self, x, prompt_bank):
-        return self.forward_bank(x, prompt_bank)
+        return self.forward_bank_sample(x, prompt_bank)
         # all_logit = self.forward_prompt(x)
         # return all_logit
     
@@ -413,6 +414,24 @@ class FedPrompt(ERM):
         all_logit = self.forward_prompt(x)
         return all_logit
     
+    def forward_bank_sample(self, x, prompt_bank):
+        hint = self.forward_raw(x)
+        img_proj = self.project(hint)
+        sample_prompt = img_proj.reshape((img_proj.shape[0], self.prompt_num, self.featurizer.network.hidden_dim)).cuda()
+        reshape_pb = torch.reshape(prompt_bank, (prompt_bank.shape[0], self.hidden_dim*self.prompt_num))
+        dot_contrast = F.softmax((torch.matmul(reshape_pb, img_proj.T).cuda()).T, dim=1)
+        domain_prods, domain_idxs = torch.topk(dot_contrast, k=3, dim=1)
+        domain_prods = F.normalize(domain_prods, dim=1, p=1.0)
+        domain_prods = domain_prods.unsqueeze(-1).unsqueeze(-1).repeat(1, 1, 4, 768)
+        # Hadamard product
+        chosen_tokens = domain_prods * prompt_bank[domain_idxs]
+        chosen_tokens = torch.sum(chosen_tokens, dim=1)
+        # combine domain prompt and sample prompt
+        comb_prompt = torch.concat((sample_prompt, chosen_tokens), dim=1)
+        with PrependPrompt(self.featurizer, comb_prompt):
+            logit = self.network(x)
+        return logit
+
     # todo : utilize the similarity of between input and prompt to weighted sum
     def forward_bank(self, x, prompt_bank):
         hint = self.forward_raw(x)
