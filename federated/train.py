@@ -90,13 +90,15 @@ if __name__ == '__main__':
         import warnings
         warnings.warn("invalid args.dataset")
         exit(0)
+    train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
+    client_num = len(train_loaders)
     if 'dg' in args.expname.lower():
         domain_num -= 1
-    train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
-    # federated client number
-    client_num = len(train_loaders)
-    if 'sqrt' in args.expname.lower():
+    elif 'sqrt' in args.expname.lower():
+        # federated client number
         domain_num = int(math.sqrt(client_num))
+    print(f"domain number = {domain_num}")
+    write_log(args, f"domain number = {domain_num}\n")
     client_weights = [1/client_num for i in range(client_num)]
     prompt_bank = None
     # setup model

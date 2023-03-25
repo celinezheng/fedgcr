@@ -150,6 +150,15 @@ def prepare_domainnet_uneven(args):
     if 'uneven' not in args.expname:
         for domain in client_nums.keys():
             client_nums[domain] = 2   
+    elif 'uneven-2' in args.expname:
+        client_nums = {
+            'Clipart': 6, 
+            'Infograph': 3, 
+            'Painting': 1, 
+            'QuickDraw': 1, 
+            'Real': 1, 
+            'Sketch':1
+            }
     print(client_nums)
     test_sets = {
         'Clipart': clipart_testset, 
@@ -389,15 +398,14 @@ def prepare_digit_uneven(args):
     # min_data_len = min(len(dataset)) * args.persent
     ori_data_len = min(len(mnist_trainset), len(svhn_trainset), len(usps_trainset), len(synth_trainset), len(mnistm_trainset))
     min_data_len = int(0.25 * ori_data_len)
-    if 'uneven-1' in args.expname.lower():
-        client_nums = {
-            'MNIST': 4, 
-            'SVHN': 3, 
-            'USPS': 1, 
-            'SynthDigits': 1, 
-            'MNIST-M': 1, 
-            }
-    elif 'uneven-2' in args.expname.lower():
+    client_nums = {
+        'MNIST': 4, 
+        'SVHN': 3, 
+        'USPS': 1, 
+        'SynthDigits': 1, 
+        'MNIST-M': 1, 
+        }
+    if 'uneven-2' in args.expname.lower():
         min_data_len = int(0.2 * ori_data_len)
         client_nums = {
             'MNIST': 5, 
@@ -406,7 +414,7 @@ def prepare_digit_uneven(args):
             'SynthDigits': 1, 
             'MNIST-M': 1, 
             }
-    if 'uneven' not in args.expname:
+    elif 'uneven' not in args.expname:
         for domain in client_nums.keys():
             client_nums[domain] = 2
     val_len = int(min_data_len * 0.4)
@@ -415,14 +423,14 @@ def prepare_digit_uneven(args):
     
     train_sets = {
         'MNIST': mnist_trainset, 
-        'SVHN': synth_trainset, 
+        'SVHN': svhn_trainset, 
         'USPS': usps_trainset, 
         'SynthDigits': synth_trainset, 
         'MNIST-M': mnistm_trainset, 
         }
     test_sets = {
         'MNIST': mnist_testset, 
-        'SVHN': synth_testset, 
+        'SVHN': svhn_testset, 
         'USPS': usps_testset, 
         'SynthDigits': synth_testset, 
         'MNIST-M': mnistm_testset, 
@@ -829,10 +837,7 @@ def train_doprompt(args, model, train_loader, client_idx, device):
         x = x.to(device).float()
         y = y.to(device).long()
         num_data += y.size(0)
-        if args.lsim:
-            result = model.update(x, y, client_idx, device)
-        else:
-            result = model.update_doprompt(x, y, client_idx, device)
+        result = model.update_doprompt(x, y, client_idx, device)
 
         loss_all += result['loss']
         correct += result['correct']

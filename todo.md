@@ -3,6 +3,6 @@
 - add sample specific prompt
 - implement promptfl
 - implement CoCoOP in FL setting
-- run another uneven setting
+- run another uneven setting with sqrt(N) of domains
 - run ablation test on different module
 - run on domain generalization setting
