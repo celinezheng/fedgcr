@@ -6,3 +6,4 @@
 - run another uneven setting with sqrt(N) of domains
 - run ablation test on different module
 - run on domain generalization setting
+- thunk about the heterogeneity setting in dg mode

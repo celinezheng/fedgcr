@@ -1,14 +1,7 @@
-import random
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch.autograd as autograd
-from torch.autograd import Variable
 
-import copy
-import numpy as np
-import math
-from collections import defaultdict, OrderedDict
 from utils import networks
 
 class Algorithm(torch.nn.Module):
@@ -117,7 +110,7 @@ class DoPrompt(ERM):
         self.num_domains = num_domains
         self.hidden_dim = self.featurizer.network.hidden_dim
         # self.prompt_dim = self.hparams['prompt_dim']
-        self.prompt_dim = 4
+        self.prompt_dim = 8
         self.mlp_dim = 3072
         assert self.hparams['vit_base_16'] == True
         
@@ -304,11 +297,12 @@ class DoPrompt(ERM):
         return all_logit
 
 class FedPrompt(ERM):
-    def __init__(self, input_shape=(3, 224, 224), num_classes=10, num_domains=1, hparams=None):
+    def __init__(self, input_shape=(3, 224, 224), num_classes=10, num_domains=1, hparams=None, lambda_con=0.5):
         super().__init__(input_shape, num_classes, num_domains, hparams)
         self.hidden_dim = self.featurizer.network.hidden_dim
         self.prompt_num = 4
         self.mlp_dim = 3072
+        self.lambda_con = lambda_con
         assert self.hparams['vit_base_16'] == True
         
         # prompt tokens
@@ -393,7 +387,7 @@ class FedPrompt(ERM):
 
         # print(labels.shape, anchor_dot_contrast.shape)
         loss_con = F.cross_entropy(anchor_dot_contrast.T, labels)
-        (loss_con + loss_m).backward()
+        (self.lambda_con * loss_con + loss_m).backward()
         pred = all_logit.data.max(1)[1]
         correct = pred.eq(y.view(-1)).sum().item()
 
@@ -420,7 +414,8 @@ class FedPrompt(ERM):
         sample_prompt = img_proj.reshape((img_proj.shape[0], self.prompt_num, self.featurizer.network.hidden_dim)).cuda()
         reshape_pb = torch.reshape(prompt_bank, (prompt_bank.shape[0], self.hidden_dim*self.prompt_num))
         dot_contrast = F.softmax((torch.matmul(reshape_pb, img_proj.T).cuda()).T, dim=1)
-        domain_prods, domain_idxs = torch.topk(dot_contrast, k=3, dim=1)
+        k = min(prompt_bank.shape[0], 3)
+        domain_prods, domain_idxs = torch.topk(dot_contrast, k=k, dim=1)
         domain_prods = F.normalize(domain_prods, dim=1, p=1.0)
         domain_prods = domain_prods.unsqueeze(-1).unsqueeze(-1).repeat(1, 1, 4, 768)
         # Hadamard product
@@ -453,7 +448,7 @@ class CoCoOP(ERM):
     def __init__(self, input_shape=(3, 224, 224), num_classes=10, hparams=None):
         super().__init__(input_shape, num_classes, 1, hparams)
         self.hidden_dim = self.featurizer.network.hidden_dim
-        self.prompt_num = 1
+        self.prompt_num = 4
         self.mlp_dim = 3072
         assert self.hparams['vit_base_16'] == True
         
@@ -463,7 +458,7 @@ class CoCoOP(ERM):
         )
 
         # image projector, similar to meta-net in CoCoOP
-        self.meta_net = networks.MetaNet(self.hidden_dim, self.prompt_num, self.hidden_dim, self.mlp_dim)
+        self.meta_net = networks.MetaNet(self.hidden_dim, 1, self.hidden_dim, self.mlp_dim)
         
         # optimizer
         self.prompt_opt = torch.optim.AdamW(
@@ -498,12 +493,14 @@ class CoCoOP(ERM):
         
     def forward_proj(self, x, z):
         img_proj = self.meta_net(z)
-        sample_prompt = img_proj.reshape((img_proj.shape[0], self.prompt_num, self.featurizer.network.hidden_dim)).cuda()
+        img_proj = img_proj.repeat((self.prompt_num, 1))
+        img_proj = img_proj.reshape((x.shape[0], self.prompt_num, self.featurizer.network.hidden_dim)).cuda()
         pi_repeat = self.prompt_tokens.repeat((x.shape[0], 1, 1)).to(self.prompt_tokens.device)
-        comb_prompt = torch.concat((sample_prompt, pi_repeat), dim=1)
+        # comb_prompt = torch.concat((img_proj, pi_repeat), dim=1)
+        comb_prompt = img_proj + pi_repeat
         with PrependPrompt(self.featurizer, comb_prompt):
             logit = self.network(x)
-        return img_proj, logit
+        return logit
     
     def update(self, x, y):
         self.prompt_opt.zero_grad()
@@ -521,7 +518,7 @@ class CoCoOP(ERM):
         hint = self.forward_raw(x)
         self.network.train()
         # todo with gmap
-        _, logit = self.forward_proj(x, hint)
+        logit = self.forward_proj(x, hint)
         loss_m = F.cross_entropy(logit, y)        
         loss_m.backward()
         pred = all_logit.data.max(1)[1]
@@ -545,10 +542,11 @@ class CoCoOP(ERM):
     def forward_meta(self, x):
         hint = self.forward_raw(x)
         img_proj = self.meta_net(hint)
-        sample_prompt = img_proj.reshape((img_proj.shape[0], self.prompt_num, self.featurizer.network.hidden_dim)).cuda()
+        img_proj = img_proj.repeat((self.prompt_num, 1))
+        img_proj = img_proj.reshape((x.shape[0], self.prompt_num, self.featurizer.network.hidden_dim)).cuda()
         global_prompt = self.prompt_tokens.repeat((x.shape[0], 1, 1)).to(self.prompt_tokens.device)
         # combine domain prompt and sample prompt
-        comb_prompt = torch.concat((sample_prompt, global_prompt), dim=1)
+        comb_prompt = global_prompt + img_proj
         with PrependPrompt(self.featurizer, comb_prompt):
             logit = self.network(x)
         return logit

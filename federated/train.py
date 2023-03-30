@@ -34,11 +34,15 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
+    parser.add_argument('--tune', action='store_true', help='whether to tune hparams')
+    parser.add_argument('--memory', action='store_true', help='whether to test memory usage of each algorithm')
+    parser.add_argument('--dg', action='store_true', help='domain generalization')
     parser.add_argument('--test', action='store_true', help ='test the pretrained model')
-    parser.add_argument('--lr', type=float, default=1e-3, help='learning rate')
-    parser.add_argument('--batch', type = int, default=32, help ='batch size')
-    parser.add_argument('--iters', type = int, default=300, help = 'iterations for communication')
-    parser.add_argument('--wk_iters', type = int, default=1, help = 'optimization iters in local worker between communication')
+    parser.add_argument('--lambda_con', type=float, default=0.5, help='lambda for contrastive loss')
+    parser.add_argument('--lr', type=float, default=1e-2, help='learning rate')
+    parser.add_argument('--batch', type = int, default=16, help ='batch size')
+    parser.add_argument('--iters', type = int, default=10, help = 'iterations for communication')
+    parser.add_argument('--wk_iters', type = int, default=5, help = 'optimization iters in local worker between communication')
     parser.add_argument('--mode', type = str, default='DoPrompt', help='[FedBN | FedAvg | DoPrompt]')
     parser.add_argument('--mu', type=float, default=1e-3, help='The hyper parameter for fedprox')
     parser.add_argument('--save_path', type = str, default='../checkpoint', help='path to save the checkpoint')
@@ -57,11 +61,16 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     exp_folder = f'fed_{args.dataset}_{args.expname}'
-
+    if args.tune:
+        exp_folder += '_tune'
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
         os.makedirs(args.save_path)
     SAVE_PATH = os.path.join(args.save_path, f'{args.mode}')
+    if args.dg:
+        SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_{args.target_domain}')
+    if args.tune:
+        SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_tune_{args.lambda_con}')
 
     write_log(args, '==={}===\n'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     write_log(args, '===Setting===\n')
@@ -70,6 +79,8 @@ if __name__ == '__main__':
     write_log(args, '    batch: {}\n'.format(args.batch))
     write_log(args, '    iters: {}\n'.format(args.iters))
     write_log(args, '    wk_iters: {}\n'.format(args.wk_iters))
+    write_log(args, '    tune: {}\n'.format(args.tune))
+    write_log(args, '    lambda for constrastive: {}\n'.format(args.lambda_con))
 
     if args.hparams_seed == 0:
         hparams = hparams_registry.default_hparams(args.mode, args.dataset)
@@ -92,9 +103,9 @@ if __name__ == '__main__':
         exit(0)
     train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
     client_num = len(train_loaders)
-    if 'dg' in args.expname.lower():
+    if args.dg:
         domain_num -= 1
-    elif 'sqrt' in args.expname.lower():
+    if 'sqrt' in args.expname.lower():
         # federated client number
         domain_num = int(math.sqrt(client_num))
     print(f"domain number = {domain_num}")
@@ -105,7 +116,7 @@ if __name__ == '__main__':
     if args.mode.lower() == 'doprompt':
         server_model = DoPrompt(num_classes=args.num_classes, num_domains=client_num, hparams=hparams).to(device)
     elif args.mode.lower() == 'fedprompt':
-        server_model = FedPrompt(num_classes=args.num_classes, hparams=hparams).to(device)
+        server_model = FedPrompt(num_classes=args.num_classes, hparams=hparams, lambda_con=args.lambda_con).to(device)
         prompt_bank = nn.Parameter(
             torch.empty(domain_num, 4, 768, requires_grad=False).normal_(std=0.02)
         ).to(device)
@@ -117,17 +128,41 @@ if __name__ == '__main__':
             else:
                 all_pi = torch.concat((all_pi, pi))
         prompt_bank.detach_()
-        # prompt_bank = remap(all_pi, prompt_bank)
-        prompt_bank = util.random_replace(all_pi, prompt_bank)
         print(prompt_bank.shape)
     elif args.mode.lower() == 'cocoop':
         server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
+    elif args.mode.lower() == 'full':
+        model_type="sup_vitb16_imagenet21k"
+        server_model = PromptViT(model_type=model_type, args=args).to(device)
     else:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args).to(device)
         for name, param in server_model.named_parameters():
             if 'prompt' not in name and 'head' not in name:
                 param.requires_grad = False
+    if args.memory:
+        param_size = 0
+        trained_param = 0
+        for param in server_model.parameters():
+            param_size += param.nelement() * param.element_size()
+            if param.requires_grad:
+                trained_param += param.nelement() * param.element_size()
+        buffer_size = 0
+        for buffer in server_model.buffers():
+            buffer_size += buffer.nelement() * buffer.element_size()
+            if buffer.requires_grad:
+                trained_param += buffer.nelement() * buffer.element_size()
+        if prompt_bank is not None:
+            param_size += prompt_bank.nelement() * prompt_bank.element_size()
+        size_all_train_mb = (trained_param) / 1024**2
+        size_all_mb = (param_size + buffer_size) / 1024**2
+        print('trained size: {:.3f}MB'.format(size_all_train_mb))
+        print('model size: {:.3f}MB'.format(size_all_mb))
+        print('trained percentage trained param: {:.6f}'.format(size_all_train_mb/size_all_mb))
+        write_log(args, 'trained size: {:.3f}MB'.format(size_all_train_mb))
+        write_log(args, 'model size: {:.3f}MB'.format(size_all_mb))
+        write_log(args, 'trained percentage trained param: {:.6f}'.format(size_all_train_mb/size_all_mb))
+        exit(0)
 
     loss_fun = nn.CrossEntropyLoss()
 
@@ -144,7 +179,7 @@ if __name__ == '__main__':
             test_accs = [0. for _ in range(client_num)]
             for client_idx in range(client_num):
                 models[client_idx].load_state_dict(checkpoint['model_{}'.format(client_idx)])
-            if 'dg' in args.expname:
+            if args.dg:
                 for client_idx, datasite in enumerate(datasets):
                     _, test_acc = test(models[client_idx], target_loader, loss_fun, device, prompt_bank)
                     test_accs[client_idx] = test_acc
@@ -159,9 +194,9 @@ if __name__ == '__main__':
         else:
             test_accs = {}
             best_changed = False
-            if 'dg' in args.expname:
+            if args.dg:
                 _, test_acc = test(server_model, target_loader, loss_fun, device, prompt_bank)
-                write_log(args, f'Test Accuracy of {args.target_domain}: {np.mean(test_accs):.4f}\n')
+                write_log(args, f'Test Accuracy of {args.target_domain}: {test_acc:.4f}\n')
                 test_accs[args.target_domain] = test_acc
             else:
                 for client_idx, datasite in enumerate(datasets):

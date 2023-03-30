@@ -65,8 +65,10 @@ class PromptViT(nn.Module):
 
     def __init__(self, args, model_type="sup_vitb16_imagenet21k", vis=False):
         super().__init__()
-
-        prompt_cfg = get_vpt_cfg(args)
+        if 'full' in args.mode.lower():
+            prompt_cfg = None
+        else:
+            prompt_cfg = get_vpt_cfg(args)
         self.froze_enc = False
         self.model_type = model_type
         self.build_backbone(
@@ -110,7 +112,7 @@ class PromptViT(nn.Module):
                 crop_size, num_classes=-1, vis=vis
             )
         else:
-            print('type is vit-s')
+            print('type is full tune')
             self.enc = VisionTransformer(
             model_type, crop_size, num_classes=-1, vis=vis)
 

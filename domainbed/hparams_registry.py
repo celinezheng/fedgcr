@@ -43,7 +43,7 @@ def _hparams(algorithm, dataset, random_seed):
 
     if "prompt" in algorithm.lower() or 'coop' in algorithm.lower() or algorithm in ["PADA"]:
         _hparam('prompt_dim', 4, lambda r: 4)
-        _hparam('lambda', 10, lambda r: 1.0)
+        _hparam('lambda', 0.5, lambda r: 0.5)
         _hparam('lr_prompt', 1e-3, lambda r: 1e-3)
         _hparam('lr_project', 1e-4, lambda r: 1e-4)
         _hparam('wd_project', 1e-5, lambda r: 1e-5)
