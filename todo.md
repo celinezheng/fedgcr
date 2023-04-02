@@ -7,3 +7,5 @@
 - run ablation test on different module
 - run on domain generalization setting
 - thunk about the heterogeneity setting in dg mode
+- try sklearn.cluster.SpectralClustering
+- domain-wise aggregate meta-net(normalize in group) 

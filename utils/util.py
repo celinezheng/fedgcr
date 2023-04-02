@@ -6,7 +6,7 @@ from utils.data_utils import DomainNetDataset, DigitsDataset, OfficeDataset
 import copy
 
 def write_log(args, msg):
-    log_path = f'../logs/{args.dataset}_{args.expname}'
+    log_path = f'../logs/{args.dataset}_{args.expname}_{args.seed}'
     log_fname = f'{args.mode}.log'
     if args.dg:
         log_path = f'../logs/{args.dataset}_{args.expname}_{args.target_domain}'
@@ -705,6 +705,33 @@ def get_domain_idx(pi, prompt_bank):
     
     return torch.argmax(domain_sim)
 
+from sklearn.cluster import AgglomerativeClustering as Agg
+from sklearn.cluster import KMeans
+from sklearn.mixture import GaussianMixture as GMM
+from sklearn.cluster import SpectralClustering
+def agg_cluster(all_pi, prompt_bank):
+    all_pi_reshape = all_pi.cpu().reshape(all_pi.shape[0], -1)
+    print(all_pi_reshape.shape)
+    # cluster = Agg(n_clusters=prompt_bank.shape[0]).fit(all_pi_reshape)
+    # labels = cluster.labels_
+    # cluster = KMeans(n_clusters=prompt_bank.shape[0], random_state=0)
+    cluster = SpectralClustering(n_clusters=prompt_bank.shape[0],
+         assign_labels='discretize',
+         random_state=0)
+    labels = cluster.fit_predict(all_pi_reshape)
+    gmap = {}
+    cnt = [0 for _ in range(prompt_bank.shape[0])]
+    temp = torch.zeros_like(prompt_bank, dtype=torch.float32).cuda()
+    for cidx, gidx in enumerate(labels):
+        gmap[cidx] = gidx
+        temp[gidx] += all_pi[cidx]
+        cnt[gidx] += 1
+    for gidx in range(prompt_bank.shape[0]):
+        temp[gidx] /= cnt[gidx]
+        if cnt[gidx]>0:
+            prompt_bank[gidx].data.copy_(temp[gidx])
+    return prompt_bank, gmap, cnt
+
 def remap(all_pi, prompt_bank):
     # print(prompt_bank[0][0][0])
     # print(all_pi.shape, prompt_bank.shape)
@@ -714,13 +741,12 @@ def remap(all_pi, prompt_bank):
     mb, stdb = mb.detach(), stdb.detach()
     if torch.sum(stdb)==0:
         print(f"std is zero!! {torch.sum(stdb)}")
-    #     return random_replace(all_pi, prompt_bank)
+        # return random_replace(all_pi, prompt_bank)
+        prompt_bank, _, _ = agg_cluster(all_pi, prompt_bank)
+        return prompt_bank
     else:
         print(f"std not zero: {torch.sum(stdb)}")
-    # print(stdi[0][0], stdb[0][0])
-    # print(mi.shape, mb.shape)
     prompt_bank = (mi + stdi * (prompt_bank - mb)/stdb)
-    # print(prompt_bank[0][0][0])
     return prompt_bank
 
 def random_replace(all_pi, prompt_bank):
@@ -786,8 +812,9 @@ def communication(args, group_cnt, server_model, models, client_weights, client_
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
         elif args.mode.lower() == 'fedprompt':
+            # first set up gmap
             for key in server_model.state_dict().keys():
-                if  'prompt' not in key:
+                if  'head' in key:
                 # if 'bn' not in key:
                     temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
                     for client_idx in range(client_num):
@@ -795,13 +822,14 @@ def communication(args, group_cnt, server_model, models, client_weights, client_
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-                else:
+                # todo normalize meta gradient in a domain
+                elif 'project' in key:
+                    pass
+                elif 'prompt' in key:
                     print(key)
                     cnt = [0 for i in range(domain_num)]
                     all_pi = None
-                    first_round = False
                     if group_cnt == 0:
-                        first_round = True
                         for client_idx in range(client_num):
                             pi = models[client_idx].state_dict()[key].unsqueeze(0)
                             if client_idx == 0:
@@ -809,30 +837,25 @@ def communication(args, group_cnt, server_model, models, client_weights, client_
                             else:
                                 all_pi = torch.concat((all_pi, pi))
                         prompt_bank = remap(all_pi, prompt_bank)
-                        
                     temp = torch.zeros_like(prompt_bank, dtype=torch.float32)
                     for client_idx in range(client_num):
                         didx = get_domain_idx(models[client_idx].state_dict()[key], prompt_bank)
                         gmap[client_idx] = didx
                         cnt[didx] += 1
                         temp[didx] += models[client_idx].state_dict()[key]
-                        write_log(args, f'client-{client_idx} is in G-{didx}\n')
-                        # temp = prompt_bank[didx].data*(1-alpha) + alpha*models[client_idx].state_dict()[key]
-                        # strategy to pull apart to prompt bank
-                        # prompt_bank[didx].data.copy_(temp)
-                    if first_round and 'align' in args.expname.lower():
-                        write_log(args, "only align at first round\n")
-                        continue
-                    # # todo : EMA replace prompt
-                    print(cnt)
-                    write_log(args, f'clients=[')
                     for i in range(domain_num):
-                        write_log(args, f'{cnt[i], }')
                         if cnt[i]>0:
                             temp[i] /= cnt[i]
+                            # # todo : EMA replace prompt
                             prompt_bank[i].data.copy_(prompt_bank[i].data*(1-alpha) + alpha*temp[i])
-
+                    for cidx in range(client_num):
+                        write_log(args, f'client-{cidx} is in G-{gmap[cidx]}\n')
+                    write_log(args, f'cnt=[')
+                    for didx in range(domain_num):
+                        write_log(args, f'{cnt[didx]}, ')
                     write_log(args, f']\n')
+                    print(cnt)
+
         else:
             for key in server_model.state_dict().keys():
                 # num_batches_tracked is a non trainable LongTensor and

@@ -26,11 +26,7 @@ from utils import util
 
 if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    seed= 1
-    np.random.seed(seed)
-    torch.manual_seed(seed)    
-    torch.cuda.manual_seed_all(seed) 
-    random.seed(seed)
+    
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
@@ -51,6 +47,7 @@ if __name__ == '__main__':
     parser.add_argument('--dataset', type=str, default='digit')
     parser.add_argument('--percent', type = float, default= 0.2, help ='percentage of dataset to train')
     parser.add_argument('--num_classes', type = int, default=10, help ='number of classes')
+    parser.add_argument('--seed', type = int, default=1, help ='random seed')
     parser.add_argument('--model', type = str, default='prompt', help='prompt | vit-linear')
     parser.add_argument('--target_domain', type = str, default='Clipart', help='Clipart, Infograph, ...')
     parser.add_argument('--hparams', type=str,
@@ -59,8 +56,12 @@ if __name__ == '__main__':
         help='Seed for random hparams (0 means "default hparams")')
     parser.add_argument('--expname', type=str, default='prompt-sim')
     args = parser.parse_args()
-
-    exp_folder = f'fed_{args.dataset}_{args.expname}'
+    seed = args.seed
+    np.random.seed(seed)
+    torch.manual_seed(seed)    
+    torch.cuda.manual_seed_all(seed) 
+    random.seed(seed)
+    exp_folder = f'fed_{args.dataset}_{args.expname}_{args.seed}'
     if args.tune:
         exp_folder += '_tune'
     args.save_path = os.path.join(args.save_path, exp_folder)
@@ -128,6 +129,7 @@ if __name__ == '__main__':
             else:
                 all_pi = torch.concat((all_pi, pi))
         prompt_bank.detach_()
+        prompt_bank = util.random_replace(all_pi, prompt_bank)
         print(prompt_bank.shape)
     elif args.mode.lower() == 'cocoop':
         server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
@@ -249,11 +251,10 @@ if __name__ == '__main__':
                 elif args.mode.lower() == 'doprompt':
                     train_doprompt(args, model, train_loaders[client_idx], client_idx, device)
                 elif args.mode.lower() == 'fedprompt':
-                    if len(gmap) == 0: gidx = -1
+                    if len(gmap) == 0: 
+                        gidx = -1
                     else: 
                         gidx = gmap[client_idx]
-                        if wi == args.wk_iters-1:
-                            print(f"gidx of client-{client_idx} is {gidx}")
                     train_fedprompt(gidx, model, train_loaders[client_idx], prompt_bank, device)
                 elif args.mode.lower() == 'cocoop':
                     train_CoCoOP(model, train_loaders[client_idx], device)
