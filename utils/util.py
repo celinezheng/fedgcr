@@ -709,6 +709,23 @@ from sklearn.cluster import AgglomerativeClustering as Agg
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture as GMM
 from sklearn.cluster import SpectralClustering
+def cluster(all_pi, domain_num):
+    all_pi_reshape = all_pi.cpu().reshape(all_pi.shape[0], -1)
+    print(all_pi_reshape.shape)
+    # cluster = Agg(n_clusters=prompt_bank.shape[0]).fit(all_pi_reshape)
+    # labels = cluster.labels_
+    # cluster = KMeans(n_clusters=prompt_bank.shape[0], random_state=0)
+    cluster = SpectralClustering(n_clusters=domain_num,
+         assign_labels='discretize',
+         random_state=0)
+    labels = cluster.fit_predict(all_pi_reshape)
+    gmap = {}
+    cnt = [0 for _ in range(domain_num)]
+    for cidx, gidx in enumerate(labels):
+        gmap[cidx] = gidx
+        cnt[gidx] += 1
+    return gmap, cnt
+
 def agg_cluster(all_pi, prompt_bank):
     all_pi_reshape = all_pi.cpu().reshape(all_pi.shape[0], -1)
     print(all_pi_reshape.shape)
@@ -741,9 +758,9 @@ def remap(all_pi, prompt_bank):
     mb, stdb = mb.detach(), stdb.detach()
     if torch.sum(stdb)==0:
         print(f"std is zero!! {torch.sum(stdb)}")
-        # return random_replace(all_pi, prompt_bank)
-        prompt_bank, _, _ = agg_cluster(all_pi, prompt_bank)
-        return prompt_bank
+        return random_replace(all_pi, prompt_bank)
+        # prompt_bank, _, _ = agg_cluster(all_pi, prompt_bank)
+        # return prompt_bank
     else:
         print(f"std not zero: {torch.sum(stdb)}")
     prompt_bank = (mi + stdi * (prompt_bank - mb)/stdb)
@@ -811,10 +828,38 @@ def communication(args, group_cnt, server_model, models, client_weights, client_
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-        elif args.mode.lower() == 'fedprompt':
-            # first set up gmap
+        elif args.mode.lower() == 'nova':
+            all_pi = None
+            for client_idx in range(client_num):
+                pi = models[client_idx].state_dict()['prompt_tokens'].unsqueeze(0)
+                if client_idx == 0:
+                    all_pi = pi
+                else:
+                    all_pi = torch.concat((all_pi, pi))
+            gmap, cnt = cluster(all_pi, domain_num)
+            for cidx in range(client_num):
+                write_log(args, f'client-{cidx} is in G-{gmap[cidx]}\n')
+            write_log(args, f'cnt=[')
+            for didx in range(domain_num):
+                write_log(args, f'{cnt[didx]}, ')
+            write_log(args, f']\n')
+            print(cnt)
             for key in server_model.state_dict().keys():
-                if  'head' in key:
+                if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
+                    print(key)
+                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
+                    for client_idx in range(client_num):
+                        if 'meta_net' in key or 'prompt' in key:
+                            weight = 1/(domain_num * cnt[gmap[client_idx]])
+                        else:
+                            weight = client_weights[client_idx]
+                        temp += weight * models[client_idx].state_dict()[key]
+                    server_model.state_dict()[key].data.copy_(temp)
+                    for client_idx in range(client_num):
+                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
+        elif args.mode.lower() == 'fedprompt':
+            for key in server_model.state_dict().keys():
+                if  'prompt' not in key:
                 # if 'bn' not in key:
                     temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
                     for client_idx in range(client_num):
@@ -822,10 +867,7 @@ def communication(args, group_cnt, server_model, models, client_weights, client_
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-                # todo normalize meta gradient in a domain
-                elif 'project' in key:
-                    pass
-                elif 'prompt' in key:
+                else:
                     print(key)
                     cnt = [0 for i in range(domain_num)]
                     all_pi = None
@@ -843,19 +885,16 @@ def communication(args, group_cnt, server_model, models, client_weights, client_
                         gmap[client_idx] = didx
                         cnt[didx] += 1
                         temp[didx] += models[client_idx].state_dict()[key]
+                        write_log(args, f'client-{client_idx} is in G-{didx}\n')
+                    # # todo : EMA replace prompt
+                    print(cnt)
+                    write_log(args, f'clients=[')
                     for i in range(domain_num):
+                        write_log(args, f'{cnt[i], }')
                         if cnt[i]>0:
                             temp[i] /= cnt[i]
-                            # # todo : EMA replace prompt
                             prompt_bank[i].data.copy_(prompt_bank[i].data*(1-alpha) + alpha*temp[i])
-                    for cidx in range(client_num):
-                        write_log(args, f'client-{cidx} is in G-{gmap[cidx]}\n')
-                    write_log(args, f'cnt=[')
-                    for didx in range(domain_num):
-                        write_log(args, f'{cnt[didx]}, ')
                     write_log(args, f']\n')
-                    print(cnt)
-
         else:
             for key in server_model.state_dict().keys():
                 # num_batches_tracked is a non trainable LongTensor and

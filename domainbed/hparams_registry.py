@@ -41,7 +41,7 @@ def _hparams(algorithm, dataset, random_seed):
     # Algorithm-specific hparam definitions. Each block of code below
     # corresponds to exactly one algorithm.
 
-    if "prompt" in algorithm.lower() or 'coop' in algorithm.lower() or algorithm in ["PADA"]:
+    if "prompt" in algorithm.lower() or 'coop' in algorithm.lower() or 'nova' in algorithm.lower() or algorithm in ["PADA"]:
         _hparam('prompt_dim', 4, lambda r: 4)
         _hparam('lambda', 0.5, lambda r: 0.5)
         _hparam('lr_prompt', 1e-3, lambda r: 1e-3)

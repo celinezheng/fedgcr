@@ -131,7 +131,7 @@ if __name__ == '__main__':
         prompt_bank.detach_()
         prompt_bank = util.random_replace(all_pi, prompt_bank)
         print(prompt_bank.shape)
-    elif args.mode.lower() == 'cocoop':
+    elif args.mode.lower() in ['cocoop', 'nova']:
         server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
     elif args.mode.lower() == 'full':
         model_type="sup_vitb16_imagenet21k"
@@ -251,11 +251,11 @@ if __name__ == '__main__':
                 elif args.mode.lower() == 'doprompt':
                     train_doprompt(args, model, train_loaders[client_idx], client_idx, device)
                 elif args.mode.lower() == 'fedprompt':
-                    if len(gmap) == 0: 
-                        gidx = -1
-                    else: 
-                        gidx = gmap[client_idx]
+                    if len(gmap) == 0: gidx = -1
+                    else: gidx = gmap[client_idx]
                     train_fedprompt(gidx, model, train_loaders[client_idx], prompt_bank, device)
+                elif args.mode.lower() == 'nova':
+                    train_CoCoOP(model, train_loaders[client_idx], device)
                 elif args.mode.lower() == 'cocoop':
                     train_CoCoOP(model, train_loaders[client_idx], device)
                 else:
@@ -317,6 +317,16 @@ if __name__ == '__main__':
                         'a_iter': a_iter
                     }, SAVE_PATH)
                     best_changed = False
+                    if (a_iter+1) % 20 == 0:
+                        test_accs = {}
+                        for client_idx, datasite in enumerate(datasets):
+                            if datasite in test_accs: continue
+                            _, test_acc = test(server_model, test_loaders[client_idx], loss_fun, device, prompt_bank)
+                            test_accs[datasite] = test_acc
+                            # print(' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
+                            write_log(args, ' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, best_epoch, test_acc))
+                        test_accs = list(test_accs.values())
+                        write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
                     
                 # print(f'Average Test Accuracy: {np.mean(test_accs):.4f}')
     

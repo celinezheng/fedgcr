@@ -311,8 +311,7 @@ class FedPrompt(ERM):
         )
 
         # image projector, similar to meta-net in CoCoOP
-        # self.project = networks.MetaNet(self.hidden_dim, self.prompt_num, self.hidden_dim, self.mlp_dim)
-        self.project = networks.MetaNet(self.hidden_dim, 1, self.hidden_dim, self.mlp_dim)
+        self.project = networks.MetaNet(self.hidden_dim, self.prompt_num, self.hidden_dim, self.mlp_dim)
         
         # optimizer
         self.prompt_opt = torch.optim.AdamW(
@@ -347,8 +346,7 @@ class FedPrompt(ERM):
         
     def forward_proj(self, x, z):
         img_proj = self.project(z)
-        sample_prompt = img_proj.reshape((x.shape[0], 1, self.featurizer.network.hidden_dim)).cuda()
-        img_proj = img_proj.repeat((1, self.prompt_num))
+        sample_prompt = img_proj.reshape((x.shape[0], self.prompt_num, self.featurizer.network.hidden_dim)).cuda()
         pi_repeat = self.prompt_tokens.repeat((x.shape[0], 1, 1)).to(self.prompt_tokens.device)
         comb_prompt = torch.concat((sample_prompt, pi_repeat), dim=1)
         with PrependPrompt(self.featurizer, comb_prompt):
@@ -375,13 +373,13 @@ class FedPrompt(ERM):
         loss_m = F.cross_entropy(logit, y)
         # server as new prompt for classification
         
-        # if gidx == -1:
+        #if gidx == -1:
         reshape_pb = torch.concat((self.prompt_tokens.detach().unsqueeze(0), prompt_bank))
         labels = torch.zeros(x.shape[0], dtype=torch.long).to(device)
-        #else:
-            # reshape_pb = prompt_bank
-            # reshape_pb[gidx].data.copy_(self.prompt_tokens.detach())
-            # labels = torch.zeros(x.shape[0], dtype=torch.long).fill_(gidx).to(device)
+        # else:
+        #     reshape_pb = prompt_bank
+        #     # reshape_pb[gidx].data.copy_(self.prompt_tokens.detach())
+        #     labels = torch.zeros(x.shape[0], dtype=torch.long).fill_(gidx).to(device)
         
         
         reshape_pb = torch.reshape(reshape_pb, (reshape_pb.shape[0], self.hidden_dim*self.prompt_num))
@@ -414,8 +412,7 @@ class FedPrompt(ERM):
     def forward_bank_sample(self, x, prompt_bank):
         hint = self.forward_raw(x)
         img_proj = self.project(hint)
-        sample_prompt = img_proj.reshape((x.shape[0], 1, self.featurizer.network.hidden_dim)).cuda()
-        img_proj = img_proj.repeat((1, self.prompt_num))
+        sample_prompt = img_proj.reshape((x.shape[0], self.prompt_num, self.featurizer.network.hidden_dim)).cuda()
         reshape_pb = torch.reshape(prompt_bank, (prompt_bank.shape[0], self.hidden_dim*self.prompt_num))
         dot_contrast = F.softmax((torch.matmul(reshape_pb, img_proj.T).cuda()).T, dim=1)
         k = min(prompt_bank.shape[0], 3)

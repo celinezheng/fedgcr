@@ -9,3 +9,4 @@
 - thunk about the heterogeneity setting in dg mode
 - try sklearn.cluster.SpectralClustering
 - domain-wise aggregate meta-net(normalize in group) 
+- top-k use 1, 2, or 3
