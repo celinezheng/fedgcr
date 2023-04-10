@@ -102,16 +102,14 @@ if __name__ == '__main__':
         import warnings
         warnings.warn("invalid args.dataset")
         exit(0)
-    train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
+    client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
+    print(client_weights)
     client_num = len(train_loaders)
     if args.dg:
         domain_num -= 1
-    if 'sqrt' in args.expname.lower():
-        # federated client number
-        domain_num = int(math.sqrt(client_num))
+    
     print(f"domain number = {domain_num}")
     write_log(args, f"domain number = {domain_num}\n")
-    client_weights = [1/client_num for i in range(client_num)]
     prompt_bank = None
     # setup model
     if args.mode.lower() == 'doprompt':
@@ -230,7 +228,6 @@ if __name__ == '__main__':
         best_acc = [0. for j in range(client_num)] 
         start_iter = 0
     gmap = {}
-    
     # Start training
     for a_iter in range(start_iter, args.iters):
         if args.mode.lower() not in ['doprompt', 'fedprompt', 'cocoop']:
@@ -264,7 +261,7 @@ if __name__ == '__main__':
         with torch.no_grad():
             # Aggregation
             if args.mode.lower() != 'solo':
-                server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, client_num, domain_num, prompt_bank)
+                server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, prompt_bank)
 
             # Report loss after aggregation
             for client_idx, model in enumerate(models):
@@ -272,6 +269,7 @@ if __name__ == '__main__':
                 # print(' Site-{:<10s}| Train Loss: {:.4f} | Train Acc: {:.4f}'.format(datasets[client_idx] ,train_loss, train_acc))
                 write_log(args, ' Site-{:<10s}| Train Loss: {:.4f} | Train Acc: {:.4f}\n'.format(datasets[client_idx] ,train_loss, train_acc))
 
+            if (a_iter+1)%2 != 0 and (a_iter+1)!=args.iters: continue
             # Validation
             val_acc_list = [None for j in range(client_num)]
             for client_idx, model in enumerate(models):
@@ -317,7 +315,7 @@ if __name__ == '__main__':
                         'a_iter': a_iter
                     }, SAVE_PATH)
                     best_changed = False
-                    if (a_iter+1) % 20 == 0:
+                    if (a_iter+1) % 10 == 0:
                         test_accs = {}
                         for client_idx, datasite in enumerate(datasets):
                             if datasite in test_accs: continue

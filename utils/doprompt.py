@@ -520,7 +520,7 @@ class CoCoOP(ERM):
         self.network.train()
         # todo with gmap
         logit = self.forward_proj(x, hint)
-        loss_m = F.cross_entropy(logit, y)        
+        loss_m = F.cross_entropy(logit, y)      
         loss_m.backward()
         pred = all_logit.data.max(1)[1]
         correct = pred.eq(y.view(-1)).sum().item()

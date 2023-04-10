@@ -2,8 +2,8 @@ import sys, os
 from tqdm import tqdm
 import torch
 import torchvision.transforms as transforms
-from utils.data_utils import DomainNetDataset, DigitsDataset, OfficeDataset
-import copy
+from utils.data_utils import DomainNetDataset, DigitsDataset
+import math
 
 def write_log(args, msg):
     log_path = f'../logs/{args.dataset}_{args.expname}_{args.seed}'
@@ -138,7 +138,7 @@ def prepare_domainnet_uneven(args):
     sketch_trainset = DomainNetDataset(data_base_path, 'sketch', transform=transform_train)
     sketch_testset = DomainNetDataset(data_base_path, 'sketch', transform=transform_test, train=False)
 
-    min_data_len = int(min(len(clipart_trainset), len(infograph_trainset), len(painting_trainset), len(quickdraw_trainset), len(real_trainset), len(sketch_trainset)))
+    # min_data_len = int(min(len(clipart_trainset), len(infograph_trainset), len(painting_trainset), len(quickdraw_trainset), len(real_trainset), len(sketch_trainset)))
     
     dataset_name = ['Clipart', 'Infograph', 'Painting', 'QuickDraw', 'Real', 'Sketch']
     if args.dg:
@@ -155,7 +155,8 @@ def prepare_domainnet_uneven(args):
             data_len = [6, 3, 1, 1, 1, 1]
         else:
             data_len = [2, 2, 2, 2, 2, 2]
-    min_data_len = min(min_data_len//max(data_len), int(min_data_len*args.percent))
+    # print(min_data_len/2, min_data_len*0.05)
+    # min_data_len = min(min_data_len//max(data_len), int(min_data_len*args.percent))
     client_nums = {}
     i = 0
     for name in dataset_name:
@@ -164,8 +165,8 @@ def prepare_domainnet_uneven(args):
         else:
             client_nums[name] = data_len[i]
             i += 1
-    val_len = int(min_data_len * 0.4)
-    train_len = int(min_data_len * 0.6)
+    # val_len = int(min_data_len * 0.4)
+    # train_len = int(min_data_len * 0.6)
     print(client_nums)
 
     test_sets = {
@@ -186,13 +187,15 @@ def prepare_domainnet_uneven(args):
         }
     len_dataset = {
         'Clipart': len(clipart_trainset), 
-        'Infograph': len(infograph_trainset), 
-        'Painting': len(painting_trainset), 
-        'QuickDraw': len(quickdraw_trainset), 
-        'Real': len(real_trainset), 
-        'Sketch': len(sketch_trainset)
+        'Infograph': int(0.6*len(infograph_trainset)), 
+        'Painting': int(0.6*len(painting_trainset)), 
+        'QuickDraw': int(0.2*len(quickdraw_trainset)), 
+        'Real': int(0.2*len(real_trainset)), 
+        'Sketch': int(0.4*len(sketch_trainset))
         }
+   
     target_loader = None
+    client_weights = []
     if args.dg:
         print(f"target domain is {args.target_domain}")
         client_nums[args.target_domain] = 0
@@ -200,15 +203,27 @@ def prepare_domainnet_uneven(args):
     
     train_loaders, val_loaders, test_loaders = [], [], []
     datasets = []
+    sum_len = 0
+    
     for key, value in client_nums.items():
-        train_begin = 0
-        valid_begin = -val_len*value
-        cur_min_len = min_data_len * value
+        all_len = len_dataset[key] * args.percent
+        all_train_len = int(all_len * 0.6)
+        all_val_len = int(all_len * 0.4)
         cur_dataset_len = len_dataset[key]
+        train_begin = 0
+        valid_begin = -all_val_len
+        if value==1: 
+            train_len = int(all_len * 0.6 / 4)
+            val_len = int(all_len * 0.4 / 4)
+            partition_num = 3
+        else:
+            partition_num = (1+value)*value/2
         test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=args.batch, shuffle=False)
-        for _ in range(value):
+        for j in range(value):
+            train_len = int(all_train_len * (j+1) / partition_num)
+            val_len = int(all_val_len * (j+1) / partition_num)
             datasets.append(key)
-            cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(cur_min_len))[train_begin : train_begin+train_len])
+            cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
             cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
             train_loader = torch.utils.data.DataLoader(cur_trainset, batch_size=args.batch, shuffle=True)
             val_loader = torch.utils.data.DataLoader(cur_valset, batch_size=args.batch, shuffle=False)
@@ -217,8 +232,17 @@ def prepare_domainnet_uneven(args):
             test_loaders.append(test_loader)
             train_begin += train_len
             valid_begin += val_len
+            client_weights.append(len(cur_trainset))
+            sum_len += len(cur_trainset)
             # print(len(cur_trainset), len(cur_valset))
-    return train_loaders, val_loaders, test_loaders, datasets, target_loader
+    print(client_weights)
+    write_log(args, f"data_number=[")
+    for ni in client_weights:
+        write_log(args, f"{ni},")
+    write_log(args, f"]\n")
+
+    client_weights = [ci/sum_len for ci in client_weights]
+    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 def prepare_digit_uneven(args):
     img_size = 224
@@ -286,7 +310,7 @@ def prepare_digit_uneven(args):
     mnistm_testset = torch.utils.data.Subset(mnistm_testset, list(range(len(mnistm_testset)))[:test_len]) 
 
     # min_data_len = min(len(dataset)) * args.persent
-    ori_data_len = min(len(mnist_trainset), len(svhn_trainset), len(usps_trainset), len(synth_trainset), len(mnistm_trainset))
+    # ori_data_len = min(len(mnist_trainset), len(svhn_trainset), len(usps_trainset), len(synth_trainset), len(mnistm_trainset))
     dataset_name = ['MNIST', 'SVHN', 'USPS', 'SynthDigits', 'MNIST-M']
     if args.dg:
         if 'uneven-1' in args.expname.lower():
@@ -304,7 +328,7 @@ def prepare_digit_uneven(args):
             data_len = [6, 1, 1, 1, 1]
         else:
             data_len = [2, 2, 2, 2, 2]
-    min_data_len = ori_data_len // max(5, max(data_len))
+    # min_data_len = ori_data_len // max(5, max(data_len))
     client_nums = {}
     i = 0
     for name in dataset_name:
@@ -314,9 +338,8 @@ def prepare_digit_uneven(args):
             client_nums[name] = data_len[i]
             i += 1
         
-    val_len = int(min_data_len * 0.4)
-    train_len = int(min_data_len * 0.6)
-    
+    # val_len = int(min_data_len * 0.4)
+    # train_len = int(min_data_len * 0.6)
     
     train_sets = {
         'MNIST': mnist_trainset, 
@@ -333,13 +356,15 @@ def prepare_digit_uneven(args):
         'MNIST-M': mnistm_testset, 
         }
     len_dataset = {
-        'MNIST': len(mnist_trainset), 
-        'SVHN': len(svhn_trainset), 
-        'USPS': len(usps_trainset), 
-        'SynthDigits': len(synth_trainset), 
-        'MNIST-M': len(mnistm_trainset), 
+        'MNIST': int(0.8 * len(mnist_trainset) ), 
+        'SVHN': int(0.75 * len(svhn_trainset)), 
+        'USPS': int(0.7 * len(usps_trainset)), 
+        'SynthDigits': int(0.65 * len(synth_trainset)), 
+        'MNIST-M': int(0.6 * len(mnistm_trainset)), 
         }
     target_loader = None
+    client_weights = []
+    sum_len = 0
     if args.dg:
         print(f"target domain is {args.target_domain}")
         client_nums[args.target_domain] = 0
@@ -348,212 +373,50 @@ def prepare_digit_uneven(args):
     train_loaders, val_loaders, test_loaders = [], [], []
     datasets = []
     for key, value in client_nums.items():
-        train_begin = 0
-        valid_begin = -val_len*value
-        cur_min_len = min_data_len * value
+        all_len = len_dataset[key]
+        all_train_len = int(all_len * 0.6)
+        all_val_len = int(all_len * 0.4)
         cur_dataset_len = len_dataset[key]
+        train_begin = 0
+        valid_begin = -all_val_len
+        if value==1: 
+            train_len = int(all_len * 0.6 / 4)
+            val_len = int(all_len * 0.4 / 4)
+        else:
+            partition_num = (1+value)*value/2
+            
         test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=args.batch, shuffle=False)
-        for _ in range(value):
+        
+        for j in range(value):
+            train_len = int(all_train_len * (j+1) / partition_num)
+            val_len = int(all_val_len * (j+1) / partition_num)
             datasets.append(key)
-            cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(cur_min_len))[train_begin : train_begin+train_len])
+            cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
             cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
             train_loader = torch.utils.data.DataLoader(cur_trainset, batch_size=args.batch, shuffle=True)
             val_loader = torch.utils.data.DataLoader(cur_valset, batch_size=args.batch, shuffle=False)
             train_loaders.append(train_loader)
             val_loaders.append(val_loader)
             test_loaders.append(test_loader)
+            client_weights.append(len(cur_trainset))
+            sum_len += len(cur_trainset)
             train_begin += train_len
             valid_begin += val_len
             # print(len(cur_trainset), len(cur_valset))
-    return train_loaders, val_loaders, test_loaders, datasets, target_loader
-
-def prepare_digit(args):
-    img_size = 224
-    # Prepare data
-    transform_mnist = transforms.Compose([
-            transforms.Resize([img_size,img_size]),
-            transforms.Grayscale(num_output_channels=3),
-            transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        ])
-
-    transform_svhn = transforms.Compose([
-            transforms.Resize([img_size,img_size]),
-            transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        ])
-
-    transform_usps = transforms.Compose([
-            transforms.Resize([img_size,img_size]),
-            transforms.Grayscale(num_output_channels=3),
-            transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        ])
-
-    transform_synth = transforms.Compose([
-            transforms.Resize([img_size,img_size]),
-            transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        ])
-
-    transform_mnistm = transforms.Compose([
-            transforms.Resize([img_size,img_size]),
-            transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        ])
-    base_path = "../../data/digit"
-    # MNIST
-    mnist_trainset     = DigitsDataset(data_path=os.path.join(base_path, "MNIST"), channels=1, percent=args.percent, train=True,  transform=transform_mnist)
-    mnist_testset      = DigitsDataset(data_path=os.path.join(base_path, "MNIST"), channels=1, percent=args.percent, train=False, transform=transform_mnist)
-    test_len = int(args.percent * len(mnist_testset))
-    mnist_testset = torch.utils.data.Subset(mnist_testset, list(range(len(mnist_testset)))[:test_len]) 
-
-    # SVHN
-    svhn_trainset      = DigitsDataset(data_path=os.path.join(base_path, "SVHN"), channels=3, percent=args.percent,  train=True,  transform=transform_svhn)
-    svhn_testset       = DigitsDataset(data_path=os.path.join(base_path, "SVHN"), channels=3, percent=args.percent,  train=False, transform=transform_svhn)
-    test_len = int(args.percent * len(svhn_testset))
-    svhn_testset = torch.utils.data.Subset(svhn_testset, list(range(len(svhn_testset)))[:test_len]) 
-
-    # USPS
-    usps_trainset      = DigitsDataset(data_path=os.path.join(base_path, "USPS"), channels=1, percent=args.percent,  train=True,  transform=transform_usps)
-    usps_testset       = DigitsDataset(data_path=os.path.join(base_path, "USPS"), channels=1, percent=args.percent,  train=False, transform=transform_usps)
-    test_len = int(args.percent * len(usps_testset))
-    usps_testset = torch.utils.data.Subset(usps_testset, list(range(len(usps_testset)))[:test_len]) 
-
-    # Synth Digits
-    synth_trainset     = DigitsDataset(data_path=os.path.join(base_path, "SynthDigits"), channels=3, percent=args.percent,  train=True,  transform=transform_synth)
-    synth_testset      = DigitsDataset(data_path=os.path.join(base_path, "SynthDigits"), channels=3, percent=args.percent,  train=False, transform=transform_synth)
-    test_len = int(args.percent * len(synth_testset))
-    synth_testset = torch.utils.data.Subset(synth_testset, list(range(len(synth_testset)))[:test_len]) 
-
-    # MNIST-M
-    mnistm_trainset     = DigitsDataset(data_path=os.path.join(base_path, "MNIST_M"), channels=3, percent=args.percent,  train=True,  transform=transform_mnistm)
-    mnistm_testset      = DigitsDataset(data_path=os.path.join(base_path, "MNIST_M"), channels=3, percent=args.percent,  train=False, transform=transform_mnistm)
-    test_len = int(args.percent * len(mnistm_testset))
-    mnistm_testset = torch.utils.data.Subset(mnistm_testset, list(range(len(mnistm_testset)))[:test_len]) 
-
-    # min_data_len = min(len(dataset)) * args.persent
-    min_data_len = min(len(mnist_trainset), len(svhn_trainset), len(usps_trainset), len(synth_trainset), len(mnistm_trainset))
-    val_len = int(min_data_len * 0.4)
-    min_data_len = int(min_data_len * 0.6)
-    print(min_data_len)
-
-    mnist_valset = torch.utils.data.Subset(mnist_trainset, list(range(len(mnist_trainset)))[-val_len:]) 
-    mnist_trainset = torch.utils.data.Subset(mnist_trainset, list(range(min_data_len)))
-    
-    svhn_valset = torch.utils.data.Subset(svhn_trainset, list(range(len(svhn_trainset)))[-val_len:]) 
-    svhn_trainset = torch.utils.data.Subset(svhn_trainset, list(range(min_data_len)))
-    
-    usps_valset = torch.utils.data.Subset(usps_trainset, list(range(len(usps_trainset)))[-val_len:]) 
-    usps_trainset = torch.utils.data.Subset(usps_trainset, list(range(min_data_len)))
-    
-    synth_valset = torch.utils.data.Subset(synth_trainset, list(range(len(synth_trainset)))[-val_len:]) 
-    synth_trainset = torch.utils.data.Subset(synth_trainset, list(range(min_data_len)))
-    
-    mnistm_valset = torch.utils.data.Subset(mnistm_trainset, list(range(len(mnist_trainset)))[-val_len:]) 
-    mnistm_trainset = torch.utils.data.Subset(mnistm_trainset, list(range(min_data_len)))
-    
-    mnist_train_loader = torch.utils.data.DataLoader(mnist_trainset, batch_size=args.batch, shuffle=True)
-    mnist_val_loader  = torch.utils.data.DataLoader(mnist_valset, batch_size=args.batch, shuffle=False)
-    mnist_test_loader  = torch.utils.data.DataLoader(mnist_testset, batch_size=args.batch, shuffle=False)
-    
-    svhn_train_loader = torch.utils.data.DataLoader(svhn_trainset, batch_size=args.batch,  shuffle=True)
-    svhn_val_loader = torch.utils.data.DataLoader(svhn_valset, batch_size=args.batch, shuffle=False)
-    svhn_test_loader = torch.utils.data.DataLoader(svhn_testset, batch_size=args.batch, shuffle=False)
-    
-    usps_train_loader = torch.utils.data.DataLoader(usps_trainset, batch_size=args.batch,  shuffle=True)
-    usps_val_loader = torch.utils.data.DataLoader(usps_valset, batch_size=args.batch, shuffle=False)
-    usps_test_loader = torch.utils.data.DataLoader(usps_testset, batch_size=args.batch, shuffle=False)
-    
-    synth_train_loader = torch.utils.data.DataLoader(synth_trainset, batch_size=args.batch,  shuffle=True)
-    synth_val_loader = torch.utils.data.DataLoader(synth_valset, batch_size=args.batch, shuffle=False)
-    synth_test_loader = torch.utils.data.DataLoader(synth_testset, batch_size=args.batch, shuffle=False)
-    
-    mnistm_train_loader = torch.utils.data.DataLoader(mnistm_trainset, batch_size=args.batch,  shuffle=True)
-    mnistm_val_loader = torch.utils.data.DataLoader(mnistm_valset, batch_size=args.batch, shuffle=False)
-    mnistm_test_loader = torch.utils.data.DataLoader(mnistm_testset, batch_size=args.batch, shuffle=False)
-
-    
-
-    train_loaders = [mnist_train_loader, svhn_train_loader, usps_train_loader, synth_train_loader, mnistm_train_loader]
-    val_loaders  = [mnist_val_loader, svhn_val_loader, usps_val_loader, synth_val_loader, mnistm_val_loader]
-    test_loaders  = [mnist_test_loader, svhn_test_loader, usps_test_loader, synth_test_loader, mnistm_test_loader]
-    datasets = ['MNIST', 'SVHN', 'USPS', 'SynthDigits', 'MNIST-M']
-    return train_loaders, val_loaders, test_loaders, datasets
-
-def prepare_office(args):
-    data_base_path = '../../data'
-    transform_office = transforms.Compose([
-            transforms.Resize([224, 224]),            
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomRotation((-30,30)),
-            transforms.ToTensor(),
-    ])
-
-    transform_test = transforms.Compose([
-            transforms.Resize([224, 224]),            
-            transforms.ToTensor(),
-    ])
-    
-    # amazon
-    amazon_trainset = OfficeDataset(data_base_path, 'amazon', transform=transform_office)
-    amazon_testset = OfficeDataset(data_base_path, 'amazon', transform=transform_test, train=False)
-    # caltech
-    caltech_trainset = OfficeDataset(data_base_path, 'caltech', transform=transform_office)
-    caltech_testset = OfficeDataset(data_base_path, 'caltech', transform=transform_test, train=False)
-    # dslr
-    dslr_trainset = OfficeDataset(data_base_path, 'dslr', transform=transform_office)
-    dslr_testset = OfficeDataset(data_base_path, 'dslr', transform=transform_test, train=False)
-    # webcam
-    webcam_trainset = OfficeDataset(data_base_path, 'webcam', transform=transform_office)
-    webcam_testset = OfficeDataset(data_base_path, 'webcam', transform=transform_test, train=False)
-
-    min_data_len = args.percent * min(len(amazon_trainset), len(caltech_trainset), len(dslr_trainset), len(webcam_trainset))
-    val_len = int(min_data_len * 0.4)
-    min_data_len = int(min_data_len * 0.6)
-
-    amazon_valset = torch.utils.data.Subset(amazon_trainset, list(range(len(amazon_trainset)))[-val_len:]) 
-    amazon_trainset = torch.utils.data.Subset(amazon_trainset, list(range(min_data_len)))
-
-    caltech_valset = torch.utils.data.Subset(caltech_trainset, list(range(len(caltech_trainset)))[-val_len:]) 
-    caltech_trainset = torch.utils.data.Subset(caltech_trainset, list(range(min_data_len)))
-
-    dslr_valset = torch.utils.data.Subset(dslr_trainset, list(range(len(dslr_trainset)))[-val_len:]) 
-    dslr_trainset = torch.utils.data.Subset(dslr_trainset, list(range(min_data_len)))
-
-    webcam_valset = torch.utils.data.Subset(webcam_trainset, list(range(len(webcam_trainset)))[-val_len:]) 
-    webcam_trainset = torch.utils.data.Subset(webcam_trainset, list(range(min_data_len)))
-
-    amazon_train_loader = torch.utils.data.DataLoader(amazon_trainset, batch_size=args.batch, shuffle=True)
-    amazon_val_loader = torch.utils.data.DataLoader(amazon_valset, batch_size=args.batch, shuffle=False)
-    amazon_test_loader = torch.utils.data.DataLoader(amazon_testset, batch_size=args.batch, shuffle=False)
-
-    caltech_train_loader = torch.utils.data.DataLoader(caltech_trainset, batch_size=args.batch, shuffle=True)
-    caltech_val_loader = torch.utils.data.DataLoader(caltech_valset, batch_size=args.batch, shuffle=False)
-    caltech_test_loader = torch.utils.data.DataLoader(caltech_testset, batch_size=args.batch, shuffle=False)
-
-    dslr_train_loader = torch.utils.data.DataLoader(dslr_trainset, batch_size=args.batch, shuffle=True)
-    dslr_val_loader = torch.utils.data.DataLoader(dslr_valset, batch_size=args.batch, shuffle=False)
-    dslr_test_loader = torch.utils.data.DataLoader(dslr_testset, batch_size=args.batch, shuffle=False)
-
-    webcam_train_loader = torch.utils.data.DataLoader(webcam_trainset, batch_size=args.batch, shuffle=True)
-    webcam_val_loader = torch.utils.data.DataLoader(webcam_valset, batch_size=args.batch, shuffle=False)
-    webcam_test_loader = torch.utils.data.DataLoader(webcam_testset, batch_size=args.batch, shuffle=False)
-    
-    train_loaders = [amazon_train_loader, caltech_train_loader, dslr_train_loader, webcam_train_loader]
-    val_loaders = [amazon_val_loader, caltech_val_loader, dslr_val_loader, webcam_val_loader]
-    test_loaders = [amazon_test_loader, caltech_test_loader, dslr_test_loader, webcam_test_loader]
-    datasets = ['Amazon', 'Caltech', 'DSLR', 'Webcam']
-    return train_loaders, val_loaders, test_loaders, datasets
+    print(client_weights)
+    write_log(args, f"data_number=[")
+    for ni in client_weights:
+        write_log(args, f"{ni},")
+    write_log(args, f"]\n")
+    client_weights = [ci/sum_len for ci in client_weights]
+    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 def prepare_data(args):
     if args.dataset.lower()[:6] == 'domain':
         return prepare_domainnet_uneven(args)
     elif args.dataset.lower()[:5] == 'digit':
         return prepare_digit_uneven(args)
-    elif args.dataset.lower()[:6] == 'office':
-        return prepare_office(args)
-
+    
 def train(model, train_loader, optimizer, loss_fun, device):
     model.train()
     num_data = 0
@@ -709,7 +572,7 @@ from sklearn.cluster import AgglomerativeClustering as Agg
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture as GMM
 from sklearn.cluster import SpectralClustering
-def cluster(all_pi, domain_num):
+def cluster(args, all_pi, domain_num):
     all_pi_reshape = all_pi.cpu().reshape(all_pi.shape[0], -1)
     print(all_pi_reshape.shape)
     # cluster = Agg(n_clusters=prompt_bank.shape[0]).fit(all_pi_reshape)
@@ -724,6 +587,13 @@ def cluster(all_pi, domain_num):
     for cidx, gidx in enumerate(labels):
         gmap[cidx] = gidx
         cnt[gidx] += 1
+    for cidx in range(all_pi.shape[0]):
+        write_log(args, f'client-{cidx} is in G-{gmap[cidx]}\n')
+    write_log(args, f'cnt=[')
+    for didx in range(domain_num):
+        write_log(args, f'{cnt[didx]}, ')
+    write_log(args, f']\n')
+    print(cnt)
     return gmap, cnt
 
 def agg_cluster(all_pi, prompt_bank):
@@ -771,7 +641,7 @@ def random_replace(all_pi, prompt_bank):
     return all_pi[perm].detach().clone()
 
 ################# Key Function ########################
-def communication(args, group_cnt, server_model, models, client_weights, client_num, domain_num, prompt_bank=None):
+def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, prompt_bank=None):
     gmap = {}
     alpha = 0.99
     if args.mode.lower() != 'fedprompt':
@@ -836,21 +706,32 @@ def communication(args, group_cnt, server_model, models, client_weights, client_
                     all_pi = pi
                 else:
                     all_pi = torch.concat((all_pi, pi))
-            gmap, cnt = cluster(all_pi, domain_num)
-            for cidx in range(client_num):
-                write_log(args, f'client-{cidx} is in G-{gmap[cidx]}\n')
-            write_log(args, f'cnt=[')
-            for didx in range(domain_num):
-                write_log(args, f'{cnt[didx]}, ')
-            write_log(args, f']\n')
-            print(cnt)
+            gmap, cnt = cluster(args, all_pi, domain_num)
+            gsize = [0 for _ in range(domain_num)]
+            for i in range(client_num):
+                gsize[gmap[i]] += client_weights[i]
+            beta = 0.7
+            beta_c = 0.9
+            write_log(args, f"beta={beta}, beta_c={beta_c}\n")
+            all_weight = 0
+            for i in range(client_num):
+                Di = client_weights[client_idx] * sum_len
+                En = (1-beta) / (1 - pow(beta, Di))
+                Dc = gsize[gmap[client_idx]] * sum_len
+                Ec = (1-beta_c) / (1 - pow(beta_c, Dc))
+                all_weight += En * Ec
             for key in server_model.state_dict().keys():
                 if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
                     print(key)
                     temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
                     for client_idx in range(client_num):
+                        Di = client_weights[client_idx] * sum_len
+                        Dc = gsize[gmap[client_idx]] * sum_len
                         if 'meta_net' in key or 'prompt' in key:
-                            weight = 1/(domain_num * cnt[gmap[client_idx]])
+                            # (|Dc| - ni) / (K * |Dc|)
+                            En = (1-beta) / (1 - pow(beta, Di))
+                            Ec = (1-beta_c) / (1 - pow(beta_c, Dc))
+                            weight = En * Ec / all_weight
                         else:
                             weight = client_weights[client_idx]
                         temp += weight * models[client_idx].state_dict()[key]
