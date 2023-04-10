@@ -153,6 +153,8 @@ def prepare_domainnet_uneven(args):
             data_len = [4, 3, 2, 1, 1, 1]
         elif 'uneven-2' in args.expname.lower():
             data_len = [6, 3, 1, 1, 1, 1]
+        elif 'uneven-3' in args.expname.lower():
+            data_len = [7, 2, 1, 1, 1, 1]
         else:
             data_len = [2, 2, 2, 2, 2, 2]
     # print(min_data_len/2, min_data_len*0.05)
@@ -710,8 +712,8 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             gsize = [0 for _ in range(domain_num)]
             for i in range(client_num):
                 gsize[gmap[i]] += client_weights[i]
-            beta = 0.7
-            beta_c = 0.9
+            beta = 0.9
+            beta_c = 0.99
             write_log(args, f"beta={beta}, beta_c={beta_c}\n")
             all_weight = 0
             for i in range(client_num):
