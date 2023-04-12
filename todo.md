@@ -10,3 +10,4 @@
 - try sklearn.cluster.SpectralClustering
 - domain-wise aggregate meta-net(normalize in group) 
 - top-k use 1, 2, or 3
+- normalize along dimension of 0 or 1

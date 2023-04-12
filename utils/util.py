@@ -4,7 +4,7 @@ import torch
 import torchvision.transforms as transforms
 from utils.data_utils import DomainNetDataset, DigitsDataset
 import math
-
+import torch.nn.functional as tf
 def write_log(args, msg):
     log_path = f'../logs/{args.dataset}_{args.expname}_{args.seed}'
     log_fname = f'{args.mode}.log'
@@ -17,93 +17,6 @@ def write_log(args, msg):
         os.makedirs(log_path)
     with open(os.path.join(log_path, log_fname), 'a') as logfile:
         logfile.write(msg)
-
-def prepare_domainnet(args):
-    data_base_path = '../../data'
-    transform_train = transforms.Compose([
-            transforms.Resize([224, 224]),            
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomRotation((-30,30)),
-            transforms.ToTensor(),
-    ])
-
-    transform_test = transforms.Compose([
-            transforms.Resize([224, 224]),            
-            transforms.ToTensor(),
-    ])
-    
-    # clipart
-    clipart_trainset = DomainNetDataset(data_base_path, 'clipart', transform=transform_train)
-    clipart_testset = DomainNetDataset(data_base_path, 'clipart', transform=transform_test, train=False)
-    # infograph
-    infograph_trainset = DomainNetDataset(data_base_path, 'infograph', transform=transform_train)
-    infograph_testset = DomainNetDataset(data_base_path, 'infograph', transform=transform_test, train=False)
-    # painting
-    painting_trainset = DomainNetDataset(data_base_path, 'painting', transform=transform_train)
-    painting_testset = DomainNetDataset(data_base_path, 'painting', transform=transform_test, train=False)
-    # quickdraw
-    quickdraw_trainset = DomainNetDataset(data_base_path, 'quickdraw', transform=transform_train)
-    quickdraw_testset = DomainNetDataset(data_base_path, 'quickdraw', transform=transform_test, train=False)
-    # real
-    real_trainset = DomainNetDataset(data_base_path, 'real', transform=transform_train)
-    real_testset = DomainNetDataset(data_base_path, 'real', transform=transform_test, train=False)
-    # sketch
-    sketch_trainset = DomainNetDataset(data_base_path, 'sketch', transform=transform_train)
-    sketch_testset = DomainNetDataset(data_base_path, 'sketch', transform=transform_test, train=False)
-
-    min_data_len = int(args.percent * min(len(clipart_trainset), len(infograph_trainset), len(painting_trainset), len(quickdraw_trainset), len(real_trainset), len(sketch_trainset)))
-    # val_len = int(min_data_len * 0.1)
-    val_len = int(min_data_len * 0.4)
-    # min_data_len = int(min_data_len * 0.1)
-    min_data_len = int(min_data_len * 0.6)
-
-    clipart_valset   = torch.utils.data.Subset(clipart_trainset, list(range(len(clipart_trainset)))[-val_len:])
-    clipart_trainset = torch.utils.data.Subset(clipart_trainset, list(range(min_data_len)))
-    
-    infograph_valset   = torch.utils.data.Subset(infograph_trainset, list(range(len(infograph_trainset)))[-val_len:])
-    infograph_trainset = torch.utils.data.Subset(infograph_trainset, list(range(min_data_len)))
-    
-    painting_valset   = torch.utils.data.Subset(painting_trainset, list(range(len(painting_trainset)))[-val_len:])
-    painting_trainset = torch.utils.data.Subset(painting_trainset, list(range(min_data_len)))
-
-    quickdraw_valset   = torch.utils.data.Subset(quickdraw_trainset, list(range(len(quickdraw_trainset)))[-val_len:])
-    quickdraw_trainset = torch.utils.data.Subset(quickdraw_trainset, list(range(min_data_len)))
-
-    real_valset   = torch.utils.data.Subset(real_trainset, list(range(len(real_trainset)))[-val_len:])
-    real_trainset = torch.utils.data.Subset(real_trainset, list(range(min_data_len)))
-
-    sketch_valset   = torch.utils.data.Subset(sketch_trainset, list(range(len(sketch_trainset)))[-val_len:])
-    sketch_trainset = torch.utils.data.Subset(sketch_trainset, list(range(min_data_len)))
-
-    clipart_train_loader = torch.utils.data.DataLoader(clipart_trainset, batch_size=args.batch, shuffle=True)
-    clipart_val_loader   = torch.utils.data.DataLoader(clipart_valset, batch_size=args.batch, shuffle=False)
-    clipart_test_loader  = torch.utils.data.DataLoader(clipart_testset, batch_size=args.batch, shuffle=False)
-
-    infograph_train_loader = torch.utils.data.DataLoader(infograph_trainset, batch_size=args.batch, shuffle=True)
-    infograph_val_loader = torch.utils.data.DataLoader(infograph_valset, batch_size=args.batch, shuffle=False)
-    infograph_test_loader = torch.utils.data.DataLoader(infograph_testset, batch_size=args.batch, shuffle=False)
-
-    painting_train_loader = torch.utils.data.DataLoader(painting_trainset, batch_size=args.batch, shuffle=True)
-    painting_val_loader = torch.utils.data.DataLoader(painting_valset, batch_size=args.batch, shuffle=False)
-    painting_test_loader = torch.utils.data.DataLoader(painting_testset, batch_size=args.batch, shuffle=False)
-
-    quickdraw_train_loader = torch.utils.data.DataLoader(quickdraw_trainset, batch_size=args.batch, shuffle=True)
-    quickdraw_val_loader = torch.utils.data.DataLoader(quickdraw_valset, batch_size=args.batch, shuffle=False)
-    quickdraw_test_loader = torch.utils.data.DataLoader(quickdraw_testset, batch_size=args.batch, shuffle=False)
-
-    real_train_loader = torch.utils.data.DataLoader(real_trainset, batch_size=args.batch, shuffle=True)
-    real_val_loader = torch.utils.data.DataLoader(real_valset, batch_size=args.batch, shuffle=False)
-    real_test_loader = torch.utils.data.DataLoader(real_testset, batch_size=args.batch, shuffle=False)
-
-    sketch_train_loader = torch.utils.data.DataLoader(sketch_trainset, batch_size=args.batch, shuffle=True)
-    sketch_val_loader = torch.utils.data.DataLoader(sketch_valset, batch_size=args.batch, shuffle=False)
-    sketch_test_loader = torch.utils.data.DataLoader(sketch_testset, batch_size=args.batch, shuffle=False)
-
-    train_loaders = [clipart_train_loader, infograph_train_loader, painting_train_loader, quickdraw_train_loader, real_train_loader, sketch_train_loader]
-    val_loaders = [clipart_val_loader, infograph_val_loader, painting_val_loader, quickdraw_val_loader, real_val_loader, sketch_val_loader]
-    test_loaders = [clipart_test_loader, infograph_test_loader, painting_test_loader, quickdraw_test_loader, real_test_loader, sketch_test_loader]
-    datasets = ['Clipart', 'Infograph', 'Painting', 'Quickdraw', 'Real', 'Sketch']
-    return train_loaders, val_loaders, test_loaders, datasets
 
 def prepare_domainnet_uneven(args):
     data_base_path = '../../data'
@@ -139,38 +52,6 @@ def prepare_domainnet_uneven(args):
     sketch_testset = DomainNetDataset(data_base_path, 'sketch', transform=transform_test, train=False)
 
     # min_data_len = int(min(len(clipart_trainset), len(infograph_trainset), len(painting_trainset), len(quickdraw_trainset), len(real_trainset), len(sketch_trainset)))
-    
-    dataset_name = ['Clipart', 'Infograph', 'Painting', 'QuickDraw', 'Real', 'Sketch']
-    if args.dg:
-        if 'uneven-1' in args.expname.lower():
-            data_len = [4, 3, 1, 1, 1]
-        elif 'uneven-2' in args.expname.lower():
-            data_len = [6, 1, 1, 1, 1]
-        else:
-            data_len = [2, 2, 2, 2, 2]
-    else:
-        if 'uneven-1' in args.expname.lower():
-            data_len = [4, 3, 2, 1, 1, 1]
-        elif 'uneven-2' in args.expname.lower():
-            data_len = [6, 3, 1, 1, 1, 1]
-        elif 'uneven-3' in args.expname.lower():
-            data_len = [7, 2, 1, 1, 1, 1]
-        else:
-            data_len = [2, 2, 2, 2, 2, 2]
-    # print(min_data_len/2, min_data_len*0.05)
-    # min_data_len = min(min_data_len//max(data_len), int(min_data_len*args.percent))
-    client_nums = {}
-    i = 0
-    for name in dataset_name:
-        if args.dg and name==args.target_domain:
-            client_nums[name] = 0
-        else:
-            client_nums[name] = data_len[i]
-            i += 1
-    # val_len = int(min_data_len * 0.4)
-    # train_len = int(min_data_len * 0.6)
-    print(client_nums)
-
     test_sets = {
         'Clipart': clipart_testset, 
         'Infograph': infograph_testset, 
@@ -195,6 +76,47 @@ def prepare_domainnet_uneven(args):
         'Real': int(0.2*len(real_trainset)), 
         'Sketch': int(0.4*len(sketch_trainset))
         }
+    dataset_name = ['Clipart', 'Infograph', 'Painting', 'QuickDraw', 'Real', 'Sketch']
+    if args.dg:
+        if 'uneven-1' in args.expname.lower():
+            data_len = [4, 3, 1, 1, 1]
+        elif 'uneven-2' in args.expname.lower():
+            data_len = [6, 1, 1, 1, 1]
+        else:
+            data_len = [2, 2, 2, 2, 2]
+    else:
+        if 'uneven-1' in args.expname.lower():
+            data_len = [4, 3, 2, 1, 1, 1]
+        elif 'uneven-2' in args.expname.lower():
+            data_len = [6, 3, 1, 1, 1, 1]
+        elif 'uneven-3' in args.expname.lower():
+            data_len = [7, 2, 1, 1, 1, 1]
+        elif 'uneven-4' in args.expname.lower():
+            data_len = [4, 4, 1, 1, 1, 1]
+            len_dataset = {
+            'Clipart': len(clipart_trainset), 
+            'Infograph': int(0.6*len(infograph_trainset)), 
+            'Painting': int(0.4*len(painting_trainset)), 
+            'QuickDraw': int(0.2*len(quickdraw_trainset)), 
+            'Real': int(0.2*len(real_trainset)), 
+            'Sketch': int(0.4*len(sketch_trainset))
+            }
+        else:
+            data_len = [2, 2, 2, 2, 2, 2]
+    # print(min_data_len/2, min_data_len*0.05)
+    # min_data_len = min(min_data_len//max(data_len), int(min_data_len*args.percent))
+    client_nums = {}
+    i = 0
+    for name in dataset_name:
+        if args.dg and name==args.target_domain:
+            client_nums[name] = 0
+        else:
+            client_nums[name] = data_len[i]
+            i += 1
+    # val_len = int(min_data_len * 0.4)
+    # train_len = int(min_data_len * 0.6)
+    print(client_nums)
+
    
     target_loader = None
     client_weights = []
@@ -577,8 +499,8 @@ from sklearn.cluster import SpectralClustering
 def cluster(args, all_pi, domain_num):
     all_pi_reshape = all_pi.cpu().reshape(all_pi.shape[0], -1)
     print(all_pi_reshape.shape)
-    # cluster = Agg(n_clusters=prompt_bank.shape[0]).fit(all_pi_reshape)
-    # labels = cluster.labels_
+    # cluster = GMM(n_components=domain_num).fit(all_pi_reshape)
+    # labels = cluster.predict(all_pi_reshape)
     # cluster = KMeans(n_clusters=prompt_bank.shape[0], random_state=0)
     cluster = SpectralClustering(n_clusters=domain_num,
          assign_labels='discretize',
@@ -703,17 +625,21 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
         elif args.mode.lower() == 'nova':
             all_pi = None
             for client_idx in range(client_num):
-                pi = models[client_idx].state_dict()['prompt_tokens'].unsqueeze(0)
+                pi = models[client_idx].state_dict()['prompt_tokens'].detach().clone() 
+                pi = pi - server_model.state_dict()['prompt_tokens'].detach()
+                pi = tf.normalize(pi, dim=0)
+                pi = pi.unsqueeze(0)
                 if client_idx == 0:
                     all_pi = pi
                 else:
                     all_pi = torch.concat((all_pi, pi))
+            
             gmap, cnt = cluster(args, all_pi, domain_num)
             gsize = [0 for _ in range(domain_num)]
             for i in range(client_num):
                 gsize[gmap[i]] += client_weights[i]
             beta = 0.9
-            beta_c = 0.99
+            beta_c = 0.9
             write_log(args, f"beta={beta}, beta_c={beta_c}\n")
             all_weight = 0
             for i in range(client_num):
@@ -730,7 +656,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                         Di = client_weights[client_idx] * sum_len
                         Dc = gsize[gmap[client_idx]] * sum_len
                         if 'meta_net' in key or 'prompt' in key:
-                            # (|Dc| - ni) / (K * |Dc|)
+                        # (|Dc| - ni) / (K * |Dc|)
                             En = (1-beta) / (1 - pow(beta, Di))
                             Ec = (1-beta_c) / (1 - pow(beta_c, Dc))
                             weight = En * Ec / all_weight
