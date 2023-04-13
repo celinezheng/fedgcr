@@ -228,6 +228,10 @@ if __name__ == '__main__':
         best_acc = [0. for j in range(client_num)] 
         start_iter = 0
     gmap = {}
+    multi = 100
+    write_log(args, f'multiply acc by {multi} for Ea!\n')
+    write_log(args, f'train acc for Ea\n')
+    train_accs = [multi for _ in range(client_num)]
     # Start training
     for a_iter in range(start_iter, args.iters):
         if args.mode.lower() not in ['doprompt', 'fedprompt', 'cocoop']:
@@ -261,12 +265,13 @@ if __name__ == '__main__':
         with torch.no_grad():
             # Aggregation
             if args.mode.lower() != 'solo':
-                server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, prompt_bank)
+                print(train_accs)
+                server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, train_accs, prompt_bank)
 
             # Report loss after aggregation
             for client_idx, model in enumerate(models):
                 train_loss, train_acc = test(model, train_loaders[client_idx], loss_fun, device, prompt_bank)
-                # print(' Site-{:<10s}| Train Loss: {:.4f} | Train Acc: {:.4f}'.format(datasets[client_idx] ,train_loss, train_acc))
+                train_accs[client_idx] = int(multi * train_acc)
                 write_log(args, ' Site-{:<10s}| Train Loss: {:.4f} | Train Acc: {:.4f}\n'.format(datasets[client_idx] ,train_loss, train_acc))
 
             if (a_iter+1)%2 != 0 and (a_iter+1)!=args.iters: continue
@@ -275,6 +280,7 @@ if __name__ == '__main__':
             for client_idx, model in enumerate(models):
                 val_loss, val_acc = test(model, val_loaders[client_idx], loss_fun, device, prompt_bank)
                 val_acc_list[client_idx] = val_acc
+                # train_accs[client_idx] = int(multi * val_acc)
                 # print(' Site-{:<10s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}'.format(datasets[client_idx], val_loss, val_acc))
                 write_log(args, ' Site-{:<10s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}\n'.format(datasets[client_idx], val_loss, val_acc))
             write_log(args, f'Average Valid Accuracy: {np.mean(val_acc_list):.4f}\n')

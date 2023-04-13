@@ -92,11 +92,11 @@ def prepare_domainnet_uneven(args):
         elif 'uneven-3' in args.expname.lower():
             data_len = [7, 2, 1, 1, 1, 1]
         elif 'uneven-4' in args.expname.lower():
-            data_len = [4, 4, 1, 1, 1, 1]
+            data_len = [4, 3, 2, 1, 1, 1]
             len_dataset = {
             'Clipart': len(clipart_trainset), 
-            'Infograph': int(0.6*len(infograph_trainset)), 
-            'Painting': int(0.4*len(painting_trainset)), 
+            'Infograph': int(0.4*len(infograph_trainset)), 
+            'Painting': int(0.3*len(painting_trainset)), 
             'QuickDraw': int(0.2*len(quickdraw_trainset)), 
             'Real': int(0.2*len(real_trainset)), 
             'Sketch': int(0.4*len(sketch_trainset))
@@ -499,12 +499,13 @@ from sklearn.cluster import SpectralClustering
 def cluster(args, all_pi, domain_num):
     all_pi_reshape = all_pi.cpu().reshape(all_pi.shape[0], -1)
     print(all_pi_reshape.shape)
-    # cluster = GMM(n_components=domain_num).fit(all_pi_reshape)
+    write_log(args, 'gmm\n')
+    cluster = GMM(n_components=domain_num)
     # labels = cluster.predict(all_pi_reshape)
-    # cluster = KMeans(n_clusters=prompt_bank.shape[0], random_state=0)
-    cluster = SpectralClustering(n_clusters=domain_num,
-         assign_labels='discretize',
-         random_state=0)
+    # cluster = KMeans(n_clusters=domain_num, random_state=0)
+    # cluster = SpectralClustering(n_clusters=domain_num,
+    #      assign_labels='discretize',
+    #      random_state=0)
     labels = cluster.fit_predict(all_pi_reshape)
     gmap = {}
     cnt = [0 for _ in range(domain_num)]
@@ -565,7 +566,7 @@ def random_replace(all_pi, prompt_bank):
     return all_pi[perm].detach().clone()
 
 ################# Key Function ########################
-def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, prompt_bank=None):
+def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, train_accs, prompt_bank=None):
     gmap = {}
     alpha = 0.99
     if args.mode.lower() != 'fedprompt':
@@ -641,13 +642,15 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             beta = 0.9
             beta_c = 0.9
             write_log(args, f"beta={beta}, beta_c={beta_c}\n")
+            write_log(args, 'Ea with train accs\n')
             all_weight = 0
-            for i in range(client_num):
+            for client_idx in range(client_num):
                 Di = client_weights[client_idx] * sum_len
                 En = (1-beta) / (1 - pow(beta, Di))
                 Dc = gsize[gmap[client_idx]] * sum_len
                 Ec = (1-beta_c) / (1 - pow(beta_c, Dc))
-                all_weight += En * Ec
+                Ea = (1-beta_c) / (1 - pow(beta_c, train_accs[client_idx]))
+                all_weight += En * Ec * Ea
             for key in server_model.state_dict().keys():
                 if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
                     print(key)
@@ -659,7 +662,8 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                         # (|Dc| - ni) / (K * |Dc|)
                             En = (1-beta) / (1 - pow(beta, Di))
                             Ec = (1-beta_c) / (1 - pow(beta_c, Dc))
-                            weight = En * Ec / all_weight
+                            Ea = (1-beta_c) / (1 - pow(beta_c, train_accs[client_idx]))
+                            weight = En * Ec * Ea / all_weight
                         else:
                             weight = client_weights[client_idx]
                         temp += weight * models[client_idx].state_dict()[key]
