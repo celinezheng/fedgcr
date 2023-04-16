@@ -1,10 +1,12 @@
-import sys, os
 from tqdm import tqdm
+import sys, os
 import torch
 import torchvision.transforms as transforms
 from utils.data_utils import DomainNetDataset, DigitsDataset
 import math
 import torch.nn.functional as tf
+import numpy as np
+import copy
 def write_log(args, msg):
     log_path = f'../logs/{args.dataset}_{args.expname}_{args.seed}'
     log_fname = f'{args.mode}.log'
@@ -374,14 +376,23 @@ def check_labels(args, train_loaders):
         print(len(label_set[i]))
         write_log(args, f'{len(label_set[i])}, ')
     write_log(args, ']\n')
-    exit(0)
     
 def prepare_data(args):
     if args.dataset.lower()[:6] == 'domain':
         return prepare_domainnet_uneven(args)
     elif args.dataset.lower()[:5] == 'digit':
         return prepare_digit_uneven(args)
-    
+
+def norm_grad_diff(weights_before, new_weights, lr):
+    # input: nested gradients
+    # output: square of the L-2 norm
+    norms = 0
+    for key in weights_before.state_dict().keys():
+        if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
+            temp = (weights_before.state_dict()[key] - new_weights.state_dict()[key]) * 1.0 / lr
+            norms += torch.norm(temp, p=2).cpu()
+    return norms
+
 def train(model, train_loader, optimizer, loss_fun, device):
     model.train()
     num_data = 0
@@ -634,9 +645,10 @@ def random_replace(all_pi, prompt_bank):
     return all_pi[perm].detach().clone()
 
 ################# Key Function ########################
-def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, train_accs, all_feat=None, prompt_bank=None):
+def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, all_feat=None, prompt_bank=None):
     gmap = {}
     alpha = 0.99
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     if args.mode.lower() != 'fedprompt':
         prompt_bank = None
     with torch.no_grad():
@@ -691,6 +703,33 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
+        elif args.mode.lower() == 'q-ffl':
+            lr = 0.001
+            hs = []
+            q = 1.0
+            for client_idx in range(client_num):             
+                loss = train_losses[client_idx] # compute loss on the whole training data, with respect to the starting point (the global model)
+                new_weights = models[client_idx]
+                temp = copy.deepcopy(server_model).to(device)
+                # estimation of the local Lipchitz constant
+                hs.append(q * np.float_power(loss+1e-10, (q-1)) * norm_grad_diff(temp, new_weights, lr) + (1.0/lr) * np.float_power(loss+1e-10, q))
+
+            # aggregate using the dynamic step-size
+            demominator = np.sum(np.asarray(hs))
+            write_log(args, f'denominator: {demominator}\n')
+            for key in server_model.state_dict().keys():
+                if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
+                    print(key)
+                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
+                    delta = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
+                    for client_idx in range(client_num):
+                        grad_diff = (server_model.state_dict()[key] - models[client_idx].state_dict()[key]) * 1.0 / lr
+                        delta += np.float_power(loss+1e-10, q) * grad_diff 
+                    temp = server_model.state_dict()[key] - delta / demominator
+                    server_model.state_dict()[key].data.copy_(temp)
+                    for client_idx in range(client_num):
+                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
+           
         elif args.mode.lower() == 'nova':
             gmap, cnt = cluster(args, all_feat, domain_num)
             gsize = [0 for _ in range(domain_num)]
@@ -706,7 +745,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                 En = (1-beta) / (1 - pow(beta, Di))
                 Dc = gsize[gmap[client_idx]] * sum_len
                 Ec = (1-beta_c) / (1 - pow(beta_c, Dc))
-                Ea = (1-beta_c) / (1 - pow(beta_c, train_accs[client_idx]))
+                Ea = (1-beta_c) / (1 - pow(beta_c, Eas[client_idx]))
                 all_weight += En * Ec * Ea
             for key in server_model.state_dict().keys():
                 if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
@@ -719,7 +758,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                         # (|Dc| - ni) / (K * |Dc|)
                             En = (1-beta) / (1 - pow(beta, Di))
                             Ec = (1-beta_c) / (1 - pow(beta_c, Dc))
-                            Ea = (1-beta_c) / (1 - pow(beta_c, train_accs[client_idx]))
+                            Ea = (1-beta_c) / (1 - pow(beta_c, Eas[client_idx]))
                             weight = En * Ec * Ea / all_weight
                         else:
                             weight = client_weights[client_idx]

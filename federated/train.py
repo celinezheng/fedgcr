@@ -129,11 +129,12 @@ if __name__ == '__main__':
         prompt_bank.detach_()
         prompt_bank = util.random_replace(all_pi, prompt_bank)
         print(prompt_bank.shape)
-    elif args.mode.lower() in ['cocoop', 'nova']:
+    elif args.mode.lower() in ['cocoop', 'nova', 'q-ffl']:
         server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
     elif args.mode.lower() == 'full':
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args).to(device)
+    # fedavg
     else:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args).to(device)
@@ -231,10 +232,13 @@ if __name__ == '__main__':
         best_agg = 0
     gmap = {}
     multi = 100
-    write_log(args, f'multiply {multi} for Ea!\n')
-    write_log(args, f'use train loss for Ea\n')
-    train_accs = [multi for _ in range(client_num)]
+    if args.mode.lower() == 'nova':
+        write_log(args, f'multiply {multi} for Ea!\n')
+        write_log(args, f'use train loss for Ea\n')
+    Eas = [multi for _ in range(client_num)]
+    train_losses = [1.0 for _ in range(client_num)]
     # Start training
+    all_feat = None
     for a_iter in range(start_iter, args.iters):
         if args.mode.lower() not in ['doprompt', 'fedprompt', 'cocoop']:
             optimizers = [optim.SGD(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
@@ -266,6 +270,10 @@ if __name__ == '__main__':
                         all_feat = feat_i
                     else:
                         all_feat = torch.concat((all_feat, feat_i)) 
+                elif args.mode.lower() == 'q-ffl':
+                    train_loss, _ = train_CoCoOP(model, train_loaders[client_idx], device)
+                    train_losses[client_idx] = train_loss
+                
                 elif args.mode.lower() == 'cocoop':
                     train_CoCoOP(model, train_loaders[client_idx], device)
                 else:
@@ -274,13 +282,14 @@ if __name__ == '__main__':
         with torch.no_grad():
             # Aggregation
             if args.mode.lower() != 'solo':
-                print(train_accs)
-                server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, train_accs, all_feat, prompt_bank)
+                if args.mode.lower() == 'nova':
+                    print(Eas)
+                server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, all_feat, prompt_bank)
 
             # Report loss after aggregation
             for client_idx, model in enumerate(models):
                 train_loss, train_acc = test(model, train_loaders[client_idx], loss_fun, device, prompt_bank)
-                train_accs[client_idx] = int(multi / train_loss)
+                Eas[client_idx] = int(multi / train_loss)
                 write_log(args, ' Site-{:<10s}| Train Loss: {:.4f} | Train Acc: {:.4f}\n'.format(datasets[client_idx] ,train_loss, train_acc))
 
             # if (a_iter+1)%2 != 0 and (a_iter+1)!=args.iters: continue
