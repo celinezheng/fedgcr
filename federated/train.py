@@ -20,7 +20,7 @@ import numpy as np
 from utils.doprompt import DoPrompt, FedPrompt, CoCoOP
 from domainbed import hparams_registry, misc
 import json
-from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log, train_CoCoOP
+from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log, train_CoCoOP, agg_rep
 from utils import util
       
 
@@ -220,6 +220,7 @@ if __name__ == '__main__':
                 models[client_idx].load_state_dict(checkpoint['server_model'])
         best_epoch, best_acc  = checkpoint['best_epoch'], checkpoint['best_acc']
         start_iter = int(checkpoint['a_iter']) + 1
+        best_agg = np.mean(best_acc)
 
         print('Resume training from epoch {}'.format(start_iter))
     else:
@@ -227,10 +228,11 @@ if __name__ == '__main__':
         best_epoch = 0
         best_acc = [0. for j in range(client_num)] 
         start_iter = 0
+        best_agg = 0
     gmap = {}
     multi = 100
-    write_log(args, f'multiply acc by {multi} for Ea!\n')
-    write_log(args, f'train acc for Ea\n')
+    write_log(args, f'multiply {multi} for Ea!\n')
+    write_log(args, f'use train loss for Ea\n')
     train_accs = [multi for _ in range(client_num)]
     # Start training
     for a_iter in range(start_iter, args.iters):
@@ -239,6 +241,7 @@ if __name__ == '__main__':
         else:
             optimizers = [None for _ in range(client_num)]
         for wi in range(args.wk_iters):
+            all_feat = None
             print("============ Train epoch {} ============".format(wi + a_iter * args.wk_iters))
             write_log(args, "============ Train epoch {} ============\n".format(wi + a_iter * args.wk_iters)) 
 
@@ -257,6 +260,12 @@ if __name__ == '__main__':
                     train_fedprompt(gidx, model, train_loaders[client_idx], prompt_bank, device)
                 elif args.mode.lower() == 'nova':
                     train_CoCoOP(model, train_loaders[client_idx], device)
+                    feat_i = agg_rep(server_model, val_loaders[client_idx], device)
+                    feat_i = feat_i.unsqueeze(0)
+                    if all_feat == None:
+                        all_feat = feat_i
+                    else:
+                        all_feat = torch.concat((all_feat, feat_i)) 
                 elif args.mode.lower() == 'cocoop':
                     train_CoCoOP(model, train_loaders[client_idx], device)
                 else:
@@ -266,15 +275,15 @@ if __name__ == '__main__':
             # Aggregation
             if args.mode.lower() != 'solo':
                 print(train_accs)
-                server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, train_accs, prompt_bank)
+                server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, train_accs, all_feat, prompt_bank)
 
             # Report loss after aggregation
             for client_idx, model in enumerate(models):
                 train_loss, train_acc = test(model, train_loaders[client_idx], loss_fun, device, prompt_bank)
-                train_accs[client_idx] = int(multi * train_acc)
+                train_accs[client_idx] = int(multi / train_loss)
                 write_log(args, ' Site-{:<10s}| Train Loss: {:.4f} | Train Acc: {:.4f}\n'.format(datasets[client_idx] ,train_loss, train_acc))
 
-            if (a_iter+1)%2 != 0 and (a_iter+1)!=args.iters: continue
+            # if (a_iter+1)%2 != 0 and (a_iter+1)!=args.iters: continue
             # Validation
             val_acc_list = [None for j in range(client_num)]
             for client_idx, model in enumerate(models):
@@ -284,17 +293,49 @@ if __name__ == '__main__':
                 # print(' Site-{:<10s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}'.format(datasets[client_idx], val_loss, val_acc))
                 write_log(args, ' Site-{:<10s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}\n'.format(datasets[client_idx], val_loss, val_acc))
             write_log(args, f'Average Valid Accuracy: {np.mean(val_acc_list):.4f}\n')
-            # print(f'Average Valid Accuracy: {np.mean(val_acc_list):.4f}')
-            
+                    
             # Record best
-            if np.mean(val_acc_list) > np.mean(best_acc):
+            if 'nova' in args.mode.lower():
+                cnt = [0 for _ in range(domain_num)]
+                accs = [0 for _ in range(domain_num)]
+                agg = 0
+                domain_cnt = 0
+                for client_idx in range(client_num):
+                    accs[gmap[client_idx]] += val_acc_list[client_idx]
+                    cnt[gmap[client_idx]] += 1
+                for di in range(domain_num):
+                    if cnt[di]==0:continue
+                    domain_cnt+=1
+                    agg += (accs[di]/cnt[di])
+                agg /= domain_cnt
+                write_log(args, 'Aggregated Acc | Val Acc: {:.4f}\n'.format(agg))
+                if agg > best_agg:
+                    best_agg = agg
+                    best_epoch = a_iter
+                    best_changed=True
+                    for client_idx in range(client_num):
+                        best_acc[client_idx] = val_acc_list[client_idx]
+                        write_log(args, ' Best site-{:<10s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
+                if ((a_iter+1)*(wi+1)) > 40:
+                    test_accs = {}
+                    for client_idx, datasite in enumerate(datasets):
+                        if datasite in test_accs: continue
+                        _, test_acc = test(server_model, test_loaders[client_idx], loss_fun, device, prompt_bank)
+                        test_accs[datasite] = test_acc
+                        # print(' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
+                        write_log(args, ' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, best_epoch, test_acc))
+                    test_accs = list(test_accs.values())
+                    write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
+                    
+            elif np.mean(val_acc_list) > np.mean(best_acc):
                 for client_idx in range(client_num):
                     best_acc[client_idx] = val_acc_list[client_idx]
                     best_epoch = a_iter
                     best_changed=True
                     # print(' Best site-{:<10s}| Epoch:{} | Val Acc: {:.4f}'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
                     write_log(args, ' Best site-{:<10s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
-
+                best_agg = np.mean(best_acc)
+            
             if best_changed:     
                 # print(' Saving the local and server checkpoint to {}...'.format(SAVE_PATH))
                 write_log(args, ' Saving the local and server checkpoint to {}...\n'.format(SAVE_PATH))
@@ -321,7 +362,7 @@ if __name__ == '__main__':
                         'a_iter': a_iter
                     }, SAVE_PATH)
                     best_changed = False
-                    if (a_iter+1) % 10 == 0:
+                    if ((a_iter+1)*(wi+1)) % 10 == 0:
                         test_accs = {}
                         for client_idx, datasite in enumerate(datasets):
                             if datasite in test_accs: continue

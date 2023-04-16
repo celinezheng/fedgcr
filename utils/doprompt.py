@@ -533,6 +533,18 @@ class CoCoOP(ERM):
             "correct": correct
         }
     
+    def forward_feat(self, x):
+        hint = self.forward_raw(x)
+        img_proj = self.meta_net(hint)
+        img_proj = img_proj.repeat((self.prompt_num, 1))
+        img_proj = img_proj.reshape((x.shape[0], self.prompt_num, self.featurizer.network.hidden_dim)).cuda()
+        global_prompt = self.prompt_tokens.repeat((x.shape[0], 1, 1)).to(self.prompt_tokens.device)
+        # combine domain prompt and sample prompt
+        comb_prompt = global_prompt + img_proj
+        with PrependPrompt(self.featurizer, comb_prompt):
+            feat = self.featurizer(x)
+        return feat
+
     def forward(self, x):
         return self.forward_meta(x)
     

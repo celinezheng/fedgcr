@@ -70,8 +70,8 @@ def prepare_domainnet_uneven(args):
         }
     len_dataset = {
         'Clipart': len(clipart_trainset), 
-        'Infograph': int(0.6*len(infograph_trainset)), 
-        'Painting': int(0.6*len(painting_trainset)), 
+        'Infograph': int(0.3*len(infograph_trainset)), 
+        'Painting': int(0.3*len(painting_trainset)), 
         'QuickDraw': int(0.2*len(quickdraw_trainset)), 
         'Real': int(0.2*len(real_trainset)), 
         'Sketch': int(0.4*len(sketch_trainset))
@@ -79,28 +79,37 @@ def prepare_domainnet_uneven(args):
     dataset_name = ['Clipart', 'Infograph', 'Painting', 'QuickDraw', 'Real', 'Sketch']
     if args.dg:
         if 'uneven-1' in args.expname.lower():
-            data_len = [4, 3, 1, 1, 1]
+            data_len = [4, 1, 1, 1, 1]
         elif 'uneven-2' in args.expname.lower():
             data_len = [6, 1, 1, 1, 1]
         else:
             data_len = [2, 2, 2, 2, 2]
     else:
         if 'uneven-1' in args.expname.lower():
-            data_len = [4, 3, 2, 1, 1, 1]
+            data_len = [4, 1, 3, 1, 2, 1]
+            
         elif 'uneven-2' in args.expname.lower():
             data_len = [6, 3, 1, 1, 1, 1]
+            len_dataset = {
+                'Clipart': len(clipart_trainset), 
+                'Infograph': int(0.6*len(infograph_trainset)), 
+                'Painting': int(0.6*len(painting_trainset)), 
+                'QuickDraw': int(0.2*len(quickdraw_trainset)), 
+                'Real': int(0.2*len(real_trainset)), 
+                'Sketch': int(0.4*len(sketch_trainset))
+                }
         elif 'uneven-3' in args.expname.lower():
             data_len = [7, 2, 1, 1, 1, 1]
         elif 'uneven-4' in args.expname.lower():
-            data_len = [4, 3, 2, 1, 1, 1]
+            data_len = [4, 1, 4, 1, 1, 1]
             len_dataset = {
-            'Clipart': len(clipart_trainset), 
-            'Infograph': int(0.4*len(infograph_trainset)), 
-            'Painting': int(0.3*len(painting_trainset)), 
-            'QuickDraw': int(0.2*len(quickdraw_trainset)), 
-            'Real': int(0.2*len(real_trainset)), 
-            'Sketch': int(0.4*len(sketch_trainset))
-            }
+                'Clipart': len(clipart_trainset), 
+                'Infograph': int(0.3*len(infograph_trainset)), 
+                'Painting': int(0.3*len(painting_trainset)), 
+                'QuickDraw': int(0.2*len(quickdraw_trainset)), 
+                'Real': int(0.2*len(real_trainset)), 
+                'Sketch': int(0.4*len(sketch_trainset))
+                }
         else:
             data_len = [2, 2, 2, 2, 2, 2]
     # print(min_data_len/2, min_data_len*0.05)
@@ -137,12 +146,10 @@ def prepare_domainnet_uneven(args):
         train_begin = 0
         valid_begin = -all_val_len
         if value==1: 
-            train_len = int(all_len * 0.6 / 4)
-            val_len = int(all_len * 0.4 / 4)
             partition_num = 3
         else:
             partition_num = (1+value)*value/2
-        test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=args.batch, shuffle=False)
+        test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
         for j in range(value):
             train_len = int(all_train_len * (j+1) / partition_num)
             val_len = int(all_val_len * (j+1) / partition_num)
@@ -164,8 +171,8 @@ def prepare_domainnet_uneven(args):
     for ni in client_weights:
         write_log(args, f"{ni},")
     write_log(args, f"]\n")
-
     client_weights = [ci/sum_len for ci in client_weights]
+    check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 def prepare_digit_uneven(args):
@@ -236,35 +243,6 @@ def prepare_digit_uneven(args):
     # min_data_len = min(len(dataset)) * args.persent
     # ori_data_len = min(len(mnist_trainset), len(svhn_trainset), len(usps_trainset), len(synth_trainset), len(mnistm_trainset))
     dataset_name = ['MNIST', 'SVHN', 'USPS', 'SynthDigits', 'MNIST-M']
-    if args.dg:
-        if 'uneven-1' in args.expname.lower():
-            data_len = [4, 4, 1, 1]
-        elif 'uneven-2' in args.expname.lower():
-            data_len = [7, 1, 1, 1]
-        else:
-            data_len = [3, 3, 3, 3]
-    else:
-        if 'uneven-1' in args.expname.lower():
-            data_len = [4, 3, 1, 1, 1]
-        elif 'uneven-2' in args.expname.lower():
-            data_len = [5, 2, 1, 1, 1]
-        elif 'uneven-3' in args.expname.lower():
-            data_len = [6, 1, 1, 1, 1]
-        else:
-            data_len = [2, 2, 2, 2, 2]
-    # min_data_len = ori_data_len // max(5, max(data_len))
-    client_nums = {}
-    i = 0
-    for name in dataset_name:
-        if args.dg and name==args.target_domain:
-            client_nums[name] = 0
-        else:
-            client_nums[name] = data_len[i]
-            i += 1
-        
-    # val_len = int(min_data_len * 0.4)
-    # train_len = int(min_data_len * 0.6)
-    
     train_sets = {
         'MNIST': mnist_trainset, 
         'SVHN': svhn_trainset, 
@@ -286,6 +264,51 @@ def prepare_digit_uneven(args):
         'SynthDigits': int(0.65 * len(synth_trainset)), 
         'MNIST-M': int(0.6 * len(mnistm_trainset)), 
         }
+    if args.dg:
+        if 'uneven-1' in args.expname.lower():
+            data_len = [4, 4, 1, 1]
+        elif 'uneven-2' in args.expname.lower():
+            data_len = [7, 1, 1, 1]
+        else:
+            data_len = [3, 3, 3, 3]
+    else:
+        if 'uneven-1' in args.expname.lower():
+            # data_len = [4, 1, 1, 3, 1]
+            
+            data_len = [4, 3, 1, 1, 1]
+        elif 'uneven-2' in args.expname.lower():
+            data_len = [5, 2, 1, 1, 1]
+            len_dataset = {
+                'MNIST': int(0.8 * len(mnist_trainset) ), 
+                'SVHN': int(0.5 * len(svhn_trainset)), 
+                'USPS': int(0.4 * len(usps_trainset)), 
+                'SynthDigits': int(0.35 * len(synth_trainset)), 
+                'MNIST-M': int(0.3 * len(mnistm_trainset)), 
+                }
+        elif 'uneven-3' in args.expname.lower():
+            data_len = [6, 1, 1, 1, 1]
+        else:
+            data_len = [2, 2, 2, 2, 2]
+            len_dataset = {
+            'MNIST': int(0.4 * len(mnist_trainset) ), 
+            'SVHN': int(0.25 * len(svhn_trainset)), 
+            'USPS': int(0.35 * len(usps_trainset)), 
+            'SynthDigits': int(0.3 * len(synth_trainset)), 
+            'MNIST-M': int(0.2 * len(mnistm_trainset)), 
+            }
+    # min_data_len = ori_data_len // max(5, max(data_len))
+    client_nums = {}
+    i = 0
+    for name in dataset_name:
+        if args.dg and name==args.target_domain:
+            client_nums[name] = 0
+        else:
+            client_nums[name] = data_len[i]
+            i += 1
+        
+    # val_len = int(min_data_len * 0.4)
+    # train_len = int(min_data_len * 0.6)
+    
     target_loader = None
     client_weights = []
     sum_len = 0
@@ -304,8 +327,7 @@ def prepare_digit_uneven(args):
         train_begin = 0
         valid_begin = -all_val_len
         if value==1: 
-            train_len = int(all_len * 0.6 / 4)
-            val_len = int(all_len * 0.4 / 4)
+            partition_num = 4
         else:
             partition_num = (1+value)*value/2
             
@@ -333,8 +355,27 @@ def prepare_digit_uneven(args):
         write_log(args, f"{ni},")
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
+    check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
+def check_labels(args, train_loaders):
+    client_num = len(train_loaders)
+    label_set = [set() for _ in range(client_num)]
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    write_log(args, 'label set of clients: [')
+    for i, train_loader in enumerate(train_loaders):
+        train_iter = iter(train_loader)
+        # for step in range(len(train_iter)):
+        for step in tqdm(range(len(train_iter))):
+            _, target = next(train_iter)
+            target = target.to(device).long()
+            for j in range(len(target)):
+                label_set[i].add(target[j].item())
+        print(len(label_set[i]))
+        write_log(args, f'{len(label_set[i])}, ')
+    write_log(args, ']\n')
+    exit(0)
+    
 def prepare_data(args):
     if args.dataset.lower()[:6] == 'domain':
         return prepare_domainnet_uneven(args)
@@ -492,6 +533,34 @@ def get_domain_idx(pi, prompt_bank):
     
     return torch.argmax(domain_sim)
 
+def agg_rep(model, test_loader, device):
+    model.eval()
+    agg_protos_label = {}
+    cnt = {}
+    mid = len(test_loader)//2 
+    for idx, batch in enumerate(tqdm(test_loader)):
+        if idx==mid and idx!=0: break
+        data, target = batch
+        data = data.to(device).float()
+        target = target.to(device).long()
+        features = model.forward_feat(data)
+        for i in range(len(target)):
+            if target[i].item() in agg_protos_label:
+                agg_protos_label[target[i].item()] += features[i]
+                cnt[target[i].item()] += 1
+            else:
+                agg_protos_label[target[i].item()] = features[i]
+                cnt[target[i].item()] = 1
+
+    agg_protos = {}
+    rep_list = []
+    for [label, proto] in agg_protos_label.items():
+        agg_protos[label] = proto / cnt[label]
+        rep_list.append(agg_protos[label])
+    all_rep = torch.stack(rep_list)
+    avg_rep = torch.mean(all_rep, dim=0).data
+    return avg_rep
+
 from sklearn.cluster import AgglomerativeClustering as Agg
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture as GMM
@@ -501,7 +570,6 @@ def cluster(args, all_pi, domain_num):
     print(all_pi_reshape.shape)
     write_log(args, 'gmm\n')
     cluster = GMM(n_components=domain_num)
-    # labels = cluster.predict(all_pi_reshape)
     # cluster = KMeans(n_clusters=domain_num, random_state=0)
     # cluster = SpectralClustering(n_clusters=domain_num,
     #      assign_labels='discretize',
@@ -566,7 +634,7 @@ def random_replace(all_pi, prompt_bank):
     return all_pi[perm].detach().clone()
 
 ################# Key Function ########################
-def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, train_accs, prompt_bank=None):
+def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, train_accs, all_feat=None, prompt_bank=None):
     gmap = {}
     alpha = 0.99
     if args.mode.lower() != 'fedprompt':
@@ -624,18 +692,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
         elif args.mode.lower() == 'nova':
-            all_pi = None
-            for client_idx in range(client_num):
-                pi = models[client_idx].state_dict()['prompt_tokens'].detach().clone() 
-                pi = pi - server_model.state_dict()['prompt_tokens'].detach()
-                pi = tf.normalize(pi, dim=0)
-                pi = pi.unsqueeze(0)
-                if client_idx == 0:
-                    all_pi = pi
-                else:
-                    all_pi = torch.concat((all_pi, pi))
-            
-            gmap, cnt = cluster(args, all_pi, domain_num)
+            gmap, cnt = cluster(args, all_feat, domain_num)
             gsize = [0 for _ in range(domain_num)]
             for i in range(client_num):
                 gsize[gmap[i]] += client_weights[i]
