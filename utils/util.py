@@ -275,16 +275,24 @@ def prepare_digit_uneven(args):
             data_len = [3, 3, 3, 3]
     else:
         if 'uneven-1' in args.expname.lower():
-            # data_len = [4, 1, 1, 3, 1]
-            
+            # data_len = [4, 1, 1, 3, 1]            
             data_len = [4, 3, 1, 1, 1]
-        elif 'uneven-2' in args.expname.lower():
-            data_len = [5, 2, 1, 1, 1]
             len_dataset = {
                 'MNIST': int(0.8 * len(mnist_trainset) ), 
-                'SVHN': int(0.5 * len(svhn_trainset)), 
+                'SVHN': int(0.45 * len(svhn_trainset)), 
                 'USPS': int(0.4 * len(usps_trainset)), 
-                'SynthDigits': int(0.35 * len(synth_trainset)), 
+                'SynthDigits': int(0.5 * len(synth_trainset)), 
+                'MNIST-M': int(0.3 * len(mnistm_trainset)), 
+                }
+        elif 'uneven-2' in args.expname.lower():
+            # data_len = [5, 2, 1, 1, 1]
+            # data_len = [5, 1, 2, 1, 1]
+            data_len = [5, 1, 1, 2, 1]
+            len_dataset = {
+                'MNIST': int(0.8 * len(mnist_trainset) ), 
+                'SVHN': int(0.45 * len(svhn_trainset)), 
+                'USPS': int(0.4 * len(usps_trainset)), 
+                'SynthDigits': int(0.5 * len(synth_trainset)), 
                 'MNIST-M': int(0.3 * len(mnistm_trainset)), 
                 }
         elif 'uneven-3' in args.expname.lower():
@@ -729,24 +737,56 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-           
+        elif args.mode.lower() == 'drfl':
+            multi = 100
+            q = 1
+            all_w = 0
+            new_weights = [0 for _ in range(client_num)]
+            for client_idx in range(client_num):
+                weight = multi / (Eas[client_idx])
+                weight = client_weights[client_idx] * np.float_power(weight+1e-10, (q+1))
+                new_weights[client_idx] = weight
+                all_w += weight     
+            new_weights = [w/all_w for w in new_weights]
+            print(new_weights)
+            for key in server_model.state_dict().keys():
+                if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
+                    print(key)
+                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
+                    for client_idx in range(client_num):
+                        weight = new_weights[client_idx]
+                        temp += weight * models[client_idx].state_dict()[key]
+                    server_model.state_dict()[key].data.copy_(temp)
+                    for client_idx in range(client_num):
+                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
+          
         elif args.mode.lower() == 'nova':
             gmap, cnt = cluster(args, all_feat, domain_num)
             gsize = [0 for _ in range(domain_num)]
+            gloss = [1e-10 for _ in range(domain_num)]
             for i in range(client_num):
                 gsize[gmap[i]] += client_weights[i]
+                gloss[gmap[i]] += Eas[i] * client_weights[i]
+            for i in range(domain_num):
+                if gsize[i]>0:
+                    gloss[i] /= gsize[i]
+            print("========")
+            print(gloss)
+            print("========")
             beta = 0.9
             beta_c = 0.9
             write_log(args, f"beta={beta}, beta_c={beta_c}\n")
-            write_log(args, 'Ea with train accs\n')
+            write_log(args, 'use CB, IB for Ea\n')
             all_weight = 0
             for client_idx in range(client_num):
                 Di = client_weights[client_idx] * sum_len
                 En = (1-beta) / (1 - pow(beta, Di))
                 Dc = gsize[gmap[client_idx]] * sum_len
+                Ac = gloss[gmap[client_idx]]
                 Ec = (1-beta_c) / (1 - pow(beta_c, Dc))
                 Ea = (1-beta_c) / (1 - pow(beta_c, Eas[client_idx]))
-                all_weight += En * Ec * Ea
+                Eac = (1-beta_c) / (1 - pow(beta_c, Ac))
+                all_weight += Ea * Eac * En * Ec
             for key in server_model.state_dict().keys():
                 if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
                     print(key)
@@ -754,12 +794,14 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     for client_idx in range(client_num):
                         Di = client_weights[client_idx] * sum_len
                         Dc = gsize[gmap[client_idx]] * sum_len
+                        Ac = gloss[gmap[client_idx]]
                         if 'meta_net' in key or 'prompt' in key:
                         # (|Dc| - ni) / (K * |Dc|)
                             En = (1-beta) / (1 - pow(beta, Di))
                             Ec = (1-beta_c) / (1 - pow(beta_c, Dc))
                             Ea = (1-beta_c) / (1 - pow(beta_c, Eas[client_idx]))
-                            weight = En * Ec * Ea / all_weight
+                            Eac = (1-beta_c) / (1 - pow(beta_c, Ac))
+                            weight = Ea * Eac * En * Ec / all_weight
                         else:
                             weight = client_weights[client_idx]
                         temp += weight * models[client_idx].state_dict()[key]

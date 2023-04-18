@@ -11,3 +11,6 @@
 - domain-wise aggregate meta-net(normalize in group) 
 - top-k use 1, 2, or 3
 - normalize along dimension of 0 or 1
+- make sure the label set of the all clients are same when partitioning
+- combine q-ffl with plain vpt instead of cocoop
+- 整理 q-ffl 然後傳給ting-an!

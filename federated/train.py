@@ -129,8 +129,21 @@ if __name__ == '__main__':
         prompt_bank.detach_()
         prompt_bank = util.random_replace(all_pi, prompt_bank)
         print(prompt_bank.shape)
-    elif args.mode.lower() in ['cocoop', 'nova', 'q-ffl']:
+    elif args.mode.lower() in ['cocoop', 'nova', 'drfl']:
         server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
+    
+    elif args.mode.lower() == 'q-ffl':
+        write_log(args, '=================================\n')
+        write_log(args, f' ==== model type: {args.model} ====\n')
+        write_log(args, '=================================\n')
+        if args.model.lower() == 'cocoop':
+            server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
+        else:
+            model_type="sup_vitb16_imagenet21k"
+            server_model = PromptViT(model_type=model_type, args=args).to(device)
+            for name, param in server_model.named_parameters():
+                if 'prompt' not in name and 'head' not in name:
+                    param.requires_grad = False
     elif args.mode.lower() == 'full':
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args).to(device)
@@ -240,7 +253,7 @@ if __name__ == '__main__':
     # Start training
     all_feat = None
     for a_iter in range(start_iter, args.iters):
-        if args.mode.lower() not in ['doprompt', 'fedprompt', 'cocoop']:
+        if args.mode.lower() not in ['doprompt', 'fedprompt', 'cocoop', 'drfl']:
             optimizers = [optim.SGD(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
         else:
             optimizers = [None for _ in range(client_num)]
@@ -274,7 +287,7 @@ if __name__ == '__main__':
                     train_loss, _ = train_CoCoOP(model, train_loaders[client_idx], device)
                     train_losses[client_idx] = train_loss
                 
-                elif args.mode.lower() == 'cocoop':
+                elif args.mode.lower() in ['cocoop', 'drfl']:
                     train_CoCoOP(model, train_loaders[client_idx], device)
                 else:
                     train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
@@ -318,7 +331,8 @@ if __name__ == '__main__':
                     agg += (accs[di]/cnt[di])
                 agg /= domain_cnt
                 write_log(args, 'Aggregated Acc | Val Acc: {:.4f}\n'.format(agg))
-                if agg > best_agg:
+                # if agg > best_agg:
+                if np.mean(val_acc_list) > np.mean(best_acc):
                     best_agg = agg
                     best_epoch = a_iter
                     best_changed=True
