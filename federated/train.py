@@ -129,22 +129,10 @@ if __name__ == '__main__':
         prompt_bank.detach_()
         prompt_bank = util.random_replace(all_pi, prompt_bank)
         print(prompt_bank.shape)
-    elif args.mode.lower() in ['cocoop', 'nova', 'drfl']:
+    elif args.mode.lower() in ['cocoop', 'nova', 'ccop']:
         server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
     
-    elif args.mode.lower() == 'q-ffl':
-        write_log(args, '=================================\n')
-        write_log(args, f' ==== model type: {args.model} ====\n')
-        write_log(args, '=================================\n')
-        if args.model.lower() == 'cocoop':
-            server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
-        else:
-            model_type="sup_vitb16_imagenet21k"
-            server_model = PromptViT(model_type=model_type, args=args).to(device)
-            for name, param in server_model.named_parameters():
-                if 'prompt' not in name and 'head' not in name:
-                    param.requires_grad = False
-    elif args.mode.lower() == 'full':
+    elif args.mode.lower() in ['full', 'q-ffl', 'drfl']:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args).to(device)
     # fedavg
@@ -245,7 +233,7 @@ if __name__ == '__main__':
         best_agg = 0
     gmap = {}
     multi = 100
-    if args.mode.lower() == 'nova':
+    if args.mode.lower() in ['nova', 'ccop']:
         write_log(args, f'multiply {multi} for Ea!\n')
         write_log(args, f'use train loss for Ea\n')
     Eas = [multi for _ in range(client_num)]
@@ -253,10 +241,10 @@ if __name__ == '__main__':
     # Start training
     all_feat = None
     for a_iter in range(start_iter, args.iters):
-        if args.mode.lower() not in ['doprompt', 'fedprompt', 'cocoop', 'drfl']:
-            optimizers = [optim.SGD(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
-        else:
+        if args.mode.lower() in ['doprompt', 'fedprompt', 'cocoop', 'ccop', 'nova']:
             optimizers = [None for _ in range(client_num)]
+        else:
+            optimizers = [optim.SGD(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
         for wi in range(args.wk_iters):
             all_feat = None
             print("============ Train epoch {} ============".format(wi + a_iter * args.wk_iters))
@@ -275,7 +263,7 @@ if __name__ == '__main__':
                     if len(gmap) == 0: gidx = -1
                     else: gidx = gmap[client_idx]
                     train_fedprompt(gidx, model, train_loaders[client_idx], prompt_bank, device)
-                elif args.mode.lower() == 'nova':
+                elif args.mode.lower() in ['nova', 'ccop']:
                     train_CoCoOP(model, train_loaders[client_idx], device)
                     feat_i = agg_rep(server_model, val_loaders[client_idx], device)
                     feat_i = feat_i.unsqueeze(0)
@@ -283,21 +271,18 @@ if __name__ == '__main__':
                         all_feat = feat_i
                     else:
                         all_feat = torch.concat((all_feat, feat_i)) 
-                elif args.mode.lower() == 'q-ffl':
-                    train_loss, _ = train_CoCoOP(model, train_loaders[client_idx], device)
-                    train_losses[client_idx] = train_loss
-                
-                elif args.mode.lower() in ['cocoop', 'drfl']:
+                elif args.mode.lower() in ['cocoop']:
                     train_CoCoOP(model, train_loaders[client_idx], device)
                 else:
                     train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
+                    train_losses[client_idx] = train_loss
         
         with torch.no_grad():
             # Aggregation
             if args.mode.lower() != 'solo':
-                if args.mode.lower() == 'nova':
+                if args.mode.lower() in ['nova', 'ccop']:
                     print(Eas)
-                server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, all_feat, prompt_bank)
+                server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, all_feat, prompt_bank)
 
             # Report loss after aggregation
             for client_idx, model in enumerate(models):
@@ -317,7 +302,7 @@ if __name__ == '__main__':
             write_log(args, f'Average Valid Accuracy: {np.mean(val_acc_list):.4f}\n')
                     
             # Record best
-            if 'nova' in args.mode.lower():
+            if args.mode.lower() in ['nova', 'ccop']:
                 cnt = [0 for _ in range(domain_num)]
                 accs = [0 for _ in range(domain_num)]
                 agg = 0
@@ -339,7 +324,7 @@ if __name__ == '__main__':
                     for client_idx in range(client_num):
                         best_acc[client_idx] = val_acc_list[client_idx]
                         write_log(args, ' Best site-{:<10s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
-                if ((a_iter+1)*(wi+1)) > 40:
+                if ((a_iter+1)*(wi+1)) > 45:
                     test_accs = {}
                     for client_idx, datasite in enumerate(datasets):
                         if datasite in test_accs: continue
