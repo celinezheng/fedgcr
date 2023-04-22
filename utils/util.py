@@ -733,15 +733,16 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             demominator = np.sum(np.asarray(hs))
             write_log(args, f'denominator: {demominator}\n')
             for key in server_model.state_dict().keys():
-                temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
-                delta = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
-                for client_idx in range(client_num):
-                    grad_diff = (server_model.state_dict()[key] - models[client_idx].state_dict()[key]) * 1.0 / lr
-                    delta += np.float_power(loss+1e-10, q) * grad_diff 
-                temp = server_model.state_dict()[key] - delta / demominator
-                server_model.state_dict()[key].data.copy_(temp)
-                for client_idx in range(client_num):
-                    models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
+                if  'prompt' in key or 'head' in key:
+                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
+                    delta = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
+                    for client_idx in range(client_num):
+                        grad_diff = (server_model.state_dict()[key] - models[client_idx].state_dict()[key]) * 1.0 / lr
+                        delta += np.float_power(loss+1e-10, q) * grad_diff 
+                    temp = server_model.state_dict()[key] - delta / demominator
+                    server_model.state_dict()[key].data.copy_(temp)
+                    for client_idx in range(client_num):
+                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
         elif args.mode.lower() == 'drfl':
             multi = 100
             q = 1
@@ -755,16 +756,17 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             new_weights = [w/all_w for w in new_weights]
             print(new_weights)
             for key in server_model.state_dict().keys():
-                temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
-                for client_idx in range(client_num):
-                    weight = new_weights[client_idx]
-                    temp += weight * models[client_idx].state_dict()[key]
-                server_model.state_dict()[key].data.copy_(temp)
-                for client_idx in range(client_num):
-                    models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
+                if  'prompt' in key or 'head' in key:
+                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
+                    for client_idx in range(client_num):
+                        weight = new_weights[client_idx]
+                        temp += weight * models[client_idx].state_dict()[key]
+                    server_model.state_dict()[key].data.copy_(temp)
+                    for client_idx in range(client_num):
+                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
         elif args.mode.lower() == 'ccop':
             multi = 100
-            q = 1
+            q = args.q
             gmap, cnt = cluster(args, all_feat, domain_num)
             gsize = [0 for _ in range(domain_num)]
             gloss = [1e-10 for _ in range(domain_num)]
@@ -777,9 +779,9 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     gloss[i] /= gsize[i]
             all_weight = 0
             new_weights = [0 for _ in range(client_num)]
-            power_decay = 0.7
+            power_decay = 0.9
             if 'domain' in args.dataset:
-                power_decay = 0.6
+                power_decay = 0.8
             powerI = 0.5 + 0.5 * np.float_power(power_decay, a_iter+1) 
             powerC = 1 - powerI 
             print("========")
@@ -793,6 +795,8 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                 Lc = gloss[gmap[client_idx]] 
                 Lrb = np.float_power(Li, powerI) * np.float_power(Lc, powerC) + 1e-10
                 Srb = np.float_power(client_weights[client_idx], powerI) * np.float_power(gsize[gmap[client_idx]], powerC) 
+                if args.si:
+                    Srb = client_weights[client_idx]
                 weight = Srb * np.float_power(Lrb, (q+1)) 
                 new_weights[client_idx] = weight
                 all_weight += weight

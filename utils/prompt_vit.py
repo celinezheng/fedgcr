@@ -65,7 +65,7 @@ class PromptViT(nn.Module):
 
     def __init__(self, args, model_type="sup_vitb16_imagenet21k", vis=False):
         super().__init__()
-        if args.mode.lower() in ['full', 'q-ffl', 'drfl']:
+        if args.mode.lower() in ['full']:
             prompt_cfg = None
         else:
             prompt_cfg = get_vpt_cfg(args)

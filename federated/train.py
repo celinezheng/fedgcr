@@ -31,11 +31,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
     parser.add_argument('--tune', action='store_true', help='whether to tune hparams')
+    parser.add_argument('--si', action='store_true', help='whether to use si only')
     parser.add_argument('--memory', action='store_true', help='whether to test memory usage of each algorithm')
     parser.add_argument('--dg', action='store_true', help='domain generalization')
     parser.add_argument('--test', action='store_true', help ='test the pretrained model')
     parser.add_argument('--lambda_con', type=float, default=0.5, help='lambda for contrastive loss')
     parser.add_argument('--lr', type=float, default=1e-2, help='learning rate')
+    parser.add_argument('--q', type = int, default=1, help ='q value for fairness')
     parser.add_argument('--batch', type = int, default=16, help ='batch size')
     parser.add_argument('--iters', type = int, default=10, help = 'iterations for communication')
     parser.add_argument('--wk_iters', type = int, default=5, help = 'optimization iters in local worker between communication')
@@ -72,6 +74,8 @@ if __name__ == '__main__':
         SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_{args.target_domain}')
     if args.tune:
         SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_tune_{args.lambda_con}')
+    if 'ccop' in args.mode.lower():
+        SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_q={args.q}')
 
     write_log(args, '==={}===\n'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     write_log(args, '===Setting===\n')
@@ -80,7 +84,7 @@ if __name__ == '__main__':
     write_log(args, '    batch: {}\n'.format(args.batch))
     write_log(args, '    iters: {}\n'.format(args.iters))
     write_log(args, '    wk_iters: {}\n'.format(args.wk_iters))
-    write_log(args, '    tune: {}\n'.format(args.tune))
+    write_log(args, '    si: {}\n'.format(args.si))
     write_log(args, '    lambda for constrastive: {}\n'.format(args.lambda_con))
 
     if args.hparams_seed == 0:
@@ -132,7 +136,7 @@ if __name__ == '__main__':
     elif args.mode.lower() in ['cocoop', 'nova', 'ccop']:
         server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
     
-    elif args.mode.lower() in ['full', 'q-ffl', 'drfl']:
+    elif args.mode.lower() in ['full']:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args).to(device)
     # fedavg
@@ -176,21 +180,21 @@ if __name__ == '__main__':
         write_log(args, 'Loading snapshots...\n')
         checkpoint = torch.load(SAVE_PATH)
         server_model.load_state_dict(checkpoint['server_model'])
-        test_accs = [0. for _ in range(client_num)]
+        test_accs = {}
         if args.mode.lower() in ['fedbn', 'solo']:
-            test_accs = [0. for _ in range(client_num)]
-            for client_idx in range(client_num):
+            for client_idx in range(domain_num):
                 models[client_idx].load_state_dict(checkpoint['model_{}'.format(client_idx)])
             if args.dg:
                 for client_idx, datasite in enumerate(datasets):
                     _, test_acc = test(models[client_idx], target_loader, loss_fun, device, prompt_bank)
-                    test_accs[client_idx] = test_acc
+                    test_accs[datasite] = test_acc
                     write_log(args, ' Test site-{:<10s} -> {}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, args.target_domain, checkpoint['best_epoch'], test_acc))
                     # print(' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
             else:
                 for client_idx, datasite in enumerate(datasets):
+                    if datasite in test_accs: continue
                     _, test_acc = test(models[client_idx], test_loaders[client_idx], loss_fun, device, prompt_bank)
-                    test_accs[client_idx] = test_acc
+                    test_accs[datasite] = test_acc
                     # print(' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
                     write_log(args, ' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, checkpoint['best_epoch'], test_acc))
         else:
@@ -207,7 +211,7 @@ if __name__ == '__main__':
                     test_accs[datasite] = test_acc
                     # print(' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
                     write_log(args, ' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, checkpoint['best_epoch'], test_acc))
-            test_accs = list(test_accs.values())
+        test_accs = list(test_accs.values())
         write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
         exit(0)
 
@@ -215,10 +219,10 @@ if __name__ == '__main__':
         checkpoint = torch.load(SAVE_PATH)
         server_model.load_state_dict(checkpoint['server_model'])
         if args.mode.lower() in ['fedbn', 'solo']:
-            for client_idx in range(client_num):
+            for client_idx in range(domain_num):
                 models[client_idx].load_state_dict(checkpoint['model_{}'.format(client_idx)])
         else:
-            for client_idx in range(client_num):
+            for client_idx in range(domain_num):
                 models[client_idx].load_state_dict(checkpoint['server_model'])
         best_epoch, best_acc  = checkpoint['best_epoch'], checkpoint['best_acc']
         start_iter = int(checkpoint['a_iter']) + 1
@@ -347,14 +351,34 @@ if __name__ == '__main__':
             if best_changed:     
                 # print(' Saving the local and server checkpoint to {}...'.format(SAVE_PATH))
                 write_log(args, ' Saving the local and server checkpoint to {}...\n'.format(SAVE_PATH))
-                if args.mode.lower() in ['fedbn', 'solo'] :
+                if args.mode.lower() in ['fedbn', 'solo']:
+                    idxs = [0 for _ in range(6)]
+                    if args.dataset == 'digit':
+                        if 'uneven-1' in args.expname:
+                            idxs = [3, 6, 7, 8, 9]
+                        elif 'unevn-2' in args.expname:
+                            idxs = [4, 5, 6, 8, 9]
+                        elif args.expname=='even':
+                            idxs = [1, 3, 5, 7, 9]
+                        else:
+                            write_log(args, 'invalid expname!!!!\n')
+                    else:
+                        if 'uneven-4' in args.expname:
+                            idxs = [3, 4, 8, 9, 10]
+                        elif 'uneven-2' in args.expname:
+                            idxs = [5, 8, 9, 10, 11]
+                        elif args.expname == 'even':
+                            idxs = [1, 3, 5, 7, 9]
+                        else:
+                            write_log(args, 'invalid expname!!!!\n')
+                    print(idxs)
                     torch.save({
-                        'model_0': models[0].state_dict(),
-                        'model_1': models[1].state_dict(),
-                        'model_2': models[2].state_dict(),
-                        'model_3': models[3].state_dict(),
-                        'model_4': models[4].state_dict(),
-                        'model_5': models[5].state_dict(),
+                        'model_0': models[idxs[0]].state_dict(),
+                        'model_1': models[idxs[1]].state_dict(),
+                        'model_2': models[idxs[2]].state_dict(),
+                        'model_3': models[idxs[3]].state_dict(),
+                        'model_4': models[idxs[4]].state_dict(),
+                        'model_5': models[client_num-1].state_dict(),
                         'server_model': server_model.state_dict(),
                         'best_epoch': best_epoch,
                         'best_acc': best_acc,
