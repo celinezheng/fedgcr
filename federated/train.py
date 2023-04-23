@@ -20,8 +20,9 @@ import numpy as np
 from utils.doprompt import DoPrompt, FedPrompt, CoCoOP
 from domainbed import hparams_registry, misc
 import json
-from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log, train_CoCoOP, agg_rep
+from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log, train_CoCoOP, agg_rep, train_harmofl
 from utils import util
+from utils.weight_perturbation import WPOptim
       
 
 if __name__ == '__main__':
@@ -247,6 +248,8 @@ if __name__ == '__main__':
     for a_iter in range(start_iter, args.iters):
         if args.mode.lower() in ['doprompt', 'fedprompt', 'cocoop', 'ccop', 'nova']:
             optimizers = [None for _ in range(client_num)]
+        elif args.mode.lower() == 'harmo-fl':
+            optimizers = [WPOptim(params=models[idx].parameters(), base_optimizer=optim.Adam, lr=args.lr, alpha=0.05, weight_decay=1e-4) for idx in range(client_num)]
         else:
             optimizers = [optim.SGD(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
         for wi in range(args.wk_iters):
@@ -277,6 +280,8 @@ if __name__ == '__main__':
                         all_feat = torch.concat((all_feat, feat_i)) 
                 elif args.mode.lower() in ['cocoop']:
                     train_CoCoOP(model, train_loaders[client_idx], device)
+                elif args.mode.lower() == 'harmo-fl':
+                    train_harmofl(args, model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                 else:
                     train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                     train_losses[client_idx] = train_loss
@@ -394,7 +399,7 @@ if __name__ == '__main__':
                         'a_iter': a_iter
                     }, SAVE_PATH)
                     best_changed = False
-                    if ((a_iter+1)*(wi+1)) % 10 == 0:
+                    if ((a_iter+1)*(wi+1)) % 10 == 0 and  (a_iter+1)*(wi+1) >= 30:
                         test_accs = {}
                         for client_idx, datasite in enumerate(datasets):
                             if datasite in test_accs: continue

@@ -488,7 +488,40 @@ def train_CoCoOP(model, train_loader, device):
 
     return loss_all/len(train_iter), correct/num_data
 
+def train_harmofl(args, model, data_loader, optimizer, loss_fun, device):
+    model.train()
+    loss_all = 0
+    total = 0
+    correct = 0
+    train_acc = 0.
+
+    for step, (data, target) in enumerate(data_loader):
+        optimizer.zero_grad()
+
+        data = data.to(device)
+        target = target.to(device)
+        output = model(data)
+        loss = loss_fun(output, target)
+        loss_all += loss.item()
+
+        total += target.size(0)
+        pred = output.data.max(1)[1]
+        batch_correct = pred.eq(target.view(-1)).sum().item()
+        correct += batch_correct
+        if step % math.ceil(len(data_loader)*0.2) == 0:
+            print(' [Step-{}|{}]| Train Loss: {:.4f} | Train Acc: {:.4f}'.format(step, len(data_loader), loss.item(), batch_correct/target.size(0)), end='\r')
+
+        loss.backward()
+        optimizer.generate_delta(zero_grad=True)
+        loss_fun(model(data), target).backward()
+        optimizer.step(zero_grad=True)
+
+    loss = loss_all / len(data_loader)
+    acc = correct/total
+    return loss, acc
+
 def train_fedprox(args, server_model, model, train_loader, optimizer, loss_fun, device):
+    model.to(device)
     model.train()
     num_data = 0
     correct = 0
@@ -519,6 +552,7 @@ def train_fedprox(args, server_model, model, train_loader, optimizer, loss_fun, 
 
         pred = output.data.max(1)[1]
         correct += pred.eq(y.view(-1)).sum().item()
+    model.to('cpu')
     return loss_all/len(train_iter), correct/num_data
 
 def test(model, test_loader, loss_fun, device, prompt_bank=None):
@@ -708,6 +742,25 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
                     print(key)
+        elif args.mode.lower() == 'harmo-fl':
+            for model in models:
+                model.to(device)
+
+            for key in server_model.state_dict().keys():
+                if not ('prompt' in key or 'head' in key or 'running_amp' in key):
+                    continue
+                print(key)
+                temp = torch.zeros_like(server_model.state_dict()[key])
+                for client_idx in range(len(client_weights)):
+                    temp += client_weights[client_idx] * models[client_idx].state_dict()[key]
+                server_model.state_dict()[key].data.copy_(temp)
+                for client_idx in range(len(client_weights)):
+                    models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
+                if 'running_amp' in key:
+                    # aggregate at first round only to save communication cost
+                    server_model.amp_norm.fix_amp = True
+                    for model in models:
+                        model.amp_norm.fix_amp = True
         elif args.mode.lower() == 'cocoop':
             for key in server_model.state_dict().keys():
                 if  'prompt' in key or 'classifier' in key or 'meta_net' in key:

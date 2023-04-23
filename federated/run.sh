@@ -58,19 +58,21 @@
 # python train.py --dataset digit --percent 0.1 --expname uneven-1 --mode ccop --iters 50 --wk_iters 1 --q 0 --si
 # python train.py --dataset digit --percent 0.1 --expname uneven-1 --mode ccop --test --batch 1 --q 0
 
-python train.py --dataset digit --percent 0.1 --expname even --mode solo --iters 50 --wk_iters 1 
-python train.py --dataset digit --percent 0.1 --expname even --mode solo --test --batch 1 
-# python train.py --dataset digit --percent 0.1 --expname uneven-1 --mode solo --iters 50 --wk_iters 1 
-# python train.py --dataset digit --percent 0.1 --expname uneven-1 --mode solo --test --batch 1 
-# python train.py --dataset digit --percent 0.1 --expname uneven-2 --mode solo --iters 50 --wk_iters 1 
-# python train.py --dataset digit --percent 0.1 --expname uneven-2 --mode solo --test --batch 1 
+python train.py --dataset domainnet --percent 0.2 --expname even --mode harmo-fl --iters 50 --wk_iters 1
+python train.py --dataset domainnet --percent 0.2 --expname even --mode harmo-fl --test --batch 1 
+python train.py --dataset domainnet --percent 0.2 --expname uneven-4 --mode harmo-fl --iters 50 --wk_iters 1
+python train.py --dataset domainnet --percent 0.2 --expname uneven-4 --mode harmo-fl --test --batch 1 
+python train.py --dataset domainnet --percent 0.2 --expname uneven-2 --mode harmo-fl --iters 50 --wk_iters 1
+python train.py --dataset domainnet --percent 0.2 --expname uneven-2 --mode harmo-fl --test --batch 1 
 
-# python train.py --dataset domainnet --percent 0.2 --expname even --mode solo --iters 50 --wk_iters 1
-# python train.py --dataset domainnet --percent 0.2 --expname even --mode solo --test --batch 1 
-# python train.py --dataset domainnet --percent 0.2 --expname uneven-4 --mode solo --iters 50 --wk_iters 1
-# python train.py --dataset domainnet --percent 0.2 --expname uneven-4 --mode solo --test --batch 1 
-# python train.py --dataset domainnet --percent 0.2 --expname uneven-2 --mode solo --iters 50 --wk_iters 1
-# python train.py --dataset domainnet --percent 0.2 --expname uneven-2 --mode solo --test --batch 1 
+python train.py --dataset digit --percent 0.1 --expname even --mode harmo-fl --iters 50 --wk_iters 1
+python train.py --dataset digit --percent 0.1 --expname even --mode harmo-fl --test --batch 1 
+python train.py --dataset digit --percent 0.1 --expname uneven-1 --mode harmo-fl --iters 50 --wk_iters 1
+python train.py --dataset digit --percent 0.1 --expname uneven-1 --mode harmo-fl --test --batch 1 
+python train.py --dataset digit --percent 0.1 --expname uneven-2 --mode harmo-fl --iters 50 --wk_iters 1
+python train.py --dataset digit --percent 0.1 --expname uneven-2 --mode harmo-fl --test --batch 1 
+
+
 
 # python train.py --dataset digit --percent 0.1 --expname uneven-2 --mode ccop --iters 50 --wk_iters 1 --si
 # python train.py --dataset digit --percent 0.1 --expname uneven-2 --mode ccop --test --batch 1 

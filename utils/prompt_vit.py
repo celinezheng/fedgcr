@@ -15,6 +15,7 @@ from operator import mul
 from torch.nn.modules.utils import _pair
 from torch.nn import Conv2d, Dropout
 from scipy import ndimage
+from utils.layers import AmpNorm
 
 from .vit_backbones import CONFIGS, Transformer, VisionTransformer, np2th
 
@@ -65,10 +66,15 @@ class PromptViT(nn.Module):
 
     def __init__(self, args, model_type="sup_vitb16_imagenet21k", vis=False):
         super().__init__()
-        if args.mode.lower() in ['full']:
+        if args.mode.lower() in ['full', 'harmo-fl']:
+        # if args.mode.lower() in ['full']:
             prompt_cfg = None
         else:
             prompt_cfg = get_vpt_cfg(args)
+        if args.mode.lower() == 'harmo-fl':
+            self.amp_norm = AmpNorm(input_shape=(3, 224, 224))
+        else:
+            self.amp_norm = None
         self.froze_enc = False
         self.model_type = model_type
         self.build_backbone(
@@ -131,6 +137,9 @@ class PromptViT(nn.Module):
         self.head = nn.Linear(self.feat_dim, NUMBER_CLASSES)
 
     def forward(self, x, return_feature=False):
+        if self.amp_norm is not None:
+            x = self.amp_norm(x)
+
         if self.side is not None:
             side_output = self.side(x)
             side_output = side_output.view(side_output.size(0), -1)
