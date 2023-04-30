@@ -30,9 +30,11 @@ MODEL_ZOO = {
     "sup_vith14_imagenet21k": "imagenet21k_ViT-H_14.npz",
 }
 class VptCfgNode():
-    def __init__(self):
+    def __init__(self, args):
         super().__init__()
         self.NUM_TOKENS = 4
+        if args.mode.lower() in ['fedavg', 'q-ffl', 'drfl']:
+            self.NUM_TOKENS = 6
         self.DEEP = False
         self.DROPOUT = 0.0
         self.LOCATION = "prepend"
@@ -52,7 +54,7 @@ class VptCfgNode():
         self.VIT_POOL_TYPE = "original" 
 
 def get_vpt_cfg(args):
-    prompt_cfg = VptCfgNode()
+    prompt_cfg = VptCfgNode(args)
     # prompt_cfg.DEEP = args.deep
     return prompt_cfg
     
@@ -66,8 +68,8 @@ class PromptViT(nn.Module):
 
     def __init__(self, args, model_type="sup_vitb16_imagenet21k", vis=False):
         super().__init__()
-        if args.mode.lower() in ['full', 'harmo-fl']:
-        # if args.mode.lower() in ['full']:
+        # if args.mode.lower() in ['full', 'harmo-fl']:
+        if args.mode.lower() in ['full']:
             prompt_cfg = None
         else:
             prompt_cfg = get_vpt_cfg(args)

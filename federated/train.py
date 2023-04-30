@@ -20,10 +20,10 @@ import numpy as np
 from utils.doprompt import DoPrompt, FedPrompt, CoCoOP
 from domainbed import hparams_registry, misc
 import json
-from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log, train_CoCoOP, agg_rep, train_harmofl
+from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log, train_CoCoOP, agg_rep, train_harmofl, train_sam
 from utils import util
 from utils.weight_perturbation import WPOptim
-      
+from utils.sam import SAM
 
 if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -33,6 +33,7 @@ if __name__ == '__main__':
     parser.add_argument('--log', action='store_true', help='whether to log')
     parser.add_argument('--tune', action='store_true', help='whether to tune hparams')
     parser.add_argument('--si', action='store_true', help='whether to use si only')
+    parser.add_argument('--sam', action='store_true', help='whether to use sam optimizer')
     parser.add_argument('--memory', action='store_true', help='whether to test memory usage of each algorithm')
     parser.add_argument('--dg', action='store_true', help='domain generalization')
     parser.add_argument('--test', action='store_true', help ='test the pretrained model')
@@ -136,7 +137,6 @@ if __name__ == '__main__':
         print(prompt_bank.shape)
     elif args.mode.lower() in ['cocoop', 'nova', 'ccop']:
         server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
-    
     elif args.mode.lower() in ['full']:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args).to(device)
@@ -174,7 +174,7 @@ if __name__ == '__main__':
     loss_fun = nn.CrossEntropyLoss()
 
     # each local client model
-    models = [copy.deepcopy(server_model).to(device) for idx in range(client_num)]
+    models = [copy.deepcopy(server_model).to(device) for _ in range(client_num)]
     best_changed = False
 
     if args.test:
@@ -225,7 +225,8 @@ if __name__ == '__main__':
         else:
             for client_idx in range(domain_num):
                 models[client_idx].load_state_dict(checkpoint['server_model'])
-        best_epoch, best_acc  = checkpoint['best_epoch'], checkpoint['best_acc']
+        best_epoch, best_acc = checkpoint['best_epoch'], checkpoint['best_acc']
+        best_test = checkpoint['best_test']
         start_iter = int(checkpoint['a_iter']) + 1
         best_agg = np.mean(best_acc)
 
@@ -234,6 +235,7 @@ if __name__ == '__main__':
         # log the best for each model on all datasets
         best_epoch = 0
         best_acc = [0. for j in range(client_num)] 
+        best_test = [0. for j in range(domain_num)] 
         start_iter = 0
         best_agg = 0
     gmap = {}
@@ -245,11 +247,17 @@ if __name__ == '__main__':
     train_losses = [1.0 for _ in range(client_num)]
     # Start training
     all_feat = None
+    print(args.sam)
     for a_iter in range(start_iter, args.iters):
-        if args.mode.lower() in ['doprompt', 'fedprompt', 'cocoop', 'ccop', 'nova']:
+        print(best_test)
+        if args.mode.lower() in ['doprompt', 'fedprompt', 'cocoop', 'nova']:
             optimizers = [None for _ in range(client_num)]
         elif args.mode.lower() == 'harmo-fl':
             optimizers = [WPOptim(params=models[idx].parameters(), base_optimizer=optim.Adam, lr=args.lr, alpha=0.05, weight_decay=1e-4) for idx in range(client_num)]
+        elif args.mode.lower() == 'ccop' and args.sam:
+            optimizers = [SAM(params=models[idx].classifier.parameters(), base_optimizer=optim.Adam, lr=args.lr) for idx in range(client_num)]
+            prompt_opts = [SAM(params=[models[idx].prompt_tokens], base_optimizer=optim.Adam, lr=args.lr) for idx in range(client_num)]
+            project_opts = [SAM(params=models[idx].meta_net.parameters(), base_optimizer=optim.Adam, lr=args.lr) for idx in range(client_num)]
         else:
             optimizers = [optim.SGD(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
         for wi in range(args.wk_iters):
@@ -271,7 +279,10 @@ if __name__ == '__main__':
                     else: gidx = gmap[client_idx]
                     train_fedprompt(gidx, model, train_loaders[client_idx], prompt_bank, device)
                 elif args.mode.lower() in ['nova', 'ccop']:
-                    train_CoCoOP(model, train_loaders[client_idx], device)
+                    if args.sam:
+                        train_sam(model, train_loaders[client_idx], prompt_opts[client_idx], prompt_opts[client_idx], optimizers[client_idx], device)
+                    else:
+                        train_CoCoOP(model, train_loaders[client_idx], device)
                     feat_i = agg_rep(server_model, val_loaders[client_idx], device)
                     feat_i = feat_i.unsqueeze(0)
                     if all_feat == None:
@@ -312,6 +323,8 @@ if __name__ == '__main__':
                     
             # Record best
             if args.mode.lower() in ['nova', 'ccop']:
+                if args.sam: threshold = 30
+                else: threshold = 45
                 cnt = [0 for _ in range(domain_num)]
                 accs = [0 for _ in range(domain_num)]
                 agg = 0
@@ -325,15 +338,15 @@ if __name__ == '__main__':
                     agg += (accs[di]/cnt[di])
                 agg /= domain_cnt
                 write_log(args, 'Aggregated Acc | Val Acc: {:.4f}\n'.format(agg))
-                # if agg > best_agg:
-                if np.mean(val_acc_list) > np.mean(best_acc):
+                if agg > best_agg:
+                # if np.mean(val_acc_list) > np.mean(best_acc):
                     best_agg = agg
                     best_epoch = a_iter
                     best_changed=True
                     for client_idx in range(client_num):
                         best_acc[client_idx] = val_acc_list[client_idx]
                         write_log(args, ' Best site-{:<10s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
-                if ((a_iter+1)*(wi+1)) > 45:
+                if ((a_iter+1)*(wi+1)) > threshold:
                     test_accs = {}
                     for client_idx, datasite in enumerate(datasets):
                         if datasite in test_accs: continue
@@ -342,8 +355,14 @@ if __name__ == '__main__':
                         # print(' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
                         write_log(args, ' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, best_epoch, test_acc))
                     test_accs = list(test_accs.values())
-                    write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
-                    
+                    if np.mean(test_accs) > np.mean(best_test):
+                        best_changed = True
+                        best_epoch = a_iter
+                        for i in range(len(best_test)):
+                            best_test[i] = test_accs[i]
+                    else:
+                        best_changed = False
+                    write_log(args, f'Average Test Accuracy: {np.mean(best_test):.4f}\n')        
             elif np.mean(val_acc_list) > np.mean(best_acc):
                 for client_idx in range(client_num):
                     best_acc[client_idx] = val_acc_list[client_idx]
@@ -352,7 +371,7 @@ if __name__ == '__main__':
                     # print(' Best site-{:<10s}| Epoch:{} | Val Acc: {:.4f}'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
                     write_log(args, ' Best site-{:<10s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
                 best_agg = np.mean(best_acc)
-            
+                   
             if best_changed:     
                 # print(' Saving the local and server checkpoint to {}...'.format(SAVE_PATH))
                 write_log(args, ' Saving the local and server checkpoint to {}...\n'.format(SAVE_PATH))
@@ -390,16 +409,33 @@ if __name__ == '__main__':
                         'a_iter': a_iter
                     }, SAVE_PATH)
                     best_changed = False
+                    if args.sam:
+                        threshold = 30
+                    else:
+                        threshold = 40
+                    if (((a_iter+1)*(wi+1)) % 10 == 0 or args.mode.lower()=='ccop') and  (a_iter+1)*(wi+1) >= threshold:
+                        test_accs = {}
+                        for client_idx in idxs:
+                            datasite = datasets[client_idx]
+                            if datasite in test_accs: continue
+                            _, test_acc = test(server_model, test_loaders[client_idx], loss_fun, device, prompt_bank)
+                            test_accs[datasite] = test_acc
+                            # print(' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
+                            write_log(args, ' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, best_epoch, test_acc))
+                        test_accs = list(test_accs.values())
+                        write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
+                        
                 # todo save gmap
                 else:
                     torch.save({
                         'server_model': server_model.state_dict(),
                         'best_epoch': best_epoch,
                         'best_acc': best_acc,
-                        'a_iter': a_iter
+                        'a_iter': a_iter, 
+                        'best_test': best_test
                     }, SAVE_PATH)
                     best_changed = False
-                    if ((a_iter+1)*(wi+1)) % 10 == 0 and  (a_iter+1)*(wi+1) >= 30:
+                    if ((a_iter+1)*(wi+1)) % 10 == 0:
                         test_accs = {}
                         for client_idx, datasite in enumerate(datasets):
                             if datasite in test_accs: continue
@@ -408,6 +444,10 @@ if __name__ == '__main__':
                             # print(' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
                             write_log(args, ' Test site-{:<10s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, best_epoch, test_acc))
                         test_accs = list(test_accs.values())
+
+                        if np.mean(test_accs) > np.mean(best_test):
+                            for i in range(domain_num):
+                                best_test[i] = test_accs[i]
                         write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
                     
                 # print(f'Average Test Accuracy: {np.mean(test_accs):.4f}')

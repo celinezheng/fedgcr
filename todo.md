@@ -14,3 +14,9 @@
 - make sure the label set of the all clients are same when partitioning
 - combine q-ffl with plain vpt instead of cocoop
 - 整理 q-ffl 然後傳給ting-an!
+- 嘗試 add prompt for proxy representation
+- display uneven distribution
+- 想看看要怎麼呈現 reweight 後 minority 的 accuracy變化（？）
+- fairness
+    - minority/worst performance(10%?)
+    - trade-off score survey
