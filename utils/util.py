@@ -12,9 +12,8 @@ def write_log(args, msg):
     log_fname = f'{args.mode}.log'
     if args.dg:
         log_path = f'../logs/{args.dataset}_{args.expname}_{args.target_domain}'
-    if args.tune:
-        log_path += '_tune'
-        log_fname = f'{args.mode}_{args.lambda_con}.log'
+    if args.q!=1:
+        log_fname = f'{args.mode}_q={args.q}.log'
     if not os.path.exists(log_path):
         os.makedirs(log_path)
     with open(os.path.join(log_path, log_fname), 'a') as logfile:
@@ -133,19 +132,19 @@ def prepare_digit_uneven(args):
             # val = 10 * (2)^(-k)
             len_dataset = {
                 'MNIST': int(0.8 * len(mnist_trainset) ),
-                'SVHN': int(0.4 * len(svhn_trainset)),
-                'USPS': int(0.5 * len(usps_trainset)),
-                'SynthDigits': int(0.4 * len(synth_trainset)),
-                'MNIST-M': int(0.4 * len(mnistm_trainset)),
+                'SVHN': int(0.45 * len(svhn_trainset)),
+                'USPS': int(0.4 * len(usps_trainset)),
+                'SynthDigits': int(0.5 * len(synth_trainset)),
+                'MNIST-M': int(0.3 * len(mnistm_trainset)),
                 }
             # data_len = [5, 1, 1, 2, 1]
         elif 'uneven-3' in args.expname.lower():
             # val = 8 * (1.5)^(-k)
-            data_len = [5, 1, 3, 2, 2]
+            data_len = [5, 1, 4, 2, 2]
             len_dataset = {
                 'MNIST': int(0.8 * len(mnist_trainset) ),
                 'SVHN': int(0.3 * len(svhn_trainset)),
-                'USPS': int(0.5 * len(usps_trainset)),
+                'USPS': int(0.7 * len(usps_trainset)),
                 'SynthDigits': int(0.4 * len(synth_trainset)),
                 'MNIST-M': int(0.3 * len(mnistm_trainset)),
                 }
@@ -384,6 +383,12 @@ def prepare_domainnet_uneven(args):
     client_weights = [ci/sum_len for ci in client_weights]
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
+def prepare_data(args):
+    if args.dataset.lower()[:6] == 'domain':
+        return prepare_domainnet_uneven(args)
+    elif args.dataset.lower()[:5] == 'digit':
+        return prepare_digit_uneven(args)
+    
 def check_labels(args, train_loaders):
     client_num = len(train_loaders)
     label_set = [set() for _ in range(client_num)]
@@ -400,12 +405,6 @@ def check_labels(args, train_loaders):
         print(len(label_set[i]))
         write_log(args, f'{len(label_set[i])}, ')
     write_log(args, ']\n')
-
-def prepare_data(args):
-    if args.dataset.lower()[:6] == 'domain':
-        return prepare_domainnet_uneven(args)
-    elif args.dataset.lower()[:5] == 'digit':
-        return prepare_digit_uneven(args)
 
 def norm_grad_diff(weights_before, new_weights, lr):
     # input: nested gradients
@@ -891,8 +890,8 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     gloss[i] /= gsize[i]
             all_weight = 0
             new_weights = [0 for _ in range(client_num)]
-            power_decay = 0.95
-            base = 0.5
+            power_decay = 0.9
+            base = 0.4
             powerI = base + (1-base) * np.float_power(power_decay, a_iter+1)
             powerC = 1 - powerI
             print("========")

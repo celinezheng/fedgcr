@@ -225,6 +225,11 @@ class ViT(nn.Module):
             self.network = timm.create_model("vit_base_patch16_224", pretrained=True, drop_path_rate=0.1)
             del self.network.head
             self.network.head = Identity()
+        elif hparams['scratch']:
+            self.network = torchvision.models.vit_b_16(pretrained=False, attention_dropout=hparams["attention_dropout"])
+            del self.network.heads
+            self.network.heads = Identity()
+            print('scratch')
         else:
             self.network = torchvision.models.vit_b_16(pretrained=True, attention_dropout=hparams["attention_dropout"])
             del self.network.heads

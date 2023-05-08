@@ -1,3 +1,5 @@
 
-python train.py --dataset digit --percent 0.1 --expname uneven-3 --mode ccop --iters 60 --wk_iters 1 
-python train.py --dataset digit --percent 0.1 --expname uneven-3 --mode ccop --test --batch 1 
+python train.py --dataset domainnet --percent 0.2 --expname uneven-1-scratch --mode CoCoOP --iters 50 \
+    --hparams '{"scratch": "True"}' 
+python train.py --dataset domainnet --percent 0.2 --expname uneven-1-scratch --mode CoCoOP --test \
+    --hparams '{"scratch": "True"}' 

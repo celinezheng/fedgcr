@@ -79,8 +79,9 @@ class PromptViT(nn.Module):
             self.amp_norm = None
         self.froze_enc = False
         self.model_type = model_type
+        pretrained = 'scratch' in args.expname
         self.build_backbone(
-            prompt_cfg, vis=vis)
+            prompt_cfg, vis=vis, pretrained=pretrained)
         self.setup_side()
         self.setup_head(args.num_classes)
         print(args.num_classes)
@@ -95,7 +96,7 @@ class PromptViT(nn.Module):
         self.side = None
         
 
-    def build_backbone(self, prompt_cfg, vis):
+    def build_backbone(self, prompt_cfg, vis, pretrained=True):
         m2featdim = {
             "sup_vitb16_224": 768,
             "sup_vitb16": 768,
@@ -124,9 +125,11 @@ class PromptViT(nn.Module):
             self.enc = VisionTransformer(
             model_type, crop_size, num_classes=-1, vis=vis)
 
-        print('loading pretrained weights...')
-        self.enc.load_from(np.load(os.path.join(model_root, MODEL_ZOO[model_type])))
-        
+        if pretrained:
+            print('loading pretrained weights...')
+            self.enc.load_from(np.load(os.path.join(model_root, MODEL_ZOO[model_type])))
+        else:
+            print('train from scratch......')
     def setup_head(self, class_num):
         MLP_NUM = 0
         NUMBER_CLASSES = class_num

@@ -39,10 +39,10 @@ if __name__ == '__main__':
     parser.add_argument('--test', action='store_true', help ='test the pretrained model')
     parser.add_argument('--lambda_con', type=float, default=0.5, help='lambda for contrastive loss')
     parser.add_argument('--lr', type=float, default=1e-2, help='learning rate')
-    parser.add_argument('--q', type = int, default=1, help ='q value for fairness')
+    parser.add_argument('--q', type = float, default=1, help ='q value for fairness')
     parser.add_argument('--batch', type = int, default=16, help ='batch size')
     parser.add_argument('--iters', type = int, default=10, help = 'iterations for communication')
-    parser.add_argument('--wk_iters', type = int, default=5, help = 'optimization iters in local worker between communication')
+    parser.add_argument('--wk_iters', type = int, default=1, help = 'optimization iters in local worker between communication')
     parser.add_argument('--mode', type = str, default='DoPrompt', help='[FedBN | FedAvg | DoPrompt]')
     parser.add_argument('--mu', type=float, default=1e-3, help='The hyper parameter for fedprox')
     parser.add_argument('--save_path', type = str, default='../checkpoint', help='path to save the checkpoint')
@@ -338,8 +338,8 @@ if __name__ == '__main__':
                     agg += (accs[di]/cnt[di])
                 agg /= domain_cnt
                 write_log(args, 'Aggregated Acc | Val Acc: {:.4f}\n'.format(agg))
-                if agg > best_agg:
-                # if np.mean(val_acc_list) > np.mean(best_acc):
+                # if agg > best_agg:
+                if np.mean(val_acc_list) > np.mean(best_acc):
                     best_agg = agg
                     best_epoch = a_iter
                     best_changed=True
@@ -362,7 +362,7 @@ if __name__ == '__main__':
                             best_test[i] = test_accs[i]
                     else:
                         best_changed = False
-                    write_log(args, f'Average Test Accuracy: {np.mean(best_test):.4f}\n')        
+                    write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')        
             elif np.mean(val_acc_list) > np.mean(best_acc):
                 for client_idx in range(client_num):
                     best_acc[client_idx] = val_acc_list[client_idx]

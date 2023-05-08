@@ -27,6 +27,7 @@ def _hparams(algorithm, dataset, random_seed):
     # Unconditional hparam definitions.
     
     _hparam('vit_base_16', True, lambda r: True)
+    _hparam('scratch', False, lambda r: False)
     _hparam('im21k', False, lambda r: False)
     _hparam('resnet_dropout', 0.1, lambda r: 0.1)
     _hparam('attention_dropout', 0.0, lambda r: 0.0)
