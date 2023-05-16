@@ -503,14 +503,14 @@ class CoCoOP(ERM):
             logit = self.network(x)
         return logit
     
-    def update(self, x, y):
+    def update(self, loss_fun, x, y):
         self.prompt_opt.zero_grad()
         self.optimizer.zero_grad()
         self.project_opt.zero_grad()
         
         # domain prompt learning
         all_logit = self.forward_prompt(x)
-        loss_p = F.cross_entropy(all_logit, y)
+        loss_p = loss_fun(all_logit, y)
         loss_p.backward()
         self.prompt_opt.step()
 
@@ -520,7 +520,7 @@ class CoCoOP(ERM):
         self.network.train()
         # todo with gmap
         logit = self.forward_proj(x, hint)
-        loss_m = F.cross_entropy(logit, y)      
+        loss_m = loss_fun(logit, y)      
         loss_m.backward()
         pred = all_logit.data.max(1)[1]
         correct = pred.eq(y.view(-1)).sum().item()

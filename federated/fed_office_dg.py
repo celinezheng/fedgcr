@@ -61,7 +61,7 @@ def train_prox(args, model, data_loader, optimizer, loss_fun, device):
     return loss_all / len(data_loader), correct/total
      
 def prepare_data(args):
-    data_base_path = '../../data'
+    data_base_path = '../data'
     transform_office = transforms.Compose([
             transforms.Resize([224, 224]),            
             transforms.RandomHorizontalFlip(),

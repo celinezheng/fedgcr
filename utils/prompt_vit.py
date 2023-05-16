@@ -79,7 +79,7 @@ class PromptViT(nn.Module):
             self.amp_norm = None
         self.froze_enc = False
         self.model_type = model_type
-        pretrained = 'scratch' in args.expname
+        pretrained = 'scratch' not in args.expname
         self.build_backbone(
             prompt_cfg, vis=vis, pretrained=pretrained)
         self.setup_side()
@@ -163,7 +163,11 @@ class PromptViT(nn.Module):
         x = self.head(x)
 
         return x
-        
+
+    def forward_feat(self, x):
+        feat, _ =  self.forward(x, return_feature=True)
+        return feat
+
     def forward_feature(self, feat):
         x = self.head(feat)
         return x

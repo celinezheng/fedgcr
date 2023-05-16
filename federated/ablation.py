@@ -40,7 +40,7 @@ if __name__ == '__main__':
     parser.add_argument('--batch', type = int, default=64, help ='batch size')
     parser.add_argument('--iters', type = int, default=10, help = 'iterations for communication')
     parser.add_argument('--wk_iters', type = int, default=1, help = 'optimization iters in local worker between communication')
-    parser.add_argument('--mode', type = str, default='DoPrompt', help='[FedBN | FedAvg | DoPrompt]')
+    parser.add_argument('--mode', type = str, default='ablation', help='[FedBN | FedAvg | DoPrompt]')
     parser.add_argument('--mu', type=float, default=1e-3, help='The hyper parameter for fedprox')
     parser.add_argument('--save_path', type = str, default='../checkpoint', help='path to save the checkpoint')
     parser.add_argument('--resume', action='store_true', help ='resume training from the save path checkpoint')
@@ -72,8 +72,8 @@ if __name__ == '__main__':
     SAVE_PATH = os.path.join(args.save_path, f'{args.mode}')
     if args.dg:
         SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_{args.target_domain}')
-    if args.sam:
-        SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_sam_{args.sam}')
+    if args.tune:
+        SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_tune_{args.lambda_con}')
     if 'ccop' in args.mode.lower():
         SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_q={args.q}')
 
@@ -102,12 +102,10 @@ if __name__ == '__main__':
         domain_num = 5
     elif args.dataset.lower()[:9] == 'fairface':
         domain_num = 7
-        args.num_classes = 9
     else:
         import warnings
         warnings.warn("invalid args.dataset")
         exit(0)
-    loss_fun = nn.CrossEntropyLoss()
     client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
     print(client_weights)
     client_num = len(train_loaders)
@@ -140,7 +138,7 @@ if __name__ == '__main__':
     elif args.mode.lower() in ['full']:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args).to(device)
-    # fedavg
+    # fedavg, ablation
     else:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args).to(device)
@@ -171,7 +169,8 @@ if __name__ == '__main__':
         write_log(args, 'trained percentage trained param: {:.6f}'.format(size_all_train_mb/size_all_mb))
         exit(0)
 
-    
+    loss_fun = nn.CrossEntropyLoss()
+
     # each local client model
     models = [copy.deepcopy(server_model).to(device) for _ in range(client_num)]
     best_changed = False
@@ -246,6 +245,7 @@ if __name__ == '__main__':
     train_losses = [1.0 for _ in range(client_num)]
     # Start training
     all_feat = None
+    print(args.sam)
     for a_iter in range(start_iter, args.iters):
         print(best_test)
         if args.mode.lower() in ['doprompt', 'fedprompt', 'cocoop', 'nova']:
@@ -278,9 +278,17 @@ if __name__ == '__main__':
                     train_fedprompt(gidx, model, train_loaders[client_idx], prompt_bank, device)
                 elif args.mode.lower() in ['nova', 'ccop']:
                     if args.sam:
-                        train_sam(model, train_loaders[client_idx], prompt_opts[client_idx], prompt_opts[client_idx], optimizers[client_idx], loss_fun, device)
+                        train_sam(model, train_loaders[client_idx], prompt_opts[client_idx], prompt_opts[client_idx], optimizers[client_idx], device)
                     else:
-                        train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device)
+                        train_CoCoOP(model, train_loaders[client_idx], device)
+                    feat_i = agg_rep(server_model, train_loaders[client_idx], device)
+                    feat_i = feat_i.unsqueeze(0)
+                    if all_feat == None:
+                        all_feat = feat_i
+                    else:
+                        all_feat = torch.concat((all_feat, feat_i)) 
+                elif args.mode.lower() == 'ablation':
+                    train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                     feat_i = agg_rep(server_model, train_loaders[client_idx], device)
                     feat_i = feat_i.unsqueeze(0)
                     if all_feat == None:
@@ -288,7 +296,7 @@ if __name__ == '__main__':
                     else:
                         all_feat = torch.concat((all_feat, feat_i)) 
                 elif args.mode.lower() in ['cocoop']:
-                    train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device)
+                    train_CoCoOP(model, train_loaders[client_idx], device)
                 elif args.mode.lower() == 'harmo-fl':
                     train_harmofl(args, model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                 else:
@@ -320,10 +328,10 @@ if __name__ == '__main__':
             write_log(args, f'Average Valid Accuracy: {np.mean(val_acc_list):.4f}\n')
                     
             # Record best
-            if args.mode.lower() in ['nova', 'ccop']:
-                if args.sam: threshold = args.iters - 10
-                else: threshold = args.iters - 5
-                threshold = max(10, threshold)
+            if args.mode.lower() in ['nova', 'ccop', 'ablation']:
+                if args.sam: threshold = 30
+                elif args.dataset.lower()=='fairface': threshold = 90
+                else: threshold = 45
                 cnt = [0 for _ in range(domain_num)]
                 accs = [0 for _ in range(domain_num)]
                 agg = 0

@@ -2,13 +2,13 @@ from tqdm import tqdm
 import sys, os
 import torch
 import torchvision.transforms as transforms
-from utils.data_utils import DomainNetDataset, DigitsDataset
+from utils.data_utils import DomainNetDataset, DigitsDataset, FairFaceDataset
 import math
 import torch.nn.functional as tf
 import numpy as np
 import copy
 def write_log(args, msg):
-    log_path = f'../logs/{args.dataset}_{args.expname}_{args.seed}'
+    log_path = f'../logs/{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
     log_fname = f'{args.mode}.log'
     if args.dg:
         log_path = f'../logs/{args.dataset}_{args.expname}_{args.target_domain}'
@@ -86,7 +86,6 @@ def prepare_digit_uneven(args):
 
     # min_data_len = min(len(dataset)) * args.persent
     # ori_data_len = min(len(mnist_trainset), len(svhn_trainset), len(usps_trainset), len(synth_trainset), len(mnistm_trainset))
-    dataset_name = ['MNIST', 'SVHN', 'USPS', 'SynthDigits', 'MNIST-M']
     train_sets = {
         'MNIST': mnist_trainset,
         'SVHN': svhn_trainset,
@@ -115,6 +114,7 @@ def prepare_digit_uneven(args):
         'SynthDigits': int(0.5 * len(synth_trainset)),
         'MNIST-M': int(0.2 * len(mnistm_trainset)),
         }
+    client_nums = {}
     if args.dg:
         if 'uneven-1' in args.expname.lower():
             data_len = [4, 4, 1, 1]
@@ -123,53 +123,25 @@ def prepare_digit_uneven(args):
         else:
             data_len = [3, 3, 3, 3]
     else:
-        if 'uneven-1' in args.expname.lower():
+        decay_order = ['MNIST', 'USPS', 'SynthDigits', 'MNIST-M', 'SVHN']
+        if 'uneven' in args.expname.lower():
             # data_len = [4, 1, 1, 3, 1]
-            data_len = [4, 3, 1, 1, 1]
-        elif 'uneven-2' in args.expname.lower():
-            # data_len = [5, 2, 1, 1, 1]
-            data_len = [5, 1, 2, 1, 1]
-            # val = 10 * (2)^(-k)
-            len_dataset = {
-                'MNIST': int(0.8 * len(mnist_trainset) ),
-                'SVHN': int(0.45 * len(svhn_trainset)),
-                'USPS': int(0.4 * len(usps_trainset)),
-                'SynthDigits': int(0.5 * len(synth_trainset)),
-                'MNIST-M': int(0.3 * len(mnistm_trainset)),
-                }
-            # data_len = [5, 1, 1, 2, 1]
-        elif 'uneven-3' in args.expname.lower():
-            # val = 8 * (1.5)^(-k)
-            data_len = [5, 1, 4, 2, 2]
-            len_dataset = {
-                'MNIST': int(0.8 * len(mnist_trainset) ),
-                'SVHN': int(0.3 * len(svhn_trainset)),
-                'USPS': int(0.7 * len(usps_trainset)),
-                'SynthDigits': int(0.4 * len(synth_trainset)),
-                'MNIST-M': int(0.3 * len(mnistm_trainset)),
-                }
+            decay_speed = args.ratio
+            for i, name in enumerate(decay_order):
+                client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
+                if i==0:
+                    len_dataset[name] = len(train_sets[name])
+                else:
+                    len_dataset[name] = int(len_dataset[decay_order[i-1]]/decay_speed)
         else:
-            data_len = [2, 2, 2, 2, 2]
-            len_dataset = {
-            'MNIST': int(0.4 * len(mnist_trainset) ),
-            'SVHN': int(0.25 * len(svhn_trainset)),
-            'USPS': int(0.35 * len(usps_trainset)),
-            'SynthDigits': int(0.3 * len(synth_trainset)),
-            'MNIST-M': int(0.2 * len(mnistm_trainset)),
-            }
-    # min_data_len = ori_data_len // max(5, max(data_len))
-    client_nums = {}
-    i = 0
-    for name in dataset_name:
-        if args.dg and name==args.target_domain:
-            client_nums[name] = 0
-        else:
-            client_nums[name] = data_len[i]
-            i += 1
-
-    # val_len = int(min_data_len * 0.4)
-    # train_len = int(min_data_len * 0.6)
-
+            min_len = int(0.5 * len(mnist_trainset))
+            decay_speed = 3
+            for i, name in enumerate(decay_order):
+                client_nums[name] = 2
+                len_dataset[name] = min_len
+    
+    for name, val in len_dataset.items():
+        print(f"{name}: {val * 0.6}")
     target_loader = None
     client_weights = []
     sum_len = 0
@@ -180,23 +152,20 @@ def prepare_digit_uneven(args):
     print(client_nums)
     train_loaders, val_loaders, test_loaders = [], [], []
     datasets = []
+    train_ratio = 0.8
     for key, value in client_nums.items():
         all_len = len_dataset[key]
-        all_train_len = int(all_len * 0.6)
-        all_val_len = int(all_len * 0.4)
+        all_train_len = int(all_len * train_ratio)
+        all_val_len = int(all_len * (1 - train_ratio))
         cur_dataset_len = len_dataset[key]
         train_begin = 0
         valid_begin = -all_val_len
-        if value==1:
-            partition_num = 4
-        else:
-            partition_num = (1+value)*value/2
+        partition_num = (np.float_power(decay_speed, value)-1) / (decay_speed - 1)
 
-        test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=args.batch, shuffle=False)
-
+        test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
         for j in range(value):
-            train_len = int(all_train_len * (j+1) / partition_num)
-            val_len = int(all_val_len * (j+1) / partition_num)
+            train_len = int(all_train_len * np.float_power(decay_speed, j) / partition_num)
+            val_len = int(all_val_len * np.float_power(decay_speed, j) / partition_num)
             datasets.append(key)
             cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
             cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
@@ -214,8 +183,15 @@ def prepare_digit_uneven(args):
     write_log(args, f"data_number=[")
     for ni in client_weights:
         write_log(args, f"{ni},")
+    write_log(args, f"\nclient_nums=[")
+    for name in decay_order:
+        write_log(args, f"{client_nums[name]},")
+    write_log(args, f"]\nlen_dataset=[")
+    for name in decay_order:
+        write_log(args, f"{len_dataset[name]},")
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
+    # check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 def prepare_domainnet_uneven(args):
@@ -268,73 +244,35 @@ def prepare_domainnet_uneven(args):
         'Real': real_trainset,
         'Sketch':sketch_trainset
         }
-    len_dataset = {
-        'Clipart': len(clipart_trainset),
-        'Infograph': int(0.3*len(infograph_trainset)),
-        'Painting': int(0.4*len(painting_trainset)),
-        'QuickDraw': int(0.3*len(quickdraw_trainset)),
-        'Real': int(0.3*len(real_trainset)),
-        'Sketch': int(0.4*len(sketch_trainset))
-        }
-    dataset_name = ['Clipart', 'Infograph', 'Painting', 'QuickDraw', 'Real', 'Sketch']
-    if args.dg:
-        if 'uneven-1' in args.expname.lower():
-            data_len = [4, 1, 1, 1, 1]
-        elif 'uneven-2' in args.expname.lower():
-            data_len = [6, 1, 1, 1, 1]
-        else:
-            data_len = [2, 2, 2, 2, 2]
-    else:
-        if 'uneven-1' in args.expname.lower():
-            # {5, 1, 1, 1, 2, 1}, client number =12/〖2.2〗^𝑘
-            data_len = [5, 1, 1, 1, 2, 1]
-        elif 'uneven-2' in args.expname.lower():
-            data_len = [6, 3, 1, 1, 1, 1]
-            len_dataset = {
-                'Clipart': len(clipart_trainset),
-                'Infograph': int(0.6*len(infograph_trainset)),
-                'Painting': int(0.6*len(painting_trainset)),
-                'QuickDraw': int(0.2*len(quickdraw_trainset)),
-                'Real': int(0.2*len(real_trainset)),
-                'Sketch': int(0.4*len(sketch_trainset))
-                }
-        elif 'uneven-3' in args.expname.lower():
-            # {5, 1, 4, 1, 2, 2}, client number =8/〖1.5〗^𝑘
-            data_len = [5, 1, 4, 1, 2, 2]
-        elif 'uneven-4' in args.expname.lower():
-            data_len = [4, 1, 4, 1, 1, 1]
-            len_dataset = {
-                'Clipart': len(clipart_trainset),
-                'Infograph': int(0.3*len(infograph_trainset)),
-                'Painting': int(0.3*len(painting_trainset)),
-                'QuickDraw': int(0.2*len(quickdraw_trainset)),
-                'Real': int(0.2*len(real_trainset)),
-                'Sketch': int(0.4*len(sketch_trainset))
-                }
-        else:
-            data_len = [2, 2, 2, 2, 2, 2]
-            len_dataset = {
-                'Clipart': len(clipart_trainset),
-                'Infograph': int(0.3*len(infograph_trainset)),
-                'Painting': int(0.3*len(painting_trainset)),
-                'QuickDraw': int(0.2*len(quickdraw_trainset)),
-                'Real': int(0.2*len(real_trainset)),
-                'Sketch': int(0.4*len(sketch_trainset))
-                }
-    # print(min_data_len/2, min_data_len*0.05)
-    # min_data_len = min(min_data_len//max(data_len), int(min_data_len*args.percent))
+    len_dataset = {}
     client_nums = {}
-    i = 0
-    for name in dataset_name:
-        if args.dg and name==args.target_domain:
-            client_nums[name] = 0
-        else:
-            client_nums[name] = data_len[i]
-            i += 1
-    # val_len = int(min_data_len * 0.4)
-    # train_len = int(min_data_len * 0.6)
+    decay_order = ['Clipart', 'Real', 'Painting', 'Sketch', 'QuickDraw', 'Infograph']
+    if 'uneven' in args.expname.lower():
+        # client number = 1.4^k, k=0~5
+        # data_len = {5, 4, 3, 2, 1, 1}
+        decay_speed = args.ratio
+        for i, name in enumerate(decay_order):
+            client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
+            if i==0:
+                len_dataset[name] = len(train_sets[name])
+            else:
+                len_dataset[name] = int(len_dataset[decay_order[i-1]]/decay_speed)
+    else:
+        decay_speed = 3
+        # data_len = [2, 2, 2, 2, 2, 2]
+        min_len = -1
+        for _, train_set in train_sets.items():
+            if min_len==-1:
+                min_len = len(train_set)
+            else:
+                min_len = min(min_len, len(train_set))
+        for i, name in enumerate(decay_order):
+            client_nums[name] = 2
+            len_dataset[name] = min_len
+            
     print(client_nums)
-
+    for name, val in len_dataset.items():
+        print(f"{name}: {val * args.percent * 0.6}")
 
     target_loader = None
     client_weights = []
@@ -354,14 +292,12 @@ def prepare_domainnet_uneven(args):
         cur_dataset_len = len_dataset[key]
         train_begin = 0
         valid_begin = -all_val_len
-        if value==1:
-            partition_num = 3
-        else:
-            partition_num = (1+value)*value/2
+        partition_num = (np.float_power(decay_speed, value)-1) / (decay_speed - 1)
+        
         test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
         for j in range(value):
-            train_len = int(all_train_len * (j+1) / partition_num)
-            val_len = int(all_val_len * (j+1) / partition_num)
+            train_len = int(all_train_len * np.float_power(decay_speed, j) / partition_num)
+            val_len = int(all_val_len * np.float_power(decay_speed, j) / partition_num)
             datasets.append(key)
             cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
             cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
@@ -379,8 +315,151 @@ def prepare_domainnet_uneven(args):
     write_log(args, f"data_number=[")
     for ni in client_weights:
         write_log(args, f"{ni},")
+    write_log(args, f"\nclient_nums=[")
+    for name in decay_order:
+        write_log(args, f"{client_nums[name]},")
+    write_log(args, f"]\nlen_dataset=[")
+    for name in decay_order:
+        write_log(args, f"{len_dataset[name]},")
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
+    check_labels(args, train_loaders)
+    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
+
+def prepare_fairface_uneven(args):
+    data_base_path = '../../data/FairFace'
+    transform_train = transforms.Compose([
+            transforms.Resize([224, 224]),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation((-30,30)),
+            transforms.ToTensor(),
+    ])
+
+    transform_test = transforms.Compose([
+            transforms.Resize([224, 224]),
+            transforms.ToTensor(),
+    ])
+
+    # white
+    White_trainset = FairFaceDataset(data_base_path, 'White', transform=transform_train)
+    White_testset = FairFaceDataset(data_base_path, 'White', transform=transform_test, train=False)
+    # East_Asian
+    East_Asian_trainset = FairFaceDataset(data_base_path, 'East_Asian', transform=transform_train)
+    East_Asian_testset = FairFaceDataset(data_base_path, 'East_Asian', transform=transform_test, train=False)
+    # Indian
+    Indian_trainset = FairFaceDataset(data_base_path, 'Indian', transform=transform_train)
+    Indian_testset = FairFaceDataset(data_base_path, 'Indian', transform=transform_test, train=False)
+    # Middle_Eastern
+    Middle_Eastern_trainset = FairFaceDataset(data_base_path, 'Middle_Eastern', transform=transform_train)
+    Middle_Eastern_testset = FairFaceDataset(data_base_path, 'Middle_Eastern', transform=transform_test, train=False)
+    # Latino_Hispanic
+    Latino_Hispanic_trainset = FairFaceDataset(data_base_path, 'Latino_Hispanic', transform=transform_train)
+    Latino_Hispanic_testset = FairFaceDataset(data_base_path, 'Latino_Hispanic', transform=transform_test, train=False)
+    # Southeast_Asian
+    Southeast_Asian_trainset = FairFaceDataset(data_base_path, 'Southeast_Asian', transform=transform_train)
+    Southeast_Asian_testset = FairFaceDataset(data_base_path, 'Southeast_Asian', transform=transform_test, train=False)
+    # Black
+    Black_trainset = FairFaceDataset(data_base_path, 'Black', transform=transform_train)
+    Black_testset = FairFaceDataset(data_base_path, 'Black', transform=transform_test, train=False)
+
+    # min_data_len = int(min(len(clipart_trainset), len(infograph_trainset), len(painting_trainset), len(quickdraw_trainset), len(real_trainset), len(sketch_trainset)))
+    test_sets = {
+        'White': White_testset,
+        'East_Asian': East_Asian_testset,
+        'Indian': Indian_testset,
+        'Middle_Eastern': Middle_Eastern_testset,
+        'Latino_Hispanic': Latino_Hispanic_testset,
+        'Southeast_Asian':Southeast_Asian_testset,
+        'Black': Black_testset
+        }
+    train_sets = {
+        'White': White_trainset,
+        'East_Asian': East_Asian_trainset,
+        'Indian': Indian_trainset,
+        'Middle_Eastern': Middle_Eastern_trainset,
+        'Latino_Hispanic': Latino_Hispanic_trainset,
+        'Southeast_Asian':Southeast_Asian_trainset,
+        'Black': Black_trainset
+        }
+    len_dataset = {}
+    client_nums = {}
+    decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
+    if 'uneven' in args.expname.lower():
+        # client number = 1.4^k, k=0~5
+        # data_len = {5, 4, 3, 2, 1, 1}
+        decay_speed = args.ratio
+        for i, name in enumerate(decay_order):
+            client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
+            if i==0: 
+                len_dataset[name] = len(train_sets[name])
+            else:
+                len_dataset[name] = int(len_dataset[decay_order[i-1]]/decay_speed)
+    else:
+        decay_speed = 3
+        min_len = -1
+        for _, train_set in train_sets.items():
+            if min_len==-1:
+                min_len = len(train_set)
+            else:
+                min_len = min(min_len, len(train_set))
+        for i, name in enumerate(decay_order):
+            client_nums[name] = 2
+            len_dataset[name] = min_len
+            
+    print(client_nums)
+    for name, val in len_dataset.items():
+        print(f"{name}: {val * args.percent * 0.6}")
+
+    target_loader = None
+    client_weights = []
+    if args.dg:
+        print(f"target domain is {args.target_domain}")
+        client_nums[args.target_domain] = 0
+        target_loader = torch.utils.data.DataLoader(test_sets[args.target_domain], batch_size=args.batch, shuffle=False)
+
+    train_loaders, val_loaders, test_loaders = [], [], []
+    datasets = []
+    sum_len = 0
+
+    for key, value in client_nums.items():
+        all_len = len_dataset[key] * args.percent
+        all_train_len = int(all_len * 0.6)
+        all_val_len = int(all_len * 0.4)
+        cur_dataset_len = len_dataset[key]
+        train_begin = 0
+        valid_begin = -all_val_len
+        partition_num = (np.float_power(decay_speed, value)-1) / (decay_speed - 1)
+        
+        test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
+        for j in range(value):
+            train_len = int(all_train_len * np.float_power(decay_speed, j) / partition_num)
+            val_len = int(all_val_len * np.float_power(decay_speed, j) / partition_num)
+            datasets.append(key)
+            cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
+            cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
+            train_loader = torch.utils.data.DataLoader(cur_trainset, batch_size=args.batch, shuffle=True)
+            val_loader = torch.utils.data.DataLoader(cur_valset, batch_size=args.batch, shuffle=False)
+            train_loaders.append(train_loader)
+            val_loaders.append(val_loader)
+            test_loaders.append(test_loader)
+            train_begin += train_len
+            valid_begin += val_len
+            client_weights.append(len(cur_trainset))
+            sum_len += len(cur_trainset)
+            # print(len(cur_trainset), len(cur_valset))
+    print(client_weights)
+    write_log(args, f"data_number=[")
+    for ni in client_weights:
+        write_log(args, f"{ni},")
+    write_log(args, f"]\nclient_nums=[")
+    for name in decay_order:
+        write_log(args, f"{client_nums[name]},")
+    write_log(args, f"]\nlen_dataset=[")
+    for name in decay_order:
+        write_log(args, f"{len_dataset[name]},")
+    write_log(args, f"]\n")
+    client_weights = [ci/sum_len for ci in client_weights]
+    # check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 def prepare_data(args):
@@ -388,7 +467,9 @@ def prepare_data(args):
         return prepare_domainnet_uneven(args)
     elif args.dataset.lower()[:5] == 'digit':
         return prepare_digit_uneven(args)
-    
+    elif args.dataset.lower()[:9] == 'fairface':
+        return prepare_fairface_uneven(args)
+
 def check_labels(args, train_loaders):
     client_num = len(train_loaders)
     label_set = [set() for _ in range(client_num)]
@@ -417,6 +498,7 @@ def norm_grad_diff(weights_before, new_weights, lr):
     return norms
 
 def train(model, train_loader, optimizer, loss_fun, device):
+    model.to(device)
     model.train()
     num_data = 0
     correct = 0
@@ -440,6 +522,7 @@ def train(model, train_loader, optimizer, loss_fun, device):
 
         pred = output.data.max(1)[1]
         correct += pred.eq(y.view(-1)).sum().item()
+    model.to('cpu')
     return loss_all/len(train_iter), correct/num_data
 
 def train_doprompt(args, model, train_loader, client_idx, device):
@@ -480,7 +563,7 @@ def train_fedprompt(gidx, model, train_loader, prompt_bank, device):
 
     return loss_all/len(train_iter), correct/num_data
 
-def train_CoCoOP(model, train_loader, device):
+def train_CoCoOP(args, model, train_loader, loss_fun, device):
     model.to(device)
     model.train()
     num_data = 0
@@ -492,15 +575,15 @@ def train_CoCoOP(model, train_loader, device):
         x = x.to(device).float()
         y = y.to(device).long()
         num_data += y.size(0)
-        result = model.update(x, y)
-
+        result = model.update(loss_fun, x, y)
         loss_all += result['loss']
         correct += result['correct']
     model.to('cpu')
     return loss_all/len(train_iter), correct/num_data
 
 import torch.nn.functional as F
-def train_sam(model, train_loader, prompt_opt, project_opt, optimizer, device):
+def train_sam(model, train_loader, prompt_opt, project_opt, optimizer, loss_fun, device):
+    model.to(device)
     model.train()
     num_data = 0
     correct = 0
@@ -514,31 +597,32 @@ def train_sam(model, train_loader, prompt_opt, project_opt, optimizer, device):
         num_data += y.size(0)
         # prompt
         all_logit = model.forward_prompt(x)
-        loss_p = F.cross_entropy(all_logit, y)
+        loss_p = loss_fun(all_logit, y)
         loss_p.backward()
         prompt_opt.first_step(zero_grad=True)
-        F.cross_entropy(model.forward_prompt(x), y).backward()
+        loss_fun(model.forward_prompt(x), y).backward()
         prompt_opt.second_step(zero_grad=True)
         # meta net
         model.network.eval()
         hint = model.forward_raw(x)
         model.network.train()
         logit = model.forward_proj(x, hint)
-        loss_m = F.cross_entropy(logit, y)      
+        loss_m = loss_fun(logit, y)      
         loss_m.backward()
         optimizer.first_step(zero_grad=True)
         project_opt.first_step(zero_grad=True)
-        F.cross_entropy(model.forward_proj(x, hint), y).backward()
+        loss_fun(model.forward_proj(x, hint), y).backward()
         optimizer.second_step(zero_grad=True)
         project_opt.second_step(zero_grad=True)
 
         loss_all += (loss_m+loss_p).item()
         pred = logit.data.max(1)[1]
         correct += pred.eq(y.view(-1)).sum().item()
-
+    model.to('cpu')
     return loss_all/len(train_iter), correct/num_data
 
 def train_harmofl(args, model, data_loader, optimizer, loss_fun, device):
+    model.to(device)
     model.train()
     loss_all = 0
     total = 0
@@ -550,6 +634,7 @@ def train_harmofl(args, model, data_loader, optimizer, loss_fun, device):
 
         data = data.to(device)
         target = target.to(device)
+        
         output = model(data)
         loss = loss_fun(output, target)
         loss_all += loss.item()
@@ -569,6 +654,7 @@ def train_harmofl(args, model, data_loader, optimizer, loss_fun, device):
 
     loss = loss_all / len(data_loader)
     acc = correct/total
+    model.to('cpu')
     return loss, acc
 
 def train_fedprox(args, server_model, model, train_loader, optimizer, loss_fun, device):
@@ -607,6 +693,7 @@ def train_fedprox(args, server_model, model, train_loader, optimizer, loss_fun, 
     return loss_all/len(train_iter), correct/num_data
 
 def test(model, test_loader, loss_fun, device, prompt_bank=None):
+    model.to(device)
     model.eval()
     test_loss = 0
     correct = 0
@@ -626,7 +713,7 @@ def test(model, test_loader, loss_fun, device, prompt_bank=None):
         pred = output.data.max(1)[1]
 
         correct += pred.eq(target.view(-1)).sum().item()
-
+    model.to('cpu')
     return test_loss/len(test_loader), correct /len(test_loader.dataset)
 
 def is_personalized_param(name):
@@ -649,9 +736,9 @@ def agg_rep(model, test_loader, device):
     model.eval()
     agg_protos_label = {}
     cnt = {}
-    mid = len(test_loader)//2
+    mid = 3
     for idx, batch in enumerate(tqdm(test_loader)):
-        if idx==mid and idx!=0: break
+        if idx==mid: break
         data, target = batch
         data = data.to(device).float()
         target = target.to(device).long()
@@ -891,7 +978,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             all_weight = 0
             new_weights = [0 for _ in range(client_num)]
             power_decay = 0.9
-            base = 0.4
+            base = 0.5
             powerI = base + (1-base) * np.float_power(power_decay, a_iter+1)
             powerC = 1 - powerI
             print("========")
@@ -920,9 +1007,9 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-        elif args.mode.lower() == 'nova':
+        elif args.mode.lower() == 'ablation':
             multi = 100
-            q = 1
+            q = args.q
             gmap, cnt = cluster(args, all_feat, domain_num)
             gsize = [0 for _ in range(domain_num)]
             gloss = [1e-10 for _ in range(domain_num)]
@@ -933,27 +1020,30 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             for i in range(domain_num):
                 if gsize[i]>0:
                     gloss[i] /= gsize[i]
-            print("========")
-            print(gloss)
-            print("========")
-            beta = 0.9
-            beta_c = 0.9
-            write_log(args, f"beta={beta}, beta_c={beta_c}\n")
-            write_log(args, 'use CB, IB for Ea\n')
             all_weight = 0
             new_weights = [0 for _ in range(client_num)]
+            power_decay = 0.9
+            base = 0.5
+            powerI = base + (1-base) * np.float_power(power_decay, a_iter+1)
+            powerC = 1 - powerI
+            print("========")
+            print(gloss)
+            write_log(args, f"power_decay: {power_decay}, powerI: {powerI:.4f}, powerC: {powerC:.4f}\n")
+            print("========")
+
             for client_idx in range(client_num):
                 loss = multi / (Eas[client_idx])
                 Li  = loss
                 Lc = gloss[gmap[client_idx]]
-                Lrb = np.sqrt(Li * Lc) + 1e-10
-                weight = client_weights[client_idx] * np.float_power(Lrb, (q+1))
+                Lrb = np.float_power(Li, powerI) * np.float_power(Lc, powerC) + 1e-10
+                Srb = client_weights[client_idx]
+                weight = Srb * np.float_power(Lrb, (q+1))
                 new_weights[client_idx] = weight
                 all_weight += weight
             new_weights = [wi/all_weight for wi in new_weights]
-
+            write_log(args, f"sum of wi : {sum(new_weights):.4f}\n")
             for key in server_model.state_dict().keys():
-                if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
+                if  'prompt' in key or 'head' in key:
                     print(key)
                     temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
                     for client_idx in range(client_num):
@@ -1015,5 +1105,6 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                         server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(len(client_weights)):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-
+    for model in models:
+        model.to('cpu')
     return server_model, models, prompt_bank, gmap
