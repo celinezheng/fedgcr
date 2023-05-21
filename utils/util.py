@@ -3,6 +3,7 @@ import sys, os
 import torch
 import torchvision.transforms as transforms
 from utils.data_utils import DomainNetDataset, DigitsDataset, FairFaceDataset
+from utils.data_utils import FairFace_AMP, FairFaceAmpDataset
 import math
 import torch.nn.functional as tf
 import numpy as np
@@ -208,45 +209,18 @@ def prepare_domainnet_uneven(args):
             transforms.ToTensor(),
     ])
 
-    # clipart
-    clipart_trainset = DomainNetDataset(data_base_path, 'clipart', transform=transform_train)
-    clipart_testset = DomainNetDataset(data_base_path, 'clipart', transform=transform_test, train=False)
-    # infograph
-    infograph_trainset = DomainNetDataset(data_base_path, 'infograph', transform=transform_train)
-    infograph_testset = DomainNetDataset(data_base_path, 'infograph', transform=transform_test, train=False)
-    # painting
-    painting_trainset = DomainNetDataset(data_base_path, 'painting', transform=transform_train)
-    painting_testset = DomainNetDataset(data_base_path, 'painting', transform=transform_test, train=False)
-    # quickdraw
-    quickdraw_trainset = DomainNetDataset(data_base_path, 'quickdraw', transform=transform_train)
-    quickdraw_testset = DomainNetDataset(data_base_path, 'quickdraw', transform=transform_test, train=False)
-    # real
-    real_trainset = DomainNetDataset(data_base_path, 'real', transform=transform_train)
-    real_testset = DomainNetDataset(data_base_path, 'real', transform=transform_test, train=False)
-    # sketch
-    sketch_trainset = DomainNetDataset(data_base_path, 'sketch', transform=transform_train)
-    sketch_testset = DomainNetDataset(data_base_path, 'sketch', transform=transform_test, train=False)
-
-    # min_data_len = int(min(len(clipart_trainset), len(infograph_trainset), len(painting_trainset), len(quickdraw_trainset), len(real_trainset), len(sketch_trainset)))
-    test_sets = {
-        'Clipart': clipart_testset,
-        'Infograph': infograph_testset,
-        'Painting': painting_testset,
-        'QuickDraw': quickdraw_testset,
-        'Real': real_testset,
-        'Sketch':sketch_testset
-        }
-    train_sets = {
-        'Clipart': clipart_trainset,
-        'Infograph': infograph_trainset,
-        'Painting': painting_trainset,
-        'QuickDraw': quickdraw_trainset,
-        'Real': real_trainset,
-        'Sketch':sketch_trainset
-        }
+    decay_order = ['Clipart', 'Real', 'Painting', 'Sketch', 'QuickDraw', 'Infograph']
+    test_sets = {}
+    train_sets = {}
+    for site in decay_order:
+        trainset = DomainNetDataset(data_base_path, site, transform=transform_train)
+        testset = DomainNetDataset(data_base_path, site, transform=transform_test, train=False)
+        # testset = FairFaceAmpDataset(data_base_path, site, transform=transform_test, train=False)
+        train_sets[site] = trainset
+        test_sets[site] = testset
+    
     len_dataset = {}
     client_nums = {}
-    decay_order = ['Clipart', 'Real', 'Painting', 'Sketch', 'QuickDraw', 'Infograph']
     if 'uneven' in args.expname.lower():
         # client number = 1.4^k, k=0~5
         # data_len = {5, 4, 3, 2, 1, 1}
@@ -340,47 +314,21 @@ def prepare_fairface_uneven(args):
             transforms.ToTensor(),
     ])
 
-    # white
-    White_trainset = FairFaceDataset(data_base_path, 'White', transform=transform_train)
-    White_testset = FairFaceDataset(data_base_path, 'White', transform=transform_test, train=False)
-    # East_Asian
-    East_Asian_trainset = FairFaceDataset(data_base_path, 'East_Asian', transform=transform_train)
-    East_Asian_testset = FairFaceDataset(data_base_path, 'East_Asian', transform=transform_test, train=False)
-    # Indian
-    Indian_trainset = FairFaceDataset(data_base_path, 'Indian', transform=transform_train)
-    Indian_testset = FairFaceDataset(data_base_path, 'Indian', transform=transform_test, train=False)
-    # Middle_Eastern
-    Middle_Eastern_trainset = FairFaceDataset(data_base_path, 'Middle_Eastern', transform=transform_train)
-    Middle_Eastern_testset = FairFaceDataset(data_base_path, 'Middle_Eastern', transform=transform_test, train=False)
-    # Latino_Hispanic
-    Latino_Hispanic_trainset = FairFaceDataset(data_base_path, 'Latino_Hispanic', transform=transform_train)
-    Latino_Hispanic_testset = FairFaceDataset(data_base_path, 'Latino_Hispanic', transform=transform_test, train=False)
-    # Southeast_Asian
-    Southeast_Asian_trainset = FairFaceDataset(data_base_path, 'Southeast_Asian', transform=transform_train)
-    Southeast_Asian_testset = FairFaceDataset(data_base_path, 'Southeast_Asian', transform=transform_test, train=False)
-    # Black
-    Black_trainset = FairFaceDataset(data_base_path, 'Black', transform=transform_train)
-    Black_testset = FairFaceDataset(data_base_path, 'Black', transform=transform_test, train=False)
-
-    # min_data_len = int(min(len(clipart_trainset), len(infograph_trainset), len(painting_trainset), len(quickdraw_trainset), len(real_trainset), len(sketch_trainset)))
-    test_sets = {
-        'White': White_testset,
-        'East_Asian': East_Asian_testset,
-        'Indian': Indian_testset,
-        'Middle_Eastern': Middle_Eastern_testset,
-        'Latino_Hispanic': Latino_Hispanic_testset,
-        'Southeast_Asian':Southeast_Asian_testset,
-        'Black': Black_testset
-        }
-    train_sets = {
-        'White': White_trainset,
-        'East_Asian': East_Asian_trainset,
-        'Indian': Indian_trainset,
-        'Middle_Eastern': Middle_Eastern_trainset,
-        'Latino_Hispanic': Latino_Hispanic_trainset,
-        'Southeast_Asian':Southeast_Asian_trainset,
-        'Black': Black_trainset
-        }
+    decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
+    if args.aug:
+        amp_loader = FairFace_AMP(decay_order)
+    else: amp_loader = None
+    if args.testaug:
+        test_amp_loader = FairFace_AMP(decay_order)
+    else: test_amp_loader = None
+    test_sets = {}
+    train_sets = {}
+    for site in decay_order:
+        trainset = FairFaceAmpDataset(data_base_path, site, amp_loader=amp_loader, transform=transform_train)
+        testset = FairFaceAmpDataset(data_base_path, site, amp_loader=test_amp_loader, transform=transform_test, train=False)
+        # testset = FairFaceAmpDataset(data_base_path, site, transform=transform_test, train=False)
+        train_sets[site] = trainset
+        test_sets[site] = testset
     len_dataset = {}
     client_nums = {}
     decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
@@ -621,6 +569,33 @@ def train_sam(model, train_loader, prompt_opt, project_opt, optimizer, loss_fun,
     model.to('cpu')
     return loss_all/len(train_iter), correct/num_data
 
+def train_sam_vpt(model, train_loader, optimizer, loss_fun, device):
+    model.to(device)
+    model.train()
+    num_data = 0
+    correct = 0
+    loss_all = 0
+    train_iter = iter(train_loader)
+    # for step in range(len(train_iter)):
+    for step in tqdm(range(len(train_iter))):
+        x, y = next(train_iter)
+        x = x.to(device).float()
+        y = y.to(device).long()
+        num_data += y.size(0)
+        output = model(x)
+
+        loss = loss_fun(output, y)
+        loss.backward()
+        loss_all += loss.item()
+        optimizer.first_step(zero_grad=True)
+        # optimizer.step()
+        loss_fun(model(x), y).backward()
+        optimizer.second_step(zero_grad=True)
+        pred = output.data.max(1)[1]
+        correct += pred.eq(y.view(-1)).sum().item()
+    model.to('cpu')
+    return loss_all/len(train_iter), correct/num_data
+
 def train_harmofl(args, model, data_loader, optimizer, loss_fun, device):
     model.to(device)
     model.train()
@@ -633,6 +608,8 @@ def train_harmofl(args, model, data_loader, optimizer, loss_fun, device):
         optimizer.zero_grad()
 
         data = data.to(device)
+        print(data.shape)
+        return 
         target = target.to(device)
         
         output = model(data)
