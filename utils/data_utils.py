@@ -113,12 +113,42 @@ class DomainNetDataset(Dataset):
 
         return image, label
 
-class FairFaceDataset(Dataset):
+class FairFaceIIDDataset(Dataset):
     def __init__(self, base_path, site, train=True, transform=None):
         if train:
-            self.paths, self.gender, self.labels = np.load('../../data/FairFace/{}_train.pkl'.format(site), allow_pickle=True)
+            self.paths, self.gender, self.labels = np.load('../../data/FairFace/pkl/iid/{}_train.pkl'.format(site), allow_pickle=True)
         else:
-            self.paths, self.gender, self.labels = np.load('../../data/FairFace/{}_test.pkl'.format(site), allow_pickle=True)
+            self.paths, self.gender, self.labels = np.load('../../data/FairFace/pkl/iid/{}_test.pkl'.format(site), allow_pickle=True)
+        
+        self.path = np.asarray(self.paths)
+        print(len(self.path))
+        # self.labels = np.asarray(self.labels).astype(np.longlong)
+        self.labels = np.asarray(self.labels).astype(np.float16)
+        self.transform = transform
+        self.base_path = base_path if base_path is not None else '../../data'
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        img_path = os.path.join(self.base_path, self.paths[idx])
+        label = self.labels[idx]
+        image = Image.open(img_path)
+        
+        if len(image.split()) != 3:
+            image = transforms.Grayscale(num_output_channels=3)(image)
+
+        if self.transform is not None:
+            image = self.transform(image)
+
+        return image, label
+
+class FairFaceGenderDataset(Dataset):
+    def __init__(self, distribution_mode, base_path, site, client_idx, train=True, transform=None):
+        if train:
+            self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{distribution_mode}/{site}_train_{client_idx}.pkl', allow_pickle=True)
+        else:
+            self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{distribution_mode}/{site}_test_{client_idx}.pkl', allow_pickle=True)
         
         self.path = np.asarray(self.paths)
         print(len(self.path))

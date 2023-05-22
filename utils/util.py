@@ -2,7 +2,7 @@ from tqdm import tqdm
 import sys, os
 import torch
 import torchvision.transforms as transforms
-from utils.data_utils import DomainNetDataset, DigitsDataset, FairFaceDataset
+from utils.data_utils import DomainNetDataset, DigitsDataset, FairFaceIIDDataset, FairFaceGenderDataset
 import math
 import torch.nn.functional as tf
 import numpy as np
@@ -12,6 +12,8 @@ def write_log(args, msg):
     log_fname = f'{args.mode}.log'
     if args.dg:
         log_path = f'../logs/{args.dataset}_{args.expname}_{args.target_domain}'
+    if args.gender_dis != 'iid':
+        log_path += f"_{args.gender_dis}"
     if args.q!=1:
         log_fname = f'{args.mode}_q={args.q}.log'
     if not os.path.exists(log_path):
@@ -326,7 +328,7 @@ def prepare_domainnet_uneven(args):
     check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
-def prepare_fairface_uneven(args):
+def prepare_fairface_iid_uneven(args):
     data_base_path = '../../data/FairFace'
     transform_train = transforms.Compose([
             transforms.Resize([224, 224]),
@@ -339,51 +341,15 @@ def prepare_fairface_uneven(args):
             transforms.Resize([224, 224]),
             transforms.ToTensor(),
     ])
-
-    # white
-    White_trainset = FairFaceDataset(data_base_path, 'White', transform=transform_train)
-    White_testset = FairFaceDataset(data_base_path, 'White', transform=transform_test, train=False)
-    # East_Asian
-    East_Asian_trainset = FairFaceDataset(data_base_path, 'East_Asian', transform=transform_train)
-    East_Asian_testset = FairFaceDataset(data_base_path, 'East_Asian', transform=transform_test, train=False)
-    # Indian
-    Indian_trainset = FairFaceDataset(data_base_path, 'Indian', transform=transform_train)
-    Indian_testset = FairFaceDataset(data_base_path, 'Indian', transform=transform_test, train=False)
-    # Middle_Eastern
-    Middle_Eastern_trainset = FairFaceDataset(data_base_path, 'Middle_Eastern', transform=transform_train)
-    Middle_Eastern_testset = FairFaceDataset(data_base_path, 'Middle_Eastern', transform=transform_test, train=False)
-    # Latino_Hispanic
-    Latino_Hispanic_trainset = FairFaceDataset(data_base_path, 'Latino_Hispanic', transform=transform_train)
-    Latino_Hispanic_testset = FairFaceDataset(data_base_path, 'Latino_Hispanic', transform=transform_test, train=False)
-    # Southeast_Asian
-    Southeast_Asian_trainset = FairFaceDataset(data_base_path, 'Southeast_Asian', transform=transform_train)
-    Southeast_Asian_testset = FairFaceDataset(data_base_path, 'Southeast_Asian', transform=transform_test, train=False)
-    # Black
-    Black_trainset = FairFaceDataset(data_base_path, 'Black', transform=transform_train)
-    Black_testset = FairFaceDataset(data_base_path, 'Black', transform=transform_test, train=False)
-
-    # min_data_len = int(min(len(clipart_trainset), len(infograph_trainset), len(painting_trainset), len(quickdraw_trainset), len(real_trainset), len(sketch_trainset)))
-    test_sets = {
-        'White': White_testset,
-        'East_Asian': East_Asian_testset,
-        'Indian': Indian_testset,
-        'Middle_Eastern': Middle_Eastern_testset,
-        'Latino_Hispanic': Latino_Hispanic_testset,
-        'Southeast_Asian':Southeast_Asian_testset,
-        'Black': Black_testset
-        }
-    train_sets = {
-        'White': White_trainset,
-        'East_Asian': East_Asian_trainset,
-        'Indian': Indian_trainset,
-        'Middle_Eastern': Middle_Eastern_trainset,
-        'Latino_Hispanic': Latino_Hispanic_trainset,
-        'Southeast_Asian':Southeast_Asian_trainset,
-        'Black': Black_trainset
-        }
     len_dataset = {}
     client_nums = {}
+    train_sets = {}
+    test_sets = {}
     decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
+    for name in decay_order:
+        train_sets[name] = FairFaceIIDDataset(data_base_path, name, transform=transform_train)
+        train_sets[name] = FairFaceIIDDataset(data_base_path, name, transform=transform_test, train=False)
+                
     if 'uneven' in args.expname.lower():
         # client number = 1.4^k, k=0~5
         # data_len = {5, 4, 3, 2, 1, 1}
@@ -462,13 +428,88 @@ def prepare_fairface_uneven(args):
     # check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
+def prepare_fairface_gender_uneven(args):
+    data_base_path = '../../data/FairFace'
+    transform_train = transforms.Compose([
+            transforms.Resize([224, 224]),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation((-30,30)),
+            transforms.ToTensor(),
+    ])
+
+    transform_test = transforms.Compose([
+            transforms.Resize([224, 224]),
+            transforms.ToTensor(),
+    ])
+    client_nums = {}
+    train_sets = {}
+    test_sets = {}
+    decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
+    
+                
+    if 'uneven' in args.expname.lower():
+        # client number = 1.4^k, k=0~5
+        # data_len = {5, 4, 3, 2, 1, 1}
+        decay_speed = args.ratio
+        max_clientnum = round(np.float_power(decay_speed, len(decay_order)-1))
+        distribution_mode = f"imbalance{max_clientnum}_{args.gender_dis}"
+        for i, name in enumerate(decay_order):
+            client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
+    else:
+        decay_speed = 3
+        distribution_mode = f"balance_{args.gender_dis}"
+        for i, name in enumerate(decay_order):
+            client_nums[name] = 2
+    print(client_nums)
+    client_weights = []
+    train_loaders, val_loaders, test_loaders = [], [], []
+    datasets = []
+    sum_len = 0
+    genders = ['Male', 'Female']
+    gidx = 0
+    for name, value in client_nums.items():
+        for j in range(value):
+            train_set = FairFaceGenderDataset(distribution_mode, data_base_path, name, j, transform=transform_train)
+            all_len = int(len(train_set) * args.percent)
+            train_len = int(all_len * 0.6)
+            val_len = int(all_len * 0.4)
+            datasets.append(f'{name}_{genders[gidx]}')
+            gidx = int(not gidx)
+            val_set = torch.utils.data.Subset(train_set, list(range(all_len))[-val_len :])
+            train_set = torch.utils.data.Subset(train_set, list(range(all_len))[: train_len])
+            train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch, shuffle=True)
+            val_loader = torch.utils.data.DataLoader(val_set, batch_size=args.batch, shuffle=False)
+            train_loaders.append(train_loader)
+            val_loaders.append(val_loader)
+            test_set = FairFaceGenderDataset(distribution_mode, data_base_path, name, gidx, transform=transform_test, train=False)
+            test_loader = torch.utils.data.DataLoader(test_set, batch_size=1, shuffle=False)
+            test_loaders.append(test_loader)
+            client_weights.append(len(train_set))
+            sum_len += len(train_set)
+            # print(len(cur_trainset), len(cur_valset))
+    print(client_weights)
+    write_log(args, f"data_number=[")
+    for ni in client_weights:
+        write_log(args, f"{ni},")
+    write_log(args, f"]\nclient_nums=[")
+    for name in decay_order:
+        write_log(args, f"{client_nums[name]},")
+    write_log(args, f"]\n")
+    client_weights = [ci/sum_len for ci in client_weights]
+    # check_labels(args, train_loaders)
+    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, None
+
 def prepare_data(args):
     if args.dataset.lower()[:6] == 'domain':
         return prepare_domainnet_uneven(args)
     elif args.dataset.lower()[:5] == 'digit':
         return prepare_digit_uneven(args)
     elif args.dataset.lower()[:9] == 'fairface':
-        return prepare_fairface_uneven(args)
+        if args.gender_dis == 'iid':
+            return prepare_fairface_iid_uneven(args)
+        else:
+            return prepare_fairface_gender_uneven(args)
+
 
 def check_labels(args, train_loaders):
     client_num = len(train_loaders)

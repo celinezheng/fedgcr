@@ -50,6 +50,8 @@ if __name__ == '__main__':
     parser.add_argument('--num_classes', type = int, default=10, help ='number of classes')
     parser.add_argument('--seed', type = int, default=1, help ='random seed')
     parser.add_argument('--model', type = str, default='prompt', help='prompt | vit-linear')
+    parser.add_argument("--gender_dis", choices=['iid', 'gender', 'gender_age'], default='iid', help="gender distribution of each client")
+    parser.add_argument('--cluster_num', type = int, default=7, help ='cluster number')
     parser.add_argument('--target_domain', type = str, default='Clipart', help='Clipart, Infograph, ...')
     parser.add_argument('--hparams', type=str,
         help='JSON-serialized hparams dict')
@@ -64,8 +66,8 @@ if __name__ == '__main__':
     torch.cuda.manual_seed_all(seed) 
     random.seed(seed)
     exp_folder = f'fed_{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
-    if args.tune:
-        exp_folder += '_tune'
+    if args.gender_dis != 'iid':
+        exp_folder += args.gender_dis
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
         os.makedirs(args.save_path)
@@ -107,6 +109,8 @@ if __name__ == '__main__':
         import warnings
         warnings.warn("invalid args.dataset")
         exit(0)
+    if args.gender_dis != 'iid':
+        domain_num = args.cluster_num
     loss_fun = nn.CrossEntropyLoss()
     client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
     print(client_weights)
@@ -188,15 +192,15 @@ if __name__ == '__main__':
                 for client_idx, datasite in enumerate(datasets):
                     _, test_acc = test(models[client_idx], target_loader, loss_fun, device, prompt_bank)
                     test_accs[datasite] = test_acc
-                    write_log(args, ' Test site-{:<16s} -> {}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, args.target_domain, checkpoint['best_epoch'], test_acc))
-                    # print(' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
+                    write_log(args, ' Test site-{:<25s} -> {}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, args.target_domain, checkpoint['best_epoch'], test_acc))
+                    # print(' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
             else:
                 for client_idx, datasite in enumerate(datasets):
                     if datasite in test_accs: continue
                     _, test_acc = test(models[client_idx], test_loaders[client_idx], loss_fun, device, prompt_bank)
                     test_accs[datasite] = test_acc
-                    # print(' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
-                    write_log(args, ' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, checkpoint['best_epoch'], test_acc))
+                    # print(' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
+                    write_log(args, ' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, checkpoint['best_epoch'], test_acc))
         else:
             test_accs = {}
             best_changed = False
@@ -209,8 +213,8 @@ if __name__ == '__main__':
                     if datasite in test_accs: continue
                     _, test_acc = test(server_model, test_loaders[client_idx], loss_fun, device, prompt_bank)
                     test_accs[datasite] = test_acc
-                    # print(' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
-                    write_log(args, ' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, checkpoint['best_epoch'], test_acc))
+                    # print(' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
+                    write_log(args, ' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, checkpoint['best_epoch'], test_acc))
         test_accs = list(test_accs.values())
         write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
         exit(0)
@@ -222,7 +226,7 @@ if __name__ == '__main__':
             for client_idx in range(domain_num):
                 models[client_idx].load_state_dict(checkpoint['model_{}'.format(client_idx)])
         else:
-            for client_idx in range(domain_num):
+            for client_idx in range(client_num):
                 models[client_idx].load_state_dict(checkpoint['server_model'])
         best_epoch, best_acc = checkpoint['best_epoch'], checkpoint['best_acc']
         best_test = checkpoint['best_test']
@@ -306,7 +310,7 @@ if __name__ == '__main__':
             for client_idx, model in enumerate(models):
                 train_loss, train_acc = test(model, train_loaders[client_idx], loss_fun, device, prompt_bank)
                 Eas[client_idx] = int(multi / train_loss)
-                write_log(args, ' Site-{:<16s}| Train Loss: {:.4f} | Train Acc: {:.4f}\n'.format(datasets[client_idx] ,train_loss, train_acc))
+                write_log(args, ' Site-{:<25s}| Train Loss: {:.4f} | Train Acc: {:.4f}\n'.format(datasets[client_idx] ,train_loss, train_acc))
 
             # if (a_iter+1)%2 != 0 and (a_iter+1)!=args.iters: continue
             # Validation
@@ -315,8 +319,8 @@ if __name__ == '__main__':
                 val_loss, val_acc = test(model, val_loaders[client_idx], loss_fun, device, prompt_bank)
                 val_acc_list[client_idx] = val_acc
                 # train_accs[client_idx] = int(multi * val_acc)
-                # print(' Site-{:<16s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}'.format(datasets[client_idx], val_loss, val_acc))
-                write_log(args, ' Site-{:<16s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}\n'.format(datasets[client_idx], val_loss, val_acc))
+                # print(' Site-{:<25s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}'.format(datasets[client_idx], val_loss, val_acc))
+                write_log(args, ' Site-{:<25s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}\n'.format(datasets[client_idx], val_loss, val_acc))
             write_log(args, f'Average Valid Accuracy: {np.mean(val_acc_list):.4f}\n')
                     
             # Record best
@@ -344,15 +348,15 @@ if __name__ == '__main__':
                     best_changed=True
                     for client_idx in range(client_num):
                         best_acc[client_idx] = val_acc_list[client_idx]
-                        write_log(args, ' Best site-{:<16s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
+                        write_log(args, ' Best site-{:<25s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
                 if ((a_iter+1)*(wi+1)) > threshold:
                     test_accs = {}
                     for client_idx, datasite in enumerate(datasets):
                         if datasite in test_accs: continue
                         _, test_acc = test(server_model, test_loaders[client_idx], loss_fun, device, prompt_bank)
                         test_accs[datasite] = test_acc
-                        # print(' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
-                        write_log(args, ' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, best_epoch, test_acc))
+                        # print(' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
+                        write_log(args, ' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, best_epoch, test_acc))
                     test_accs = list(test_accs.values())
                     if np.mean(test_accs) > np.mean(best_test):
                         best_changed = True
@@ -367,8 +371,8 @@ if __name__ == '__main__':
                     best_acc[client_idx] = val_acc_list[client_idx]
                     best_epoch = a_iter
                     best_changed=True
-                    # print(' Best site-{:<16s}| Epoch:{} | Val Acc: {:.4f}'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
-                    write_log(args, ' Best site-{:<16s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
+                    # print(' Best site-{:<25s}| Epoch:{} | Val Acc: {:.4f}'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
+                    write_log(args, ' Best site-{:<25s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
                 best_agg = np.mean(best_acc)
                    
             if best_changed:  
@@ -416,12 +420,12 @@ if __name__ == '__main__':
                             if datasite in test_accs: continue
                             _, test_acc = test(server_model, test_loaders[client_idx], loss_fun, device, prompt_bank)
                             test_accs[datasite] = test_acc
-                            # print(' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
-                            write_log(args, ' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, best_epoch, test_acc))
+                            # print(' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
+                            write_log(args, ' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, best_epoch, test_acc))
                         test_accs = list(test_accs.values())
 
                         if np.mean(test_accs) > np.mean(best_test):
-                            for i in range(domain_num):
+                            for i in range(len(test_loaders)):
                                 best_test[i] = test_accs[i]
                         write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
                    
