@@ -20,7 +20,6 @@ from utils.doprompt import DoPrompt, FedPrompt, CoCoOP
 from domainbed import hparams_registry, misc
 import json
 from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log, train_CoCoOP, agg_rep, train_harmofl, train_sam
-from utils.util import train_sam_vpt
 from utils import util
 from utils.weight_perturbation import WPOptim
 from utils.sam import SAM
@@ -32,8 +31,6 @@ if __name__ == '__main__':
     parser.add_argument('--tune', action='store_true', help='whether to tune hparams')
     parser.add_argument('--si', action='store_true', help='whether to use si only')
     parser.add_argument('--sam', action='store_true', help='whether to use sam optimizer')
-    parser.add_argument('--aug', action='store_true', help='whether to use apply amp augmentation')
-    parser.add_argument('--testaug', action='store_true', help='whether to use apply amp augmentation for inference')
     parser.add_argument('--memory', action='store_true', help='whether to test memory usage of each algorithm')
     parser.add_argument('--dg', action='store_true', help='domain generalization')
     parser.add_argument('--test', action='store_true', help ='test the pretrained model')
@@ -251,19 +248,16 @@ if __name__ == '__main__':
     all_feat = None
     for a_iter in range(start_iter, args.iters):
         print(best_test)
-        if args.mode.lower() in ['doprompt', 'fedprompt', 'nova']:
+        if args.mode.lower() in ['doprompt', 'fedprompt', 'cocoop', 'nova']:
             optimizers = [None for _ in range(client_num)]
         elif args.mode.lower() == 'harmo-fl':
             optimizers = [WPOptim(params=models[idx].parameters(), base_optimizer=optim.Adam, lr=args.lr, alpha=0.05, weight_decay=1e-4) for idx in range(client_num)]
-        elif args.mode.lower() in ['ccop', 'cocoop'] and args.sam:
+        elif args.mode.lower() == 'ccop' and args.sam:
             optimizers = [SAM(params=models[idx].classifier.parameters(), base_optimizer=optim.Adam, lr=args.lr) for idx in range(client_num)]
             prompt_opts = [SAM(params=[models[idx].prompt_tokens], base_optimizer=optim.Adam, lr=args.lr) for idx in range(client_num)]
             project_opts = [SAM(params=models[idx].meta_net.parameters(), base_optimizer=optim.Adam, lr=args.lr) for idx in range(client_num)]
-        elif args.sam:
-            optimizers = [SAM(params=models[idx].parameters(), base_optimizer=optim.Adam, lr=args.lr) for idx in range(client_num)]
         else:
             optimizers = [optim.SGD(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
-
         for wi in range(args.wk_iters):
             all_feat = None
             print("============ Train epoch {} ============".format(wi + a_iter * args.wk_iters))
@@ -282,7 +276,7 @@ if __name__ == '__main__':
                     if len(gmap) == 0: gidx = -1
                     else: gidx = gmap[client_idx]
                     train_fedprompt(gidx, model, train_loaders[client_idx], prompt_bank, device)
-                elif args.mode.lower() == 'ccop':
+                elif args.mode.lower() in ['nova', 'ccop']:
                     if args.sam:
                         train_sam(model, train_loaders[client_idx], prompt_opts[client_idx], prompt_opts[client_idx], optimizers[client_idx], loss_fun, device)
                     else:
@@ -294,16 +288,12 @@ if __name__ == '__main__':
                     else:
                         all_feat = torch.concat((all_feat, feat_i)) 
                 elif args.mode.lower() in ['cocoop']:
-                    if args.sam:
-                        train_sam(model, train_loaders[client_idx], prompt_opts[client_idx], prompt_opts[client_idx], optimizers[client_idx], loss_fun, device)
-                    else:
-                        train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device)                    
+                    train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device)
                 elif args.mode.lower() == 'harmo-fl':
                     train_harmofl(args, model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
-                elif args.sam:
-                    train_sam_vpt(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                 else:
-                    train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
+                    train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
+                    train_losses[client_idx] = train_loss
         
         with torch.no_grad():
             # Aggregation
