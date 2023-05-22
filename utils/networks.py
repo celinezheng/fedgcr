@@ -79,6 +79,19 @@ class Project(nn.Module):
         x = self.output(x)
         return x
 
+class MetaNet(nn.Module):
+    def __init__(self, n_inputs, prompt_num, token_dim, mlp_width) -> None:
+        super().__init__()
+        self.input = nn.Linear(n_inputs, mlp_width)
+        self.output = nn.Linear(mlp_width, prompt_num*token_dim)
+        self.prompt_num = prompt_num
+        self.token_dim = token_dim
+
+    def forward(self, x):
+        x = self.input(x)
+        x = F.relu(x)
+        x = self.output(x)
+        return x
 
 class ResNet(torch.nn.Module):
     """ResNet with the softmax chopped off and the batchnorm frozen"""
@@ -212,6 +225,11 @@ class ViT(nn.Module):
             self.network = timm.create_model("vit_base_patch16_224", pretrained=True, drop_path_rate=0.1)
             del self.network.head
             self.network.head = Identity()
+        elif hparams['scratch']:
+            self.network = torchvision.models.vit_b_16(pretrained=False, attention_dropout=hparams["attention_dropout"])
+            del self.network.heads
+            self.network.heads = Identity()
+            print('scratch')
         else:
             self.network = torchvision.models.vit_b_16(pretrained=True, attention_dropout=hparams["attention_dropout"])
             del self.network.heads
@@ -228,7 +246,7 @@ class ViT(nn.Module):
         feat = self.network.encoder(x)
          # Classifier "token" as used by standard language architectures
         x = feat[:, 0]
-
+        feat = feat[:, 1:5]
         # x = self.network.heads(x)
         return feat, x
 

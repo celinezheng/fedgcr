@@ -9,21 +9,19 @@ import torch
 from torch import nn, optim
 import time
 import copy
-from nets.models import DigitModel
 import argparse
 import numpy as np
-import torchvision
 import torchvision.transforms as transforms
 from utils import data_utils
 from utils.prompt_vit import PromptViT
 from utils.doprompt import DoPrompt
 from domainbed import hparams_registry, misc
 import json
-from utils.util import train, train_doprompt, test, communication
+from utils.util import train, train_doprompt, test, communication, train_fedprox
 
 
 def write_log(msg):
-    log_path = '../logs/digits/'
+    log_path = f'../logs/digits_{args.expname}'
     if not os.path.exists(log_path):
         os.makedirs(log_path)
     with open(os.path.join(log_path, f'{args.mode}_lsim={args.lsim}.log'), 'a') as logfile:
@@ -84,9 +82,11 @@ def prepare_data(args):
     mnistm_trainset     = data_utils.DigitsDataset(data_path=os.path.join(base_path, "MNIST_M"), channels=3, percent=args.percent,  train=True,  transform=transform_mnistm)
     mnistm_testset      = data_utils.DigitsDataset(data_path=os.path.join(base_path, "MNIST_M"), channels=3, percent=args.percent,  train=False, transform=transform_mnistm)
 
+    # min_data_len = min(len(dataset)) * args.persent
     min_data_len = min(len(mnist_trainset), len(svhn_trainset), len(usps_trainset), len(synth_trainset), len(mnistm_trainset))
     val_len = int(min_data_len * 0.1)
-    min_data_len = int(min_data_len * 0.5)
+    min_data_len = int(min_data_len * 0.1)
+    print(min_data_len)
 
     mnist_valset = torch.utils.data.Subset(mnist_trainset, list(range(len(mnist_trainset)))[-val_len:]) 
     mnist_trainset = torch.utils.data.Subset(mnist_trainset, list(range(min_data_len)))
@@ -131,38 +131,6 @@ def prepare_data(args):
 
     return train_loaders, val_loaders, test_loaders
 
-def train_fedprox(args, model, train_loader, optimizer, loss_fun, client_num, device):
-    model.train()
-    num_data = 0
-    correct = 0
-    loss_all = 0
-    train_iter = iter(train_loader)
-    for step in range(len(train_iter)):
-        optimizer.zero_grad()
-        x, y = next(train_iter)
-        num_data += y.size(0)
-        x = x.to(device).float()
-        y = y.to(device).long()
-        output = model(x)
-
-        loss = loss_fun(output, y)
-
-        #########################we implement FedProx Here###########################
-        # referring to https://github.com/IBM/FedMA/blob/4b586a5a22002dc955d025b890bc632daa3c01c7/main.py#L819
-        if step>0:
-            w_diff = torch.tensor(0., device=device)
-            for w, w_t in zip(server_model.parameters(), model.parameters()):
-                w_diff += torch.pow(torch.norm(w - w_t), 2)
-            loss += args.mu / 2. * w_diff
-        #############################################################################
-
-        loss.backward()
-        loss_all += loss.item()
-        optimizer.step()
-
-        pred = output.data.max(1)[1]
-        correct += pred.eq(y.view(-1)).sum().item()
-    return loss_all/len(train_iter), correct/num_data
 
 
 
@@ -182,8 +150,8 @@ if __name__ == '__main__':
     parser.add_argument('--hparams_seed', type=int, default=0,
         help='Seed for random hparams (0 means "default hparams")')
     parser.add_argument('--test', action='store_true', help ='test the pretrained model')
-    parser.add_argument('--percent', type = float, default= 0.1, help ='percentage of dataset to train')
-    parser.add_argument('--lr', type=float, default=1e-2, help='learning rate')
+    parser.add_argument('--percent', type = float, default= 0.2, help ='percentage of dataset to train')
+    parser.add_argument('--lr', type=float, default=1e-3, help='learning rate')
     parser.add_argument('--batch', type = int, default=16, help ='batch size')
     parser.add_argument('--iters', type = int, default=10, help = 'iterations for communication')
     parser.add_argument('--wk_iters', type = int, default=5, help = 'optimization iters in local worker between communication')
@@ -195,18 +163,14 @@ if __name__ == '__main__':
     parser.add_argument('--num_classes', type = int, default=10, help ='number of classes')
     parser.add_argument('--deep', action='store_true', help ='deep prompt')
     parser.add_argument('--lsim', action='store_true', help ='lsim loss for adapter')
-    parser.add_argument('--algorithm', type=str, default='DoPrompt')
     parser.add_argument('--dataset', type=str, default='digit')
+    parser.add_argument('--expname', type=str, default='prompt-sim')
     args = parser.parse_args()
 
-    exp_folder = 'federated_digits'
+    exp_folder = f'federated_digits_{args.expname}'
 
     args.save_path = os.path.join(args.save_path, exp_folder)
-    
-    # log_path = '../logs/digits/'
-    # if not os.path.exists(log_path):
-    #     os.makedirs(log_path)
-    # logfile = open(os.path.join(log_path,f'{args.mode}_lsim={args.lsim}.log'), 'a')
+
     write_log('==={}===\n'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     write_log('===Setting===\n')
     write_log('    lr: {}\n'.format(args.lr))
@@ -219,7 +183,6 @@ if __name__ == '__main__':
     SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_lsim={args.lsim}')
    
     print(args.model)
-    # server_model = PromptViT(model_type=model_type, args=args).to(device)
     if args.hparams_seed == 0:
         hparams = hparams_registry.default_hparams(args.mode, args.dataset)
     else:
@@ -228,10 +191,6 @@ if __name__ == '__main__':
     if args.hparams:
         print(args.hparams)
         hparams.update(json.loads(args.hparams))
-    server_model = DoPrompt(num_classes=10, num_domains=5, hparams=hparams).to(device)
-    
-    loss_fun = nn.CrossEntropyLoss()
-
     # prepare the data
     train_loaders, val_loaders, test_loaders = prepare_data(args)
 
@@ -241,6 +200,17 @@ if __name__ == '__main__':
     # federated setting
     client_num = len(datasets)
     client_weights = [1/client_num for i in range(client_num)]
+
+    if args.mode.lower() == 'fedavg':
+        model_type="sup_vitb16_imagenet21k"
+        server_model = PromptViT(model_type=model_type, args=args).to(device)
+        for name, param in server_model.named_parameters():
+            if 'prompt' not in name and 'head' not in name:
+                param.requires_grad = False
+    else:
+        server_model = DoPrompt(num_classes=args.num_classes, num_domains=client_num, hparams=hparams).to(device)
+    
+    loss_fun = nn.CrossEntropyLoss()
     models = [copy.deepcopy(server_model).to(device) for idx in range(client_num)]
 
     if args.test:
@@ -263,6 +233,7 @@ if __name__ == '__main__':
                 print(' {:<11s}| Test  Acc: {:.4f}'.format(datasets[test_idx], test_acc))
                 write_log(' {:<11s}| Test  Acc: {:.4f}\n'.format(datasets[test_idx], test_acc))
         write_log(f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
+        write_log('==={}===\n'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
         exit(0)
 
     if args.resume:
@@ -284,7 +255,11 @@ if __name__ == '__main__':
 
     # start training
     for a_iter in range(resume_iter, args.iters):
-        optimizers = [optim.SGD(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
+        if args.mode.lower() != 'doprompt':
+            optimizers = [optim.SGD(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
+        else:
+            optimizers = [None for _ in range(client_num)]
+        
         for wi in range(args.wk_iters):
             print("============ Train epoch {} ============".format(wi + a_iter * args.wk_iters))
             write_log("============ Train epoch {} ============\n".format(wi + a_iter * args.wk_iters)) 
@@ -293,13 +268,14 @@ if __name__ == '__main__':
                 model, train_loader, optimizer = models[client_idx], train_loaders[client_idx], optimizers[client_idx]
                 if args.mode.lower() == 'fedprox':
                     if a_iter > 0:
-                        train_fedprox(args, model, train_loader, optimizer, loss_fun, client_num, device)
+                        train_fedprox(args, server_model, model, train_loader, optimizer, loss_fun, client_num, device)
                     else:
                         train(model, train_loader, optimizer, loss_fun, client_num, device)
-                else:
-                    # train(model, train_loader, optimizer, loss_fun, client_num, device)
+                elif args.mode.lower() == 'doprompt':
                     train_doprompt(args, model, train_loader, client_idx, device)
-         
+                else:
+                    train(model, train_loader, optimizer, loss_fun, device)
+
         # aggregation
         server_model, models = communication(args, server_model, models, client_weights, client_num)
         
@@ -318,8 +294,8 @@ if __name__ == '__main__':
             print(' {:<11s}| Valid  Loss: {:.4f} | Valid  Acc: {:.4f}'.format(datasets[val_idx], val_loss, val_acc))
             write_log(' {:<11s}| Valid  Loss: {:.4f} | Valid  Acc: {:.4f}\n'.format(datasets[val_idx], val_loss, val_acc))
         
-        write_log(f'Average Test Accuracy: {np.mean(val_acc_list):.4f}\n')
-        print(f'Average Test Accuracy: {np.mean(val_acc_list):.4f}')
+        write_log(f'Average Valid Accuracy: {np.mean(val_acc_list):.4f}\n')
+        print(f'Average Valid Accuracy: {np.mean(val_acc_list):.4f}')
         if np.mean(val_acc_list) > np.mean(best_acc):
             for client_idx in range(client_num):
                 best_acc[client_idx] = val_acc_list[client_idx]
@@ -351,7 +327,5 @@ if __name__ == '__main__':
                     'best_epoch': best_epoch,
                 }, SAVE_PATH)
 
-    # logfile.flush()
-    # logfile.close()
-
+    write_log('==={}===\n'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 

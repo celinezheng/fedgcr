@@ -33,7 +33,8 @@ class DigitsDataset(Dataset):
 
         self.transform = transform
         self.channels = channels
-        self.labels = self.labels.astype(np.long).squeeze()
+        print(len(self.labels))
+        self.labels = self.labels.astype(np.longlong).squeeze()
 
     def __len__(self):
         return self.images.shape[0]
@@ -93,6 +94,36 @@ class DomainNetDataset(Dataset):
         label_dict = {'bird':0, 'feather':1, 'headphones':2, 'ice_cream':3, 'teapot':4, 'tiger':5, 'whale':6, 'windmill':7, 'wine_glass':8, 'zebra':9}     
         
         self.labels = [label_dict[text] for text in self.text_labels]
+        self.transform = transform
+        self.base_path = base_path if base_path is not None else '../../data'
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        img_path = os.path.join(self.base_path, self.paths[idx])
+        label = self.labels[idx]
+        image = Image.open(img_path)
+        
+        if len(image.split()) != 3:
+            image = transforms.Grayscale(num_output_channels=3)(image)
+
+        if self.transform is not None:
+            image = self.transform(image)
+
+        return image, label
+
+class FairFaceDataset(Dataset):
+    def __init__(self, base_path, site, train=True, transform=None):
+        if train:
+            self.paths, self.gender, self.labels = np.load('../../data/FairFace/{}_train.pkl'.format(site), allow_pickle=True)
+        else:
+            self.paths, self.gender, self.labels = np.load('../../data/FairFace/{}_test.pkl'.format(site), allow_pickle=True)
+        
+        self.path = np.asarray(self.paths)
+        print(len(self.path))
+        # self.labels = np.asarray(self.labels).astype(np.longlong)
+        self.labels = np.asarray(self.labels).astype(np.float16)
         self.transform = transform
         self.base_path = base_path if base_path is not None else '../../data'
 

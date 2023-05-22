@@ -1,32 +1,27 @@
-python fed_digits.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --lsim --wk_iters 10 --iters 5
-python fed_digits.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --wk_iters 10 --iters 5 
-python fed_digits.py --hparams '{"lr_classifier": 1e-3}' --lsim --test
-python fed_digits.py --hparams '{"lr": 1e-5, "lr_classifier": 1e-3}' --test
-# python fed_office.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --lsim --wk_iters 10 --iters 5 
-# python fed_office_dg.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --lsim --wk_iters 10 --iters 3 --target_idx 0
-# python fed_office_dg.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --lsim --wk_iters 10 --iters 3 --target_idx 2
-# python fed_office_dg.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --lsim --wk_iters 10 --iters 3 --target_idx 3
-# python fed_office.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --wk_iters 10 --iters 5
-# python fed_office_dg.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --wk_iters 10 --iters 3 --target_idx 2
-# python fed_office_dg.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --wk_iters 10 --iters 3 --target_idx 3
-# python fed_domainnet.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}'  --lsim --wk_iters 10 --iters 3
-# python fed_domainnet.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}'  --wk_iters 10 --iters 3
-# python fed_domainnet.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --lsim --test --batch 1
-# python fed_domainnet.py --hparams '{"lr_classifier": 1e-3, "nonlinear_classifier": "True"}' --test --batch 1
+# python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ratio 1.47 --iters 50
+# python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ratio 1.47 --test 
+# python train.py --dataset fairface --percent 1 --expname uneven --mode CoCoOP --ratio 1.47 --iters 50 
+# python train.py --dataset fairface --percent 1 --expname uneven --mode CoCoOP --ratio 1.47 --test 
 
-# python fed_domainnet_dg.py --hparams '{"lr_classifier": 1e-3}' --wk_iters 10 --iters 3 --target_idx 0
-# python fed_domainnet_dg.py --hparams '{"lr_classifier": 1e-3}'  --wk_iters 10 --iters 3 --target_idx 1 --resume
+# python train.py --dataset fairface --percent 0.5 --expname even --mode ccop --iters 50
+# python train.py --dataset fairface --percent 0.5 --expname even --mode ccop --test 
+# python train.py --dataset fairface --percent 0.5 --expname even --mode fedavg --iters 50 
+# python train.py --dataset fairface --percent 0.5 --expname even --mode fedavg --test 
+# python train.py --dataset fairface --percent 0.5 --expname even --mode CoCoOP --iters 50 
+# python train.py --dataset fairface --percent 0.5 --expname even --mode CoCoOP --test 
+# python train.py --dataset fairface --percent 0.5 --expname even --mode harmo-fl --iters 50 
+# python train.py --dataset fairface --percent 0.5 --expname even --mode harmo-fl --test 
 
-# python fed_digits_dg.py --hparams '{"lr_classifier": 1e-3}' --lsim --wk_iters 10 --iters 3 --target_idx 4
-# python fed_digits_dg.py --hparams '{"lr_classifier": 1e-3}'  --wk_iters 10 --iters 3 --target_idx 4
 
-# python fed_domainnet_dg.py --hparams '{"lr_classifier": 1e-3}' --lsim --wk_iters 10 --iters 3 --target_idx 0
-# python fed_domainnet_dg.py --hparams '{"lr_classifier": 1e-3}' --lsim --wk_iters 10 --iters 3 --target_idx 1
-python fed_domainnet_dg.py --hparams '{"lr_classifier": 1e-3}' --lsim --wk_iters 10 --iters 3 --target_idx 2 --resume
-# python fed_domainnet_dg.py --hparams '{"lr_classifier": 1e-3}'  --wk_iters 10 --iters 5 --target_idx 2
-# python fed_domainnet_dg.py --hparams '{"lr_classifier": 1e-3}' --lsim --wk_iters 10 --iters 5 --target_idx 3
-# python fed_domainnet_dg.py --hparams '{"lr_classifier": 1e-3}'  --wk_iters 10 --iters 5 --target_idx 3
-# python fed_domainnet_dg.py --hparams '{"lr_classifier": 1e-3}' --lsim --wk_iters 10 --iters 5 --target_idx 4
-# python fed_domainnet_dg.py --hparams '{"lr_classifier": 1e-3}'  --wk_iters 10 --iters 5 --target_idx 4
-# python fed_domainnet_dg.py --hparams '{"lr_classifier": 1e-3}' --lsim --wk_iters 10 --iters 5 --target_idx 5
-# python fed_domainnet_dg.py --hparams '{"lr_classifier": 1e-3}'  --wk_iters 10 --iters 5 --target_idx 5
+python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ratio 1.31 --iters 1
+# python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ratio 1.31 --test --sam
+# python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ratio 1.47 --iters 50 --sam
+# python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ratio 1.47 --test --sam
+
+# python train.py --dataset fairface --percent 1 --expname uneven --mode fedavg --ratio 1.31 --iters 50 
+# python train.py --dataset fairface --percent 1 --expname uneven --mode fedavg --ratio 1.31 --test 
+# python train.py --dataset fairface --percent 0.5 --expname even --mode ccop --iters 50 --sam
+# python train.py --dataset fairface --percent 0.5 --expname even --mode ccop --test --sam
+
+
+# # # # 4 * (4+2) = 24

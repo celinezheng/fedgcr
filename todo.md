@@ -1,0 +1,22 @@
+- meta loss might push away domain prompts
+- new setting: align once
+- add sample specific prompt
+- implement promptfl
+- implement CoCoOP in FL setting
+- run another uneven setting with sqrt(N) of domains
+- run ablation test on different module
+- run on domain generalization setting
+- thunk about the heterogeneity setting in dg mode
+- try sklearn.cluster.SpectralClustering
+- domain-wise aggregate meta-net(normalize in group) 
+- top-k use 1, 2, or 3
+- normalize along dimension of 0 or 1
+- make sure the label set of the all clients are same when partitioning
+- combine q-ffl with plain vpt instead of cocoop
+- 整理 q-ffl 然後傳給ting-an!
+- 嘗試 add prompt for proxy representation
+- display uneven distribution
+- 想看看要怎麼呈現 reweight 後 minority 的 accuracy變化（？）
+- fairness
+    - minority/worst performance(10%?)
+    - trade-off score survey

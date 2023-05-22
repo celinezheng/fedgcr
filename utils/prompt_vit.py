@@ -15,6 +15,7 @@ from operator import mul
 from torch.nn.modules.utils import _pair
 from torch.nn import Conv2d, Dropout
 from scipy import ndimage
+from utils.layers import AmpNorm
 
 from .vit_backbones import CONFIGS, Transformer, VisionTransformer, np2th
 
@@ -29,9 +30,11 @@ MODEL_ZOO = {
     "sup_vith14_imagenet21k": "imagenet21k_ViT-H_14.npz",
 }
 class VptCfgNode():
-    def __init__(self):
+    def __init__(self, args):
         super().__init__()
-        self.NUM_TOKENS = 50
+        self.NUM_TOKENS = 4
+        if args.mode.lower() in ['fedavg', 'q-ffl', 'drfl']:
+            self.NUM_TOKENS = 6
         self.DEEP = False
         self.DROPOUT = 0.0
         self.LOCATION = "prepend"
@@ -51,8 +54,8 @@ class VptCfgNode():
         self.VIT_POOL_TYPE = "original" 
 
 def get_vpt_cfg(args):
-    prompt_cfg = VptCfgNode()
-    prompt_cfg.DEEP = args.deep
+    prompt_cfg = VptCfgNode(args)
+    # prompt_cfg.DEEP = args.deep
     return prompt_cfg
     
 
@@ -65,16 +68,20 @@ class PromptViT(nn.Module):
 
     def __init__(self, args, model_type="sup_vitb16_imagenet21k", vis=False):
         super().__init__()
-
-        if args.model=='prompt':
-            prompt_cfg = get_vpt_cfg(args)
-        else:
+        # if args.mode.lower() in ['full', 'harmo-fl']:
+        if args.mode.lower() in ['full']:
             prompt_cfg = None
-        #print(prompt_cfg)
+        else:
+            prompt_cfg = get_vpt_cfg(args)
+        if args.mode.lower() == 'harmo-fl':
+            self.amp_norm = AmpNorm(input_shape=(3, 224, 224))
+        else:
+            self.amp_norm = None
         self.froze_enc = False
         self.model_type = model_type
+        pretrained = 'scratch' not in args.expname
         self.build_backbone(
-            prompt_cfg, vis=vis)
+            prompt_cfg, vis=vis, pretrained=pretrained)
         self.setup_side()
         self.setup_head(args.num_classes)
         print(args.num_classes)
@@ -89,7 +96,7 @@ class PromptViT(nn.Module):
         self.side = None
         
 
-    def build_backbone(self, prompt_cfg, vis):
+    def build_backbone(self, prompt_cfg, vis, pretrained=True):
         m2featdim = {
             "sup_vitb16_224": 768,
             "sup_vitb16": 768,
@@ -114,13 +121,15 @@ class PromptViT(nn.Module):
                 crop_size, num_classes=-1, vis=vis
             )
         else:
-            print('type is vit-s')
+            print('type is full tune')
             self.enc = VisionTransformer(
             model_type, crop_size, num_classes=-1, vis=vis)
 
-        print('loading pretrained weights...')
-        self.enc.load_from(np.load(os.path.join(model_root, MODEL_ZOO[model_type])))
-        
+        if pretrained:
+            print('loading pretrained weights...')
+            self.enc.load_from(np.load(os.path.join(model_root, MODEL_ZOO[model_type])))
+        else:
+            print('train from scratch......')
     def setup_head(self, class_num):
         MLP_NUM = 0
         NUMBER_CLASSES = class_num
@@ -133,6 +142,9 @@ class PromptViT(nn.Module):
         self.head = nn.Linear(self.feat_dim, NUMBER_CLASSES)
 
     def forward(self, x, return_feature=False):
+        if self.amp_norm is not None:
+            x = self.amp_norm(x)
+
         if self.side is not None:
             side_output = self.side(x)
             side_output = side_output.view(side_output.size(0), -1)
@@ -151,7 +163,11 @@ class PromptViT(nn.Module):
         x = self.head(x)
 
         return x
-        
+
+    def forward_feat(self, x):
+        feat, _ =  self.forward(x, return_feature=True)
+        return feat
+
     def forward_feature(self, feat):
         x = self.head(feat)
         return x
