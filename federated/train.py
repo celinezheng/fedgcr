@@ -51,7 +51,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', type = int, default=1, help ='random seed')
     parser.add_argument('--model', type = str, default='prompt', help='prompt | vit-linear')
     parser.add_argument("--gender_dis", choices=['iid', 'gender', 'gender_age'], default='iid', help="gender distribution of each client")
-    parser.add_argument('--cluster_num', type = int, default=7, help ='cluster number')
+    parser.add_argument('--cluster_num', type = int, default=-1, help ='cluster number')
     parser.add_argument('--target_domain', type = str, default='Clipart', help='Clipart, Infograph, ...')
     parser.add_argument('--hparams', type=str,
         help='JSON-serialized hparams dict')
@@ -65,9 +65,26 @@ if __name__ == '__main__':
     torch.manual_seed(seed)    
     torch.cuda.manual_seed_all(seed) 
     random.seed(seed)
+    if args.dataset.lower()[:6] == 'domain':
+        # name of each datasets
+        domain_num = 6
+    elif args.dataset.lower()[:5] == 'digit':
+        domain_num = 5
+    elif args.dataset.lower()[:9] == 'fairface':
+        domain_num = 7
+        args.num_classes = 9
+    else:
+        import warnings
+        warnings.warn("invalid args.dataset")
+        exit(0)
+    if args.gender_dis != 'iid':
+        domain_num = args.cluster_num
+    elif args.cluster_num == -1:
+        args.cluster_num = domain_num
+
     exp_folder = f'fed_{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
     if args.gender_dis != 'iid':
-        exp_folder += args.gender_dis
+        exp_folder += f"_{args.gender_dis}_cluster_{args.cluster_num}"
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
         os.makedirs(args.save_path)
@@ -97,20 +114,7 @@ if __name__ == '__main__':
     if args.hparams:
         hparams.update(json.loads(args.hparams))
     
-    if args.dataset.lower()[:6] == 'domain':
-        # name of each datasets
-        domain_num = 6
-    elif args.dataset.lower()[:5] == 'digit':
-        domain_num = 5
-    elif args.dataset.lower()[:9] == 'fairface':
-        domain_num = 7
-        args.num_classes = 9
-    else:
-        import warnings
-        warnings.warn("invalid args.dataset")
-        exit(0)
-    if args.gender_dis != 'iid':
-        domain_num = args.cluster_num
+    
     loss_fun = nn.CrossEntropyLoss()
     client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
     print(client_weights)
@@ -320,7 +324,8 @@ if __name__ == '__main__':
                 val_acc_list[client_idx] = val_acc
                 # train_accs[client_idx] = int(multi * val_acc)
                 # print(' Site-{:<25s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}'.format(datasets[client_idx], val_loss, val_acc))
-                write_log(args, ' Site-{:<25s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}\n'.format(datasets[client_idx], val_loss, val_acc))
+                group_info = f"({gmap[client_idx]})" if args.mode.lower()=='ccop' else ""
+                write_log(args, ' Site-{:<25s} {:<4s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}\n'.format(datasets[client_idx], group_info, val_loss, val_acc))
             write_log(args, f'Average Valid Accuracy: {np.mean(val_acc_list):.4f}\n')
                     
             # Record best
@@ -328,6 +333,8 @@ if __name__ == '__main__':
                 if args.sam: threshold = args.iters - 10
                 else: threshold = args.iters - 5
                 threshold = max(10, threshold)
+
+                threshold = 1
                 cnt = [0 for _ in range(domain_num)]
                 accs = [0 for _ in range(domain_num)]
                 agg = 0
@@ -348,7 +355,8 @@ if __name__ == '__main__':
                     best_changed=True
                     for client_idx in range(client_num):
                         best_acc[client_idx] = val_acc_list[client_idx]
-                        write_log(args, ' Best site-{:<25s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
+                        group_info = f"({gmap[client_idx]})" if args.mode.lower()=='ccop' else ""
+                        write_log(args, ' Best site-{:<25s}{:<4s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], group_info, best_epoch, best_acc[client_idx]))
                 if ((a_iter+1)*(wi+1)) > threshold:
                     test_accs = {}
                     for client_idx, datasite in enumerate(datasets):
@@ -361,7 +369,7 @@ if __name__ == '__main__':
                     if np.mean(test_accs) > np.mean(best_test):
                         best_changed = True
                         best_epoch = a_iter
-                        for i in range(len(best_test)):
+                        for i in range(len(test_accs)):
                             best_test[i] = test_accs[i]
                     else:
                         best_changed = False
@@ -425,7 +433,7 @@ if __name__ == '__main__':
                         test_accs = list(test_accs.values())
 
                         if np.mean(test_accs) > np.mean(best_test):
-                            for i in range(len(test_loaders)):
+                            for i in range(len(test_accs)):
                                 best_test[i] = test_accs[i]
                         write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
                    

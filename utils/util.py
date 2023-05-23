@@ -13,7 +13,7 @@ def write_log(args, msg):
     if args.dg:
         log_path = f'../logs/{args.dataset}_{args.expname}_{args.target_domain}'
     if args.gender_dis != 'iid':
-        log_path += f"_{args.gender_dis}"
+        log_path += f"_{args.gender_dis}_cluster_{args.cluster_num}"
     if args.q!=1:
         log_fname = f'{args.mode}_q={args.q}.log'
     if not os.path.exists(log_path):

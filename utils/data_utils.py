@@ -33,7 +33,6 @@ class DigitsDataset(Dataset):
 
         self.transform = transform
         self.channels = channels
-        print(len(self.labels))
         self.labels = self.labels.astype(np.longlong).squeeze()
 
     def __len__(self):
@@ -121,8 +120,6 @@ class FairFaceIIDDataset(Dataset):
             self.paths, self.gender, self.labels = np.load('../../data/FairFace/pkl/iid/{}_test.pkl'.format(site), allow_pickle=True)
         
         self.path = np.asarray(self.paths)
-        print(len(self.path))
-        # self.labels = np.asarray(self.labels).astype(np.longlong)
         self.labels = np.asarray(self.labels).astype(np.float16)
         self.transform = transform
         self.base_path = base_path if base_path is not None else '../../data'
@@ -151,8 +148,6 @@ class FairFaceGenderDataset(Dataset):
             self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{distribution_mode}/{site}_test_{client_idx}.pkl', allow_pickle=True)
         
         self.path = np.asarray(self.paths)
-        print(len(self.path))
-        # self.labels = np.asarray(self.labels).astype(np.longlong)
         self.labels = np.asarray(self.labels).astype(np.float16)
         self.transform = transform
         self.base_path = base_path if base_path is not None else '../../data'
