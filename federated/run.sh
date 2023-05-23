@@ -14,8 +14,6 @@
 
 
 # python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ratio 1.31 --iters 3 --gender_dis gender --cluster_num 12 
-python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ratio 1.31 --iters 3 --gender_dis gender --small_test --cluster_num 6 
-python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ratio 1.47 --iters 3 --gender_dis gender --small_test --cluster_num 6 
 # python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ratio 1.31 --test --gender_dis gender --cluster_num 12
 # python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ratio 1.47 --iters 50 --gender_dis gender --cluster_num 12
 # python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ratio 1.47 --test --gender_dis gender --cluster_num 12
