@@ -14,6 +14,8 @@ def write_log(args, msg):
         log_path = f'../logs/{args.dataset}_{args.expname}_{args.target_domain}'
     if args.gender_dis != 'iid':
         log_path += f"_{args.gender_dis}_cluster_{args.cluster_num}"
+    if args.small_test:
+        log_path += "_small_test"
     if args.q!=1:
         log_fname = f'{args.mode}_q={args.q}.log'
     if not os.path.exists(log_path):
@@ -445,7 +447,8 @@ def prepare_fairface_gender_uneven(args):
     train_sets = {}
     test_sets = {}
     decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
-    
+    if args.small_test:
+        decay_order = ['White', 'Black', 'Indian', 'Middle_Eastern']
                 
     if 'uneven' in args.expname.lower():
         # client number = 1.4^k, k=0~5
@@ -453,11 +456,13 @@ def prepare_fairface_gender_uneven(args):
         decay_speed = args.ratio
         max_clientnum = round(np.float_power(decay_speed, len(decay_order)-1))
         distribution_mode = f"imbalance{max_clientnum}_{args.gender_dis}"
+        if args.small_test: distribution_mode += '_small'
         for i, name in enumerate(decay_order):
             client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
     else:
         decay_speed = 3
         distribution_mode = f"balance_{args.gender_dis}"
+        if args.small_test: distribution_mode += '_small'
         for i, name in enumerate(decay_order):
             client_nums[name] = 2
     print(client_nums)

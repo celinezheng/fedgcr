@@ -28,6 +28,7 @@ if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
+    parser.add_argument('--small_test', action='store_true', help='whether to test small cluster')
     parser.add_argument('--tune', action='store_true', help='whether to tune hparams')
     parser.add_argument('--si', action='store_true', help='whether to use si only')
     parser.add_argument('--sam', action='store_true', help='whether to use sam optimizer')
@@ -85,6 +86,8 @@ if __name__ == '__main__':
     exp_folder = f'fed_{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
     if args.gender_dis != 'iid':
         exp_folder += f"_{args.gender_dis}_cluster_{args.cluster_num}"
+    if args.small_test:
+        exp_folder += f"_small_test"
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
         os.makedirs(args.save_path)
