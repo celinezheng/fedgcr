@@ -28,6 +28,7 @@ if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
+    parser.add_argument('--debug', action='store_true', help='whether to debug for inference/test')
     parser.add_argument('--small_test', action='store_true', help='whether to test small cluster')
     parser.add_argument('--tune', action='store_true', help='whether to tune hparams')
     parser.add_argument('--si', action='store_true', help='whether to use si only')
@@ -336,8 +337,8 @@ if __name__ == '__main__':
                 if args.sam: threshold = args.iters - 10
                 else: threshold = args.iters - 5
                 threshold = max(10, threshold)
+                if args.debug: threshold = 1
 
-                threshold = 1
                 cnt = [0 for _ in range(domain_num)]
                 accs = [0 for _ in range(domain_num)]
                 agg = 0
