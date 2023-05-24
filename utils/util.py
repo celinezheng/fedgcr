@@ -350,7 +350,7 @@ def prepare_fairface_iid_uneven(args):
     decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
     for name in decay_order:
         train_sets[name] = FairFaceIIDDataset(data_base_path, name, transform=transform_train)
-        train_sets[name] = FairFaceIIDDataset(data_base_path, name, transform=transform_test, train=False)
+        test_sets[name] = FairFaceIIDDataset(data_base_path, name, transform=transform_test, train=False)
                 
     if 'uneven' in args.expname.lower():
         # client number = 1.4^k, k=0~5
