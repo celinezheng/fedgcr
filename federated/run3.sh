@@ -27,5 +27,7 @@ python train.py --dataset fairface --percent 0.5 --expname even --mode ccop --it
 python train.py --dataset fairface --percent 0.5 --expname even --mode ccop --test
 python train.py --dataset fairface --percent 0.5 --expname even --mode CoCoOP --iters 50
 python train.py --dataset fairface --percent 0.5 --expname even --mode CoCoOP --test
+python train.py --dataset fairface --percent 0.5 --expname even --mode fedavg --iters 50
+python train.py --dataset fairface --percent 0.5 --expname even --mode fedavg --test
 
 # # # # 4 * (4+2) = 24

@@ -22,6 +22,8 @@ python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ra
 python train.py --dataset fairface --percent 1 --expname uneven --mode ccop --ratio 1.47 --test
 python train.py --dataset fairface --percent 1 --expname uneven --mode CoCoOP --ratio 1.47 --iters 50
 python train.py --dataset fairface --percent 1 --expname uneven --mode CoCoOP --ratio 1.47 --test
+python train.py --dataset fairface --percent 1 --expname uneven --mode fedavg --ratio 1.47 --iters 50
+python train.py --dataset fairface --percent 1 --expname uneven --mode fedavg --ratio 1.47 --test
 
 # python train.py --dataset fairface --percent 0.5 --expname even --mode ccop --iters 50
 # python train.py --dataset fairface --percent 0.5 --expname even --mode ccop --test
