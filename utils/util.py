@@ -14,8 +14,12 @@ def write_log(args, msg):
         log_path = f'../logs/{args.dataset}_{args.expname}_{args.target_domain}'
     if args.gender_dis != 'iid':
         log_path += f"_{args.gender_dis}_cluster_{args.cluster_num}"
+    else:
+        log_path += f"_{args.cluster_num}"
     if args.small_test:
         log_path += "_small_test"
+    if args.sam:
+        log_path += f"_sam"
     if args.q!=1:
         log_fname = f'{args.mode}_q={args.q}.log'
     if not os.path.exists(log_path):
@@ -349,8 +353,8 @@ def prepare_fairface_iid_uneven(args):
     test_sets = {}
     decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
     for name in decay_order:
-        train_sets[name] = FairFaceIIDDataset(data_base_path, name, transform=transform_train)
-        test_sets[name] = FairFaceIIDDataset(data_base_path, name, transform=transform_test, train=False)
+        train_sets[name] = FairFaceIIDDataset(args, data_base_path, name, transform=transform_train)
+        test_sets[name] = FairFaceIIDDataset(args, data_base_path, name, transform=transform_test, train=False)
                 
     if 'uneven' in args.expname.lower():
         # client number = 1.4^k, k=0~5
@@ -427,7 +431,7 @@ def prepare_fairface_iid_uneven(args):
         write_log(args, f"{len_dataset[name]},")
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
-    # check_labels(args, train_loaders)
+    check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 def prepare_fairface_gender_uneven(args):
@@ -510,7 +514,7 @@ def prepare_data(args):
     elif args.dataset.lower()[:5] == 'digit':
         return prepare_digit_uneven(args)
     elif args.dataset.lower()[:9] == 'fairface':
-        if args.gender_dis == 'iid':
+        if args.gender_dis in ['iid', 'random_dis']:
             return prepare_fairface_iid_uneven(args)
         else:
             return prepare_fairface_gender_uneven(args)
@@ -777,7 +781,7 @@ def get_domain_idx(pi, prompt_bank):
 
     return torch.argmax(domain_sim)
 
-def agg_rep(model, test_loader, device):
+def agg_rep(args, model, test_loader, device):
     model.to(device)
     model.eval()
     agg_protos_label = {}
@@ -788,7 +792,10 @@ def agg_rep(model, test_loader, device):
         data, target = batch
         data = data.to(device).float()
         target = target.to(device).long()
-        features = model.forward_feat(data)
+        if 'raw' in args.expname.lower():
+            features = model.forward_raw(data)
+        else:
+            features = model.forward_feat(data)
         for i in range(len(target)):
             if target[i].item() in agg_protos_label:
                 agg_protos_label[target[i].item()] += features[i]
@@ -815,7 +822,6 @@ import matplotlib.pyplot as plt
 def cluster(args, all_pi, domain_num):
     all_pi_reshape = all_pi.cpu().reshape(all_pi.shape[0], -1)
     print(all_pi_reshape.shape)
-    write_log(args, 'gmm\n')
     cluster = GMM(n_components=domain_num)
     # cluster = KMeans(n_clusters=domain_num, random_state=0)
     # cluster = SpectralClustering(n_clusters=domain_num,
@@ -827,8 +833,6 @@ def cluster(args, all_pi, domain_num):
     for cidx, gidx in enumerate(labels):
         gmap[cidx] = gidx
         cnt[gidx] += 1
-    for cidx in range(all_pi.shape[0]):
-        write_log(args, f'client-{cidx} is in G-{gmap[cidx]}\n')
     write_log(args, f'cnt=[')
     for didx in range(domain_num):
         write_log(args, f'{cnt[didx]}, ')
@@ -1126,7 +1130,6 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                         gmap[client_idx] = didx
                         cnt[didx] += 1
                         temp[didx] += models[client_idx].state_dict()[key]
-                        write_log(args, f'client-{client_idx} is in G-{didx}\n')
                     # # todo : EMA replace prompt
                     print(cnt)
                     write_log(args, f'clients=[')

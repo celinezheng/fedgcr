@@ -113,11 +113,11 @@ class DomainNetDataset(Dataset):
         return image, label
 
 class FairFaceIIDDataset(Dataset):
-    def __init__(self, base_path, site, train=True, transform=None):
+    def __init__(self, args, base_path, site, train=True, transform=None):
         if train:
-            self.paths, self.gender, self.labels = np.load('../../data/FairFace/pkl/iid/{}_train.pkl'.format(site), allow_pickle=True)
+            self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{args.gender_dis}/{site}_train.pkl', allow_pickle=True)
         else:
-            self.paths, self.gender, self.labels = np.load('../../data/FairFace/pkl/iid/{}_test.pkl'.format(site), allow_pickle=True)
+            self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{args.gender_dis}/{site}_test.pkl', allow_pickle=True)
         
         self.path = np.asarray(self.paths)
         self.labels = np.asarray(self.labels).astype(np.float16)

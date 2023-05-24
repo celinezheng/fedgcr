@@ -71,7 +71,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_classes', type = int, default=10, help ='number of classes')
     parser.add_argument('--seed', type = int, default=1, help ='random seed')
     parser.add_argument('--model', type = str, default='prompt', help='prompt | vit-linear')
-    parser.add_argument("--gender_dis", choices=['iid', 'gender', 'gender_age'], default='iid', help="gender distribution of each client")
+    parser.add_argument("--gender_dis", choices=['iid', 'gender', 'gender_age', 'random_dis'], default='iid', help="gender distribution of each client")
     parser.add_argument('--cluster_num', type = int, default=-1, help ='cluster number')
     parser.add_argument('--target_domain', type = str, default='Clipart', help='Clipart, Infograph, ...')
     parser.add_argument('--hparams', type=str,
@@ -98,16 +98,21 @@ if __name__ == '__main__':
         import warnings
         warnings.warn("invalid args.dataset")
         exit(0)
-    if args.gender_dis != 'iid':
-        domain_num = args.cluster_num
-    elif args.cluster_num == -1:
-        args.cluster_num = domain_num
-
     exp_folder = f'fed_{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
     if args.gender_dis != 'iid':
+        domain_num = args.cluster_num
         exp_folder += f"_{args.gender_dis}_cluster_{args.cluster_num}"
+    elif args.cluster_num != -1:
+        domain_num = args.cluster_num
+        exp_folder += f"_cluster_{args.cluster_num}"
+    else:
+        args.cluster_num = domain_num
+    
     if args.small_test:
         exp_folder += f"_small_test"
+    if args.sam:
+        exp_folder += f"_sam"
+
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
         os.makedirs(args.save_path)
@@ -127,7 +132,7 @@ if __name__ == '__main__':
     write_log(args, '    iters: {}\n'.format(args.iters))
     write_log(args, '    wk_iters: {}\n'.format(args.wk_iters))
     write_log(args, '    si: {}\n'.format(args.si))
-    write_log(args, '    lambda for constrastive: {}\n'.format(args.lambda_con))
+    write_log(args, '    domain_num: {}\n'.format(domain_num))
 
     if args.hparams_seed == 0:
         hparams = hparams_registry.default_hparams(args.mode, args.dataset)
@@ -293,7 +298,7 @@ if __name__ == '__main__':
                         train_sam(model, train_loaders[client_idx], prompt_opts[client_idx], prompt_opts[client_idx], optimizers[client_idx], loss_fun, device)
                     else:
                         train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device)
-                    feat_i = agg_rep(server_model, train_loaders[client_idx], device)
+                    feat_i = agg_rep(args, server_model, train_loaders[client_idx], device)
                     feat_i = feat_i.unsqueeze(0)
                     if all_feat == None:
                         all_feat = feat_i
