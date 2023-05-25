@@ -144,7 +144,7 @@ if __name__ == '__main__':
     
     
     loss_fun = nn.CrossEntropyLoss()
-    client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
+    client_weights, train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
     print(client_weights)
     client_num = len(train_loaders)
     if args.dg:
@@ -154,6 +154,9 @@ if __name__ == '__main__':
     write_log(args, f"domain number = {domain_num}\n")
     prompt_bank = None
     # setup model
+    feat_bank = nn.Parameter(
+            torch.empty(domain_num, 768, requires_grad=False).normal_(std=0.02)
+        ).to(device)
     if args.mode.lower() == 'doprompt':
         server_model = DoPrompt(num_classes=args.num_classes, num_domains=client_num, hparams=hparams).to(device)
     elif args.mode.lower() == 'fedprompt':
@@ -300,6 +303,7 @@ if __name__ == '__main__':
                         train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device)
                     feat_i = agg_rep(args, server_model, train_loaders[client_idx], device)
                     feat_i = feat_i.unsqueeze(0)
+                    
                     if all_feat == None:
                         all_feat = feat_i
                     else:
@@ -310,6 +314,7 @@ if __name__ == '__main__':
                     train_harmofl(args, model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                 else:
                     train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
+                    # for q-ffl
                     train_losses[client_idx] = train_loss
         
         with torch.no_grad():
@@ -317,7 +322,7 @@ if __name__ == '__main__':
             if args.mode.lower() != 'solo':
                 if args.mode.lower() in ['nova', 'ccop']:
                     print(Eas)
-                server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, all_feat, prompt_bank)
+                server_model, models, prompt_bank, gmap = communication(args, len(gmap), gmap, server_model, models, client_weights, client_num, domain_num, Eas, train_losses, a_iter, all_feat, prompt_bank, feat_bank)
 
             # Report loss after aggregation
             for client_idx, model in enumerate(models):

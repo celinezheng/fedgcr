@@ -198,7 +198,7 @@ def prepare_digit_uneven(args):
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
     # check_labels(args, train_loaders)
-    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
+    return client_weights, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 def prepare_domainnet_uneven(args):
     data_base_path = '../../data'
@@ -330,7 +330,7 @@ def prepare_domainnet_uneven(args):
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
     check_labels(args, train_loaders)
-    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
+    return client_weights, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 def prepare_fairface_iid_uneven(args):
     data_base_path = '../../data/FairFace'
@@ -439,7 +439,7 @@ def prepare_fairface_iid_uneven(args):
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
     check_labels(args, train_loaders)
-    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
+    return client_weights, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 def prepare_fairface_gender_uneven(args):
     data_base_path = '../../data/FairFace'
@@ -513,7 +513,7 @@ def prepare_fairface_gender_uneven(args):
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
     # check_labels(args, train_loaders)
-    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, None
+    return client_weights, train_loaders, val_loaders, test_loaders, datasets, None
 
 def prepare_data(args):
     if args.dataset.lower()[:6] == 'domain':
@@ -788,6 +788,18 @@ def get_domain_idx(pi, prompt_bank):
 
     return torch.argmax(domain_sim)
 
+def get_fix_domain_idx(feat_i, feat_bank):
+    feat_i_rp  = feat_i.repeat(feat_bank.shape[0], 1)
+    print(feat_i_rp.shape)
+    cos = torch.nn.CosineSimilarity(dim=1)
+    output = cos(feat_i_rp, feat_bank)
+    print(output)
+    print(f"get_fix_domain_idx, {output}")
+    gi = torch.argmax(output)
+    update_rate = 0.999
+    feat_bank[gi].data.copy_(update_rate * feat_i + (1-update_rate) * feat_bank[gi])
+    return torch.argmax(output), feat_bank
+
 def agg_rep(args, model, test_loader, device):
     model.to(device)
     model.eval()
@@ -873,15 +885,11 @@ def agg_cluster(all_pi, prompt_bank):
 def remap(all_pi, prompt_bank):
     # print(prompt_bank[0][0][0])
     # print(all_pi.shape, prompt_bank.shape)
-    mi, stdi = torch.mean(all_pi, dim=0, keepdim=False), torch.std(all_pi, dim=0, keepdim=False)
-    mb, stdb = torch.mean(prompt_bank, dim=0, keepdim=False), torch.std(prompt_bank, dim=0, keepdim=False)
-    mi, stdi = mi.detach(), stdi.detach()
-    mb, stdb = mb.detach(), stdb.detach()
+    mi, stdi = torch.mean(all_pi, dim=0, keepdim=False).detach(), torch.std(all_pi, dim=0, keepdim=False).detach()
+    mb, stdb = torch.mean(prompt_bank, dim=0, keepdim=False).detach(), torch.std(prompt_bank, dim=0, keepdim=False).detach()
     if torch.sum(stdb)==0:
         print(f"std is zero!! {torch.sum(stdb)}")
         return random_replace(all_pi, prompt_bank)
-        # prompt_bank, _, _ = agg_cluster(all_pi, prompt_bank)
-        # return prompt_bank
     else:
         print(f"std not zero: {torch.sum(stdb)}")
     prompt_bank = (mi + stdi * (prompt_bank - mb)/stdb)
@@ -892,8 +900,7 @@ def random_replace(all_pi, prompt_bank):
     return all_pi[perm].detach().clone()
 
 ################# Key Function ########################
-def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, all_feat=None, prompt_bank=None):
-    gmap = {}
+def communication(args, group_cnt, gmap, server_model, models, client_weights, client_num, domain_num, Eas, train_losses, a_iter, all_feat=None, prompt_bank=None, feat_bank=None):
     alpha = 0.99
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     if args.mode.lower() != 'fedprompt':
@@ -1021,7 +1028,22 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
         elif args.mode.lower() == 'ccop':
             multi = 100
             q = args.q
-            gmap, cnt = cluster(args, all_feat, domain_num)
+            if not gmap:
+                print('not gmap')
+                gmap, cnt = cluster(args, all_feat, domain_num)
+                update_ratio = 0.9
+                for client_idx in range(client_num):
+                    gi = gmap[client_idx]
+                    new_feat = update_ratio * all_feat[client_idx] + (1-update_ratio) * feat_bank[gi]
+                    feat_bank[gi].data.copy_(new_feat)
+            else:
+                print('gmap')
+                cnt = [0 for _ in range(domain_num)]
+                feat_bank = remap(all_feat, feat_bank)
+                for client_idx in range(client_num):
+                    gmap[client_idx], feat_bank = get_fix_domain_idx(all_feat[client_idx], feat_bank)
+                    cnt[gmap[client_idx]]+=1
+            
             gsize = [0 for _ in range(domain_num)]
             gloss = [1e-10 for _ in range(domain_num)]
             for i in range(client_num):
@@ -1052,6 +1074,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                 new_weights[client_idx] = weight
                 all_weight += weight
             new_weights = [wi/all_weight for wi in new_weights]
+            # feat_bank = agg_feat_bank(gmap, all_feat, new_weights, feat_bank)
             write_log(args, f"sum of wi : {sum(new_weights):.4f}\n")
             for key in server_model.state_dict().keys():
                 if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
