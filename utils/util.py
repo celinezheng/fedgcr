@@ -16,12 +16,10 @@ def write_log(args, msg):
         log_path += f"_{args.gender_dis}_cluster_{args.cluster_num}"
     else:
         log_path += f"_{args.cluster_num}"
-    if args.small_test:
-        log_path += "_small_test"
-    if args.sam:
-        log_path += f"_sam"
-    if args.q!=1:
-        log_fname = f'{args.mode}_q={args.q}.log'
+    if args.small_test: log_path += "_small_test"
+    if args.sam: log_path += f"_sam"
+    if args.color_jitter: log_path += f"_color_jitter"
+    if args.q!=1: log_fname = f'{args.mode}_q={args.q}.log'
     if not os.path.exists(log_path):
         os.makedirs(log_path)
     with open(os.path.join(log_path, log_fname), 'a') as logfile:
@@ -336,13 +334,22 @@ def prepare_domainnet_uneven(args):
 
 def prepare_fairface_iid_uneven(args):
     data_base_path = '../../data/FairFace'
+    s = 1
+    color_jitter = transforms.ColorJitter(0.8 * s, 0.8 * s, 0.8 * s, 0.2 * s)
     transform_train = transforms.Compose([
             transforms.Resize([224, 224]),
             transforms.RandomHorizontalFlip(),
             transforms.RandomRotation((-30,30)),
             transforms.ToTensor(),
     ])
-
+    if args.color_jitter:
+        transform_train = transforms.Compose([
+            transforms.Resize([224, 224]),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomApply([color_jitter], p=0.8),
+            transforms.RandomRotation((-30,30)),
+            transforms.ToTensor(),
+        ])
     transform_test = transforms.Compose([
             transforms.Resize([224, 224]),
             transforms.ToTensor(),
@@ -1011,7 +1018,6 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-        
         elif args.mode.lower() == 'ccop':
             multi = 100
             q = args.q
