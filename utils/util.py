@@ -891,6 +891,22 @@ def random_replace(all_pi, prompt_bank):
     perm = torch.randperm(all_pi.size(0))[:prompt_bank.shape[0]]
     return all_pi[perm].detach().clone()
 
+def domain_fairness(args, gmap, train_losses):
+    domain_losses = {}
+    for cidx, gidx in gmap.items():
+        domain_losses[gidx] = list()
+    for cidx, loss in enumerate(train_losses):
+        gidx = gmap[cidx]
+        domain_losses[gidx].append(loss)
+    for gidx in domain_losses:
+        mean = sum(domain_losses[gidx]) / len(domain_losses[gidx])
+        domain_losses[gidx] = mean
+    domain_losses = list(domain_losses.values())
+    std = np.std(domain_losses, keepdims=False)
+    print(f"domain fairness std = {std}")
+    write_log(args, f"domain fairness std = {std}\n")
+    return std
+
 ################# Key Function ########################
 def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, all_feat=None, prompt_bank=None):
     gmap = {}
@@ -1020,6 +1036,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
         elif args.mode.lower() == 'ccop':
             multi = 100
+            
             q = args.q
             gmap, cnt = cluster(args, all_feat, domain_num)
             gsize = [0 for _ in range(domain_num)]
@@ -1041,13 +1058,19 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             print(gloss)
             write_log(args, f"power_decay: {power_decay}, powerI: {powerI:.4f}, powerC: {powerC:.4f}\n")
             print("========")
-
+            losses = []
+            for client_idx in range(client_num):
+                losses.append(multi / (Eas[client_idx]))
+            if args.std_rw:
+                domain_std = domain_fairness(args, gmap, losses)
+            else: domain_std = 0
+            # calculate variance among domain performance
             for client_idx in range(client_num):
                 loss = multi / (Eas[client_idx])
                 Li  = loss
                 Lc = gloss[gmap[client_idx]]
                 Lrb = np.float_power(Li, powerI) * np.float_power(Lc, powerC) + 1e-10
-                Srb = client_weights[client_idx]
+                Srb = client_weights[client_idx] / (1 + domain_std)
                 weight = Srb * np.float_power(Lrb, (q+1))
                 new_weights[client_idx] = weight
                 all_weight += weight

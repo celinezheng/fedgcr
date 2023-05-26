@@ -47,6 +47,7 @@ if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
+    parser.add_argument('--std_rw', action='store_true', help='reweight with std')
     parser.add_argument('--color_jitter', action='store_true', help='whether to color_jitter for fairface')
     parser.add_argument('--debug', action='store_true', help='whether to debug for inference/test')
     parser.add_argument('--small_test', action='store_true', help='whether to test small cluster')
@@ -133,6 +134,7 @@ if __name__ == '__main__':
     write_log(args, '    wk_iters: {}\n'.format(args.wk_iters))
     write_log(args, '    si: {}\n'.format(args.si))
     write_log(args, '    domain_num: {}\n'.format(domain_num))
+    write_log(args, '    std_rw: {}\n'.format(args.std_rw))
 
     if args.hparams_seed == 0:
         hparams = hparams_registry.default_hparams(args.mode, args.dataset)
