@@ -2,7 +2,7 @@ from tqdm import tqdm
 import sys, os
 import torch
 import torchvision.transforms as transforms
-from utils.data_utils import DomainNetDataset, DigitsDataset, FairFaceDataset
+from utils.data_utils import DomainNetDataset, DigitsDataset, FairFaceIIDDataset, FairFaceGenderDataset
 import math
 import torch.nn.functional as tf
 import numpy as np
@@ -12,8 +12,14 @@ def write_log(args, msg):
     log_fname = f'{args.mode}.log'
     if args.dg:
         log_path = f'../logs/{args.dataset}_{args.expname}_{args.target_domain}'
-    if args.q!=1:
-        log_fname = f'{args.mode}_q={args.q}.log'
+    if args.gender_dis != 'iid':
+        log_path += f"_{args.gender_dis}_cluster_{args.cluster_num}"
+    else:
+        log_path += f"_{args.cluster_num}"
+    if args.small_test: log_path += "_small_test"
+    if args.sam: log_path += f"_sam"
+    if args.color_jitter: log_path += f"_color_jitter"
+    if args.q!=1: log_fname = f'{args.mode}_q={args.q}.log'
     if not os.path.exists(log_path):
         os.makedirs(log_path)
     with open(os.path.join(log_path, log_fname), 'a') as logfile:
@@ -326,64 +332,37 @@ def prepare_domainnet_uneven(args):
     check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
-def prepare_fairface_uneven(args):
+def prepare_fairface_iid_uneven(args):
     data_base_path = '../../data/FairFace'
+    s = 1
+    color_jitter = transforms.ColorJitter(0.8 * s, 0.8 * s, 0.8 * s, 0.2 * s)
     transform_train = transforms.Compose([
             transforms.Resize([224, 224]),
             transforms.RandomHorizontalFlip(),
             transforms.RandomRotation((-30,30)),
             transforms.ToTensor(),
     ])
-
+    if args.color_jitter:
+        transform_train = transforms.Compose([
+            transforms.Resize([224, 224]),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomApply([color_jitter], p=0.8),
+            transforms.RandomRotation((-30,30)),
+            transforms.ToTensor(),
+        ])
     transform_test = transforms.Compose([
             transforms.Resize([224, 224]),
             transforms.ToTensor(),
     ])
-
-    # white
-    White_trainset = FairFaceDataset(data_base_path, 'White', transform=transform_train)
-    White_testset = FairFaceDataset(data_base_path, 'White', transform=transform_test, train=False)
-    # East_Asian
-    East_Asian_trainset = FairFaceDataset(data_base_path, 'East_Asian', transform=transform_train)
-    East_Asian_testset = FairFaceDataset(data_base_path, 'East_Asian', transform=transform_test, train=False)
-    # Indian
-    Indian_trainset = FairFaceDataset(data_base_path, 'Indian', transform=transform_train)
-    Indian_testset = FairFaceDataset(data_base_path, 'Indian', transform=transform_test, train=False)
-    # Middle_Eastern
-    Middle_Eastern_trainset = FairFaceDataset(data_base_path, 'Middle_Eastern', transform=transform_train)
-    Middle_Eastern_testset = FairFaceDataset(data_base_path, 'Middle_Eastern', transform=transform_test, train=False)
-    # Latino_Hispanic
-    Latino_Hispanic_trainset = FairFaceDataset(data_base_path, 'Latino_Hispanic', transform=transform_train)
-    Latino_Hispanic_testset = FairFaceDataset(data_base_path, 'Latino_Hispanic', transform=transform_test, train=False)
-    # Southeast_Asian
-    Southeast_Asian_trainset = FairFaceDataset(data_base_path, 'Southeast_Asian', transform=transform_train)
-    Southeast_Asian_testset = FairFaceDataset(data_base_path, 'Southeast_Asian', transform=transform_test, train=False)
-    # Black
-    Black_trainset = FairFaceDataset(data_base_path, 'Black', transform=transform_train)
-    Black_testset = FairFaceDataset(data_base_path, 'Black', transform=transform_test, train=False)
-
-    # min_data_len = int(min(len(clipart_trainset), len(infograph_trainset), len(painting_trainset), len(quickdraw_trainset), len(real_trainset), len(sketch_trainset)))
-    test_sets = {
-        'White': White_testset,
-        'East_Asian': East_Asian_testset,
-        'Indian': Indian_testset,
-        'Middle_Eastern': Middle_Eastern_testset,
-        'Latino_Hispanic': Latino_Hispanic_testset,
-        'Southeast_Asian':Southeast_Asian_testset,
-        'Black': Black_testset
-        }
-    train_sets = {
-        'White': White_trainset,
-        'East_Asian': East_Asian_trainset,
-        'Indian': Indian_trainset,
-        'Middle_Eastern': Middle_Eastern_trainset,
-        'Latino_Hispanic': Latino_Hispanic_trainset,
-        'Southeast_Asian':Southeast_Asian_trainset,
-        'Black': Black_trainset
-        }
     len_dataset = {}
     client_nums = {}
+    train_sets = {}
+    test_sets = {}
     decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
+    for name in decay_order:
+        train_sets[name] = FairFaceIIDDataset(args, data_base_path, name, transform=transform_train)
+        test_sets[name] = FairFaceIIDDataset(args, data_base_path, name, transform=transform_test, train=False)
+                
     if 'uneven' in args.expname.lower():
         # client number = 1.4^k, k=0~5
         # data_len = {5, 4, 3, 2, 1, 1}
@@ -459,8 +438,82 @@ def prepare_fairface_uneven(args):
         write_log(args, f"{len_dataset[name]},")
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
-    # check_labels(args, train_loaders)
+    check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
+
+def prepare_fairface_gender_uneven(args):
+    data_base_path = '../../data/FairFace'
+    transform_train = transforms.Compose([
+            transforms.Resize([224, 224]),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation((-30,30)),
+            transforms.ToTensor(),
+    ])
+
+    transform_test = transforms.Compose([
+            transforms.Resize([224, 224]),
+            transforms.ToTensor(),
+    ])
+    client_nums = {}
+    train_sets = {}
+    test_sets = {}
+    decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
+    if args.small_test:
+        decay_order = ['White', 'Black', 'Indian', 'Middle_Eastern']
+                
+    if 'uneven' in args.expname.lower():
+        # client number = 1.4^k, k=0~5
+        # data_len = {5, 4, 3, 2, 1, 1}
+        decay_speed = args.ratio
+        max_clientnum = round(np.float_power(decay_speed, len(decay_order)-1))
+        distribution_mode = f"imbalance{max_clientnum}_{args.gender_dis}"
+        if args.small_test: distribution_mode += '_small'
+        for i, name in enumerate(decay_order):
+            client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
+    else:
+        decay_speed = 3
+        distribution_mode = f"balance_{args.gender_dis}"
+        if args.small_test: distribution_mode += '_small'
+        for i, name in enumerate(decay_order):
+            client_nums[name] = 2
+    print(client_nums)
+    client_weights = []
+    train_loaders, val_loaders, test_loaders = [], [], []
+    datasets = []
+    sum_len = 0
+    genders = ['Male', 'Female']
+    gidx = 0
+    for name, value in client_nums.items():
+        for j in range(value):
+            train_set = FairFaceGenderDataset(distribution_mode, data_base_path, name, j, transform=transform_train)
+            all_len = int(len(train_set) * args.percent)
+            train_len = int(all_len * 0.6)
+            val_len = int(all_len * 0.4)
+            datasets.append(f'{name}_{genders[gidx]}')
+            gidx = int(not gidx)
+            val_set = torch.utils.data.Subset(train_set, list(range(all_len))[-val_len :])
+            train_set = torch.utils.data.Subset(train_set, list(range(all_len))[: train_len])
+            train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch, shuffle=True)
+            val_loader = torch.utils.data.DataLoader(val_set, batch_size=args.batch, shuffle=False)
+            train_loaders.append(train_loader)
+            val_loaders.append(val_loader)
+            test_set = FairFaceGenderDataset(distribution_mode, data_base_path, name, gidx, transform=transform_test, train=False)
+            test_loader = torch.utils.data.DataLoader(test_set, batch_size=1, shuffle=False)
+            test_loaders.append(test_loader)
+            client_weights.append(len(train_set))
+            sum_len += len(train_set)
+            # print(len(cur_trainset), len(cur_valset))
+    print(client_weights)
+    write_log(args, f"data_number=[")
+    for ni in client_weights:
+        write_log(args, f"{ni},")
+    write_log(args, f"]\nclient_nums=[")
+    for name in decay_order:
+        write_log(args, f"{client_nums[name]},")
+    write_log(args, f"]\n")
+    client_weights = [ci/sum_len for ci in client_weights]
+    # check_labels(args, train_loaders)
+    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, None
 
 def prepare_data(args):
     if args.dataset.lower()[:6] == 'domain':
@@ -468,7 +521,11 @@ def prepare_data(args):
     elif args.dataset.lower()[:5] == 'digit':
         return prepare_digit_uneven(args)
     elif args.dataset.lower()[:9] == 'fairface':
-        return prepare_fairface_uneven(args)
+        if args.gender_dis in ['iid', 'random_dis']:
+            return prepare_fairface_iid_uneven(args)
+        else:
+            return prepare_fairface_gender_uneven(args)
+
 
 def check_labels(args, train_loaders):
     client_num = len(train_loaders)
@@ -731,7 +788,7 @@ def get_domain_idx(pi, prompt_bank):
 
     return torch.argmax(domain_sim)
 
-def agg_rep(model, test_loader, device):
+def agg_rep(args, model, test_loader, device):
     model.to(device)
     model.eval()
     agg_protos_label = {}
@@ -742,7 +799,10 @@ def agg_rep(model, test_loader, device):
         data, target = batch
         data = data.to(device).float()
         target = target.to(device).long()
-        features = model.forward_feat(data)
+        if 'raw' in args.expname.lower():
+            features = model.forward_raw(data)
+        else:
+            features = model.forward_feat(data)
         for i in range(len(target)):
             if target[i].item() in agg_protos_label:
                 agg_protos_label[target[i].item()] += features[i]
@@ -769,7 +829,6 @@ import matplotlib.pyplot as plt
 def cluster(args, all_pi, domain_num):
     all_pi_reshape = all_pi.cpu().reshape(all_pi.shape[0], -1)
     print(all_pi_reshape.shape)
-    write_log(args, 'gmm\n')
     cluster = GMM(n_components=domain_num)
     # cluster = KMeans(n_clusters=domain_num, random_state=0)
     # cluster = SpectralClustering(n_clusters=domain_num,
@@ -781,8 +840,6 @@ def cluster(args, all_pi, domain_num):
     for cidx, gidx in enumerate(labels):
         gmap[cidx] = gidx
         cnt[gidx] += 1
-    for cidx in range(all_pi.shape[0]):
-        write_log(args, f'client-{cidx} is in G-{gmap[cidx]}\n')
     write_log(args, f'cnt=[')
     for didx in range(domain_num):
         write_log(args, f'{cnt[didx]}, ')
@@ -833,6 +890,22 @@ def remap(all_pi, prompt_bank):
 def random_replace(all_pi, prompt_bank):
     perm = torch.randperm(all_pi.size(0))[:prompt_bank.shape[0]]
     return all_pi[perm].detach().clone()
+
+def domain_fairness(args, gmap, train_losses):
+    domain_losses = {}
+    for cidx, gidx in gmap.items():
+        domain_losses[gidx] = list()
+    for cidx, loss in enumerate(train_losses):
+        gidx = gmap[cidx]
+        domain_losses[gidx].append(loss)
+    for gidx in domain_losses:
+        mean = sum(domain_losses[gidx]) / len(domain_losses[gidx])
+        domain_losses[gidx] = mean
+    domain_losses = list(domain_losses.values())
+    std = np.std(domain_losses, keepdims=False)
+    print(f"domain fairness std = {std}")
+    write_log(args, f"domain fairness std = {std}\n")
+    return std
 
 ################# Key Function ########################
 def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, all_feat=None, prompt_bank=None):
@@ -961,9 +1034,9 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-        
         elif args.mode.lower() == 'ccop':
             multi = 100
+            
             q = args.q
             gmap, cnt = cluster(args, all_feat, domain_num)
             gsize = [0 for _ in range(domain_num)]
@@ -985,18 +1058,39 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             print(gloss)
             write_log(args, f"power_decay: {power_decay}, powerI: {powerI:.4f}, powerC: {powerC:.4f}\n")
             print("========")
-
+            losses = []
+            for client_idx in range(client_num):
+                losses.append(multi / (Eas[client_idx]))
+            if args.std_rw:
+                domain_std = domain_fairness(args, gmap, losses)
+            else:
+                domain_std = 0
+            loss_i, loss_c = [], []
             for client_idx in range(client_num):
                 loss = multi / (Eas[client_idx])
                 Li  = loss
                 Lc = gloss[gmap[client_idx]]
+                loss_i.append(Li)
+                loss_c.append(Lc)
                 Lrb = np.float_power(Li, powerI) * np.float_power(Lc, powerC) + 1e-10
-                Srb = client_weights[client_idx]
+                Srb = client_weights[client_idx] / (1 + domain_std)
                 weight = Srb * np.float_power(Lrb, (q+1))
                 new_weights[client_idx] = weight
-                all_weight += weight
+            if args.quan > 0:
+                quan_i = np.quantile(np.asarray(loss_i), args.quan)
+                quan_c = np.quantile(np.asarray(loss_c), args.quan)
+                print(loss_i)
+                print(quan_i)
+                min_w = min(new_weights)
+                write_log(args, f"min_w={min_w:.5f}, quan_i={quan_i:.2f}, quan_c={quan_c:.2f}\n")
+                write_log(args, f"minimize weight of clients:[")
+                for client_idx in range(client_num):
+                    if loss_i[client_idx] < quan_i and loss_c[client_idx] < quan_c:
+                        write_log(args, f"{client_idx}, ")
+                        new_weights[client_idx] = min_w
+                write_log(args, f"]\n")
+            all_weight = sum(new_weights) 
             new_weights = [wi/all_weight for wi in new_weights]
-            write_log(args, f"sum of wi : {sum(new_weights):.4f}\n")
             for key in server_model.state_dict().keys():
                 if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
                     print(key)
@@ -1080,7 +1174,6 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                         gmap[client_idx] = didx
                         cnt[didx] += 1
                         temp[didx] += models[client_idx].state_dict()[key]
-                        write_log(args, f'client-{client_idx} is in G-{didx}\n')
                     # # todo : EMA replace prompt
                     print(cnt)
                     write_log(args, f'clients=[')

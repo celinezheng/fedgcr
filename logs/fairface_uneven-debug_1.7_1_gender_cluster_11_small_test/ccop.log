@@ -1,0 +1,486 @@
+===2023-05-24 13:51:19===
+===Setting===
+    dataset: fairface
+    lr: 0.01
+    batch: 64
+    iters: 3
+    wk_iters: 1
+    si: False
+    lambda for constrastive: 0.5
+data_number=[48,82,140,238,261,96,163,259,117,199,186,]
+client_nums=[5,3,2,1,]
+domain number = 11
+multiply 100 for Ea!
+use train loss for Ea
+============ Train epoch 0 ============
+gmm
+client-0 is in G-6
+client-1 is in G-2
+client-2 is in G-9
+client-3 is in G-7
+client-4 is in G-10
+client-5 is in G-0
+client-6 is in G-3
+client-7 is in G-8
+client-8 is in G-5
+client-9 is in G-4
+client-10 is in G-1
+cnt=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]
+power_decay: 0.9, powerI: 0.9500, powerC: 0.0500
+sum of wi : 1.0000
+ Site-White_Male               | Train Loss: 2.0027 | Train Acc: 0.3333
+ Site-White_Female             | Train Loss: 1.7809 | Train Acc: 0.3780
+ Site-White_Male               | Train Loss: 1.9927 | Train Acc: 0.2429
+ Site-White_Female             | Train Loss: 1.7897 | Train Acc: 0.3992
+ Site-White_Male               | Train Loss: 1.9779 | Train Acc: 0.2490
+ Site-Black_Female             | Train Loss: 1.9242 | Train Acc: 0.3333
+ Site-Black_Male               | Train Loss: 2.0492 | Train Acc: 0.2086
+ Site-Black_Female             | Train Loss: 2.0650 | Train Acc: 0.2973
+ Site-Indian_Male              | Train Loss: 2.0390 | Train Acc: 0.2222
+ Site-Indian_Female            | Train Loss: 2.1365 | Train Acc: 0.2613
+ Site-Middle_Eastern_Male      | Train Loss: 2.2393 | Train Acc: 0.1452
+ Site-White_Male                (6) | Val  Loss: 2.0538 | Val  Acc: 0.1562
+ Site-White_Female              (2) | Val  Loss: 1.7607 | Val  Acc: 0.4259
+ Site-White_Male                (9) | Val  Loss: 1.9482 | Val  Acc: 0.2581
+ Site-White_Female              (7) | Val  Loss: 1.8406 | Val  Acc: 0.3481
+ Site-White_Male                (10)| Val  Loss: 2.0600 | Val  Acc: 0.2299
+ Site-Black_Female              (0) | Val  Loss: 1.9310 | Val  Acc: 0.2812
+ Site-Black_Male                (3) | Val  Loss: 1.9661 | Val  Acc: 0.2844
+ Site-Black_Female              (8) | Val  Loss: 1.9057 | Val  Acc: 0.3006
+ Site-Indian_Male               (5) | Val  Loss: 1.8813 | Val  Acc: 0.2564
+ Site-Indian_Female             (4) | Val  Loss: 1.8602 | Val  Acc: 0.2955
+ Site-Middle_Eastern_Male       (1) | Val  Loss: 2.1973 | Val  Acc: 0.1694
+Average Valid Accuracy: 0.2732
+Aggregated Acc | Val Acc: 0.2732
+ Best site-White_Male               (6)  | Epoch:0 | Val Acc: 0.1562
+ Best site-White_Female             (2)  | Epoch:0 | Val Acc: 0.4259
+ Best site-White_Male               (9)  | Epoch:0 | Val Acc: 0.2581
+ Best site-White_Female             (7)  | Epoch:0 | Val Acc: 0.3481
+ Best site-White_Male               (10) | Epoch:0 | Val Acc: 0.2299
+ Best site-Black_Female             (0)  | Epoch:0 | Val Acc: 0.2812
+ Best site-Black_Male               (3)  | Epoch:0 | Val Acc: 0.2844
+ Best site-Black_Female             (8)  | Epoch:0 | Val Acc: 0.3006
+ Best site-Indian_Male              (5)  | Epoch:0 | Val Acc: 0.2564
+ Best site-Indian_Female            (4)  | Epoch:0 | Val Acc: 0.2955
+ Best site-Middle_Eastern_Male      (1)  | Epoch:0 | Val Acc: 0.1694
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_uneven-debug_1.7_1_gender_cluster_11_small_test/ccop_q=1...
+============ Train epoch 1 ============
+gmm
+client-0 is in G-0
+client-1 is in G-8
+client-2 is in G-5
+client-3 is in G-2
+client-4 is in G-10
+client-5 is in G-7
+client-6 is in G-4
+client-7 is in G-1
+client-8 is in G-3
+client-9 is in G-6
+client-10 is in G-9
+cnt=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]
+power_decay: 0.9, powerI: 0.9050, powerC: 0.0950
+sum of wi : 1.0000
+ Site-White_Male               | Train Loss: 1.9209 | Train Acc: 0.3125
+ Site-White_Female             | Train Loss: 1.8067 | Train Acc: 0.3780
+ Site-White_Male               | Train Loss: 1.9380 | Train Acc: 0.2429
+ Site-White_Female             | Train Loss: 1.7584 | Train Acc: 0.4160
+ Site-White_Male               | Train Loss: 1.8700 | Train Acc: 0.2567
+ Site-Black_Female             | Train Loss: 1.9130 | Train Acc: 0.3229
+ Site-Black_Male               | Train Loss: 1.9807 | Train Acc: 0.2393
+ Site-Black_Female             | Train Loss: 1.9895 | Train Acc: 0.2896
+ Site-Indian_Male              | Train Loss: 2.0107 | Train Acc: 0.2564
+ Site-Indian_Female            | Train Loss: 2.0879 | Train Acc: 0.2714
+ Site-Middle_Eastern_Male      | Train Loss: 2.1550 | Train Acc: 0.1559
+ Site-White_Male                (0) | Val  Loss: 1.9936 | Val  Acc: 0.1875
+ Site-White_Female              (8) | Val  Loss: 1.7624 | Val  Acc: 0.3889
+ Site-White_Male                (5) | Val  Loss: 1.9067 | Val  Acc: 0.2366
+ Site-White_Female              (2) | Val  Loss: 1.8351 | Val  Acc: 0.3354
+ Site-White_Male                (10)| Val  Loss: 1.9853 | Val  Acc: 0.2529
+ Site-Black_Female              (7) | Val  Loss: 1.9002 | Val  Acc: 0.2812
+ Site-Black_Male                (4) | Val  Loss: 1.9610 | Val  Acc: 0.2752
+ Site-Black_Female              (1) | Val  Loss: 1.9038 | Val  Acc: 0.3179
+ Site-Indian_Male               (3) | Val  Loss: 1.8755 | Val  Acc: 0.2564
+ Site-Indian_Female             (6) | Val  Loss: 1.8277 | Val  Acc: 0.2879
+ Site-Middle_Eastern_Male       (9) | Val  Loss: 2.1247 | Val  Acc: 0.1774
+Average Valid Accuracy: 0.2725
+Aggregated Acc | Val Acc: 0.2725
+===2023-05-24 13:56:24===
+===Setting===
+    dataset: fairface
+    lr: 0.01
+    batch: 64
+    iters: 3
+    wk_iters: 1
+    si: False
+    lambda for constrastive: 0.5
+data_number=[48,82,140,238,261,96,163,259,117,199,186,]
+client_nums=[5,3,2,1,]
+domain number = 11
+multiply 100 for Ea!
+use train loss for Ea
+============ Train epoch 0 ============
+gmm
+client-0 is in G-6
+client-1 is in G-2
+client-2 is in G-9
+client-3 is in G-7
+client-4 is in G-10
+client-5 is in G-0
+client-6 is in G-3
+client-7 is in G-8
+client-8 is in G-5
+client-9 is in G-4
+client-10 is in G-1
+cnt=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]
+power_decay: 0.9, powerI: 0.9500, powerC: 0.0500
+sum of wi : 1.0000
+ Site-White_Male               | Train Loss: 2.0027 | Train Acc: 0.3333
+ Site-White_Female             | Train Loss: 1.7809 | Train Acc: 0.3780
+ Site-White_Male               | Train Loss: 1.9927 | Train Acc: 0.2429
+ Site-White_Female             | Train Loss: 1.7897 | Train Acc: 0.3992
+ Site-White_Male               | Train Loss: 1.9779 | Train Acc: 0.2490
+ Site-Black_Female             | Train Loss: 1.9242 | Train Acc: 0.3333
+ Site-Black_Male               | Train Loss: 2.0492 | Train Acc: 0.2086
+ Site-Black_Female             | Train Loss: 2.0650 | Train Acc: 0.2973
+ Site-Indian_Male              | Train Loss: 2.0390 | Train Acc: 0.2222
+ Site-Indian_Female            | Train Loss: 2.1365 | Train Acc: 0.2613
+ Site-Middle_Eastern_Male      | Train Loss: 2.2393 | Train Acc: 0.1452
+ Site-White_Male                (6) | Val  Loss: 2.0538 | Val  Acc: 0.1562
+ Site-White_Female              (2) | Val  Loss: 1.7607 | Val  Acc: 0.4259
+ Site-White_Male                (9) | Val  Loss: 1.9482 | Val  Acc: 0.2581
+ Site-White_Female              (7) | Val  Loss: 1.8406 | Val  Acc: 0.3481
+ Site-White_Male                (10)| Val  Loss: 2.0600 | Val  Acc: 0.2299
+ Site-Black_Female              (0) | Val  Loss: 1.9310 | Val  Acc: 0.2812
+ Site-Black_Male                (3) | Val  Loss: 1.9661 | Val  Acc: 0.2844
+ Site-Black_Female              (8) | Val  Loss: 1.9057 | Val  Acc: 0.3006
+ Site-Indian_Male               (5) | Val  Loss: 1.8813 | Val  Acc: 0.2564
+ Site-Indian_Female             (4) | Val  Loss: 1.8602 | Val  Acc: 0.2955
+ Site-Middle_Eastern_Male       (1) | Val  Loss: 2.1973 | Val  Acc: 0.1694
+Average Valid Accuracy: 0.2732
+Aggregated Acc | Val Acc: 0.2732
+ Best site-White_Male               (6)  | Epoch:0 | Val Acc: 0.1562
+ Best site-White_Female             (2)  | Epoch:0 | Val Acc: 0.4259
+ Best site-White_Male               (9)  | Epoch:0 | Val Acc: 0.2581
+ Best site-White_Female             (7)  | Epoch:0 | Val Acc: 0.3481
+ Best site-White_Male               (10) | Epoch:0 | Val Acc: 0.2299
+ Best site-Black_Female             (0)  | Epoch:0 | Val Acc: 0.2812
+ Best site-Black_Male               (3)  | Epoch:0 | Val Acc: 0.2844
+ Best site-Black_Female             (8)  | Epoch:0 | Val Acc: 0.3006
+ Best site-Indian_Male              (5)  | Epoch:0 | Val Acc: 0.2564
+ Best site-Indian_Female            (4)  | Epoch:0 | Val Acc: 0.2955
+ Best site-Middle_Eastern_Male      (1)  | Epoch:0 | Val Acc: 0.1694
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_uneven-debug_1.7_1_gender_cluster_11_small_test/ccop_q=1...
+============ Train epoch 1 ============
+gmm
+client-0 is in G-0
+client-1 is in G-8
+client-2 is in G-5
+client-3 is in G-2
+client-4 is in G-10
+client-5 is in G-7
+client-6 is in G-4
+client-7 is in G-1
+client-8 is in G-3
+client-9 is in G-6
+client-10 is in G-9
+cnt=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]
+power_decay: 0.9, powerI: 0.9050, powerC: 0.0950
+sum of wi : 1.0000
+ Site-White_Male               | Train Loss: 1.9209 | Train Acc: 0.3125
+ Site-White_Female             | Train Loss: 1.8067 | Train Acc: 0.3780
+ Site-White_Male               | Train Loss: 1.9380 | Train Acc: 0.2429
+ Site-White_Female             | Train Loss: 1.7584 | Train Acc: 0.4160
+ Site-White_Male               | Train Loss: 1.8700 | Train Acc: 0.2567
+ Site-Black_Female             | Train Loss: 1.9130 | Train Acc: 0.3229
+ Site-Black_Male               | Train Loss: 1.9807 | Train Acc: 0.2393
+ Site-Black_Female             | Train Loss: 1.9895 | Train Acc: 0.2896
+ Site-Indian_Male              | Train Loss: 2.0107 | Train Acc: 0.2564
+ Site-Indian_Female            | Train Loss: 2.0879 | Train Acc: 0.2714
+ Site-Middle_Eastern_Male      | Train Loss: 2.1550 | Train Acc: 0.1559
+ Site-White_Male                (0) | Val  Loss: 1.9936 | Val  Acc: 0.1875
+ Site-White_Female              (8) | Val  Loss: 1.7624 | Val  Acc: 0.3889
+ Site-White_Male                (5) | Val  Loss: 1.9067 | Val  Acc: 0.2366
+ Site-White_Female              (2) | Val  Loss: 1.8351 | Val  Acc: 0.3354
+ Site-White_Male                (10)| Val  Loss: 1.9853 | Val  Acc: 0.2529
+ Site-Black_Female              (7) | Val  Loss: 1.9002 | Val  Acc: 0.2812
+ Site-Black_Male                (4) | Val  Loss: 1.9610 | Val  Acc: 0.2752
+ Site-Black_Female              (1) | Val  Loss: 1.9038 | Val  Acc: 0.3179
+ Site-Indian_Male               (3) | Val  Loss: 1.8755 | Val  Acc: 0.2564
+ Site-Indian_Female             (6) | Val  Loss: 1.8277 | Val  Acc: 0.2879
+ Site-Middle_Eastern_Male       (9) | Val  Loss: 2.1247 | Val  Acc: 0.1774
+Average Valid Accuracy: 0.2725
+Aggregated Acc | Val Acc: 0.2725
+===2023-05-24 13:59:57===
+===Setting===
+    dataset: fairface
+    lr: 0.01
+    batch: 64
+    iters: 3
+    wk_iters: 1
+    si: False
+    lambda for constrastive: 0.5
+data_number=[48,82,140,238,261,96,163,259,117,199,186,]
+client_nums=[5,3,2,1,]
+domain number = 11
+multiply 100 for Ea!
+use train loss for Ea
+============ Train epoch 0 ============
+gmm
+client-0 is in G-6
+client-1 is in G-2
+client-2 is in G-9
+client-3 is in G-7
+client-4 is in G-10
+client-5 is in G-0
+client-6 is in G-3
+client-7 is in G-8
+client-8 is in G-5
+client-9 is in G-4
+client-10 is in G-1
+cnt=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]
+power_decay: 0.9, powerI: 0.9500, powerC: 0.0500
+sum of wi : 1.0000
+ Site-White_Male               | Train Loss: 2.0027 | Train Acc: 0.3333
+ Site-White_Female             | Train Loss: 1.7809 | Train Acc: 0.3780
+ Site-White_Male               | Train Loss: 1.9927 | Train Acc: 0.2429
+ Site-White_Female             | Train Loss: 1.7897 | Train Acc: 0.3992
+ Site-White_Male               | Train Loss: 1.9779 | Train Acc: 0.2490
+ Site-Black_Female             | Train Loss: 1.9242 | Train Acc: 0.3333
+ Site-Black_Male               | Train Loss: 2.0492 | Train Acc: 0.2086
+ Site-Black_Female             | Train Loss: 2.0650 | Train Acc: 0.2973
+ Site-Indian_Male              | Train Loss: 2.0390 | Train Acc: 0.2222
+ Site-Indian_Female            | Train Loss: 2.1365 | Train Acc: 0.2613
+ Site-Middle_Eastern_Male      | Train Loss: 2.2393 | Train Acc: 0.1452
+ Site-White_Male                (6) | Val  Loss: 2.0538 | Val  Acc: 0.1562
+ Site-White_Female              (2) | Val  Loss: 1.7607 | Val  Acc: 0.4259
+ Site-White_Male                (9) | Val  Loss: 1.9482 | Val  Acc: 0.2581
+ Site-White_Female              (7) | Val  Loss: 1.8406 | Val  Acc: 0.3481
+ Site-White_Male                (10)| Val  Loss: 2.0600 | Val  Acc: 0.2299
+ Site-Black_Female              (0) | Val  Loss: 1.9310 | Val  Acc: 0.2812
+ Site-Black_Male                (3) | Val  Loss: 1.9661 | Val  Acc: 0.2844
+ Site-Black_Female              (8) | Val  Loss: 1.9057 | Val  Acc: 0.3006
+ Site-Indian_Male               (5) | Val  Loss: 1.8813 | Val  Acc: 0.2564
+ Site-Indian_Female             (4) | Val  Loss: 1.8602 | Val  Acc: 0.2955
+ Site-Middle_Eastern_Male       (1) | Val  Loss: 2.1973 | Val  Acc: 0.1694
+Average Valid Accuracy: 0.2732
+Aggregated Acc | Val Acc: 0.2732
+ Best site-White_Male               (6)  | Epoch:0 | Val Acc: 0.1562
+ Best site-White_Female             (2)  | Epoch:0 | Val Acc: 0.4259
+ Best site-White_Male               (9)  | Epoch:0 | Val Acc: 0.2581
+ Best site-White_Female             (7)  | Epoch:0 | Val Acc: 0.3481
+ Best site-White_Male               (10) | Epoch:0 | Val Acc: 0.2299
+ Best site-Black_Female             (0)  | Epoch:0 | Val Acc: 0.2812
+ Best site-Black_Male               (3)  | Epoch:0 | Val Acc: 0.2844
+ Best site-Black_Female             (8)  | Epoch:0 | Val Acc: 0.3006
+ Best site-Indian_Male              (5)  | Epoch:0 | Val Acc: 0.2564
+ Best site-Indian_Female            (4)  | Epoch:0 | Val Acc: 0.2955
+ Best site-Middle_Eastern_Male      (1)  | Epoch:0 | Val Acc: 0.1694
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_uneven-debug_1.7_1_gender_cluster_11_small_test/ccop_q=1...
+============ Train epoch 1 ============
+gmm
+client-0 is in G-0
+client-1 is in G-8
+client-2 is in G-5
+client-3 is in G-2
+client-4 is in G-10
+client-5 is in G-7
+client-6 is in G-4
+client-7 is in G-1
+client-8 is in G-3
+client-9 is in G-6
+client-10 is in G-9
+cnt=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]
+power_decay: 0.9, powerI: 0.9050, powerC: 0.0950
+sum of wi : 1.0000
+ Site-White_Male               | Train Loss: 1.9209 | Train Acc: 0.3125
+ Site-White_Female             | Train Loss: 1.8067 | Train Acc: 0.3780
+ Site-White_Male               | Train Loss: 1.9380 | Train Acc: 0.2429
+ Site-White_Female             | Train Loss: 1.7584 | Train Acc: 0.4160
+ Site-White_Male               | Train Loss: 1.8700 | Train Acc: 0.2567
+ Site-Black_Female             | Train Loss: 1.9130 | Train Acc: 0.3229
+ Site-Black_Male               | Train Loss: 1.9807 | Train Acc: 0.2393
+ Site-Black_Female             | Train Loss: 1.9895 | Train Acc: 0.2896
+ Site-Indian_Male              | Train Loss: 2.0107 | Train Acc: 0.2564
+ Site-Indian_Female            | Train Loss: 2.0879 | Train Acc: 0.2714
+ Site-Middle_Eastern_Male      | Train Loss: 2.1550 | Train Acc: 0.1559
+ Site-White_Male                (0) | Val  Loss: 1.9936 | Val  Acc: 0.1875
+ Site-White_Female              (8) | Val  Loss: 1.7624 | Val  Acc: 0.3889
+ Site-White_Male                (5) | Val  Loss: 1.9067 | Val  Acc: 0.2366
+ Site-White_Female              (2) | Val  Loss: 1.8351 | Val  Acc: 0.3354
+ Site-White_Male                (10)| Val  Loss: 1.9853 | Val  Acc: 0.2529
+ Site-Black_Female              (7) | Val  Loss: 1.9002 | Val  Acc: 0.2812
+ Site-Black_Male                (4) | Val  Loss: 1.9610 | Val  Acc: 0.2752
+ Site-Black_Female              (1) | Val  Loss: 1.9038 | Val  Acc: 0.3179
+ Site-Indian_Male               (3) | Val  Loss: 1.8755 | Val  Acc: 0.2564
+ Site-Indian_Female             (6) | Val  Loss: 1.8277 | Val  Acc: 0.2879
+ Site-Middle_Eastern_Male       (9) | Val  Loss: 2.1247 | Val  Acc: 0.1774
+Average Valid Accuracy: 0.2725
+Aggregated Acc | Val Acc: 0.2725
+ Test site-White_Male               | Epoch:0 | Test Acc: 0.3481
+===2023-05-24 14:04:02===
+===Setting===
+    dataset: fairface
+    lr: 0.01
+    batch: 64
+    iters: 3
+    wk_iters: 1
+    si: False
+    lambda for constrastive: 0.5
+data_number=[48,82,140,238,261,96,163,259,117,199,186,]
+client_nums=[5,3,2,1,]
+domain number = 11
+multiply 100 for Ea!
+use train loss for Ea
+============ Train epoch 0 ============
+gmm
+client-0 is in G-6
+client-1 is in G-2
+client-2 is in G-9
+client-3 is in G-7
+client-4 is in G-10
+client-5 is in G-0
+client-6 is in G-3
+client-7 is in G-8
+client-8 is in G-5
+client-9 is in G-4
+client-10 is in G-1
+cnt=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]
+power_decay: 0.9, powerI: 0.9500, powerC: 0.0500
+sum of wi : 1.0000
+ Site-White_Male               | Train Loss: 2.0027 | Train Acc: 0.3333
+ Site-White_Female             | Train Loss: 1.7809 | Train Acc: 0.3780
+ Site-White_Male               | Train Loss: 1.9927 | Train Acc: 0.2429
+ Site-White_Female             | Train Loss: 1.7897 | Train Acc: 0.3992
+ Site-White_Male               | Train Loss: 1.9779 | Train Acc: 0.2490
+ Site-Black_Female             | Train Loss: 1.9242 | Train Acc: 0.3333
+ Site-Black_Male               | Train Loss: 2.0492 | Train Acc: 0.2086
+ Site-Black_Female             | Train Loss: 2.0650 | Train Acc: 0.2973
+ Site-Indian_Male              | Train Loss: 2.0390 | Train Acc: 0.2222
+ Site-Indian_Female            | Train Loss: 2.1365 | Train Acc: 0.2613
+ Site-Middle_Eastern_Male      | Train Loss: 2.2393 | Train Acc: 0.1452
+ Site-White_Male                (6) | Val  Loss: 2.0538 | Val  Acc: 0.1562
+ Site-White_Female              (2) | Val  Loss: 1.7607 | Val  Acc: 0.4259
+ Site-White_Male                (9) | Val  Loss: 1.9482 | Val  Acc: 0.2581
+ Site-White_Female              (7) | Val  Loss: 1.8406 | Val  Acc: 0.3481
+ Site-White_Male                (10)| Val  Loss: 2.0600 | Val  Acc: 0.2299
+ Site-Black_Female              (0) | Val  Loss: 1.9310 | Val  Acc: 0.2812
+ Site-Black_Male                (3) | Val  Loss: 1.9661 | Val  Acc: 0.2844
+ Site-Black_Female              (8) | Val  Loss: 1.9057 | Val  Acc: 0.3006
+ Site-Indian_Male               (5) | Val  Loss: 1.8813 | Val  Acc: 0.2564
+ Site-Indian_Female             (4) | Val  Loss: 1.8602 | Val  Acc: 0.2955
+ Site-Middle_Eastern_Male       (1) | Val  Loss: 2.1973 | Val  Acc: 0.1694
+Average Valid Accuracy: 0.2732
+Aggregated Acc | Val Acc: 0.2732
+ Best site-White_Male               (6)  | Epoch:0 | Val Acc: 0.1562
+ Best site-White_Female             (2)  | Epoch:0 | Val Acc: 0.4259
+ Best site-White_Male               (9)  | Epoch:0 | Val Acc: 0.2581
+ Best site-White_Female             (7)  | Epoch:0 | Val Acc: 0.3481
+ Best site-White_Male               (10) | Epoch:0 | Val Acc: 0.2299
+ Best site-Black_Female             (0)  | Epoch:0 | Val Acc: 0.2812
+ Best site-Black_Male               (3)  | Epoch:0 | Val Acc: 0.2844
+ Best site-Black_Female             (8)  | Epoch:0 | Val Acc: 0.3006
+ Best site-Indian_Male              (5)  | Epoch:0 | Val Acc: 0.2564
+ Best site-Indian_Female            (4)  | Epoch:0 | Val Acc: 0.2955
+ Best site-Middle_Eastern_Male      (1)  | Epoch:0 | Val Acc: 0.1694
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_uneven-debug_1.7_1_gender_cluster_11_small_test/ccop_q=1...
+============ Train epoch 1 ============
+gmm
+client-0 is in G-0
+client-1 is in G-8
+client-2 is in G-5
+client-3 is in G-2
+client-4 is in G-10
+client-5 is in G-7
+client-6 is in G-4
+client-7 is in G-1
+client-8 is in G-3
+client-9 is in G-6
+client-10 is in G-9
+cnt=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]
+power_decay: 0.9, powerI: 0.9050, powerC: 0.0950
+sum of wi : 1.0000
+ Site-White_Male               | Train Loss: 1.9209 | Train Acc: 0.3125
+ Site-White_Female             | Train Loss: 1.8067 | Train Acc: 0.3780
+ Site-White_Male               | Train Loss: 1.9380 | Train Acc: 0.2429
+ Site-White_Female             | Train Loss: 1.7584 | Train Acc: 0.4160
+ Site-White_Male               | Train Loss: 1.8700 | Train Acc: 0.2567
+ Site-Black_Female             | Train Loss: 1.9130 | Train Acc: 0.3229
+ Site-Black_Male               | Train Loss: 1.9807 | Train Acc: 0.2393
+ Site-Black_Female             | Train Loss: 1.9895 | Train Acc: 0.2896
+ Site-Indian_Male              | Train Loss: 2.0107 | Train Acc: 0.2564
+ Site-Indian_Female            | Train Loss: 2.0879 | Train Acc: 0.2714
+ Site-Middle_Eastern_Male      | Train Loss: 2.1550 | Train Acc: 0.1559
+ Site-White_Male                (0) | Val  Loss: 1.9936 | Val  Acc: 0.1875
+ Site-White_Female              (8) | Val  Loss: 1.7624 | Val  Acc: 0.3889
+ Site-White_Male                (5) | Val  Loss: 1.9067 | Val  Acc: 0.2366
+ Site-White_Female              (2) | Val  Loss: 1.8351 | Val  Acc: 0.3354
+ Site-White_Male                (10)| Val  Loss: 1.9853 | Val  Acc: 0.2529
+ Site-Black_Female              (7) | Val  Loss: 1.9002 | Val  Acc: 0.2812
+ Site-Black_Male                (4) | Val  Loss: 1.9610 | Val  Acc: 0.2752
+ Site-Black_Female              (1) | Val  Loss: 1.9038 | Val  Acc: 0.3179
+ Site-Indian_Male               (3) | Val  Loss: 1.8755 | Val  Acc: 0.2564
+ Site-Indian_Female             (6) | Val  Loss: 1.8277 | Val  Acc: 0.2879
+ Site-Middle_Eastern_Male       (9) | Val  Loss: 2.1247 | Val  Acc: 0.1774
+Average Valid Accuracy: 0.2725
+Aggregated Acc | Val Acc: 0.2725
+ Test site-White_Male               | Epoch:0 | Test Acc: 0.3481
+ Test site-White_Female             | Epoch:0 | Test Acc: 0.1914
+ Test site-Black_Female             | Epoch:0 | Test Acc: 0.2092
+ Test site-Black_Male               | Epoch:0 | Test Acc: 0.2763
+ Test site-Indian_Male              | Epoch:0 | Test Acc: 0.3210
+ Test site-Indian_Female            | Epoch:0 | Test Acc: 0.2202
+ Test site-Middle_Eastern_Male      | Epoch:0 | Test Acc: 0.3378
+Average Test Accuracy: 0.2720, domain std=0.0606, individual std=0.0658
+Average Test Accuracy: 0.2720
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_uneven-debug_1.7_1_gender_cluster_11_small_test/ccop_q=1...
+============ Train epoch 2 ============
+gmm
+client-0 is in G-3
+client-1 is in G-0
+client-2 is in G-10
+client-3 is in G-7
+client-4 is in G-4
+client-5 is in G-8
+client-6 is in G-5
+client-7 is in G-2
+client-8 is in G-1
+client-9 is in G-6
+client-10 is in G-9
+cnt=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]
+power_decay: 0.9, powerI: 0.8645, powerC: 0.1355
+sum of wi : 1.0000
+ Site-White_Male               | Train Loss: 1.9008 | Train Acc: 0.2917
+ Site-White_Female             | Train Loss: 1.6607 | Train Acc: 0.3659
+ Site-White_Male               | Train Loss: 1.9261 | Train Acc: 0.2429
+ Site-White_Female             | Train Loss: 1.7488 | Train Acc: 0.3992
+ Site-White_Male               | Train Loss: 1.9178 | Train Acc: 0.2567
+ Site-Black_Female             | Train Loss: 1.8769 | Train Acc: 0.3021
+ Site-Black_Male               | Train Loss: 1.9540 | Train Acc: 0.2270
+ Site-Black_Female             | Train Loss: 1.7638 | Train Acc: 0.3166
+ Site-Indian_Male              | Train Loss: 1.9825 | Train Acc: 0.2222
+ Site-Indian_Female            | Train Loss: 2.0764 | Train Acc: 0.2613
+ Site-Middle_Eastern_Male      | Train Loss: 2.1278 | Train Acc: 0.1774
+ Site-White_Male                (3) | Val  Loss: 1.9952 | Val  Acc: 0.1875
+ Site-White_Female              (0) | Val  Loss: 1.7717 | Val  Acc: 0.4259
+ Site-White_Male                (10)| Val  Loss: 1.8832 | Val  Acc: 0.2581
+ Site-White_Female              (7) | Val  Loss: 1.8253 | Val  Acc: 0.3544
+ Site-White_Male                (4) | Val  Loss: 1.9709 | Val  Acc: 0.2414
+ Site-Black_Female              (8) | Val  Loss: 1.8539 | Val  Acc: 0.2969
+ Site-Black_Male                (5) | Val  Loss: 1.8977 | Val  Acc: 0.2936
+ Site-Black_Female              (2) | Val  Loss: 1.8801 | Val  Acc: 0.2370
+ Site-Indian_Male               (1) | Val  Loss: 1.8557 | Val  Acc: 0.2821
+ Site-Indian_Female             (6) | Val  Loss: 1.7936 | Val  Acc: 0.2803
+ Site-Middle_Eastern_Male       (9) | Val  Loss: 2.1270 | Val  Acc: 0.1452
+Average Valid Accuracy: 0.2729
+Aggregated Acc | Val Acc: 0.2729
+ Test site-White_Male               | Epoch:1 | Test Acc: 0.3646
+ Test site-White_Female             | Epoch:1 | Test Acc: 0.2057
+ Test site-Black_Female             | Epoch:1 | Test Acc: 0.2222
+ Test site-Black_Male               | Epoch:1 | Test Acc: 0.2796
+ Test site-Indian_Male              | Epoch:1 | Test Acc: 0.3210
+ Test site-Indian_Female            | Epoch:1 | Test Acc: 0.2202
+ Test site-Middle_Eastern_Male      | Epoch:1 | Test Acc: 0.3412
+Average Test Accuracy: 0.2792, domain std=0.0598, individual std=0.0661
+Average Test Accuracy: 0.2792
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_uneven-debug_1.7_1_gender_cluster_11_small_test/ccop_q=1...
+===2023-05-24 14:09:39===
