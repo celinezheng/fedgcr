@@ -47,9 +47,10 @@ if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
-    parser.add_argument('--std_rw', action='store_true', help='reweight with std')
     parser.add_argument('--color_jitter', action='store_true', help='whether to color_jitter for fairface')
     parser.add_argument('--debug', action='store_true', help='whether to debug for inference/test')
+    parser.add_argument('--std_rw', action='store_true', help='divide ni with domain std over performance')
+    parser.add_argument('--quan', type=float, default=0, help='whether to minimize client with loss smaller than 0.5 quantile')
     parser.add_argument('--small_test', action='store_true', help='whether to test small cluster')
     parser.add_argument('--tune', action='store_true', help='whether to tune hparams')
     parser.add_argument('--si', action='store_true', help='whether to use si only')
@@ -134,6 +135,7 @@ if __name__ == '__main__':
     write_log(args, '    wk_iters: {}\n'.format(args.wk_iters))
     write_log(args, '    si: {}\n'.format(args.si))
     write_log(args, '    domain_num: {}\n'.format(domain_num))
+    write_log(args, '    quantile: {}\n'.format(args.quan))
     write_log(args, '    std_rw: {}\n'.format(args.std_rw))
 
     if args.hparams_seed == 0:
@@ -157,12 +159,12 @@ if __name__ == '__main__':
     prompt_bank = None
     # setup model
     if args.mode.lower() == 'doprompt':
-        server_model = DoPrompt(num_classes=args.num_classes, num_domains=client_num, hparams=hparams).to(device)
+        server_model = DoPrompt(num_classes=args.num_classes, num_domains=client_num, hparams=hparams)
     elif args.mode.lower() == 'fedprompt':
-        server_model = FedPrompt(num_classes=args.num_classes, hparams=hparams, lambda_con=args.lambda_con).to(device)
+        server_model = FedPrompt(num_classes=args.num_classes, hparams=hparams, lambda_con=args.lambda_con)
         prompt_bank = nn.Parameter(
             torch.empty(domain_num, 4, 768, requires_grad=False).normal_(std=0.02)
-        ).to(device)
+        )
         all_pi = None
         for client_idx in range(client_num):
             pi = server_model.state_dict()['prompt_tokens'].unsqueeze(0)
@@ -174,14 +176,14 @@ if __name__ == '__main__':
         prompt_bank = util.random_replace(all_pi, prompt_bank)
         print(prompt_bank.shape)
     elif args.mode.lower() in ['cocoop', 'nova', 'ccop']:
-        server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
+        server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams)
     elif args.mode.lower() in ['full']:
         model_type="sup_vitb16_imagenet21k"
-        server_model = PromptViT(model_type=model_type, args=args).to(device)
+        server_model = PromptViT(model_type=model_type, args=args)
     # fedavg
     else:
         model_type="sup_vitb16_imagenet21k"
-        server_model = PromptViT(model_type=model_type, args=args).to(device)
+        server_model = PromptViT(model_type=model_type, args=args)
         for name, param in server_model.named_parameters():
             if 'prompt' not in name and 'head' not in name:
                 param.requires_grad = False
@@ -211,7 +213,7 @@ if __name__ == '__main__':
 
     
     # each local client model
-    models = [copy.deepcopy(server_model).to(device) for _ in range(client_num)]
+    models = [copy.deepcopy(server_model) for _ in range(client_num)]
     best_changed = False
 
     if args.test:
@@ -340,7 +342,7 @@ if __name__ == '__main__':
                     
             # Record best
             if args.mode.lower() in ['nova', 'ccop']:
-                if args.sam: threshold = args.iters - 10
+                if args.sam or args.dataset.lower() != 'digit': threshold = args.iters - 10
                 else: threshold = args.iters - 5
                 threshold = max(10, threshold)
                 if args.debug: threshold = 0

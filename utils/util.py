@@ -1063,19 +1063,34 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                 losses.append(multi / (Eas[client_idx]))
             if args.std_rw:
                 domain_std = domain_fairness(args, gmap, losses)
-            else: domain_std = 0
-            # calculate variance among domain performance
+            else:
+                domain_std = 0
+            loss_i, loss_c = [], []
             for client_idx in range(client_num):
                 loss = multi / (Eas[client_idx])
                 Li  = loss
                 Lc = gloss[gmap[client_idx]]
+                loss_i.append(Li)
+                loss_c.append(Lc)
                 Lrb = np.float_power(Li, powerI) * np.float_power(Lc, powerC) + 1e-10
                 Srb = client_weights[client_idx] / (1 + domain_std)
                 weight = Srb * np.float_power(Lrb, (q+1))
                 new_weights[client_idx] = weight
-                all_weight += weight
+            if args.quan > 0:
+                quan_i = np.quantile(np.asarray(loss_i), args.quan)
+                quan_c = np.quantile(np.asarray(loss_c), args.quan)
+                print(loss_i)
+                print(quan_i)
+                min_w = min(new_weights)
+                write_log(args, f"min_w={min_w:.5f}, quan_i={quan_i:.2f}, quan_c={quan_c:.2f}\n")
+                write_log(args, f"minimize weight of clients:[")
+                for client_idx in range(client_num):
+                    if loss_i[client_idx] < quan_i and loss_c[client_idx] < quan_c:
+                        write_log(args, f"{client_idx}, ")
+                        new_weights[client_idx] = min_w
+                write_log(args, f"]\n")
+            all_weight = sum(new_weights) 
             new_weights = [wi/all_weight for wi in new_weights]
-            write_log(args, f"sum of wi : {sum(new_weights):.4f}\n")
             for key in server_model.state_dict().keys():
                 if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
                     print(key)
