@@ -50,6 +50,7 @@ if __name__ == '__main__':
     parser.add_argument('--color_jitter', action='store_true', help='whether to color_jitter for fairface')
     parser.add_argument('--debug', action='store_true', help='whether to debug for inference/test')
     parser.add_argument('--small_test', action='store_true', help='whether to test small cluster')
+    parser.add_argument('--update_rate', type=float, default=0.9, help='update_rate for feature bank')
     parser.add_argument('--tune', action='store_true', help='whether to tune hparams')
     parser.add_argument('--si', action='store_true', help='whether to use si only')
     parser.add_argument('--sam', action='store_true', help='whether to use sam optimizer')
@@ -133,6 +134,7 @@ if __name__ == '__main__':
     write_log(args, '    wk_iters: {}\n'.format(args.wk_iters))
     write_log(args, '    si: {}\n'.format(args.si))
     write_log(args, '    domain_num: {}\n'.format(domain_num))
+    write_log(args, '    update_rate: {}\n'.format(args.update_rate))
 
     if args.hparams_seed == 0:
         hparams = hparams_registry.default_hparams(args.mode, args.dataset)
@@ -155,15 +157,15 @@ if __name__ == '__main__':
     prompt_bank = None
     # setup model
     feat_bank = nn.Parameter(
-            torch.empty(domain_num, 768, requires_grad=False).normal_(std=0.02)
+            torch.empty(max(1, domain_num), 768, requires_grad=False).normal_(std=0.02)
         ).to(device)
     if args.mode.lower() == 'doprompt':
-        server_model = DoPrompt(num_classes=args.num_classes, num_domains=client_num, hparams=hparams).to(device)
+        server_model = DoPrompt(num_classes=args.num_classes, num_domains=client_num, hparams=hparams)
     elif args.mode.lower() == 'fedprompt':
-        server_model = FedPrompt(num_classes=args.num_classes, hparams=hparams, lambda_con=args.lambda_con).to(device)
+        server_model = FedPrompt(num_classes=args.num_classes, hparams=hparams, lambda_con=args.lambda_con)
         prompt_bank = nn.Parameter(
             torch.empty(domain_num, 4, 768, requires_grad=False).normal_(std=0.02)
-        ).to(device)
+        )
         all_pi = None
         for client_idx in range(client_num):
             pi = server_model.state_dict()['prompt_tokens'].unsqueeze(0)
@@ -175,14 +177,14 @@ if __name__ == '__main__':
         prompt_bank = util.random_replace(all_pi, prompt_bank)
         print(prompt_bank.shape)
     elif args.mode.lower() in ['cocoop', 'nova', 'ccop']:
-        server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
+        server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams)
     elif args.mode.lower() in ['full']:
         model_type="sup_vitb16_imagenet21k"
-        server_model = PromptViT(model_type=model_type, args=args).to(device)
+        server_model = PromptViT(model_type=model_type, args=args)
     # fedavg
     else:
         model_type="sup_vitb16_imagenet21k"
-        server_model = PromptViT(model_type=model_type, args=args).to(device)
+        server_model = PromptViT(model_type=model_type, args=args)
         for name, param in server_model.named_parameters():
             if 'prompt' not in name and 'head' not in name:
                 param.requires_grad = False
@@ -210,11 +212,10 @@ if __name__ == '__main__':
         write_log(args, 'trained percentage trained param: {:.6f}'.format(size_all_train_mb/size_all_mb))
         exit(0)
 
-    
     # each local client model
-    models = [copy.deepcopy(server_model).to(device) for _ in range(client_num)]
     best_changed = False
-
+    models = [copy.deepcopy(server_model) for _ in range(client_num)]
+    
     if args.test:
         write_log(args, 'Loading snapshots...\n')
         checkpoint = torch.load(SAVE_PATH)
@@ -235,6 +236,7 @@ if __name__ == '__main__':
             test_accs = test_score(server_model, test_loaders, datasets, best_epoch)
         exit(0)
 
+   
     if args.resume:
         checkpoint = torch.load(SAVE_PATH)
         server_model.load_state_dict(checkpoint['server_model'])

@@ -788,7 +788,7 @@ def get_domain_idx(pi, prompt_bank):
 
     return torch.argmax(domain_sim)
 
-def get_fix_domain_idx(feat_i, feat_bank):
+def get_fix_domain_idx(args, feat_i, feat_bank):
     feat_i_rp  = feat_i.repeat(feat_bank.shape[0], 1)
     print(feat_i_rp.shape)
     cos = torch.nn.CosineSimilarity(dim=1)
@@ -796,7 +796,7 @@ def get_fix_domain_idx(feat_i, feat_bank):
     print(output)
     print(f"get_fix_domain_idx, {output}")
     gi = torch.argmax(output)
-    update_rate = 0.999
+    update_rate = args.update_rate
     feat_bank[gi].data.copy_(update_rate * feat_i + (1-update_rate) * feat_bank[gi])
     return torch.argmax(output), feat_bank
 
@@ -1041,7 +1041,7 @@ def communication(args, group_cnt, gmap, server_model, models, client_weights, c
                 cnt = [0 for _ in range(domain_num)]
                 feat_bank = remap(all_feat, feat_bank)
                 for client_idx in range(client_num):
-                    gmap[client_idx], feat_bank = get_fix_domain_idx(all_feat[client_idx], feat_bank)
+                    gmap[client_idx], feat_bank = get_fix_domain_idx(args, all_feat[client_idx], feat_bank)
                     cnt[gmap[client_idx]]+=1
             
             gsize = [0 for _ in range(domain_num)]
@@ -1050,9 +1050,12 @@ def communication(args, group_cnt, gmap, server_model, models, client_weights, c
                 gsize[gmap[i]] += client_weights[i]
                 loss = multi / (Eas[i])
                 gloss[gmap[i]] += loss * client_weights[i]
+            write_log(args, f'cnt=[')
             for i in range(domain_num):
+                write_log(args, f'{cnt[i]}, ')
                 if gsize[i]>0:
                     gloss[i] /= gsize[i]
+            write_log(args, f']\n')
             all_weight = 0
             new_weights = [0 for _ in range(client_num)]
             power_decay = 0.9
