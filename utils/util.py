@@ -363,8 +363,8 @@ def prepare_fairface_iid_uneven(args):
     if args.binary_race:
         decay_order = ['White', 'Black']
     for name in decay_order:
-        train_sets[name] = FairFaceIIDDataset(args, data_base_path, name, transform=transform_train)
-        test_sets[name] = FairFaceIIDDataset(args, data_base_path, name, transform=transform_test, train=False)
+        train_sets[name] = FairFaceIIDDataset(args, data_base_path, name, gender_label=args.gender_label, transform=transform_train)
+        test_sets[name] = FairFaceIIDDataset(args, data_base_path, name, gender_label=args.gender_label, transform=transform_test, train=False)
                 
     if 'uneven' in args.expname.lower():
         # client number = 1.4^k, k=0~5
@@ -498,7 +498,7 @@ def prepare_fairface_gender_uneven(args):
     gidx = 0
     for name, value in client_nums.items():
         for j in range(value):
-            train_set = FairFaceGenderDataset(distribution_mode, data_base_path, name, j, transform=transform_train)
+            train_set = FairFaceGenderDataset(distribution_mode, data_base_path, name, j, gender_label=args.gender_label, transform=transform_train)
             all_len = int(len(train_set) * args.percent)
             train_len = int(all_len * 0.6)
             val_len = int(all_len * 0.4)
@@ -510,7 +510,7 @@ def prepare_fairface_gender_uneven(args):
             val_loader = torch.utils.data.DataLoader(val_set, batch_size=args.batch, shuffle=False)
             train_loaders.append(train_loader)
             val_loaders.append(val_loader)
-            test_set = FairFaceGenderDataset(distribution_mode, data_base_path, name, gidx, transform=transform_test, train=False)
+            test_set = FairFaceGenderDataset(distribution_mode, data_base_path, name, gidx, gender_label=args.gender_label, transform=transform_test, train=False)
             test_loader = torch.utils.data.DataLoader(test_set, batch_size=1, shuffle=False)
             test_loaders.append(test_loader)
             client_weights.append(len(train_set))
