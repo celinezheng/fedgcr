@@ -17,6 +17,7 @@ def write_log(args, msg):
     else:
         log_path += f"_{args.cluster_num}"
     if args.small_test: log_path += "_small_test"
+    if args.gender_label: log_path += "_gender_label"
     if args.sam: log_path += f"_sam"
     if args.color_jitter: log_path += f"_color_jitter"
     if args.q!=1: log_fname = f'{args.mode}_q={args.q}.log'
