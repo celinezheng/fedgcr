@@ -152,7 +152,7 @@ if __name__ == '__main__':
     
     loss_fun = nn.CrossEntropyLoss()
     client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
-    print(client_weights)
+    print(datasets)
     client_num = len(train_loaders)
     if args.dg:
         domain_num -= 1
