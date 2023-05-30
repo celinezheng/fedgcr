@@ -115,6 +115,8 @@ if __name__ == '__main__':
         args.cluster_num = domain_num
     
     if args.small_test:  exp_folder += f"_small_test"
+    if args.gender_label: exp_folder += "_gender_label"
+    if args.binary_race: exp_folder += "_binary_race"
     if args.sam: exp_folder += f"_sam"
     if args.color_jitter:  exp_folder += f"_color_jitter"
 
@@ -122,15 +124,10 @@ if __name__ == '__main__':
     if not os.path.exists(args.save_path):
         os.makedirs(args.save_path)
     SAVE_PATH = os.path.join(args.save_path, f'{args.mode}')
-    if args.dg:
-        SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_{args.target_domain}')
-    if args.gender_label: SAVE_PATH += "_gender_label"
-    if args.binary_race: SAVE_PATH += "_binary_race"
     if args.sam:
         SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_sam_{args.sam}')
     if 'ccop' in args.mode.lower():
-        SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_q={args.q}')
-
+        SAVE_PATH += f"_q={args.q}"
     write_log(args, '==={}===\n'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     write_log(args, '===Setting===\n')
     write_log(args, '    dataset: {}\n'.format(args.dataset))
