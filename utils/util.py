@@ -471,10 +471,10 @@ def prepare_fairface_gender_uneven(args):
         distribution_mode = f"imbalance{max_clientnum}_{args.gender_dis}"
         if args.small_test: distribution_mode += '_small'
         if args.binary_race:
+            client_nums = {"White": 10, "Black": 2}
+        else:
             for i, name in enumerate(decay_order):
                 client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
-        else:
-            client_nums = {"White": 10, "Black": 2}
     else:
         decay_speed = 3
         distribution_mode = f"balance_{args.gender_dis}"
