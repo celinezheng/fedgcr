@@ -150,7 +150,7 @@ class FairFaceGenderDataset(Dataset):
         if train:
             self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/{distribution_mode}/{site}_train_{client_idx}.pkl', allow_pickle=True)
         else:
-            self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{distribution_mode}/{site}_test_{client_idx}.pkl', allow_pickle=True)
+            self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/{distribution_mode}/{site}_test_{client_idx}.pkl', allow_pickle=True)
         
         self.path = np.asarray(self.paths)
         gender_dict = {'Male':0, 'Female':1}     
