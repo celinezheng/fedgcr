@@ -359,6 +359,8 @@ def prepare_fairface_iid_uneven(args):
     train_sets = {}
     test_sets = {}
     decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
+    if args.binary_race:
+        decay_order = ['White', 'Black']
     for name in decay_order:
         train_sets[name] = FairFaceIIDDataset(args, data_base_path, name, transform=transform_train)
         test_sets[name] = FairFaceIIDDataset(args, data_base_path, name, transform=transform_test, train=False)
@@ -367,12 +369,17 @@ def prepare_fairface_iid_uneven(args):
         # client number = 1.4^k, k=0~5
         # data_len = {5, 4, 3, 2, 1, 1}
         decay_speed = args.ratio
-        for i, name in enumerate(decay_order):
-            client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
-            if i==0: 
-                len_dataset[name] = len(train_sets[name])
-            else:
-                len_dataset[name] = int(len_dataset[decay_order[i-1]]/decay_speed)
+        if args.binary_race:
+            client_nums = {"White": 10, "Black": 2}
+            len_dataset[decay_order[0]] = len(train_sets[decay_order[0]])
+            len_dataset[decay_order[1]] = int(len(train_sets[decay_order[0]]) * (client_nums[decay_order[1]] / client_nums[decay_order[0]]))
+        else:
+            for i, name in enumerate(decay_order):
+                client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
+                if i==0: 
+                    len_dataset[name] = len(train_sets[name])
+                else:
+                    len_dataset[name] = int(len_dataset[decay_order[i-1]]/decay_speed)
     else:
         decay_speed = 3
         min_len = -1
