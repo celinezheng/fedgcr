@@ -460,7 +460,9 @@ def prepare_fairface_gender_uneven(args):
     decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
     if args.small_test:
         decay_order = ['White', 'Black', 'Indian', 'Middle_Eastern']
-                
+    elif args.binary_race:
+        decay_order = ['White', 'Black']
+
     if 'uneven' in args.expname.lower():
         # client number = 1.4^k, k=0~5
         # data_len = {5, 4, 3, 2, 1, 1}
@@ -468,8 +470,11 @@ def prepare_fairface_gender_uneven(args):
         max_clientnum = round(np.float_power(decay_speed, len(decay_order)-1))
         distribution_mode = f"imbalance{max_clientnum}_{args.gender_dis}"
         if args.small_test: distribution_mode += '_small'
-        for i, name in enumerate(decay_order):
-            client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
+        if args.binary_race:
+            for i, name in enumerate(decay_order):
+                client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
+        else:
+            client_nums = {"White": 10, "Black": 2}
     else:
         decay_speed = 3
         distribution_mode = f"balance_{args.gender_dis}"

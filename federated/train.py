@@ -52,6 +52,7 @@ if __name__ == '__main__':
     parser.add_argument('--std_rw', action='store_true', help='divide ni with domain std over performance')
     parser.add_argument('--quan', type=float, default=0, help='whether to minimize client with loss smaller than 0.5 quantile')
     parser.add_argument('--small_test', action='store_true', help='whether to test small cluster')
+    parser.add_argument('--binary_race', action='store_true', help='whether to test binary_race race distribution and find under-represented white people.')
     parser.add_argument('--tune', action='store_true', help='whether to tune hparams')
     parser.add_argument('--si', action='store_true', help='whether to use si only')
     parser.add_argument('--sam', action='store_true', help='whether to use sam optimizer')
