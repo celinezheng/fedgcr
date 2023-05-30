@@ -124,8 +124,8 @@ if __name__ == '__main__':
     SAVE_PATH = os.path.join(args.save_path, f'{args.mode}')
     if args.dg:
         SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_{args.target_domain}')
-    if args.gender_label:
-        SAVE_PATH += "_gender_label"
+    if args.gender_label: SAVE_PATH += "_gender_label"
+    if args.binary_race: SAVE_PATH += "_binary_race"
     if args.sam:
         SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_sam_{args.sam}')
     if 'ccop' in args.mode.lower():
@@ -143,6 +143,7 @@ if __name__ == '__main__':
     write_log(args, '    quantile: {}\n'.format(args.quan))
     write_log(args, '    std_rw: {}\n'.format(args.std_rw))
     write_log(args, '    gender_label: {}\n'.format(args.gender_label))
+    write_log(args, '    binary_race: {}\n'.format(args.binary_race))
 
     if args.hparams_seed == 0:
         hparams = hparams_registry.default_hparams(args.mode, args.dataset)
