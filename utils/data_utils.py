@@ -113,17 +113,20 @@ class DomainNetDataset(Dataset):
         return image, label
 
 class FairFaceIIDDataset(Dataset):
-    def __init__(self, args, base_path, site, train=True, transform=None):
+    def __init__(self, args, base_path, site, gender_label=False, train=True, transform=None):
         if train:
-            self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{args.gender_dis}/{site}_train.pkl', allow_pickle=True)
+            self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/{args.gender_dis}/{site}_train.pkl', allow_pickle=True)
         else:
-            self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{args.gender_dis}/{site}_test.pkl', allow_pickle=True)
+            self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/{args.gender_dis}/{site}_test.pkl', allow_pickle=True)
         
         self.path = np.asarray(self.paths)
-        self.labels = np.asarray(self.labels).astype(np.float16)
+        if gender_label:
+            self.labels = np.asarray(self.age).astype(np.float16)
+        else: 
+            self.labels = np.asarray(self.gender).astype(np.float16)
         self.transform = transform
         self.base_path = base_path if base_path is not None else '../../data'
-
+       
     def __len__(self):
         return len(self.labels)
 
@@ -141,17 +144,19 @@ class FairFaceIIDDataset(Dataset):
         return image, label
 
 class FairFaceGenderDataset(Dataset):
-    def __init__(self, distribution_mode, base_path, site, client_idx, train=True, transform=None):
+    def __init__(self, distribution_mode, base_path, site, client_idx, gender_label=False, train=True, transform=None):
         if train:
             self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{distribution_mode}/{site}_train_{client_idx}.pkl', allow_pickle=True)
         else:
             self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{distribution_mode}/{site}_test_{client_idx}.pkl', allow_pickle=True)
         
         self.path = np.asarray(self.paths)
-        self.labels = np.asarray(self.labels).astype(np.float16)
+        if gender_label:
+            self.labels = np.asarray(self.age).astype(np.float16)
+        else: 
+            self.labels = np.asarray(self.gender).astype(np.float16)
         self.transform = transform
         self.base_path = base_path if base_path is not None else '../../data'
-
     def __len__(self):
         return len(self.labels)
 

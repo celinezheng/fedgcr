@@ -53,6 +53,7 @@ if __name__ == '__main__':
     parser.add_argument('--quan', type=float, default=0, help='whether to minimize client with loss smaller than 0.5 quantile')
     parser.add_argument('--small_test', action='store_true', help='whether to test small cluster')
     parser.add_argument('--binary_race', action='store_true', help='whether to test binary_race race distribution and find under-represented white people.')
+    parser.add_argument('--gender_label', action='store_true', help='whether to predict gender')
     parser.add_argument('--tune', action='store_true', help='whether to tune hparams')
     parser.add_argument('--si', action='store_true', help='whether to use si only')
     parser.add_argument('--sam', action='store_true', help='whether to use sam optimizer')
@@ -97,7 +98,8 @@ if __name__ == '__main__':
         domain_num = 5
     elif args.dataset.lower()[:9] == 'fairface':
         domain_num = 7
-        args.num_classes = 9
+        if args.gender_label: args.num_classes = 2
+        else: args.num_classes = 9
     else:
         import warnings
         warnings.warn("invalid args.dataset")

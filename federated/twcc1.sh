@@ -36,14 +36,14 @@ python train.py --dataset fairface --percent 1 --expname uneven-quan --mode ccop
 python train.py --dataset fairface --percent 1 --expname uneven-quan --mode ccop --ratio 1.47 --gender_dis gender --iters 50 --cluster_num 14 --quan 0.7
 python train.py --dataset fairface --percent 1 --expname uneven-quan --mode ccop --ratio 1.47 --gender_dis gender --test --cluster_num 14 --quan 0.7
 
-python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode ccop --ratio 1.31 --gender_dis random_dis --iters 50 --cluster_num 7 --quan 0.7
-python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode ccop --ratio 1.31 --gender_dis random_dis --test --cluster_num 7 --quan 0.7
-python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode ccop --ratio 1.47 --gender_dis random_dis --iters 50 --cluster_num 7 --quan 0.7
-python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode ccop --ratio 1.47 --gender_dis random_dis --test --cluster_num 7 --quan 0.7
+# python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode ccop --ratio 1.31 --gender_dis random_dis --iters 50 --cluster_num 7 --quan 0.7
+# python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode ccop --ratio 1.31 --gender_dis random_dis --test --cluster_num 7 --quan 0.7
+# python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode CoCoOP --ratio 1.31 --gender_dis random_dis --iters 50
+# python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode CoCoOP --ratio 1.31 --gender_dis random_dis --test
 
-python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode CoCoOP --ratio 1.31 --gender_dis random_dis --iters 50
-python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode CoCoOP --ratio 1.31 --gender_dis random_dis --test
-python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode CoCoOP --ratio 1.47 --gender_dis random_dis --iters 50
-python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode CoCoOP --ratio 1.47 --gender_dis random_dis --test
+# python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode ccop --ratio 1.47 --gender_dis random_dis --iters 50 --cluster_num 7 --quan 0.7
+# python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode ccop --ratio 1.47 --gender_dis random_dis --test --cluster_num 7 --quan 0.7
+# python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode CoCoOP --ratio 1.47 --gender_dis random_dis --iters 50
+# python train.py --dataset fairface --percent 1 --expname uneven-binary --binary_race --mode CoCoOP --ratio 1.47 --gender_dis random_dis --test
 
 # tar -zcvf - ./checkpoint |ssh shulingcheng@140.112.42.29 "tar -zxvf - -C ~/experiment/Fed/FedBN-master/"
