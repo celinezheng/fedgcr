@@ -408,34 +408,30 @@ def prepare_fairface_iid_uneven(args):
     train_loaders, val_loaders, test_loaders = [], [], []
     datasets = []
     sum_len = 0
-
+    all_test_len = min([len(test_sets[key]) for key in client_nums])
+    test_len = int(all_test_len / client_nums[decay_order[0]])
     for key, value in client_nums.items():
         all_len = len_dataset[key] * args.percent
         all_train_len = int(all_len * 0.6)
         all_val_len = int(all_len * 0.4)
-        all_test_len = len(test_sets[key])
         cur_dataset_len = len_dataset[key]
         train_begin = 0
         valid_begin = -all_val_len
         test_begin = 0
         partition_num = (np.float_power(decay_speed, value)-1) / (decay_speed - 1)
-        
         test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
         for j in range(value):
             dataset_name = key
             client_ratio = np.float_power(decay_speed, j) / partition_num
             train_len = int(all_train_len * client_ratio)
             val_len = int(all_val_len * client_ratio)
-            test_len = int(all_test_len * client_ratio)
-
             if args.split_test:
                 dataset_name = f"{key}_{j}"
                 cur_testset = torch.utils.data.Subset(test_sets[key], list(range(all_test_len))[test_begin : test_begin+test_len])
                 test_loader = torch.utils.data.DataLoader(cur_testset, batch_size=1, shuffle=False)
                 test_begin += test_len
-            else:
-                test_loaders.append(test_loader)
-                
+
+            test_loaders.append(test_loader)
             datasets.append(dataset_name)
             cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
             cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])

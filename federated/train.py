@@ -24,22 +24,49 @@ from utils import util
 from utils.weight_perturbation import WPOptim
 from utils.sam import SAM
 
-def test_score(server_model, test_loaders, datasets, best_epoch):
+def test_score(server_model, test_loaders, datasets, best_epoch, gmap):
     domain_test_accs = {}
+    cluster_test_accs = {}
     individual_test_acc = []
+    if gmap:
+        for client_idx in gmap:
+            cluster_test_accs[gmap[client_idx]] = list()
+    for datasite in datasets:
+        domain_test_accs[datasite.split("_")[0]] = list()
     for client_idx, datasite in enumerate(datasets):
+        domain_name = datasite.split("_")[0]
         if datasite not in domain_test_accs:
             _, test_acc = test(server_model, test_loaders[client_idx], loss_fun, device, prompt_bank)
-            domain_test_accs[datasite] = test_acc
+            domain_test_accs[domain_name].append(test_acc)
+            if gmap:
+                cluster_test_accs[gmap[client_idx]].append(test_acc)
+                group_info = f"({gmap[client_idx]})"
+            else:
+                group_info = f""
             # print(' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
-            write_log(args, ' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, best_epoch, test_acc))
-        print(datasite)
-        individual_test_acc.append(domain_test_accs[datasite])
+            write_log(args, ' Test site-{:<25s} {}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, group_info, best_epoch, test_acc))
+        print(f"{datasite}, domain = {domain_name}")
+        individual_test_acc.append(domain_test_accs[domain_name][-1])
+    if gmap:
+        for gidx in gmap.values():
+            cluster_test_accs[gidx] = np.mean(cluster_test_accs[gidx], dtype=np.float64)
+    for name in domain_test_accs:
+        domain_test_accs[name] = np.mean(domain_test_accs[name], dtype=np.float64)
+    for name, acc in domain_test_accs.items():
+        write_log(args, f"{name}: {acc:.3f}, ")
+    write_log(args, "\n")
+    print(domain_test_accs)
+    cluster_test_accs = list(cluster_test_accs.values())
     domain_test_accs = list(domain_test_accs.values())
-    
+    if gmap: std_cluster = np.std(cluster_test_accs, dtype=np.float64)
+    else: std_cluster = -1
     std_domain = np.std(domain_test_accs, dtype=np.float64)
     std_individual = np.std(individual_test_acc, dtype=np.float64)
-    write_log(args, f'Average Test Accuracy: {np.mean(domain_test_accs):.4f}, domain std={std_domain:.4f}, individual std={std_individual:.4f}\n')
+    msg = f"Average Test Accuracy: {np.mean(domain_test_accs):.4f}, " \
+        + f"domain std={std_domain:.4f}, " \
+        + f"cluster std={std_cluster:.4f}, " \
+        + f"individual std={std_individual:.4f}, " 
+    write_log(args, f'{msg}\n')
     # todo individual std
     return domain_test_accs
 
@@ -49,6 +76,8 @@ if __name__ == '__main__':
     parser.add_argument('--log', action='store_true', help='whether to log')
     parser.add_argument('--color_jitter', action='store_true', help='whether to color_jitter for fairface')
     parser.add_argument('--debug', action='store_true', help='whether to debug for inference/test')
+    parser.add_argument('--save_all_gmap', action='store_true', help='whether to save_all_gmap')
+    parser.add_argument('--freeze_ckpt', action='store_true', help='whether to freeze_ckpt')
     parser.add_argument('--std_rw', action='store_true', help='divide ni with domain std over performance')
     parser.add_argument('--quan', type=float, default=0, help='whether to minimize client with loss smaller than 0.5 quantile')
     parser.add_argument('--small_test', action='store_true', help='whether to test small cluster')
@@ -64,8 +93,8 @@ if __name__ == '__main__':
     parser.add_argument('--lambda_con', type=float, default=0.5, help='lambda for contrastive loss')
     parser.add_argument('--lr', type=float, default=1e-2, help='learning rate')
     parser.add_argument('--q', type = float, default=1, help ='q value for fairness')
-    parser.add_argument('--save_iter', type = int, default=49, help ='save_iter')
-    parser.add_argument('--batch', type = int, default=64, help ='batch size')
+    parser.add_argument('--save_iter', type = int, default=-1, help ='save_iter')
+    parser.add_argument('--batch', type = int, default=32, help ='batch size')
     parser.add_argument('--iters', type = int, default=10, help = 'iterations for communication')
     parser.add_argument('--wk_iters', type = int, default=1, help = 'optimization iters in local worker between communication')
     parser.add_argument('--mode', type = str, default='DoPrompt', help='[FedBN | FedAvg | DoPrompt]')
@@ -78,7 +107,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_classes', type = int, default=10, help ='number of classes')
     parser.add_argument('--seed', type = int, default=1, help ='random seed')
     parser.add_argument('--model', type = str, default='prompt', help='prompt | vit-linear')
-    parser.add_argument("--gender_dis", choices=['iid', 'gender', 'gender_age', 'random_dis'], default='iid', help="gender distribution of each client")
+    parser.add_argument("--gender_dis", choices=['iid', 'gender', 'gender_age', 'random_dis'], default='random_dis', help="gender distribution of each client")
     parser.add_argument('--cluster_num', type = int, default=-1, help ='cluster number')
     parser.add_argument('--target_domain', type = str, default='Clipart', help='Clipart, Infograph, ...')
     parser.add_argument('--hparams', type=str,
@@ -86,6 +115,7 @@ if __name__ == '__main__':
     parser.add_argument('--hparams_seed', type=int, default=0,
         help='Seed for random hparams (0 means "default hparams")')
     parser.add_argument('--expname', type=str, default='prompt-sim')
+    parser.add_argument('--gmap_path', type=str, default='none')
     parser.add_argument('--ratio', type=float, default=1.0)
     args = parser.parse_args()
     seed = args.seed
@@ -93,6 +123,7 @@ if __name__ == '__main__':
     torch.manual_seed(seed)    
     torch.cuda.manual_seed_all(seed) 
     random.seed(seed)
+    args.save_all_gmap = args.save_all_gmap and args.mode.lower()=='ccop'
     if args.dataset.lower()[:6] == 'domain':
         # name of each datasets
         domain_num = 6
@@ -107,12 +138,13 @@ if __name__ == '__main__':
         warnings.warn("invalid args.dataset")
         exit(0)
     exp_folder = f'fed_{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
+    cluster_num = args.cluster_num if args.mode.lower()=='ccop' else -1
     if args.gender_dis != 'iid':
         domain_num = args.cluster_num
-        exp_folder += f"_{args.gender_dis}_cluster_{args.cluster_num}"
+        exp_folder += f"_{args.gender_dis}_cluster_{cluster_num}"
     elif args.cluster_num != -1:
         domain_num = args.cluster_num
-        exp_folder += f"_cluster_{args.cluster_num}"
+        exp_folder += f"_cluster_{cluster_num}"
     else:
         args.cluster_num = domain_num
     
@@ -130,6 +162,14 @@ if __name__ == '__main__':
         SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_sam_{args.sam}')
     if 'ccop' in args.mode.lower():
         SAVE_PATH += f"_q={args.q}"
+    GMAP_SAVE_PATH = args.gmap_path
+    if GMAP_SAVE_PATH == 'none':
+        GMAP_SAVE_PATH = f"{SAVE_PATH}_gmap"
+        if args.mode.lower()!='ccop':
+            GMAP_SAVE_PATH = GMAP_SAVE_PATH.replace(args.mode, f'ccop_q={args.q}')
+        GMAP_SAVE_PATH = GMAP_SAVE_PATH.replace('cluster_-1', f"cluster_{args.cluster_num}")
+        
+    print(GMAP_SAVE_PATH)
     write_log(args, '==={}===\n'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     write_log(args, '===Setting===\n')
     write_log(args, '    dataset: {}\n'.format(args.dataset))
@@ -222,7 +262,12 @@ if __name__ == '__main__':
     # each local client model
     models = [copy.deepcopy(server_model) for _ in range(client_num)]
     best_changed = False
-
+    try:
+        gmap_ckpt = torch.load(GMAP_SAVE_PATH)
+        gmap = gmap_ckpt['gmap']
+    except:
+        gmap = None
+    
     if args.test:
         write_log(args, 'Loading snapshots...\n')
         checkpoint = torch.load(SAVE_PATH)
@@ -240,7 +285,7 @@ if __name__ == '__main__':
             test_accs = list(test_accs.values())
             write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
         else:
-            test_accs = test_score(server_model, test_loaders, datasets, best_epoch)
+            test_accs = test_score(server_model, test_loaders, datasets, best_epoch, gmap)
         exit(0)
 
     if args.resume:
@@ -255,25 +300,25 @@ if __name__ == '__main__':
         best_epoch, best_acc = checkpoint['best_epoch'], checkpoint['best_acc']
         best_test = checkpoint['best_test']
         start_iter = int(checkpoint['a_iter']) + 1
-        best_agg = np.mean(best_acc)
-
-        print('Resume training from epoch {}'.format(start_iter))
+        print(f'Resume training from epoch {start_iter}, best_test={np.mean(best_test):.3f}')
     else:
         # log the best for each model on all datasets
         best_epoch = 0
         best_acc = [0. for j in range(client_num)] 
         best_test = [0. for j in range(domain_num)] 
         start_iter = 0
-        best_agg = 0
+
+    # Start training
     gmap = {}
     multi = 100
+    Eas = [multi for _ in range(client_num)]
+    all_feat = None
     if args.mode.lower() in ['nova', 'ccop']:
         write_log(args, f'multiply {multi} for Ea!\n')
         write_log(args, f'use train loss for Ea\n')
-    Eas = [multi for _ in range(client_num)]
     train_losses = [1.0 for _ in range(client_num)]
-    # Start training
-    all_feat = None
+    if args.freeze_ckpt and start_iter>0: 
+        args.iters = start_iter + 1
     for a_iter in range(start_iter, args.iters):
         print(best_test)
         if args.mode.lower() in ['doprompt', 'fedprompt', 'cocoop', 'nova']:
@@ -353,23 +398,7 @@ if __name__ == '__main__':
                 else: threshold = args.iters - 5
                 threshold = max(10, threshold)
                 if args.debug: threshold = 0
-
-                cnt = [0 for _ in range(domain_num)]
-                accs = [0 for _ in range(domain_num)]
-                agg = 0
-                domain_cnt = 0
-                for client_idx in range(client_num):
-                    accs[gmap[client_idx]] += val_acc_list[client_idx]
-                    cnt[gmap[client_idx]] += 1
-                for di in range(domain_num):
-                    if cnt[di]==0:continue
-                    domain_cnt+=1
-                    agg += (accs[di]/cnt[di])
-                agg /= domain_cnt
-                write_log(args, 'Aggregated Acc | Val Acc: {:.4f}\n'.format(agg))
-                # if agg > best_agg:
                 if np.mean(val_acc_list) > np.mean(best_acc):
-                    best_agg = agg
                     best_epoch = a_iter
                     best_changed=True
                     for client_idx in range(client_num):
@@ -377,7 +406,7 @@ if __name__ == '__main__':
                         group_info = f"({gmap[client_idx]})" if args.mode.lower()=='ccop' else ""
                         write_log(args, ' Best site-{:<25s}{:<4s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], group_info, best_epoch, best_acc[client_idx]))
                 if ((a_iter+1)*(wi+1)) > threshold:
-                    test_accs = test_score(server_model, test_loaders, datasets, best_epoch)
+                    test_accs = test_score(server_model, test_loaders, datasets, best_epoch, gmap)
                     if np.mean(test_accs) > np.mean(best_test):
                         best_changed = True
                         best_epoch = a_iter
@@ -392,9 +421,14 @@ if __name__ == '__main__':
                     best_epoch = a_iter
                     best_changed=True
                     write_log(args, ' Best site-{:<25s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
-                best_agg = np.mean(best_acc)
-                   
-            if best_changed or a_iter==args.save_iter:  
+            if GMAP_SAVE_PATH != 'none' and (best_changed or args.save_all_gmap):
+                write_log(args, ' Saving the gmap checkpoint to {}...\n'.format(GMAP_SAVE_PATH))
+                torch.save({
+                    'a_iter': a_iter, 
+                    'gmap': gmap
+                }, GMAP_SAVE_PATH)
+            best_changed = a_iter==args.save_iter or (best_changed and not args.freeze_ckpt)
+            if best_changed:  
                 best_changed = False
                 # print(' Saving the local and server checkpoint to {}...'.format(SAVE_PATH))
                 write_log(args, ' Saving the local and server checkpoint to {}...\n'.format(SAVE_PATH))
@@ -434,7 +468,7 @@ if __name__ == '__main__':
                 # todo save gmap
                 else:
                     if ((a_iter+1)*(wi+1)) % 10 == 0:
-                        test_accs = test_score(server_model, test_loaders, datasets, best_epoch)
+                        test_accs = test_score(server_model, test_loaders, datasets, best_epoch, gmap)
                         if np.mean(test_accs) > np.mean(best_test):
                             best_epoch = a_iter
                             for i in range(len(test_accs)):
@@ -445,8 +479,10 @@ if __name__ == '__main__':
                         'best_epoch': best_epoch,
                         'best_acc': best_acc,
                         'a_iter': a_iter, 
-                        'best_test': best_test
+                        'best_test': best_test,
+                        'gmap': gmap
                     }, SAVE_PATH)
+                
                  
                 # print(f'Average Test Accuracy: {np.mean(test_accs):.4f}')
     
