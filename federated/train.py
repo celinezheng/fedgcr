@@ -52,6 +52,7 @@ if __name__ == '__main__':
     parser.add_argument('--std_rw', action='store_true', help='divide ni with domain std over performance')
     parser.add_argument('--quan', type=float, default=0, help='whether to minimize client with loss smaller than 0.5 quantile')
     parser.add_argument('--small_test', action='store_true', help='whether to test small cluster')
+    parser.add_argument('--split_test', action='store_true', help='whether to test split testing set')
     parser.add_argument('--binary_race', action='store_true', help='whether to test binary_race race distribution and find under-represented white people.')
     parser.add_argument('--gender_label', action='store_true', help='whether to predict gender')
     parser.add_argument('--tune', action='store_true', help='whether to tune hparams')
@@ -63,6 +64,7 @@ if __name__ == '__main__':
     parser.add_argument('--lambda_con', type=float, default=0.5, help='lambda for contrastive loss')
     parser.add_argument('--lr', type=float, default=1e-2, help='learning rate')
     parser.add_argument('--q', type = float, default=1, help ='q value for fairness')
+    parser.add_argument('--save_iter', type = int, default=49, help ='save_iter')
     parser.add_argument('--batch', type = int, default=64, help ='batch size')
     parser.add_argument('--iters', type = int, default=10, help = 'iterations for communication')
     parser.add_argument('--wk_iters', type = int, default=1, help = 'optimization iters in local worker between communication')
@@ -141,6 +143,7 @@ if __name__ == '__main__':
     write_log(args, '    std_rw: {}\n'.format(args.std_rw))
     write_log(args, '    gender_label: {}\n'.format(args.gender_label))
     write_log(args, '    binary_race: {}\n'.format(args.binary_race))
+    write_log(args, '    save_iter: {}\n'.format(args.save_iter))
 
     if args.hparams_seed == 0:
         hparams = hparams_registry.default_hparams(args.mode, args.dataset)
@@ -391,7 +394,7 @@ if __name__ == '__main__':
                     write_log(args, ' Best site-{:<25s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
                 best_agg = np.mean(best_acc)
                    
-            if best_changed:  
+            if best_changed or a_iter==args.save_iter:  
                 best_changed = False
                 # print(' Saving the local and server checkpoint to {}...'.format(SAVE_PATH))
                 write_log(args, ' Saving the local and server checkpoint to {}...\n'.format(SAVE_PATH))

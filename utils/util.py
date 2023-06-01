@@ -413,23 +413,36 @@ def prepare_fairface_iid_uneven(args):
         all_len = len_dataset[key] * args.percent
         all_train_len = int(all_len * 0.6)
         all_val_len = int(all_len * 0.4)
+        all_test_len = len(test_sets[key])
         cur_dataset_len = len_dataset[key]
         train_begin = 0
         valid_begin = -all_val_len
+        test_begin = 0
         partition_num = (np.float_power(decay_speed, value)-1) / (decay_speed - 1)
         
         test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
         for j in range(value):
-            train_len = int(all_train_len * np.float_power(decay_speed, j) / partition_num)
-            val_len = int(all_val_len * np.float_power(decay_speed, j) / partition_num)
-            datasets.append(key)
+            dataset_name = key
+            client_ratio = np.float_power(decay_speed, j) / partition_num
+            train_len = int(all_train_len * client_ratio)
+            val_len = int(all_val_len * client_ratio)
+            test_len = int(all_test_len * client_ratio)
+
+            if args.split_test:
+                dataset_name = f"{key}_{j}"
+                cur_testset = torch.utils.data.Subset(test_sets[key], list(range(all_test_len))[test_begin : test_begin+test_len])
+                test_loader = torch.utils.data.DataLoader(cur_testset, batch_size=1, shuffle=False)
+                test_begin += test_len
+            else:
+                test_loaders.append(test_loader)
+                
+            datasets.append(dataset_name)
             cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
             cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
             train_loader = torch.utils.data.DataLoader(cur_trainset, batch_size=args.batch, shuffle=True)
             val_loader = torch.utils.data.DataLoader(cur_valset, batch_size=args.batch, shuffle=False)
             train_loaders.append(train_loader)
             val_loaders.append(val_loader)
-            test_loaders.append(test_loader)
             train_begin += train_len
             valid_begin += val_len
             client_weights.append(len(cur_trainset))
