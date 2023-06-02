@@ -35,7 +35,7 @@ def test_score(server_model, test_loaders, datasets, best_epoch, gmap):
         domain_test_accs[datasite.split("_")[0]] = list()
     for client_idx, datasite in enumerate(datasets):
         domain_name = datasite.split("_")[0]
-        if datasite not in domain_test_accs:
+        if datasite not in domain_test_accs or len(domain_test_accs[domain_name])==0:
             _, test_acc = test(server_model, test_loaders[client_idx], loss_fun, device, prompt_bank)
             domain_test_accs[domain_name].append(test_acc)
             if gmap:
