@@ -138,15 +138,16 @@ if __name__ == '__main__':
         warnings.warn("invalid args.dataset")
         exit(0)
     exp_folder = f'fed_{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
-    cluster_num = args.cluster_num if args.mode.lower()=='ccop' else -1
-    if args.gender_dis != 'iid':
-        domain_num = args.cluster_num
-        exp_folder += f"_{args.gender_dis}_cluster_{cluster_num}"
-    elif args.cluster_num != -1:
-        domain_num = args.cluster_num
-        exp_folder += f"_cluster_{cluster_num}"
-    else:
-        args.cluster_num = domain_num
+    if args.dataset.lower()[:8]=='fairface':
+        cluster_num = args.cluster_num if args.mode.lower()=='ccop' else -1
+        if args.gender_dis != 'iid':
+            domain_num = args.cluster_num
+            exp_folder += f"_{args.gender_dis}_cluster_{cluster_num}"
+        elif args.cluster_num != -1:
+            domain_num = args.cluster_num
+            exp_folder += f"_cluster_{cluster_num}"
+        else:
+            args.cluster_num = domain_num
     
     if args.small_test:  exp_folder += f"_small_test"
     if args.gender_label: exp_folder += "_gender_label"
