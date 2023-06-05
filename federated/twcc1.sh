@@ -1,23 +1,6 @@
 
-# python train.py --dataset fairface --percent 1 --expname uneven-quan --mode ccop --ratio 1.47 --gender_dis gender --iters 50 --cluster_num 14 --quan 0.5
-# python train.py --dataset fairface --percent 1 --expname uneven-quan --mode ccop --ratio 1.47 --gender_dis gender --test --cluster_num 14 --quan 0.5
-
-# python train.py --dataset fairface --percent 1 --expname uneven-quan --mode ccop --ratio 1.31 --gender_dis gender --iters 50 --cluster_num 12 --quan 0.7
-# python train.py --dataset fairface --percent 1 --expname uneven-quan --mode ccop --ratio 1.31 --gender_dis gender --test --cluster_num 12 --quan 0.7
-# python train.py --dataset fairface --percent 1 --expname uneven-quan --mode ccop --ratio 1.31 --gender_dis gender --iters 50 --cluster_num 13 --quan 0.5
-# python train.py --dataset fairface --percent 1 --expname uneven-quan --mode ccop --ratio 1.31 --gender_dis gender --test --cluster_num 13 --quan 0.5
-# python train.py --dataset fairface --percent 1 --expname uneven-quan --mode ccop --ratio 1.31 --gender_dis gender --iters 50 --cluster_num 14 --quan 0.5
-# python train.py --dataset fairface --percent 1 --expname uneven-quan --mode ccop --ratio 1.31 --gender_dis gender --test --cluster_num 14 --quan 0.5
-
-
-python train.py --dataset fairface --percent 0.5 --expname even --mode ccop --cluster 7 --quan 0.5 --iters 50
-python train.py --dataset fairface --percent 0.5 --expname even --mode ccop --cluster 7 --quan 0.5 --test
-
-python train.py --dataset fairface --percent 1 --expname uneven --mode fedavg --ratio 1.31 --gender_dis gender --iters 50
-python train.py --dataset fairface --percent 1 --expname uneven --mode fedavg --ratio 1.31 --gender_dis gender --test
-python train.py --dataset fairface --percent 1 --expname uneven --mode fedavg --ratio 1.47 --gender_dis gender --iters 50
-python train.py --dataset fairface --percent 1 --expname uneven --mode fedavg --ratio 1.47 --gender_dis gender --test
-
+python train.py --dataset fairface --percent 1 --expname uneven --ratio 1.47 --mode ablation --iters 50 --cluster 7
+python train.py --dataset fairface --percent 1 --expname uneven --ratio 1.47 --mode ablation --test --cluster 7
 
 
 
