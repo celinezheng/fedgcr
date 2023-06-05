@@ -145,6 +145,39 @@ class FairFaceIIDDataset(Dataset):
 
         return image, label
 
+class FairFaceBinaryDataset(Dataset):
+    def __init__(self, base_path, site, client_idx, gender_label=False, train=True, transform=None):
+        if train:
+            self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/binary_race/train_{site}_{client_idx}.pkl', allow_pickle=True)
+        else:
+            self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/binary_race/test_{site}_{client_idx}.pkl', allow_pickle=True)
+        
+        self.path = np.asarray(self.paths)
+        gender_dict = {'Male':0, 'Female':1}     
+        self.gender = [gender_dict[text] for text in self.gender]
+        if gender_label:
+            self.labels = np.asarray(self.gender).astype(np.float16)
+        else: 
+            self.labels = np.asarray(self.age).astype(np.float16)
+        self.transform = transform
+        self.base_path = base_path if base_path is not None else '../../data'
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        img_path = os.path.join(self.base_path, self.paths[idx])
+        label = self.labels[idx]
+        image = Image.open(img_path)
+        
+        if len(image.split()) != 3:
+            image = transforms.Grayscale(num_output_channels=3)(image)
+
+        if self.transform is not None:
+            image = self.transform(image)
+
+        return image, label
+
+
 class FairFaceGenderDataset(Dataset):
     def __init__(self, distribution_mode, base_path, site, client_idx, gender_label=False, train=True, transform=None):
         if train:

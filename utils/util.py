@@ -2,7 +2,8 @@ from tqdm import tqdm
 import sys, os
 import torch
 import torchvision.transforms as transforms
-from utils.data_utils import DomainNetDataset, DigitsDataset, FairFaceIIDDataset, FairFaceGenderDataset
+import torch.utils.data as data
+from utils.data_utils import DomainNetDataset, DigitsDataset, FairFaceIIDDataset, FairFaceGenderDataset, FairFaceBinaryDataset
 import math
 import torch.nn.functional as tf
 import numpy as np
@@ -361,8 +362,8 @@ def prepare_fairface_iid_uneven(args):
     train_sets = {}
     test_sets = {}
     decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
-    if args.binary_race:
-        decay_order = ['White', 'Black']
+    # if args.binary_race:
+    #     decay_order = ['White', 'Black']
     for name in decay_order:
         train_sets[name] = FairFaceIIDDataset(args, data_base_path, name, gender_label=args.gender_label, transform=transform_train)
         test_sets[name] = FairFaceIIDDataset(args, data_base_path, name, gender_label=args.gender_label, transform=transform_test, train=False)
@@ -371,12 +372,12 @@ def prepare_fairface_iid_uneven(args):
         # client number = 1.4^k, k=0~5
         # data_len = {5, 4, 3, 2, 1, 1}
         decay_speed = args.ratio
-        if args.binary_race:
-            client_nums = {"White": 10, "Black": 2}
-            len_dataset[decay_order[0]] = len(train_sets[decay_order[0]])
-            len_dataset[decay_order[1]] = int(len(train_sets[decay_order[0]]) * (client_nums[decay_order[1]] / client_nums[decay_order[0]]))
-        else:
-            for i, name in enumerate(decay_order):
+        # if args.binary_race:
+        #     client_nums = {"White": 10, "Black": 2}
+        #     len_dataset[decay_order[0]] = len(train_sets[decay_order[0]])
+        #     len_dataset[decay_order[1]] = int(len(train_sets[decay_order[0]]) * (client_nums[decay_order[1]] / client_nums[decay_order[0]]))
+        # else:
+        for i, name in enumerate(decay_order):
                 client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
                 if i==0: 
                     len_dataset[name] = len(train_sets[name])
@@ -478,8 +479,8 @@ def prepare_fairface_gender_uneven(args):
     decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
     if args.small_test:
         decay_order = ['White', 'Black', 'Indian', 'Middle_Eastern']
-    elif args.binary_race:
-        decay_order = ['White', 'Black']
+    # elif args.binary_race:
+    #     decay_order = ['White', 'Black']
 
     if 'uneven' in args.expname.lower():
         # client number = 1.4^k, k=0~5
@@ -488,10 +489,10 @@ def prepare_fairface_gender_uneven(args):
         max_clientnum = round(np.float_power(decay_speed, len(decay_order)-1))
         distribution_mode = f"imbalance{max_clientnum}_{args.gender_dis}"
         if args.small_test: distribution_mode += '_small'
-        if args.binary_race:
-            client_nums = {"White": 10, "Black": 2}
-        else:
-            for i, name in enumerate(decay_order):
+        # if args.binary_race:
+        #     client_nums = {"White": 10, "Black": 2}
+        # else:
+        for i, name in enumerate(decay_order):
                 client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
     else:
         decay_speed = 3
@@ -538,13 +539,80 @@ def prepare_fairface_gender_uneven(args):
     # check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, None
 
+def prepare_fairface_binary_race(args):
+    base_path = '../../data/FairFace'
+    s = 1
+    color_jitter = transforms.ColorJitter(0.8 * s, 0.8 * s, 0.8 * s, 0.2 * s)
+    transform_train = transforms.Compose([
+            transforms.Resize([224, 224]),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation((-30,30)),
+            transforms.ToTensor(),
+    ])
+    if args.color_jitter:
+        transform_train = transforms.Compose([
+            transforms.Resize([224, 224]),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomApply([color_jitter], p=0.8),
+            transforms.RandomRotation((-30,30)),
+            transforms.ToTensor(),
+        ])
+    transform_test = transforms.Compose([
+            transforms.Resize([224, 224]),
+            transforms.ToTensor(),
+    ])
+    client_nums = {}
+    decay_order = ['White', 'Black']
+    client_nums = {'White': 10, 'Black': 2}
+    print(client_nums)
+
+    target_loader = None
+    client_weights = []
+    
+    train_loaders, val_loaders, test_loaders = [], [], []
+    datasets = []
+    sum_len = 0
+    for key, value in client_nums.items():
+        for j in range(value):
+            dataset_name = key
+            train_set = FairFaceBinaryDataset(base_path=base_path, site=key, client_idx=j, gender_label=args.gender_label, train=True, transform=transform_train)
+            test_set = FairFaceBinaryDataset(base_path=base_path, site=key, client_idx=j, gender_label=args.gender_label, train=False, transform=transform_test)
+            test_loader = torch.utils.data.DataLoader(test_set, batch_size=1, shuffle=False)
+            test_loaders.append(test_loader)
+            # Random split
+            train_set_size = int(len(train_set) * 0.8)
+            valid_set_size = len(train_set) - train_set_size
+            train_set, valid_set = data.random_split(train_set, [train_set_size, valid_set_size])
+            train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch, shuffle=True)
+            val_loader = torch.utils.data.DataLoader(valid_set, batch_size=args.batch, shuffle=False)
+            datasets.append(dataset_name)
+            train_loaders.append(train_loader)
+            val_loaders.append(val_loader)
+            client_weights.append(len(train_set))
+            sum_len += len(train_set)
+            # print(len(cur_trainset), len(cur_valset))
+    print(client_weights)
+    write_log(args, f"data_number=[")
+    for ni in client_weights:
+        write_log(args, f"{ni},")
+    write_log(args, f"]\nclient_nums=[")
+    for name in decay_order:
+        write_log(args, f"{client_nums[name]},")
+    write_log(args, f"]\n")
+    client_weights = [ci/sum_len for ci in client_weights]
+    check_labels(args, train_loaders)
+    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
+
+
 def prepare_data(args):
     if args.dataset.lower()[:6] == 'domain':
         return prepare_domainnet_uneven(args)
     elif args.dataset.lower()[:5] == 'digit':
         return prepare_digit_uneven(args)
     elif args.dataset.lower()[:9] == 'fairface':
-        if args.gender_dis in ['iid', 'random_dis']:
+        if args.binary_race:
+            return prepare_fairface_binary_race(args)
+        elif args.gender_dis in ['iid', 'random_dis']:
             return prepare_fairface_iid_uneven(args)
         else:
             return prepare_fairface_gender_uneven(args)
