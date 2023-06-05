@@ -139,7 +139,7 @@ if __name__ == '__main__':
         exit(0)
     exp_folder = f'fed_{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
     if args.dataset.lower()[:8]=='fairface':
-        cluster_num = args.cluster_num if args.mode.lower()=='ccop' else -1
+        cluster_num = args.cluster_num if args.mode.lower() in ['ccop', 'ablation'] else -1
         if args.gender_dis != 'iid':
             domain_num = args.cluster_num
             exp_folder += f"_{args.gender_dis}_cluster_{cluster_num}"
@@ -228,7 +228,7 @@ if __name__ == '__main__':
     elif args.mode.lower() in ['full']:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args)
-    # fedavg
+    # fedavg, ablation
     else:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args)
@@ -361,6 +361,14 @@ if __name__ == '__main__':
                         all_feat = feat_i
                     else:
                         all_feat = torch.concat((all_feat, feat_i)) 
+                elif args.mode.lower() == 'ablation':
+                    train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
+                    feat_i = agg_rep(args, server_model, train_loaders[client_idx], device)
+                    feat_i = feat_i.unsqueeze(0)
+                    if all_feat == None:
+                        all_feat = feat_i
+                    else:
+                        all_feat = torch.concat((all_feat, feat_i))
                 elif args.mode.lower() in ['cocoop']:
                     train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device)
                 elif args.mode.lower() == 'harmo-fl':
@@ -372,7 +380,7 @@ if __name__ == '__main__':
         with torch.no_grad():
             # Aggregation
             if args.mode.lower() != 'solo':
-                if args.mode.lower() in ['nova', 'ccop']:
+                if args.mode.lower() in ['nova', 'ccop', 'ablation']:
                     print(Eas)
                 server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, all_feat, prompt_bank)
 
@@ -394,7 +402,7 @@ if __name__ == '__main__':
             write_log(args, f'Average Valid Accuracy: {np.mean(val_acc_list):.4f}\n')
                     
             # Record best
-            if args.mode.lower() in ['nova', 'ccop']:
+            if args.mode.lower() in ['nova', 'ccop', 'ablation']:
                 if args.sam or args.dataset.lower() != 'digit': threshold = args.iters - 10
                 else: threshold = args.iters - 5
                 threshold = max(10, threshold)
@@ -422,7 +430,7 @@ if __name__ == '__main__':
                     best_epoch = a_iter
                     best_changed=True
                     write_log(args, ' Best site-{:<25s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
-            if GMAP_SAVE_PATH != 'none' and (best_changed or args.save_all_gmap):
+            if args.mode.lower()=='ccop' and GMAP_SAVE_PATH != 'none' and (best_changed or args.save_all_gmap):
                 write_log(args, ' Saving the gmap checkpoint to {}...\n'.format(GMAP_SAVE_PATH))
                 torch.save({
                     'a_iter': a_iter, 
