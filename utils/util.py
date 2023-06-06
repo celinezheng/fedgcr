@@ -574,7 +574,7 @@ def prepare_fairface_binary_race(args):
     sum_len = 0
     for key, value in client_nums.items():
         for j in range(value):
-            dataset_name = key
+            dataset_name = f"{key}_{j}"
             train_set = FairFaceBinaryDataset(base_path=base_path, site=key, client_idx=j, gender_label=args.gender_label, train=True, transform=transform_train)
             test_set = FairFaceBinaryDataset(base_path=base_path, site=key, client_idx=j, gender_label=args.gender_label, train=False, transform=transform_test)
             test_loader = torch.utils.data.DataLoader(test_set, batch_size=1, shuffle=False)

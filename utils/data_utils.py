@@ -147,10 +147,12 @@ class FairFaceIIDDataset(Dataset):
 
 class FairFaceBinaryDataset(Dataset):
     def __init__(self, base_path, site, client_idx, gender_label=False, train=True, transform=None):
+        if gender_label: distribution = 'binary_race_gender'
+        else: distribution  = 'binary_race'
         if train:
-            self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/binary_race/train_{site}_{client_idx}.pkl', allow_pickle=True)
+            self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/{distribution}/train_{site}_{client_idx}.pkl', allow_pickle=True)
         else:
-            self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/binary_race/test_{site}_{client_idx}.pkl', allow_pickle=True)
+            self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/{distribution}/test_{site}_{client_idx}.pkl', allow_pickle=True)
         
         self.path = np.asarray(self.paths)
         gender_dict = {'Male':0, 'Female':1}     

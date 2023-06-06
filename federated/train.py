@@ -53,7 +53,7 @@ def test_score(server_model, test_loaders, datasets, best_epoch, gmap):
     for name in domain_test_accs:
         domain_test_accs[name] = np.mean(domain_test_accs[name], dtype=np.float64)
     for name, acc in domain_test_accs.items():
-        write_log(args, f"{name}: {acc:.3f}, ")
+        write_log(args, f"{name}: {acc:.4f}, ")
     write_log(args, "\n")
     print(domain_test_accs)
     cluster_test_accs = list(cluster_test_accs.values())
