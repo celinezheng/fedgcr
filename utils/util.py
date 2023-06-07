@@ -22,6 +22,7 @@ def write_log(args, msg):
     if args.binary_race: log_path += "_binary_race"
     if args.sam: log_path += f"_sam"
     if args.color_jitter: log_path += f"_color_jitter"
+    if args.relu: log_path += f"_relu"
     if args.q!=1: log_fname = f'{args.mode}_q={args.q}.log'
     if not os.path.exists(log_path):
         os.makedirs(log_path)
@@ -1170,16 +1171,25 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             if args.quan > 0:
                 quan_i = np.quantile(np.asarray(loss_i), args.quan)
                 quan_c = np.quantile(np.asarray(loss_c), args.quan)
-                print(loss_i)
-                print(quan_i)
-                min_w = min(new_weights)
-                write_log(args, f"min_w={min_w:.5f}, quan_i={quan_i:.2f}, quan_c={quan_c:.2f}\n")
-                write_log(args, f"minimize weight of clients:[")
-                for client_idx in range(client_num):
-                    if loss_i[client_idx] < quan_i and loss_c[client_idx] < quan_c:
-                        write_log(args, f"{client_idx}, ")
-                        new_weights[client_idx] = min_w
-                write_log(args, f"]\n")
+                if args.relu:
+                    write_log(args, f"quan_i={quan_i:.2f}, quan_c={quan_c:.2f}\n")
+                    write_log(args, f"enlarge weight of clients:[")
+                    for client_idx in range(client_num):
+                        if loss_i[client_idx] > quan_i and loss_c[client_idx] > quan_c:
+                            write_log(args, f"{client_idx}, ")
+                            Srb = client_weights[client_idx]
+                            weight = Srb * np.float_power(loss_i[client_idx], loss_c[client_idx])
+                            new_weights[client_idx] = weight
+                    write_log(args, f"]\n")
+                else:
+                    min_w = min(new_weights)
+                    write_log(args, f"min_w={min_w:.5f}, quan_i={quan_i:.2f}, quan_c={quan_c:.2f}\n")
+                    write_log(args, f"minimize weight of clients:[")
+                    for client_idx in range(client_num):
+                        if loss_i[client_idx] < quan_i and loss_c[client_idx] < quan_c:
+                            write_log(args, f"{client_idx}, ")
+                            new_weights[client_idx] = min_w
+                    write_log(args, f"]\n")
             all_weight = sum(new_weights) 
             new_weights = [wi/all_weight for wi in new_weights]
             for key in server_model.state_dict().keys():
