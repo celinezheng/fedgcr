@@ -332,7 +332,7 @@ def prepare_domainnet_uneven(args):
         write_log(args, f"{len_dataset[name]},")
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
-    check_labels(args, train_loaders)
+    # check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 def prepare_fairface_iid_uneven(args):
@@ -427,7 +427,7 @@ def prepare_fairface_iid_uneven(args):
             train_len = int(all_train_len * client_ratio)
             val_len = int(all_val_len * client_ratio)
             if args.split_test:
-                dataset_name = f"{key}_{j}"
+                dataset_name = f"{key}-{j}"
                 cur_testset = torch.utils.data.Subset(test_sets[key], list(range(all_test_len))[test_begin : test_begin+test_len])
                 test_loader = torch.utils.data.DataLoader(cur_testset, batch_size=1, shuffle=False)
                 test_begin += test_len
@@ -457,7 +457,7 @@ def prepare_fairface_iid_uneven(args):
         write_log(args, f"{len_dataset[name]},")
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
-    check_labels(args, train_loaders)
+    # check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 def prepare_fairface_gender_uneven(args):
@@ -574,7 +574,7 @@ def prepare_fairface_binary_race(args):
     sum_len = 0
     for key, value in client_nums.items():
         for j in range(value):
-            dataset_name = f"{key}_{j}"
+            dataset_name = f"{key}-{j}"
             train_set = FairFaceBinaryDataset(base_path=base_path, site=key, client_idx=j, gender_label=args.gender_label, train=True, transform=transform_train)
             test_set = FairFaceBinaryDataset(base_path=base_path, site=key, client_idx=j, gender_label=args.gender_label, train=False, transform=transform_test)
             test_loader = torch.utils.data.DataLoader(test_set, batch_size=1, shuffle=False)
@@ -600,7 +600,7 @@ def prepare_fairface_binary_race(args):
         write_log(args, f"{client_nums[name]},")
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
-    check_labels(args, train_loaders)
+    # check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 
