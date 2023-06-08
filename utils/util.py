@@ -601,7 +601,7 @@ def prepare_fairface_binary_race(args):
         write_log(args, f"{client_nums[name]},")
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
-    # check_labels(args, train_loaders)
+    check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 
@@ -1234,7 +1234,18 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                 Srb = client_weights[client_idx]
                 weight = Srb * np.float_power(Lrb, (q+1))
                 new_weights[client_idx] = weight
-                all_weight += weight
+            if args.quan > 0:
+                quan_i = np.quantile(np.asarray(loss_i), args.quan)
+                quan_c = np.quantile(np.asarray(loss_c), args.quan)
+                min_w = min(new_weights)
+                write_log(args, f"min_w={min_w:.5f}, quan_i={quan_i:.2f}, quan_c={quan_c:.2f}\n")
+                write_log(args, f"minimize weight of clients:[")
+                for client_idx in range(client_num):
+                    if loss_i[client_idx] < quan_i and loss_c[client_idx] < quan_c:
+                        write_log(args, f"{client_idx}, ")
+                        new_weights[client_idx] = min_w
+                write_log(args, f"]\n")
+            all_weight = sum(new_weights)
             new_weights = [wi/all_weight for wi in new_weights]
             write_log(args, f"sum of wi : {sum(new_weights):.4f}\n")
             for key in server_model.state_dict().keys():
