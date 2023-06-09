@@ -1,0 +1,1793 @@
+===2023-06-09 02:51:46===
+===Setting===
+    dataset: fairface
+    lr: 0.01
+    batch: 64
+    iters: 50
+    wk_iters: 1
+    si: False
+    domain_num: 7
+    quantile: 0
+    std_rw: False
+    gender_label: False
+    binary_race: False
+    save_iter: -1
+data_number=[361,532,246,361,167,245,113,167,77,113,52,76,35,52,]
+client_nums=[2,2,2,2,2,2,2,]
+len_dataset=[2980,2027,1378,937,637,433,294,]
+domain number = 7
+============ Train epoch 0 ============
+ Site-White                    | Train Loss: 1.8394 | Train Acc: 0.3490
+ Site-White                    | Train Loss: 1.8190 | Train Acc: 0.3571
+ Site-Latino_Hispanic          | Train Loss: 1.9676 | Train Acc: 0.2561
+ Site-Latino_Hispanic          | Train Loss: 1.9496 | Train Acc: 0.2548
+ Site-Black                    | Train Loss: 2.0069 | Train Acc: 0.2455
+ Site-Black                    | Train Loss: 2.0421 | Train Acc: 0.2408
+ Site-East_Asian               | Train Loss: 1.8580 | Train Acc: 0.3628
+ Site-East_Asian               | Train Loss: 1.7841 | Train Acc: 0.4072
+ Site-Indian                   | Train Loss: 2.1377 | Train Acc: 0.2338
+ Site-Indian                   | Train Loss: 2.1013 | Train Acc: 0.2478
+ Site-Southeast_Asian          | Train Loss: 2.1037 | Train Acc: 0.2692
+ Site-Southeast_Asian          | Train Loss: 2.2039 | Train Acc: 0.3026
+ Site-Middle_Eastern           | Train Loss: 2.1380 | Train Acc: 0.2286
+ Site-Middle_Eastern           | Train Loss: 1.9677 | Train Acc: 0.3077
+ Site-White                         | Val  Loss: 1.8461 | Val  Acc: 0.3402
+ Site-White                         | Val  Loss: 1.8576 | Val  Acc: 0.3475
+ Site-Latino_Hispanic               | Val  Loss: 1.9599 | Val  Acc: 0.2761
+ Site-Latino_Hispanic               | Val  Loss: 1.9663 | Val  Acc: 0.2614
+ Site-Black                         | Val  Loss: 1.9241 | Val  Acc: 0.2973
+ Site-Black                         | Val  Loss: 2.0080 | Val  Acc: 0.2270
+ Site-East_Asian                    | Val  Loss: 2.0259 | Val  Acc: 0.4000
+ Site-East_Asian                    | Val  Loss: 1.7867 | Val  Acc: 0.4144
+ Site-Indian                        | Val  Loss: 2.1091 | Val  Acc: 0.2353
+ Site-Indian                        | Val  Loss: 2.1356 | Val  Acc: 0.2533
+ Site-Southeast_Asian               | Val  Loss: 2.2253 | Val  Acc: 0.2353
+ Site-Southeast_Asian               | Val  Loss: 2.0303 | Val  Acc: 0.3137
+ Site-Middle_Eastern                | Val  Loss: 2.2809 | Val  Acc: 0.1304
+ Site-Middle_Eastern                | Val  Loss: 1.9169 | Val  Acc: 0.3529
+Average Valid Accuracy: 0.2918
+ Best site-White                     | Epoch:0 | Val Acc: 0.3402
+ Best site-White                     | Epoch:0 | Val Acc: 0.3475
+ Best site-Latino_Hispanic           | Epoch:0 | Val Acc: 0.2761
+ Best site-Latino_Hispanic           | Epoch:0 | Val Acc: 0.2614
+ Best site-Black                     | Epoch:0 | Val Acc: 0.2973
+ Best site-Black                     | Epoch:0 | Val Acc: 0.2270
+ Best site-East_Asian                | Epoch:0 | Val Acc: 0.4000
+ Best site-East_Asian                | Epoch:0 | Val Acc: 0.4144
+ Best site-Indian                    | Epoch:0 | Val Acc: 0.2353
+ Best site-Indian                    | Epoch:0 | Val Acc: 0.2533
+ Best site-Southeast_Asian           | Epoch:0 | Val Acc: 0.2353
+ Best site-Southeast_Asian           | Epoch:0 | Val Acc: 0.3137
+ Best site-Middle_Eastern            | Epoch:0 | Val Acc: 0.1304
+ Best site-Middle_Eastern            | Epoch:0 | Val Acc: 0.3529
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+============ Train epoch 1 ============
+ Site-White                    | Train Loss: 1.8143 | Train Acc: 0.3601
+ Site-White                    | Train Loss: 1.8040 | Train Acc: 0.3571
+ Site-Latino_Hispanic          | Train Loss: 1.9244 | Train Acc: 0.2642
+ Site-Latino_Hispanic          | Train Loss: 1.9318 | Train Acc: 0.2548
+ Site-Black                    | Train Loss: 1.9882 | Train Acc: 0.2635
+ Site-Black                    | Train Loss: 1.9745 | Train Acc: 0.2776
+ Site-East_Asian               | Train Loss: 1.8052 | Train Acc: 0.3717
+ Site-East_Asian               | Train Loss: 1.7513 | Train Acc: 0.4012
+ Site-Indian                   | Train Loss: 2.0798 | Train Acc: 0.2597
+ Site-Indian                   | Train Loss: 2.0786 | Train Acc: 0.2301
+ Site-Southeast_Asian          | Train Loss: 2.0329 | Train Acc: 0.3269
+ Site-Southeast_Asian          | Train Loss: 1.9980 | Train Acc: 0.3026
+ Site-Middle_Eastern           | Train Loss: 2.0406 | Train Acc: 0.2000
+ Site-Middle_Eastern           | Train Loss: 1.9291 | Train Acc: 0.3077
+ Site-White                         | Val  Loss: 1.8024 | Val  Acc: 0.3568
+ Site-White                         | Val  Loss: 1.8146 | Val  Acc: 0.3475
+ Site-Latino_Hispanic               | Val  Loss: 1.8949 | Val  Acc: 0.2699
+ Site-Latino_Hispanic               | Val  Loss: 1.9283 | Val  Acc: 0.2614
+ Site-Black                         | Val  Loss: 1.8983 | Val  Acc: 0.2793
+ Site-Black                         | Val  Loss: 1.9955 | Val  Acc: 0.2454
+ Site-East_Asian                    | Val  Loss: 2.0035 | Val  Acc: 0.3733
+ Site-East_Asian                    | Val  Loss: 1.7612 | Val  Acc: 0.4324
+ Site-Indian                        | Val  Loss: 2.1134 | Val  Acc: 0.1765
+ Site-Indian                        | Val  Loss: 2.1115 | Val  Acc: 0.2133
+ Site-Southeast_Asian               | Val  Loss: 2.1338 | Val  Acc: 0.2353
+ Site-Southeast_Asian               | Val  Loss: 1.9587 | Val  Acc: 0.3137
+ Site-Middle_Eastern                | Val  Loss: 2.2135 | Val  Acc: 0.2174
+ Site-Middle_Eastern                | Val  Loss: 1.8992 | Val  Acc: 0.3235
+Average Valid Accuracy: 0.2890
+============ Train epoch 2 ============
+ Site-White                    | Train Loss: 1.7734 | Train Acc: 0.3546
+ Site-White                    | Train Loss: 1.7602 | Train Acc: 0.3534
+ Site-Latino_Hispanic          | Train Loss: 1.9145 | Train Acc: 0.2683
+ Site-Latino_Hispanic          | Train Loss: 1.8683 | Train Acc: 0.2770
+ Site-Black                    | Train Loss: 1.9627 | Train Acc: 0.2575
+ Site-Black                    | Train Loss: 1.9504 | Train Acc: 0.2735
+ Site-East_Asian               | Train Loss: 1.7650 | Train Acc: 0.3805
+ Site-East_Asian               | Train Loss: 1.7226 | Train Acc: 0.4012
+ Site-Indian                   | Train Loss: 2.0758 | Train Acc: 0.2338
+ Site-Indian                   | Train Loss: 2.0590 | Train Acc: 0.2035
+ Site-Southeast_Asian          | Train Loss: 2.0128 | Train Acc: 0.3269
+ Site-Southeast_Asian          | Train Loss: 2.0720 | Train Acc: 0.3026
+ Site-Middle_Eastern           | Train Loss: 1.9987 | Train Acc: 0.2286
+ Site-Middle_Eastern           | Train Loss: 1.8946 | Train Acc: 0.3462
+ Site-White                         | Val  Loss: 1.7646 | Val  Acc: 0.3651
+ Site-White                         | Val  Loss: 1.7885 | Val  Acc: 0.3475
+ Site-Latino_Hispanic               | Val  Loss: 1.8581 | Val  Acc: 0.2638
+ Site-Latino_Hispanic               | Val  Loss: 1.8917 | Val  Acc: 0.2739
+ Site-Black                         | Val  Loss: 1.8380 | Val  Acc: 0.3153
+ Site-Black                         | Val  Loss: 1.9728 | Val  Acc: 0.2393
+ Site-East_Asian                    | Val  Loss: 1.9043 | Val  Acc: 0.4000
+ Site-East_Asian                    | Val  Loss: 1.7310 | Val  Acc: 0.3964
+ Site-Indian                        | Val  Loss: 2.0804 | Val  Acc: 0.2353
+ Site-Indian                        | Val  Loss: 2.0640 | Val  Acc: 0.2400
+ Site-Southeast_Asian               | Val  Loss: 2.1530 | Val  Acc: 0.2353
+ Site-Southeast_Asian               | Val  Loss: 1.9599 | Val  Acc: 0.2941
+ Site-Middle_Eastern                | Val  Loss: 2.1261 | Val  Acc: 0.2174
+ Site-Middle_Eastern                | Val  Loss: 1.8378 | Val  Acc: 0.3235
+Average Valid Accuracy: 0.2962
+ Best site-White                     | Epoch:2 | Val Acc: 0.3651
+ Best site-White                     | Epoch:2 | Val Acc: 0.3475
+ Best site-Latino_Hispanic           | Epoch:2 | Val Acc: 0.2638
+ Best site-Latino_Hispanic           | Epoch:2 | Val Acc: 0.2739
+ Best site-Black                     | Epoch:2 | Val Acc: 0.3153
+ Best site-Black                     | Epoch:2 | Val Acc: 0.2393
+ Best site-East_Asian                | Epoch:2 | Val Acc: 0.4000
+ Best site-East_Asian                | Epoch:2 | Val Acc: 0.3964
+ Best site-Indian                    | Epoch:2 | Val Acc: 0.2353
+ Best site-Indian                    | Epoch:2 | Val Acc: 0.2400
+ Best site-Southeast_Asian           | Epoch:2 | Val Acc: 0.2353
+ Best site-Southeast_Asian           | Epoch:2 | Val Acc: 0.2941
+ Best site-Middle_Eastern            | Epoch:2 | Val Acc: 0.2174
+ Best site-Middle_Eastern            | Epoch:2 | Val Acc: 0.3235
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+============ Train epoch 3 ============
+ Site-White                    | Train Loss: 1.7487 | Train Acc: 0.3629
+ Site-White                    | Train Loss: 1.7256 | Train Acc: 0.3647
+ Site-Latino_Hispanic          | Train Loss: 1.8717 | Train Acc: 0.2642
+ Site-Latino_Hispanic          | Train Loss: 1.8450 | Train Acc: 0.2798
+ Site-Black                    | Train Loss: 1.9556 | Train Acc: 0.2335
+ Site-Black                    | Train Loss: 1.9277 | Train Acc: 0.2939
+ Site-East_Asian               | Train Loss: 1.7303 | Train Acc: 0.4071
+ Site-East_Asian               | Train Loss: 1.7140 | Train Acc: 0.3713
+ Site-Indian                   | Train Loss: 2.1046 | Train Acc: 0.2727
+ Site-Indian                   | Train Loss: 2.0006 | Train Acc: 0.2389
+ Site-Southeast_Asian          | Train Loss: 1.9556 | Train Acc: 0.3462
+ Site-Southeast_Asian          | Train Loss: 1.8582 | Train Acc: 0.3026
+ Site-Middle_Eastern           | Train Loss: 1.9894 | Train Acc: 0.2286
+ Site-Middle_Eastern           | Train Loss: 1.8451 | Train Acc: 0.3269
+ Site-White                         | Val  Loss: 1.7404 | Val  Acc: 0.3361
+ Site-White                         | Val  Loss: 1.7480 | Val  Acc: 0.3616
+ Site-Latino_Hispanic               | Val  Loss: 1.8492 | Val  Acc: 0.2577
+ Site-Latino_Hispanic               | Val  Loss: 1.8434 | Val  Acc: 0.2739
+ Site-Black                         | Val  Loss: 1.8375 | Val  Acc: 0.3243
+ Site-Black                         | Val  Loss: 1.9244 | Val  Acc: 0.2577
+ Site-East_Asian                    | Val  Loss: 1.8789 | Val  Acc: 0.4000
+ Site-East_Asian                    | Val  Loss: 1.7021 | Val  Acc: 0.4144
+ Site-Indian                        | Val  Loss: 2.0461 | Val  Acc: 0.1961
+ Site-Indian                        | Val  Loss: 2.0070 | Val  Acc: 0.2667
+ Site-Southeast_Asian               | Val  Loss: 2.0429 | Val  Acc: 0.2353
+ Site-Southeast_Asian               | Val  Loss: 1.9377 | Val  Acc: 0.3137
+ Site-Middle_Eastern                | Val  Loss: 2.1747 | Val  Acc: 0.2174
+ Site-Middle_Eastern                | Val  Loss: 1.8357 | Val  Acc: 0.2941
+Average Valid Accuracy: 0.2963
+ Best site-White                     | Epoch:3 | Val Acc: 0.3361
+ Best site-White                     | Epoch:3 | Val Acc: 0.3616
+ Best site-Latino_Hispanic           | Epoch:3 | Val Acc: 0.2577
+ Best site-Latino_Hispanic           | Epoch:3 | Val Acc: 0.2739
+ Best site-Black                     | Epoch:3 | Val Acc: 0.3243
+ Best site-Black                     | Epoch:3 | Val Acc: 0.2577
+ Best site-East_Asian                | Epoch:3 | Val Acc: 0.4000
+ Best site-East_Asian                | Epoch:3 | Val Acc: 0.4144
+ Best site-Indian                    | Epoch:3 | Val Acc: 0.1961
+ Best site-Indian                    | Epoch:3 | Val Acc: 0.2667
+ Best site-Southeast_Asian           | Epoch:3 | Val Acc: 0.2353
+ Best site-Southeast_Asian           | Epoch:3 | Val Acc: 0.3137
+ Best site-Middle_Eastern            | Epoch:3 | Val Acc: 0.2174
+ Best site-Middle_Eastern            | Epoch:3 | Val Acc: 0.2941
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+============ Train epoch 4 ============
+ Site-White                    | Train Loss: 1.7187 | Train Acc: 0.3629
+ Site-White                    | Train Loss: 1.6988 | Train Acc: 0.3759
+ Site-Latino_Hispanic          | Train Loss: 1.8487 | Train Acc: 0.2683
+ Site-Latino_Hispanic          | Train Loss: 1.8261 | Train Acc: 0.3019
+ Site-Black                    | Train Loss: 1.9085 | Train Acc: 0.2275
+ Site-Black                    | Train Loss: 1.8955 | Train Acc: 0.2816
+ Site-East_Asian               | Train Loss: 1.6673 | Train Acc: 0.3805
+ Site-East_Asian               | Train Loss: 1.6898 | Train Acc: 0.3772
+ Site-Indian                   | Train Loss: 1.9363 | Train Acc: 0.2468
+ Site-Indian                   | Train Loss: 1.9524 | Train Acc: 0.2124
+ Site-Southeast_Asian          | Train Loss: 1.9562 | Train Acc: 0.3269
+ Site-Southeast_Asian          | Train Loss: 1.8806 | Train Acc: 0.3026
+ Site-Middle_Eastern           | Train Loss: 1.8956 | Train Acc: 0.2571
+ Site-Middle_Eastern           | Train Loss: 1.8334 | Train Acc: 0.3269
+ Site-White                         | Val  Loss: 1.6941 | Val  Acc: 0.3734
+ Site-White                         | Val  Loss: 1.7128 | Val  Acc: 0.3559
+ Site-Latino_Hispanic               | Val  Loss: 1.8123 | Val  Acc: 0.2945
+ Site-Latino_Hispanic               | Val  Loss: 1.8164 | Val  Acc: 0.3029
+ Site-Black                         | Val  Loss: 1.8209 | Val  Acc: 0.3333
+ Site-Black                         | Val  Loss: 1.9049 | Val  Acc: 0.2454
+ Site-East_Asian                    | Val  Loss: 1.8338 | Val  Acc: 0.4133
+ Site-East_Asian                    | Val  Loss: 1.6764 | Val  Acc: 0.4414
+ Site-Indian                        | Val  Loss: 1.9720 | Val  Acc: 0.2549
+ Site-Indian                        | Val  Loss: 1.9517 | Val  Acc: 0.2667
+ Site-Southeast_Asian               | Val  Loss: 2.0213 | Val  Acc: 0.2353
+ Site-Southeast_Asian               | Val  Loss: 1.9109 | Val  Acc: 0.3333
+ Site-Middle_Eastern                | Val  Loss: 2.0885 | Val  Acc: 0.1304
+ Site-Middle_Eastern                | Val  Loss: 1.7917 | Val  Acc: 0.3235
+Average Valid Accuracy: 0.3075
+ Best site-White                     | Epoch:4 | Val Acc: 0.3734
+ Best site-White                     | Epoch:4 | Val Acc: 0.3559
+ Best site-Latino_Hispanic           | Epoch:4 | Val Acc: 0.2945
+ Best site-Latino_Hispanic           | Epoch:4 | Val Acc: 0.3029
+ Best site-Black                     | Epoch:4 | Val Acc: 0.3333
+ Best site-Black                     | Epoch:4 | Val Acc: 0.2454
+ Best site-East_Asian                | Epoch:4 | Val Acc: 0.4133
+ Best site-East_Asian                | Epoch:4 | Val Acc: 0.4414
+ Best site-Indian                    | Epoch:4 | Val Acc: 0.2549
+ Best site-Indian                    | Epoch:4 | Val Acc: 0.2667
+ Best site-Southeast_Asian           | Epoch:4 | Val Acc: 0.2353
+ Best site-Southeast_Asian           | Epoch:4 | Val Acc: 0.3333
+ Best site-Middle_Eastern            | Epoch:4 | Val Acc: 0.1304
+ Best site-Middle_Eastern            | Epoch:4 | Val Acc: 0.3235
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+============ Train epoch 5 ============
+ Site-White                    | Train Loss: 1.6706 | Train Acc: 0.4183
+ Site-White                    | Train Loss: 1.6597 | Train Acc: 0.4117
+ Site-Latino_Hispanic          | Train Loss: 1.7850 | Train Acc: 0.2927
+ Site-Latino_Hispanic          | Train Loss: 1.7580 | Train Acc: 0.3130
+ Site-Black                    | Train Loss: 1.8865 | Train Acc: 0.2635
+ Site-Black                    | Train Loss: 1.8596 | Train Acc: 0.2939
+ Site-East_Asian               | Train Loss: 1.6549 | Train Acc: 0.3540
+ Site-East_Asian               | Train Loss: 1.6388 | Train Acc: 0.3772
+ Site-Indian                   | Train Loss: 1.8627 | Train Acc: 0.3117
+ Site-Indian                   | Train Loss: 1.9008 | Train Acc: 0.2655
+ Site-Southeast_Asian          | Train Loss: 1.8553 | Train Acc: 0.4038
+ Site-Southeast_Asian          | Train Loss: 1.8756 | Train Acc: 0.2500
+ Site-Middle_Eastern           | Train Loss: 1.8385 | Train Acc: 0.2571
+ Site-Middle_Eastern           | Train Loss: 1.7535 | Train Acc: 0.4038
+ Site-White                         | Val  Loss: 1.6754 | Val  Acc: 0.3983
+ Site-White                         | Val  Loss: 1.6665 | Val  Acc: 0.4040
+ Site-Latino_Hispanic               | Val  Loss: 1.7684 | Val  Acc: 0.3067
+ Site-Latino_Hispanic               | Val  Loss: 1.7751 | Val  Acc: 0.3237
+ Site-Black                         | Val  Loss: 1.8046 | Val  Acc: 0.3423
+ Site-Black                         | Val  Loss: 1.8916 | Val  Acc: 0.2945
+ Site-East_Asian                    | Val  Loss: 1.7733 | Val  Acc: 0.4400
+ Site-East_Asian                    | Val  Loss: 1.6703 | Val  Acc: 0.3694
+ Site-Indian                        | Val  Loss: 1.9355 | Val  Acc: 0.2745
+ Site-Indian                        | Val  Loss: 1.8530 | Val  Acc: 0.2933
+ Site-Southeast_Asian               | Val  Loss: 1.9201 | Val  Acc: 0.2941
+ Site-Southeast_Asian               | Val  Loss: 1.8219 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.9771 | Val  Acc: 0.1739
+ Site-Middle_Eastern                | Val  Loss: 1.7038 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.3391
+ Best site-White                     | Epoch:5 | Val Acc: 0.3983
+ Best site-White                     | Epoch:5 | Val Acc: 0.4040
+ Best site-Latino_Hispanic           | Epoch:5 | Val Acc: 0.3067
+ Best site-Latino_Hispanic           | Epoch:5 | Val Acc: 0.3237
+ Best site-Black                     | Epoch:5 | Val Acc: 0.3423
+ Best site-Black                     | Epoch:5 | Val Acc: 0.2945
+ Best site-East_Asian                | Epoch:5 | Val Acc: 0.4400
+ Best site-East_Asian                | Epoch:5 | Val Acc: 0.3694
+ Best site-Indian                    | Epoch:5 | Val Acc: 0.2745
+ Best site-Indian                    | Epoch:5 | Val Acc: 0.2933
+ Best site-Southeast_Asian           | Epoch:5 | Val Acc: 0.2941
+ Best site-Southeast_Asian           | Epoch:5 | Val Acc: 0.3922
+ Best site-Middle_Eastern            | Epoch:5 | Val Acc: 0.1739
+ Best site-Middle_Eastern            | Epoch:5 | Val Acc: 0.4412
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+============ Train epoch 6 ============
+ Site-White                    | Train Loss: 1.6101 | Train Acc: 0.4183
+ Site-White                    | Train Loss: 1.5663 | Train Acc: 0.4305
+ Site-Latino_Hispanic          | Train Loss: 1.7392 | Train Acc: 0.3333
+ Site-Latino_Hispanic          | Train Loss: 1.6916 | Train Acc: 0.3518
+ Site-Black                    | Train Loss: 1.8200 | Train Acc: 0.2994
+ Site-Black                    | Train Loss: 1.8381 | Train Acc: 0.3102
+ Site-East_Asian               | Train Loss: 1.5878 | Train Acc: 0.3363
+ Site-East_Asian               | Train Loss: 1.5943 | Train Acc: 0.4371
+ Site-Indian                   | Train Loss: 1.8717 | Train Acc: 0.2987
+ Site-Indian                   | Train Loss: 1.8104 | Train Acc: 0.2920
+ Site-Southeast_Asian          | Train Loss: 1.8041 | Train Acc: 0.4423
+ Site-Southeast_Asian          | Train Loss: 1.6656 | Train Acc: 0.3158
+ Site-Middle_Eastern           | Train Loss: 1.7578 | Train Acc: 0.3429
+ Site-Middle_Eastern           | Train Loss: 1.6745 | Train Acc: 0.3269
+ Site-White                         | Val  Loss: 1.5732 | Val  Acc: 0.4606
+ Site-White                         | Val  Loss: 1.6058 | Val  Acc: 0.4096
+ Site-Latino_Hispanic               | Val  Loss: 1.7110 | Val  Acc: 0.3497
+ Site-Latino_Hispanic               | Val  Loss: 1.7025 | Val  Acc: 0.3734
+ Site-Black                         | Val  Loss: 1.7928 | Val  Acc: 0.3784
+ Site-Black                         | Val  Loss: 1.8622 | Val  Acc: 0.3006
+ Site-East_Asian                    | Val  Loss: 1.7241 | Val  Acc: 0.4933
+ Site-East_Asian                    | Val  Loss: 1.6250 | Val  Acc: 0.4324
+ Site-Indian                        | Val  Loss: 1.8670 | Val  Acc: 0.3529
+ Site-Indian                        | Val  Loss: 1.7609 | Val  Acc: 0.3333
+ Site-Southeast_Asian               | Val  Loss: 1.7256 | Val  Acc: 0.2647
+ Site-Southeast_Asian               | Val  Loss: 1.8168 | Val  Acc: 0.3137
+ Site-Middle_Eastern                | Val  Loss: 1.8754 | Val  Acc: 0.2174
+ Site-Middle_Eastern                | Val  Loss: 1.6411 | Val  Acc: 0.3824
+Average Valid Accuracy: 0.3616
+ Best site-White                     | Epoch:6 | Val Acc: 0.4606
+ Best site-White                     | Epoch:6 | Val Acc: 0.4096
+ Best site-Latino_Hispanic           | Epoch:6 | Val Acc: 0.3497
+ Best site-Latino_Hispanic           | Epoch:6 | Val Acc: 0.3734
+ Best site-Black                     | Epoch:6 | Val Acc: 0.3784
+ Best site-Black                     | Epoch:6 | Val Acc: 0.3006
+ Best site-East_Asian                | Epoch:6 | Val Acc: 0.4933
+ Best site-East_Asian                | Epoch:6 | Val Acc: 0.4324
+ Best site-Indian                    | Epoch:6 | Val Acc: 0.3529
+ Best site-Indian                    | Epoch:6 | Val Acc: 0.3333
+ Best site-Southeast_Asian           | Epoch:6 | Val Acc: 0.2647
+ Best site-Southeast_Asian           | Epoch:6 | Val Acc: 0.3137
+ Best site-Middle_Eastern            | Epoch:6 | Val Acc: 0.2174
+ Best site-Middle_Eastern            | Epoch:6 | Val Acc: 0.3824
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+============ Train epoch 7 ============
+ Site-White                    | Train Loss: 1.5564 | Train Acc: 0.4404
+ Site-White                    | Train Loss: 1.5400 | Train Acc: 0.4417
+ Site-Latino_Hispanic          | Train Loss: 1.6990 | Train Acc: 0.3293
+ Site-Latino_Hispanic          | Train Loss: 1.6627 | Train Acc: 0.3546
+ Site-Black                    | Train Loss: 1.8176 | Train Acc: 0.2814
+ Site-Black                    | Train Loss: 1.8275 | Train Acc: 0.3020
+ Site-East_Asian               | Train Loss: 1.5386 | Train Acc: 0.3982
+ Site-East_Asian               | Train Loss: 1.6106 | Train Acc: 0.4251
+ Site-Indian                   | Train Loss: 1.6939 | Train Acc: 0.3247
+ Site-Indian                   | Train Loss: 1.7277 | Train Acc: 0.3628
+ Site-Southeast_Asian          | Train Loss: 1.7018 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.7810 | Train Acc: 0.4079
+ Site-Middle_Eastern           | Train Loss: 1.6932 | Train Acc: 0.3714
+ Site-Middle_Eastern           | Train Loss: 1.6421 | Train Acc: 0.4038
+ Site-White                         | Val  Loss: 1.5588 | Val  Acc: 0.4481
+ Site-White                         | Val  Loss: 1.5626 | Val  Acc: 0.4492
+ Site-Latino_Hispanic               | Val  Loss: 1.6910 | Val  Acc: 0.3620
+ Site-Latino_Hispanic               | Val  Loss: 1.6852 | Val  Acc: 0.3112
+ Site-Black                         | Val  Loss: 1.7655 | Val  Acc: 0.3874
+ Site-Black                         | Val  Loss: 1.8705 | Val  Acc: 0.2822
+ Site-East_Asian                    | Val  Loss: 1.7041 | Val  Acc: 0.4133
+ Site-East_Asian                    | Val  Loss: 1.5567 | Val  Acc: 0.4865
+ Site-Indian                        | Val  Loss: 1.8294 | Val  Acc: 0.2941
+ Site-Indian                        | Val  Loss: 1.6637 | Val  Acc: 0.3467
+ Site-Southeast_Asian               | Val  Loss: 1.7703 | Val  Acc: 0.2941
+ Site-Southeast_Asian               | Val  Loss: 1.7325 | Val  Acc: 0.3333
+ Site-Middle_Eastern                | Val  Loss: 1.9388 | Val  Acc: 0.1739
+ Site-Middle_Eastern                | Val  Loss: 1.5994 | Val  Acc: 0.4706
+Average Valid Accuracy: 0.3609
+============ Train epoch 8 ============
+ Site-White                    | Train Loss: 1.5187 | Train Acc: 0.4432
+ Site-White                    | Train Loss: 1.5077 | Train Acc: 0.4436
+ Site-Latino_Hispanic          | Train Loss: 1.6842 | Train Acc: 0.3374
+ Site-Latino_Hispanic          | Train Loss: 1.6516 | Train Acc: 0.3657
+ Site-Black                    | Train Loss: 1.8207 | Train Acc: 0.2994
+ Site-Black                    | Train Loss: 1.7874 | Train Acc: 0.3224
+ Site-East_Asian               | Train Loss: 1.5458 | Train Acc: 0.3894
+ Site-East_Asian               | Train Loss: 1.5742 | Train Acc: 0.4072
+ Site-Indian                   | Train Loss: 1.5081 | Train Acc: 0.3506
+ Site-Indian                   | Train Loss: 1.7009 | Train Acc: 0.3186
+ Site-Southeast_Asian          | Train Loss: 1.7396 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.6614 | Train Acc: 0.3684
+ Site-Middle_Eastern           | Train Loss: 1.6808 | Train Acc: 0.3429
+ Site-Middle_Eastern           | Train Loss: 1.6333 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.5233 | Val  Acc: 0.4440
+ Site-White                         | Val  Loss: 1.5243 | Val  Acc: 0.4350
+ Site-Latino_Hispanic               | Val  Loss: 1.6534 | Val  Acc: 0.3742
+ Site-Latino_Hispanic               | Val  Loss: 1.6278 | Val  Acc: 0.3568
+ Site-Black                         | Val  Loss: 1.7562 | Val  Acc: 0.3874
+ Site-Black                         | Val  Loss: 1.7797 | Val  Acc: 0.3190
+ Site-East_Asian                    | Val  Loss: 1.6254 | Val  Acc: 0.5333
+ Site-East_Asian                    | Val  Loss: 1.5789 | Val  Acc: 0.4505
+ Site-Indian                        | Val  Loss: 1.7523 | Val  Acc: 0.3529
+ Site-Indian                        | Val  Loss: 1.6727 | Val  Acc: 0.3733
+ Site-Southeast_Asian               | Val  Loss: 1.7470 | Val  Acc: 0.3529
+ Site-Southeast_Asian               | Val  Loss: 1.7450 | Val  Acc: 0.3529
+ Site-Middle_Eastern                | Val  Loss: 1.8481 | Val  Acc: 0.2174
+ Site-Middle_Eastern                | Val  Loss: 1.5181 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.3851
+ Best site-White                     | Epoch:8 | Val Acc: 0.4440
+ Best site-White                     | Epoch:8 | Val Acc: 0.4350
+ Best site-Latino_Hispanic           | Epoch:8 | Val Acc: 0.3742
+ Best site-Latino_Hispanic           | Epoch:8 | Val Acc: 0.3568
+ Best site-Black                     | Epoch:8 | Val Acc: 0.3874
+ Best site-Black                     | Epoch:8 | Val Acc: 0.3190
+ Best site-East_Asian                | Epoch:8 | Val Acc: 0.5333
+ Best site-East_Asian                | Epoch:8 | Val Acc: 0.4505
+ Best site-Indian                    | Epoch:8 | Val Acc: 0.3529
+ Best site-Indian                    | Epoch:8 | Val Acc: 0.3733
+ Best site-Southeast_Asian           | Epoch:8 | Val Acc: 0.3529
+ Best site-Southeast_Asian           | Epoch:8 | Val Acc: 0.3529
+ Best site-Middle_Eastern            | Epoch:8 | Val Acc: 0.2174
+ Best site-Middle_Eastern            | Epoch:8 | Val Acc: 0.4412
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+============ Train epoch 9 ============
+ Site-White                    | Train Loss: 1.4717 | Train Acc: 0.4515
+ Site-White                    | Train Loss: 1.4717 | Train Acc: 0.4549
+ Site-Latino_Hispanic          | Train Loss: 1.6543 | Train Acc: 0.3333
+ Site-Latino_Hispanic          | Train Loss: 1.6144 | Train Acc: 0.3407
+ Site-Black                    | Train Loss: 1.7585 | Train Acc: 0.2814
+ Site-Black                    | Train Loss: 1.7638 | Train Acc: 0.3143
+ Site-East_Asian               | Train Loss: 1.4745 | Train Acc: 0.4336
+ Site-East_Asian               | Train Loss: 1.5515 | Train Acc: 0.4371
+ Site-Indian                   | Train Loss: 1.6636 | Train Acc: 0.3377
+ Site-Indian                   | Train Loss: 1.7278 | Train Acc: 0.3451
+ Site-Southeast_Asian          | Train Loss: 1.6895 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.6364 | Train Acc: 0.3553
+ Site-Middle_Eastern           | Train Loss: 1.6887 | Train Acc: 0.4286
+ Site-Middle_Eastern           | Train Loss: 1.6580 | Train Acc: 0.3462
+ Site-White                         | Val  Loss: 1.4894 | Val  Acc: 0.4523
+ Site-White                         | Val  Loss: 1.4697 | Val  Acc: 0.4520
+ Site-Latino_Hispanic               | Val  Loss: 1.6398 | Val  Acc: 0.3190
+ Site-Latino_Hispanic               | Val  Loss: 1.6033 | Val  Acc: 0.3900
+ Site-Black                         | Val  Loss: 1.7167 | Val  Acc: 0.3784
+ Site-Black                         | Val  Loss: 1.7818 | Val  Acc: 0.3129
+ Site-East_Asian                    | Val  Loss: 1.6076 | Val  Acc: 0.4800
+ Site-East_Asian                    | Val  Loss: 1.5646 | Val  Acc: 0.4685
+ Site-Indian                        | Val  Loss: 1.7642 | Val  Acc: 0.3922
+ Site-Indian                        | Val  Loss: 1.6406 | Val  Acc: 0.3867
+ Site-Southeast_Asian               | Val  Loss: 1.7177 | Val  Acc: 0.3529
+ Site-Southeast_Asian               | Val  Loss: 1.7269 | Val  Acc: 0.4118
+ Site-Middle_Eastern                | Val  Loss: 1.7238 | Val  Acc: 0.2609
+ Site-Middle_Eastern                | Val  Loss: 1.5155 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.3928
+ Best site-White                     | Epoch:9 | Val Acc: 0.4523
+ Best site-White                     | Epoch:9 | Val Acc: 0.4520
+ Best site-Latino_Hispanic           | Epoch:9 | Val Acc: 0.3190
+ Best site-Latino_Hispanic           | Epoch:9 | Val Acc: 0.3900
+ Best site-Black                     | Epoch:9 | Val Acc: 0.3784
+ Best site-Black                     | Epoch:9 | Val Acc: 0.3129
+ Best site-East_Asian                | Epoch:9 | Val Acc: 0.4800
+ Best site-East_Asian                | Epoch:9 | Val Acc: 0.4685
+ Best site-Indian                    | Epoch:9 | Val Acc: 0.3922
+ Best site-Indian                    | Epoch:9 | Val Acc: 0.3867
+ Best site-Southeast_Asian           | Epoch:9 | Val Acc: 0.3529
+ Best site-Southeast_Asian           | Epoch:9 | Val Acc: 0.4118
+ Best site-Middle_Eastern            | Epoch:9 | Val Acc: 0.2609
+ Best site-Middle_Eastern            | Epoch:9 | Val Acc: 0.4412
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+ Test site-White                     | Epoch:9 | Test Acc: 0.4064
+ Test site-Latino_Hispanic           | Epoch:9 | Test Acc: 0.3259
+ Test site-Black                     | Epoch:9 | Test Acc: 0.2687
+ Test site-East_Asian                | Epoch:9 | Test Acc: 0.4481
+ Test site-Indian                    | Epoch:9 | Test Acc: 0.2775
+ Test site-Southeast_Asian           | Epoch:9 | Test Acc: 0.4000
+ Test site-Middle_Eastern            | Epoch:9 | Test Acc: 0.3376
+White: 0.4064, Latino_Hispanic: 0.3259, Black: 0.2687, East_Asian: 0.4481, Indian: 0.2775, Southeast_Asian: 0.4000, Middle_Eastern: 0.3376, 
+Average Test Accuracy(group): 0.3520, Average Test Accuracy(individual): 0.3520,
+domain std=0.0631, cluster std=-1.0000, individual std=0.0631, 
+============ Train epoch 10 ============
+ Site-White                    | Train Loss: 1.4348 | Train Acc: 0.4432
+ Site-White                    | Train Loss: 1.4340 | Train Acc: 0.4662
+ Site-Latino_Hispanic          | Train Loss: 1.6390 | Train Acc: 0.3333
+ Site-Latino_Hispanic          | Train Loss: 1.5978 | Train Acc: 0.3740
+ Site-Black                    | Train Loss: 1.7510 | Train Acc: 0.2934
+ Site-Black                    | Train Loss: 1.7553 | Train Acc: 0.3102
+ Site-East_Asian               | Train Loss: 1.4774 | Train Acc: 0.4248
+ Site-East_Asian               | Train Loss: 1.5244 | Train Acc: 0.4132
+ Site-Indian                   | Train Loss: 1.7171 | Train Acc: 0.3247
+ Site-Indian                   | Train Loss: 1.6934 | Train Acc: 0.3540
+ Site-Southeast_Asian          | Train Loss: 1.6442 | Train Acc: 0.4423
+ Site-Southeast_Asian          | Train Loss: 1.6520 | Train Acc: 0.3684
+ Site-Middle_Eastern           | Train Loss: 1.6888 | Train Acc: 0.4000
+ Site-Middle_Eastern           | Train Loss: 1.5718 | Train Acc: 0.4038
+ Site-White                         | Val  Loss: 1.4704 | Val  Acc: 0.4481
+ Site-White                         | Val  Loss: 1.4600 | Val  Acc: 0.4548
+ Site-Latino_Hispanic               | Val  Loss: 1.6118 | Val  Acc: 0.3742
+ Site-Latino_Hispanic               | Val  Loss: 1.5443 | Val  Acc: 0.3900
+ Site-Black                         | Val  Loss: 1.7148 | Val  Acc: 0.3874
+ Site-Black                         | Val  Loss: 1.7823 | Val  Acc: 0.3006
+ Site-East_Asian                    | Val  Loss: 1.6720 | Val  Acc: 0.4267
+ Site-East_Asian                    | Val  Loss: 1.5230 | Val  Acc: 0.4414
+ Site-Indian                        | Val  Loss: 1.7162 | Val  Acc: 0.3529
+ Site-Indian                        | Val  Loss: 1.5696 | Val  Acc: 0.3600
+ Site-Southeast_Asian               | Val  Loss: 1.6958 | Val  Acc: 0.3824
+ Site-Southeast_Asian               | Val  Loss: 1.6717 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.9609 | Val  Acc: 0.2609
+ Site-Middle_Eastern                | Val  Loss: 1.4941 | Val  Acc: 0.3529
+Average Valid Accuracy: 0.3803
+============ Train epoch 11 ============
+ Site-White                    | Train Loss: 1.4544 | Train Acc: 0.4820
+ Site-White                    | Train Loss: 1.4031 | Train Acc: 0.4699
+ Site-Latino_Hispanic          | Train Loss: 1.6203 | Train Acc: 0.3333
+ Site-Latino_Hispanic          | Train Loss: 1.5650 | Train Acc: 0.3740
+ Site-Black                    | Train Loss: 1.7519 | Train Acc: 0.3174
+ Site-Black                    | Train Loss: 1.7527 | Train Acc: 0.3102
+ Site-East_Asian               | Train Loss: 1.4734 | Train Acc: 0.4159
+ Site-East_Asian               | Train Loss: 1.5322 | Train Acc: 0.4311
+ Site-Indian                   | Train Loss: 1.6536 | Train Acc: 0.3766
+ Site-Indian                   | Train Loss: 1.6719 | Train Acc: 0.3717
+ Site-Southeast_Asian          | Train Loss: 1.6641 | Train Acc: 0.4808
+ Site-Southeast_Asian          | Train Loss: 1.5257 | Train Acc: 0.3947
+ Site-Middle_Eastern           | Train Loss: 1.6600 | Train Acc: 0.3714
+ Site-Middle_Eastern           | Train Loss: 1.4901 | Train Acc: 0.3846
+ Site-White                         | Val  Loss: 1.4199 | Val  Acc: 0.4813
+ Site-White                         | Val  Loss: 1.4478 | Val  Acc: 0.4802
+ Site-Latino_Hispanic               | Val  Loss: 1.5970 | Val  Acc: 0.3129
+ Site-Latino_Hispanic               | Val  Loss: 1.5654 | Val  Acc: 0.3610
+ Site-Black                         | Val  Loss: 1.6871 | Val  Acc: 0.3784
+ Site-Black                         | Val  Loss: 1.7259 | Val  Acc: 0.3313
+ Site-East_Asian                    | Val  Loss: 1.6181 | Val  Acc: 0.4400
+ Site-East_Asian                    | Val  Loss: 1.5477 | Val  Acc: 0.4685
+ Site-Indian                        | Val  Loss: 1.7080 | Val  Acc: 0.3529
+ Site-Indian                        | Val  Loss: 1.4930 | Val  Acc: 0.4133
+ Site-Southeast_Asian               | Val  Loss: 1.6889 | Val  Acc: 0.3824
+ Site-Southeast_Asian               | Val  Loss: 1.6768 | Val  Acc: 0.3529
+ Site-Middle_Eastern                | Val  Loss: 1.8137 | Val  Acc: 0.2609
+ Site-Middle_Eastern                | Val  Loss: 1.5203 | Val  Acc: 0.3824
+Average Valid Accuracy: 0.3856
+============ Train epoch 12 ============
+ Site-White                    | Train Loss: 1.4142 | Train Acc: 0.4681
+ Site-White                    | Train Loss: 1.3889 | Train Acc: 0.4624
+ Site-Latino_Hispanic          | Train Loss: 1.5764 | Train Acc: 0.3780
+ Site-Latino_Hispanic          | Train Loss: 1.5601 | Train Acc: 0.3629
+ Site-Black                    | Train Loss: 1.7391 | Train Acc: 0.3054
+ Site-Black                    | Train Loss: 1.7450 | Train Acc: 0.3429
+ Site-East_Asian               | Train Loss: 1.4267 | Train Acc: 0.4071
+ Site-East_Asian               | Train Loss: 1.4729 | Train Acc: 0.4132
+ Site-Indian                   | Train Loss: 1.6641 | Train Acc: 0.3247
+ Site-Indian                   | Train Loss: 1.6571 | Train Acc: 0.3540
+ Site-Southeast_Asian          | Train Loss: 1.5930 | Train Acc: 0.4423
+ Site-Southeast_Asian          | Train Loss: 1.7719 | Train Acc: 0.3816
+ Site-Middle_Eastern           | Train Loss: 1.6155 | Train Acc: 0.4857
+ Site-Middle_Eastern           | Train Loss: 1.5452 | Train Acc: 0.3846
+ Site-White                         | Val  Loss: 1.3915 | Val  Acc: 0.4938
+ Site-White                         | Val  Loss: 1.4047 | Val  Acc: 0.4689
+ Site-Latino_Hispanic               | Val  Loss: 1.5619 | Val  Acc: 0.3681
+ Site-Latino_Hispanic               | Val  Loss: 1.5251 | Val  Acc: 0.3942
+ Site-Black                         | Val  Loss: 1.6780 | Val  Acc: 0.4144
+ Site-Black                         | Val  Loss: 1.7828 | Val  Acc: 0.3313
+ Site-East_Asian                    | Val  Loss: 1.6240 | Val  Acc: 0.4133
+ Site-East_Asian                    | Val  Loss: 1.4657 | Val  Acc: 0.4685
+ Site-Indian                        | Val  Loss: 1.7827 | Val  Acc: 0.2941
+ Site-Indian                        | Val  Loss: 1.5134 | Val  Acc: 0.4267
+ Site-Southeast_Asian               | Val  Loss: 1.7155 | Val  Acc: 0.3824
+ Site-Southeast_Asian               | Val  Loss: 1.6568 | Val  Acc: 0.3529
+ Site-Middle_Eastern                | Val  Loss: 1.8852 | Val  Acc: 0.2174
+ Site-Middle_Eastern                | Val  Loss: 1.4583 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.3905
+============ Train epoch 13 ============
+ Site-White                    | Train Loss: 1.3740 | Train Acc: 0.5042
+ Site-White                    | Train Loss: 1.3777 | Train Acc: 0.4718
+ Site-Latino_Hispanic          | Train Loss: 1.5787 | Train Acc: 0.3862
+ Site-Latino_Hispanic          | Train Loss: 1.5461 | Train Acc: 0.3934
+ Site-Black                    | Train Loss: 1.7134 | Train Acc: 0.3293
+ Site-Black                    | Train Loss: 1.7015 | Train Acc: 0.3796
+ Site-East_Asian               | Train Loss: 1.4364 | Train Acc: 0.4602
+ Site-East_Asian               | Train Loss: 1.5245 | Train Acc: 0.4431
+ Site-Indian                   | Train Loss: 1.4519 | Train Acc: 0.3117
+ Site-Indian                   | Train Loss: 1.6602 | Train Acc: 0.3540
+ Site-Southeast_Asian          | Train Loss: 1.6615 | Train Acc: 0.4808
+ Site-Southeast_Asian          | Train Loss: 1.7951 | Train Acc: 0.3026
+ Site-Middle_Eastern           | Train Loss: 1.6382 | Train Acc: 0.4571
+ Site-Middle_Eastern           | Train Loss: 1.5689 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.3885 | Val  Acc: 0.4855
+ Site-White                         | Val  Loss: 1.3635 | Val  Acc: 0.4774
+ Site-Latino_Hispanic               | Val  Loss: 1.5523 | Val  Acc: 0.3804
+ Site-Latino_Hispanic               | Val  Loss: 1.5274 | Val  Acc: 0.4108
+ Site-Black                         | Val  Loss: 1.6792 | Val  Acc: 0.3874
+ Site-Black                         | Val  Loss: 1.7221 | Val  Acc: 0.3006
+ Site-East_Asian                    | Val  Loss: 1.6227 | Val  Acc: 0.4267
+ Site-East_Asian                    | Val  Loss: 1.4573 | Val  Acc: 0.5315
+ Site-Indian                        | Val  Loss: 1.6486 | Val  Acc: 0.3725
+ Site-Indian                        | Val  Loss: 1.5059 | Val  Acc: 0.4267
+ Site-Southeast_Asian               | Val  Loss: 1.7578 | Val  Acc: 0.2941
+ Site-Southeast_Asian               | Val  Loss: 1.6904 | Val  Acc: 0.3725
+ Site-Middle_Eastern                | Val  Loss: 1.8228 | Val  Acc: 0.1739
+ Site-Middle_Eastern                | Val  Loss: 1.4079 | Val  Acc: 0.4118
+Average Valid Accuracy: 0.3894
+============ Train epoch 14 ============
+ Site-White                    | Train Loss: 1.3642 | Train Acc: 0.4903
+ Site-White                    | Train Loss: 1.3390 | Train Acc: 0.4831
+ Site-Latino_Hispanic          | Train Loss: 1.5567 | Train Acc: 0.3537
+ Site-Latino_Hispanic          | Train Loss: 1.5142 | Train Acc: 0.3712
+ Site-Black                    | Train Loss: 1.7285 | Train Acc: 0.3473
+ Site-Black                    | Train Loss: 1.6936 | Train Acc: 0.3837
+ Site-East_Asian               | Train Loss: 1.4498 | Train Acc: 0.3805
+ Site-East_Asian               | Train Loss: 1.4523 | Train Acc: 0.4551
+ Site-Indian                   | Train Loss: 1.3850 | Train Acc: 0.3766
+ Site-Indian                   | Train Loss: 1.6334 | Train Acc: 0.3982
+ Site-Southeast_Asian          | Train Loss: 1.5691 | Train Acc: 0.4038
+ Site-Southeast_Asian          | Train Loss: 1.8261 | Train Acc: 0.3553
+ Site-Middle_Eastern           | Train Loss: 1.5320 | Train Acc: 0.4286
+ Site-Middle_Eastern           | Train Loss: 1.5402 | Train Acc: 0.3846
+ Site-White                         | Val  Loss: 1.3789 | Val  Acc: 0.4938
+ Site-White                         | Val  Loss: 1.3880 | Val  Acc: 0.4718
+ Site-Latino_Hispanic               | Val  Loss: 1.5494 | Val  Acc: 0.3681
+ Site-Latino_Hispanic               | Val  Loss: 1.5004 | Val  Acc: 0.3900
+ Site-Black                         | Val  Loss: 1.6523 | Val  Acc: 0.4054
+ Site-Black                         | Val  Loss: 1.7587 | Val  Acc: 0.3926
+ Site-East_Asian                    | Val  Loss: 1.5063 | Val  Acc: 0.4800
+ Site-East_Asian                    | Val  Loss: 1.4821 | Val  Acc: 0.4955
+ Site-Indian                        | Val  Loss: 1.7285 | Val  Acc: 0.3529
+ Site-Indian                        | Val  Loss: 1.4480 | Val  Acc: 0.4133
+ Site-Southeast_Asian               | Val  Loss: 1.6267 | Val  Acc: 0.3529
+ Site-Southeast_Asian               | Val  Loss: 1.6419 | Val  Acc: 0.4314
+ Site-Middle_Eastern                | Val  Loss: 1.7842 | Val  Acc: 0.2609
+ Site-Middle_Eastern                | Val  Loss: 1.4245 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.4107
+ Best site-White                     | Epoch:14 | Val Acc: 0.4938
+ Best site-White                     | Epoch:14 | Val Acc: 0.4718
+ Best site-Latino_Hispanic           | Epoch:14 | Val Acc: 0.3681
+ Best site-Latino_Hispanic           | Epoch:14 | Val Acc: 0.3900
+ Best site-Black                     | Epoch:14 | Val Acc: 0.4054
+ Best site-Black                     | Epoch:14 | Val Acc: 0.3926
+ Best site-East_Asian                | Epoch:14 | Val Acc: 0.4800
+ Best site-East_Asian                | Epoch:14 | Val Acc: 0.4955
+ Best site-Indian                    | Epoch:14 | Val Acc: 0.3529
+ Best site-Indian                    | Epoch:14 | Val Acc: 0.4133
+ Best site-Southeast_Asian           | Epoch:14 | Val Acc: 0.3529
+ Best site-Southeast_Asian           | Epoch:14 | Val Acc: 0.4314
+ Best site-Middle_Eastern            | Epoch:14 | Val Acc: 0.2609
+ Best site-Middle_Eastern            | Epoch:14 | Val Acc: 0.4412
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+============ Train epoch 15 ============
+ Site-White                    | Train Loss: 1.3701 | Train Acc: 0.5152
+ Site-White                    | Train Loss: 1.3843 | Train Acc: 0.4774
+ Site-Latino_Hispanic          | Train Loss: 1.5584 | Train Acc: 0.3659
+ Site-Latino_Hispanic          | Train Loss: 1.5137 | Train Acc: 0.3740
+ Site-Black                    | Train Loss: 1.7123 | Train Acc: 0.3473
+ Site-Black                    | Train Loss: 1.6966 | Train Acc: 0.3469
+ Site-East_Asian               | Train Loss: 1.4406 | Train Acc: 0.3982
+ Site-East_Asian               | Train Loss: 1.4667 | Train Acc: 0.4491
+ Site-Indian                   | Train Loss: 1.4272 | Train Acc: 0.3766
+ Site-Indian                   | Train Loss: 1.5875 | Train Acc: 0.4425
+ Site-Southeast_Asian          | Train Loss: 1.6073 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.7470 | Train Acc: 0.4342
+ Site-Middle_Eastern           | Train Loss: 1.5816 | Train Acc: 0.4000
+ Site-Middle_Eastern           | Train Loss: 1.4708 | Train Acc: 0.3462
+ Site-White                         | Val  Loss: 1.3708 | Val  Acc: 0.5104
+ Site-White                         | Val  Loss: 1.3709 | Val  Acc: 0.5056
+ Site-Latino_Hispanic               | Val  Loss: 1.5155 | Val  Acc: 0.3988
+ Site-Latino_Hispanic               | Val  Loss: 1.5021 | Val  Acc: 0.4108
+ Site-Black                         | Val  Loss: 1.6074 | Val  Acc: 0.3964
+ Site-Black                         | Val  Loss: 1.7291 | Val  Acc: 0.3436
+ Site-East_Asian                    | Val  Loss: 1.6048 | Val  Acc: 0.4400
+ Site-East_Asian                    | Val  Loss: 1.4615 | Val  Acc: 0.4775
+ Site-Indian                        | Val  Loss: 1.6612 | Val  Acc: 0.4118
+ Site-Indian                        | Val  Loss: 1.4358 | Val  Acc: 0.4000
+ Site-Southeast_Asian               | Val  Loss: 1.5671 | Val  Acc: 0.4118
+ Site-Southeast_Asian               | Val  Loss: 1.6097 | Val  Acc: 0.5098
+ Site-Middle_Eastern                | Val  Loss: 1.6742 | Val  Acc: 0.3478
+ Site-Middle_Eastern                | Val  Loss: 1.3982 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.4290
+ Best site-White                     | Epoch:15 | Val Acc: 0.5104
+ Best site-White                     | Epoch:15 | Val Acc: 0.5056
+ Best site-Latino_Hispanic           | Epoch:15 | Val Acc: 0.3988
+ Best site-Latino_Hispanic           | Epoch:15 | Val Acc: 0.4108
+ Best site-Black                     | Epoch:15 | Val Acc: 0.3964
+ Best site-Black                     | Epoch:15 | Val Acc: 0.3436
+ Best site-East_Asian                | Epoch:15 | Val Acc: 0.4400
+ Best site-East_Asian                | Epoch:15 | Val Acc: 0.4775
+ Best site-Indian                    | Epoch:15 | Val Acc: 0.4118
+ Best site-Indian                    | Epoch:15 | Val Acc: 0.4000
+ Best site-Southeast_Asian           | Epoch:15 | Val Acc: 0.4118
+ Best site-Southeast_Asian           | Epoch:15 | Val Acc: 0.5098
+ Best site-Middle_Eastern            | Epoch:15 | Val Acc: 0.3478
+ Best site-Middle_Eastern            | Epoch:15 | Val Acc: 0.4412
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+============ Train epoch 16 ============
+ Site-White                    | Train Loss: 1.3498 | Train Acc: 0.4958
+ Site-White                    | Train Loss: 1.3290 | Train Acc: 0.5019
+ Site-Latino_Hispanic          | Train Loss: 1.5618 | Train Acc: 0.3862
+ Site-Latino_Hispanic          | Train Loss: 1.5022 | Train Acc: 0.3684
+ Site-Black                    | Train Loss: 1.6649 | Train Acc: 0.3114
+ Site-Black                    | Train Loss: 1.6823 | Train Acc: 0.3469
+ Site-East_Asian               | Train Loss: 1.4298 | Train Acc: 0.4071
+ Site-East_Asian               | Train Loss: 1.5188 | Train Acc: 0.4431
+ Site-Indian                   | Train Loss: 1.3364 | Train Acc: 0.3506
+ Site-Indian                   | Train Loss: 1.6084 | Train Acc: 0.4248
+ Site-Southeast_Asian          | Train Loss: 1.6283 | Train Acc: 0.4038
+ Site-Southeast_Asian          | Train Loss: 1.4758 | Train Acc: 0.3553
+ Site-Middle_Eastern           | Train Loss: 1.6408 | Train Acc: 0.3714
+ Site-Middle_Eastern           | Train Loss: 1.5141 | Train Acc: 0.3846
+ Site-White                         | Val  Loss: 1.3694 | Val  Acc: 0.4813
+ Site-White                         | Val  Loss: 1.3413 | Val  Acc: 0.4774
+ Site-Latino_Hispanic               | Val  Loss: 1.5213 | Val  Acc: 0.3497
+ Site-Latino_Hispanic               | Val  Loss: 1.4754 | Val  Acc: 0.4149
+ Site-Black                         | Val  Loss: 1.6472 | Val  Acc: 0.3604
+ Site-Black                         | Val  Loss: 1.7485 | Val  Acc: 0.3067
+ Site-East_Asian                    | Val  Loss: 1.5517 | Val  Acc: 0.4800
+ Site-East_Asian                    | Val  Loss: 1.4839 | Val  Acc: 0.5135
+ Site-Indian                        | Val  Loss: 1.6349 | Val  Acc: 0.4118
+ Site-Indian                        | Val  Loss: 1.4835 | Val  Acc: 0.4133
+ Site-Southeast_Asian               | Val  Loss: 1.5302 | Val  Acc: 0.4706
+ Site-Southeast_Asian               | Val  Loss: 1.5959 | Val  Acc: 0.4314
+ Site-Middle_Eastern                | Val  Loss: 1.8225 | Val  Acc: 0.2174
+ Site-Middle_Eastern                | Val  Loss: 1.4233 | Val  Acc: 0.4118
+Average Valid Accuracy: 0.4100
+============ Train epoch 17 ============
+ Site-White                    | Train Loss: 1.3397 | Train Acc: 0.5042
+ Site-White                    | Train Loss: 1.2937 | Train Acc: 0.5188
+ Site-Latino_Hispanic          | Train Loss: 1.5200 | Train Acc: 0.3902
+ Site-Latino_Hispanic          | Train Loss: 1.4966 | Train Acc: 0.3934
+ Site-Black                    | Train Loss: 1.7135 | Train Acc: 0.3293
+ Site-Black                    | Train Loss: 1.6937 | Train Acc: 0.3510
+ Site-East_Asian               | Train Loss: 1.4155 | Train Acc: 0.4336
+ Site-East_Asian               | Train Loss: 1.4594 | Train Acc: 0.4132
+ Site-Indian                   | Train Loss: 1.4247 | Train Acc: 0.4286
+ Site-Indian                   | Train Loss: 1.5955 | Train Acc: 0.4513
+ Site-Southeast_Asian          | Train Loss: 1.5376 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.5604 | Train Acc: 0.3816
+ Site-Middle_Eastern           | Train Loss: 1.5974 | Train Acc: 0.2857
+ Site-Middle_Eastern           | Train Loss: 1.5416 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.3440 | Val  Acc: 0.5104
+ Site-White                         | Val  Loss: 1.3323 | Val  Acc: 0.5000
+ Site-Latino_Hispanic               | Val  Loss: 1.5232 | Val  Acc: 0.3620
+ Site-Latino_Hispanic               | Val  Loss: 1.4733 | Val  Acc: 0.4066
+ Site-Black                         | Val  Loss: 1.6157 | Val  Acc: 0.3784
+ Site-Black                         | Val  Loss: 1.7185 | Val  Acc: 0.3436
+ Site-East_Asian                    | Val  Loss: 1.6088 | Val  Acc: 0.4133
+ Site-East_Asian                    | Val  Loss: 1.4762 | Val  Acc: 0.4865
+ Site-Indian                        | Val  Loss: 1.6536 | Val  Acc: 0.4314
+ Site-Indian                        | Val  Loss: 1.4190 | Val  Acc: 0.4133
+ Site-Southeast_Asian               | Val  Loss: 1.6542 | Val  Acc: 0.4118
+ Site-Southeast_Asian               | Val  Loss: 1.6303 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.7227 | Val  Acc: 0.2174
+ Site-Middle_Eastern                | Val  Loss: 1.4160 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.4077
+============ Train epoch 18 ============
+ Site-White                    | Train Loss: 1.3180 | Train Acc: 0.5319
+ Site-White                    | Train Loss: 1.3077 | Train Acc: 0.5132
+ Site-Latino_Hispanic          | Train Loss: 1.5169 | Train Acc: 0.4187
+ Site-Latino_Hispanic          | Train Loss: 1.4620 | Train Acc: 0.4211
+ Site-Black                    | Train Loss: 1.6827 | Train Acc: 0.3593
+ Site-Black                    | Train Loss: 1.6937 | Train Acc: 0.3633
+ Site-East_Asian               | Train Loss: 1.4210 | Train Acc: 0.3894
+ Site-East_Asian               | Train Loss: 1.4612 | Train Acc: 0.4431
+ Site-Indian                   | Train Loss: 1.3600 | Train Acc: 0.3896
+ Site-Indian                   | Train Loss: 1.5889 | Train Acc: 0.3805
+ Site-Southeast_Asian          | Train Loss: 1.6037 | Train Acc: 0.4615
+ Site-Southeast_Asian          | Train Loss: 1.8426 | Train Acc: 0.3947
+ Site-Middle_Eastern           | Train Loss: 1.5886 | Train Acc: 0.3143
+ Site-Middle_Eastern           | Train Loss: 1.5097 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.3549 | Val  Acc: 0.4979
+ Site-White                         | Val  Loss: 1.3234 | Val  Acc: 0.5113
+ Site-Latino_Hispanic               | Val  Loss: 1.5002 | Val  Acc: 0.4049
+ Site-Latino_Hispanic               | Val  Loss: 1.4589 | Val  Acc: 0.4149
+ Site-Black                         | Val  Loss: 1.6537 | Val  Acc: 0.3694
+ Site-Black                         | Val  Loss: 1.7381 | Val  Acc: 0.3129
+ Site-East_Asian                    | Val  Loss: 1.5369 | Val  Acc: 0.4533
+ Site-East_Asian                    | Val  Loss: 1.4879 | Val  Acc: 0.4775
+ Site-Indian                        | Val  Loss: 1.7108 | Val  Acc: 0.3529
+ Site-Indian                        | Val  Loss: 1.4560 | Val  Acc: 0.4000
+ Site-Southeast_Asian               | Val  Loss: 1.6313 | Val  Acc: 0.4118
+ Site-Southeast_Asian               | Val  Loss: 1.6312 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.7958 | Val  Acc: 0.3043
+ Site-Middle_Eastern                | Val  Loss: 1.3883 | Val  Acc: 0.3529
+Average Valid Accuracy: 0.4040
+============ Train epoch 19 ============
+ Site-White                    | Train Loss: 1.3270 | Train Acc: 0.5235
+ Site-White                    | Train Loss: 1.2952 | Train Acc: 0.5113
+ Site-Latino_Hispanic          | Train Loss: 1.5376 | Train Acc: 0.3821
+ Site-Latino_Hispanic          | Train Loss: 1.4922 | Train Acc: 0.3906
+ Site-Black                    | Train Loss: 1.6849 | Train Acc: 0.3713
+ Site-Black                    | Train Loss: 1.6847 | Train Acc: 0.3551
+ Site-East_Asian               | Train Loss: 1.4058 | Train Acc: 0.4336
+ Site-East_Asian               | Train Loss: 1.4615 | Train Acc: 0.4551
+ Site-Indian                   | Train Loss: 1.4623 | Train Acc: 0.4286
+ Site-Indian                   | Train Loss: 1.5253 | Train Acc: 0.4425
+ Site-Southeast_Asian          | Train Loss: 1.5166 | Train Acc: 0.4808
+ Site-Southeast_Asian          | Train Loss: 1.6152 | Train Acc: 0.3947
+ Site-Middle_Eastern           | Train Loss: 1.5789 | Train Acc: 0.3714
+ Site-Middle_Eastern           | Train Loss: 1.4703 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.3313 | Val  Acc: 0.5270
+ Site-White                         | Val  Loss: 1.3183 | Val  Acc: 0.5113
+ Site-Latino_Hispanic               | Val  Loss: 1.5034 | Val  Acc: 0.3620
+ Site-Latino_Hispanic               | Val  Loss: 1.4374 | Val  Acc: 0.4357
+ Site-Black                         | Val  Loss: 1.6623 | Val  Acc: 0.3243
+ Site-Black                         | Val  Loss: 1.7601 | Val  Acc: 0.3129
+ Site-East_Asian                    | Val  Loss: 1.6045 | Val  Acc: 0.4800
+ Site-East_Asian                    | Val  Loss: 1.4633 | Val  Acc: 0.4414
+ Site-Indian                        | Val  Loss: 1.6764 | Val  Acc: 0.3922
+ Site-Indian                        | Val  Loss: 1.4495 | Val  Acc: 0.4267
+ Site-Southeast_Asian               | Val  Loss: 1.5457 | Val  Acc: 0.4412
+ Site-Southeast_Asian               | Val  Loss: 1.6273 | Val  Acc: 0.4118
+ Site-Middle_Eastern                | Val  Loss: 1.7786 | Val  Acc: 0.1739
+ Site-Middle_Eastern                | Val  Loss: 1.3980 | Val  Acc: 0.4118
+Average Valid Accuracy: 0.4037
+============ Train epoch 20 ============
+ Site-White                    | Train Loss: 1.3205 | Train Acc: 0.5235
+ Site-White                    | Train Loss: 1.3103 | Train Acc: 0.5000
+ Site-Latino_Hispanic          | Train Loss: 1.5182 | Train Acc: 0.3862
+ Site-Latino_Hispanic          | Train Loss: 1.4578 | Train Acc: 0.4294
+ Site-Black                    | Train Loss: 1.6852 | Train Acc: 0.3593
+ Site-Black                    | Train Loss: 1.6250 | Train Acc: 0.3796
+ Site-East_Asian               | Train Loss: 1.4371 | Train Acc: 0.4336
+ Site-East_Asian               | Train Loss: 1.5173 | Train Acc: 0.4491
+ Site-Indian                   | Train Loss: 1.4697 | Train Acc: 0.4026
+ Site-Indian                   | Train Loss: 1.5837 | Train Acc: 0.4159
+ Site-Southeast_Asian          | Train Loss: 1.5477 | Train Acc: 0.4808
+ Site-Southeast_Asian          | Train Loss: 1.8044 | Train Acc: 0.3553
+ Site-Middle_Eastern           | Train Loss: 1.5691 | Train Acc: 0.4000
+ Site-Middle_Eastern           | Train Loss: 1.4618 | Train Acc: 0.4231
+ Site-White                         | Val  Loss: 1.3098 | Val  Acc: 0.5021
+ Site-White                         | Val  Loss: 1.3013 | Val  Acc: 0.5198
+ Site-Latino_Hispanic               | Val  Loss: 1.5039 | Val  Acc: 0.3988
+ Site-Latino_Hispanic               | Val  Loss: 1.4285 | Val  Acc: 0.4357
+ Site-Black                         | Val  Loss: 1.6132 | Val  Acc: 0.4144
+ Site-Black                         | Val  Loss: 1.7027 | Val  Acc: 0.3313
+ Site-East_Asian                    | Val  Loss: 1.5445 | Val  Acc: 0.4133
+ Site-East_Asian                    | Val  Loss: 1.4727 | Val  Acc: 0.4775
+ Site-Indian                        | Val  Loss: 1.6384 | Val  Acc: 0.4510
+ Site-Indian                        | Val  Loss: 1.4146 | Val  Acc: 0.4400
+ Site-Southeast_Asian               | Val  Loss: 1.6095 | Val  Acc: 0.3824
+ Site-Southeast_Asian               | Val  Loss: 1.5795 | Val  Acc: 0.4706
+ Site-Middle_Eastern                | Val  Loss: 1.6173 | Val  Acc: 0.2609
+ Site-Middle_Eastern                | Val  Loss: 1.4121 | Val  Acc: 0.4118
+Average Valid Accuracy: 0.4221
+============ Train epoch 21 ============
+ Site-White                    | Train Loss: 1.2844 | Train Acc: 0.5429
+ Site-White                    | Train Loss: 1.2869 | Train Acc: 0.5226
+ Site-Latino_Hispanic          | Train Loss: 1.5236 | Train Acc: 0.4065
+ Site-Latino_Hispanic          | Train Loss: 1.4668 | Train Acc: 0.4183
+ Site-Black                    | Train Loss: 1.7185 | Train Acc: 0.3413
+ Site-Black                    | Train Loss: 1.6857 | Train Acc: 0.3755
+ Site-East_Asian               | Train Loss: 1.4451 | Train Acc: 0.4159
+ Site-East_Asian               | Train Loss: 1.4637 | Train Acc: 0.4371
+ Site-Indian                   | Train Loss: 1.3889 | Train Acc: 0.4026
+ Site-Indian                   | Train Loss: 1.6106 | Train Acc: 0.4159
+ Site-Southeast_Asian          | Train Loss: 1.5843 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.4615 | Train Acc: 0.4079
+ Site-Middle_Eastern           | Train Loss: 1.5115 | Train Acc: 0.4571
+ Site-Middle_Eastern           | Train Loss: 1.4435 | Train Acc: 0.4038
+ Site-White                         | Val  Loss: 1.3242 | Val  Acc: 0.4896
+ Site-White                         | Val  Loss: 1.2761 | Val  Acc: 0.5339
+ Site-Latino_Hispanic               | Val  Loss: 1.5008 | Val  Acc: 0.3436
+ Site-Latino_Hispanic               | Val  Loss: 1.4213 | Val  Acc: 0.4232
+ Site-Black                         | Val  Loss: 1.6332 | Val  Acc: 0.4234
+ Site-Black                         | Val  Loss: 1.6746 | Val  Acc: 0.3742
+ Site-East_Asian                    | Val  Loss: 1.5237 | Val  Acc: 0.4667
+ Site-East_Asian                    | Val  Loss: 1.4318 | Val  Acc: 0.4414
+ Site-Indian                        | Val  Loss: 1.7389 | Val  Acc: 0.3725
+ Site-Indian                        | Val  Loss: 1.3771 | Val  Acc: 0.4400
+ Site-Southeast_Asian               | Val  Loss: 1.6540 | Val  Acc: 0.4412
+ Site-Southeast_Asian               | Val  Loss: 1.6158 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.6424 | Val  Acc: 0.3043
+ Site-Middle_Eastern                | Val  Loss: 1.3497 | Val  Acc: 0.4706
+Average Valid Accuracy: 0.4226
+============ Train epoch 22 ============
+ Site-White                    | Train Loss: 1.2993 | Train Acc: 0.5485
+ Site-White                    | Train Loss: 1.2764 | Train Acc: 0.5188
+ Site-Latino_Hispanic          | Train Loss: 1.4879 | Train Acc: 0.3821
+ Site-Latino_Hispanic          | Train Loss: 1.4533 | Train Acc: 0.3989
+ Site-Black                    | Train Loss: 1.6667 | Train Acc: 0.3832
+ Site-Black                    | Train Loss: 1.6902 | Train Acc: 0.3837
+ Site-East_Asian               | Train Loss: 1.3791 | Train Acc: 0.4336
+ Site-East_Asian               | Train Loss: 1.4650 | Train Acc: 0.4731
+ Site-Indian                   | Train Loss: 1.4974 | Train Acc: 0.3766
+ Site-Indian                   | Train Loss: 1.5649 | Train Acc: 0.4071
+ Site-Southeast_Asian          | Train Loss: 1.5338 | Train Acc: 0.4423
+ Site-Southeast_Asian          | Train Loss: 1.4764 | Train Acc: 0.3947
+ Site-Middle_Eastern           | Train Loss: 1.5499 | Train Acc: 0.4286
+ Site-Middle_Eastern           | Train Loss: 1.4392 | Train Acc: 0.4423
+ Site-White                         | Val  Loss: 1.3127 | Val  Acc: 0.5228
+ Site-White                         | Val  Loss: 1.2501 | Val  Acc: 0.5367
+ Site-Latino_Hispanic               | Val  Loss: 1.5105 | Val  Acc: 0.3558
+ Site-Latino_Hispanic               | Val  Loss: 1.3985 | Val  Acc: 0.4315
+ Site-Black                         | Val  Loss: 1.6342 | Val  Acc: 0.4054
+ Site-Black                         | Val  Loss: 1.7090 | Val  Acc: 0.3436
+ Site-East_Asian                    | Val  Loss: 1.5846 | Val  Acc: 0.4800
+ Site-East_Asian                    | Val  Loss: 1.4813 | Val  Acc: 0.4505
+ Site-Indian                        | Val  Loss: 1.6647 | Val  Acc: 0.4510
+ Site-Indian                        | Val  Loss: 1.4344 | Val  Acc: 0.3867
+ Site-Southeast_Asian               | Val  Loss: 1.5928 | Val  Acc: 0.3529
+ Site-Southeast_Asian               | Val  Loss: 1.6694 | Val  Acc: 0.4510
+ Site-Middle_Eastern                | Val  Loss: 1.6892 | Val  Acc: 0.3043
+ Site-Middle_Eastern                | Val  Loss: 1.4273 | Val  Acc: 0.3824
+Average Valid Accuracy: 0.4182
+============ Train epoch 23 ============
+ Site-White                    | Train Loss: 1.2864 | Train Acc: 0.5180
+ Site-White                    | Train Loss: 1.2941 | Train Acc: 0.5226
+ Site-Latino_Hispanic          | Train Loss: 1.4989 | Train Acc: 0.3740
+ Site-Latino_Hispanic          | Train Loss: 1.4706 | Train Acc: 0.4183
+ Site-Black                    | Train Loss: 1.6838 | Train Acc: 0.3713
+ Site-Black                    | Train Loss: 1.6576 | Train Acc: 0.3673
+ Site-East_Asian               | Train Loss: 1.4170 | Train Acc: 0.3894
+ Site-East_Asian               | Train Loss: 1.4481 | Train Acc: 0.4790
+ Site-Indian                   | Train Loss: 1.4272 | Train Acc: 0.4026
+ Site-Indian                   | Train Loss: 1.5835 | Train Acc: 0.4071
+ Site-Southeast_Asian          | Train Loss: 1.5814 | Train Acc: 0.4038
+ Site-Southeast_Asian          | Train Loss: 1.5771 | Train Acc: 0.3684
+ Site-Middle_Eastern           | Train Loss: 1.5678 | Train Acc: 0.4286
+ Site-Middle_Eastern           | Train Loss: 1.5158 | Train Acc: 0.3462
+ Site-White                         | Val  Loss: 1.2924 | Val  Acc: 0.5104
+ Site-White                         | Val  Loss: 1.2650 | Val  Acc: 0.5395
+ Site-Latino_Hispanic               | Val  Loss: 1.5022 | Val  Acc: 0.3988
+ Site-Latino_Hispanic               | Val  Loss: 1.4108 | Val  Acc: 0.4315
+ Site-Black                         | Val  Loss: 1.6177 | Val  Acc: 0.4234
+ Site-Black                         | Val  Loss: 1.7244 | Val  Acc: 0.3313
+ Site-East_Asian                    | Val  Loss: 1.5277 | Val  Acc: 0.4533
+ Site-East_Asian                    | Val  Loss: 1.4570 | Val  Acc: 0.4775
+ Site-Indian                        | Val  Loss: 1.6038 | Val  Acc: 0.4706
+ Site-Indian                        | Val  Loss: 1.3974 | Val  Acc: 0.4400
+ Site-Southeast_Asian               | Val  Loss: 1.6111 | Val  Acc: 0.3529
+ Site-Southeast_Asian               | Val  Loss: 1.6215 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.6651 | Val  Acc: 0.3478
+ Site-Middle_Eastern                | Val  Loss: 1.3967 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.4293
+ Best site-White                     | Epoch:23 | Val Acc: 0.5104
+ Best site-White                     | Epoch:23 | Val Acc: 0.5395
+ Best site-Latino_Hispanic           | Epoch:23 | Val Acc: 0.3988
+ Best site-Latino_Hispanic           | Epoch:23 | Val Acc: 0.4315
+ Best site-Black                     | Epoch:23 | Val Acc: 0.4234
+ Best site-Black                     | Epoch:23 | Val Acc: 0.3313
+ Best site-East_Asian                | Epoch:23 | Val Acc: 0.4533
+ Best site-East_Asian                | Epoch:23 | Val Acc: 0.4775
+ Best site-Indian                    | Epoch:23 | Val Acc: 0.4706
+ Best site-Indian                    | Epoch:23 | Val Acc: 0.4400
+ Best site-Southeast_Asian           | Epoch:23 | Val Acc: 0.3529
+ Best site-Southeast_Asian           | Epoch:23 | Val Acc: 0.3922
+ Best site-Middle_Eastern            | Epoch:23 | Val Acc: 0.3478
+ Best site-Middle_Eastern            | Epoch:23 | Val Acc: 0.4412
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+============ Train epoch 24 ============
+ Site-White                    | Train Loss: 1.2824 | Train Acc: 0.5374
+ Site-White                    | Train Loss: 1.2739 | Train Acc: 0.5226
+ Site-Latino_Hispanic          | Train Loss: 1.4670 | Train Acc: 0.4065
+ Site-Latino_Hispanic          | Train Loss: 1.4547 | Train Acc: 0.4211
+ Site-Black                    | Train Loss: 1.6874 | Train Acc: 0.3533
+ Site-Black                    | Train Loss: 1.6670 | Train Acc: 0.3429
+ Site-East_Asian               | Train Loss: 1.4153 | Train Acc: 0.4159
+ Site-East_Asian               | Train Loss: 1.4896 | Train Acc: 0.4012
+ Site-Indian                   | Train Loss: 1.4448 | Train Acc: 0.3896
+ Site-Indian                   | Train Loss: 1.6044 | Train Acc: 0.3540
+ Site-Southeast_Asian          | Train Loss: 1.5688 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.6189 | Train Acc: 0.3684
+ Site-Middle_Eastern           | Train Loss: 1.5394 | Train Acc: 0.3714
+ Site-Middle_Eastern           | Train Loss: 1.4778 | Train Acc: 0.4231
+ Site-White                         | Val  Loss: 1.2729 | Val  Acc: 0.5145
+ Site-White                         | Val  Loss: 1.2442 | Val  Acc: 0.5339
+ Site-Latino_Hispanic               | Val  Loss: 1.4985 | Val  Acc: 0.3436
+ Site-Latino_Hispanic               | Val  Loss: 1.3943 | Val  Acc: 0.4523
+ Site-Black                         | Val  Loss: 1.6251 | Val  Acc: 0.3964
+ Site-Black                         | Val  Loss: 1.7228 | Val  Acc: 0.3620
+ Site-East_Asian                    | Val  Loss: 1.5697 | Val  Acc: 0.4933
+ Site-East_Asian                    | Val  Loss: 1.4429 | Val  Acc: 0.5045
+ Site-Indian                        | Val  Loss: 1.6934 | Val  Acc: 0.3725
+ Site-Indian                        | Val  Loss: 1.3632 | Val  Acc: 0.4533
+ Site-Southeast_Asian               | Val  Loss: 1.5467 | Val  Acc: 0.4118
+ Site-Southeast_Asian               | Val  Loss: 1.6950 | Val  Acc: 0.4314
+ Site-Middle_Eastern                | Val  Loss: 1.7024 | Val  Acc: 0.2609
+ Site-Middle_Eastern                | Val  Loss: 1.3806 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.4265
+============ Train epoch 25 ============
+ Site-White                    | Train Loss: 1.2685 | Train Acc: 0.5485
+ Site-White                    | Train Loss: 1.2367 | Train Acc: 0.5301
+ Site-Latino_Hispanic          | Train Loss: 1.4772 | Train Acc: 0.4146
+ Site-Latino_Hispanic          | Train Loss: 1.4353 | Train Acc: 0.4294
+ Site-Black                    | Train Loss: 1.6541 | Train Acc: 0.3832
+ Site-Black                    | Train Loss: 1.6312 | Train Acc: 0.3959
+ Site-East_Asian               | Train Loss: 1.4433 | Train Acc: 0.3894
+ Site-East_Asian               | Train Loss: 1.4358 | Train Acc: 0.4910
+ Site-Indian                   | Train Loss: 1.4461 | Train Acc: 0.3636
+ Site-Indian                   | Train Loss: 1.5590 | Train Acc: 0.3982
+ Site-Southeast_Asian          | Train Loss: 1.5069 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.6331 | Train Acc: 0.3947
+ Site-Middle_Eastern           | Train Loss: 1.5123 | Train Acc: 0.4000
+ Site-Middle_Eastern           | Train Loss: 1.4741 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.2985 | Val  Acc: 0.5021
+ Site-White                         | Val  Loss: 1.2461 | Val  Acc: 0.5537
+ Site-Latino_Hispanic               | Val  Loss: 1.4619 | Val  Acc: 0.4110
+ Site-Latino_Hispanic               | Val  Loss: 1.4216 | Val  Acc: 0.4149
+ Site-Black                         | Val  Loss: 1.6076 | Val  Acc: 0.3784
+ Site-Black                         | Val  Loss: 1.7154 | Val  Acc: 0.3558
+ Site-East_Asian                    | Val  Loss: 1.5356 | Val  Acc: 0.4533
+ Site-East_Asian                    | Val  Loss: 1.4323 | Val  Acc: 0.4955
+ Site-Indian                        | Val  Loss: 1.6008 | Val  Acc: 0.4510
+ Site-Indian                        | Val  Loss: 1.4085 | Val  Acc: 0.4533
+ Site-Southeast_Asian               | Val  Loss: 1.5800 | Val  Acc: 0.2941
+ Site-Southeast_Asian               | Val  Loss: 1.7075 | Val  Acc: 0.3333
+ Site-Middle_Eastern                | Val  Loss: 1.5852 | Val  Acc: 0.2174
+ Site-Middle_Eastern                | Val  Loss: 1.3839 | Val  Acc: 0.4118
+Average Valid Accuracy: 0.4090
+============ Train epoch 26 ============
+ Site-White                    | Train Loss: 1.2695 | Train Acc: 0.5097
+ Site-White                    | Train Loss: 1.2489 | Train Acc: 0.5207
+ Site-Latino_Hispanic          | Train Loss: 1.5025 | Train Acc: 0.3984
+ Site-Latino_Hispanic          | Train Loss: 1.4292 | Train Acc: 0.4488
+ Site-Black                    | Train Loss: 1.6227 | Train Acc: 0.3653
+ Site-Black                    | Train Loss: 1.6625 | Train Acc: 0.3796
+ Site-East_Asian               | Train Loss: 1.3905 | Train Acc: 0.4336
+ Site-East_Asian               | Train Loss: 1.4360 | Train Acc: 0.4371
+ Site-Indian                   | Train Loss: 1.4157 | Train Acc: 0.4026
+ Site-Indian                   | Train Loss: 1.5816 | Train Acc: 0.4248
+ Site-Southeast_Asian          | Train Loss: 1.6244 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.5331 | Train Acc: 0.3684
+ Site-Middle_Eastern           | Train Loss: 1.5499 | Train Acc: 0.4286
+ Site-Middle_Eastern           | Train Loss: 1.4386 | Train Acc: 0.4231
+ Site-White                         | Val  Loss: 1.2590 | Val  Acc: 0.5353
+ Site-White                         | Val  Loss: 1.2415 | Val  Acc: 0.5480
+ Site-Latino_Hispanic               | Val  Loss: 1.4825 | Val  Acc: 0.3681
+ Site-Latino_Hispanic               | Val  Loss: 1.4093 | Val  Acc: 0.4357
+ Site-Black                         | Val  Loss: 1.6050 | Val  Acc: 0.4054
+ Site-Black                         | Val  Loss: 1.6879 | Val  Acc: 0.3681
+ Site-East_Asian                    | Val  Loss: 1.3992 | Val  Acc: 0.5200
+ Site-East_Asian                    | Val  Loss: 1.4254 | Val  Acc: 0.5225
+ Site-Indian                        | Val  Loss: 1.6350 | Val  Acc: 0.4510
+ Site-Indian                        | Val  Loss: 1.3770 | Val  Acc: 0.4267
+ Site-Southeast_Asian               | Val  Loss: 1.5185 | Val  Acc: 0.3529
+ Site-Southeast_Asian               | Val  Loss: 1.6566 | Val  Acc: 0.4118
+ Site-Middle_Eastern                | Val  Loss: 1.6534 | Val  Acc: 0.2609
+ Site-Middle_Eastern                | Val  Loss: 1.3749 | Val  Acc: 0.3824
+Average Valid Accuracy: 0.4278
+============ Train epoch 27 ============
+ Site-White                    | Train Loss: 1.2577 | Train Acc: 0.5485
+ Site-White                    | Train Loss: 1.2539 | Train Acc: 0.5489
+ Site-Latino_Hispanic          | Train Loss: 1.4552 | Train Acc: 0.4390
+ Site-Latino_Hispanic          | Train Loss: 1.4202 | Train Acc: 0.4183
+ Site-Black                    | Train Loss: 1.7035 | Train Acc: 0.3892
+ Site-Black                    | Train Loss: 1.6531 | Train Acc: 0.3918
+ Site-East_Asian               | Train Loss: 1.4050 | Train Acc: 0.3982
+ Site-East_Asian               | Train Loss: 1.4008 | Train Acc: 0.5030
+ Site-Indian                   | Train Loss: 1.4512 | Train Acc: 0.3377
+ Site-Indian                   | Train Loss: 1.6071 | Train Acc: 0.3628
+ Site-Southeast_Asian          | Train Loss: 1.5732 | Train Acc: 0.5000
+ Site-Southeast_Asian          | Train Loss: 1.6184 | Train Acc: 0.3947
+ Site-Middle_Eastern           | Train Loss: 1.4998 | Train Acc: 0.3429
+ Site-Middle_Eastern           | Train Loss: 1.4513 | Train Acc: 0.4038
+ Site-White                         | Val  Loss: 1.2688 | Val  Acc: 0.5228
+ Site-White                         | Val  Loss: 1.2441 | Val  Acc: 0.5452
+ Site-Latino_Hispanic               | Val  Loss: 1.4880 | Val  Acc: 0.3436
+ Site-Latino_Hispanic               | Val  Loss: 1.3976 | Val  Acc: 0.4274
+ Site-Black                         | Val  Loss: 1.6204 | Val  Acc: 0.4324
+ Site-Black                         | Val  Loss: 1.7355 | Val  Acc: 0.3129
+ Site-East_Asian                    | Val  Loss: 1.5146 | Val  Acc: 0.4267
+ Site-East_Asian                    | Val  Loss: 1.4532 | Val  Acc: 0.4865
+ Site-Indian                        | Val  Loss: 1.6812 | Val  Acc: 0.4118
+ Site-Indian                        | Val  Loss: 1.3099 | Val  Acc: 0.4667
+ Site-Southeast_Asian               | Val  Loss: 1.5406 | Val  Acc: 0.4412
+ Site-Southeast_Asian               | Val  Loss: 1.6166 | Val  Acc: 0.3529
+ Site-Middle_Eastern                | Val  Loss: 1.6300 | Val  Acc: 0.2174
+ Site-Middle_Eastern                | Val  Loss: 1.3478 | Val  Acc: 0.4118
+Average Valid Accuracy: 0.4142
+============ Train epoch 28 ============
+ Site-White                    | Train Loss: 1.2433 | Train Acc: 0.5540
+ Site-White                    | Train Loss: 1.2304 | Train Acc: 0.5320
+ Site-Latino_Hispanic          | Train Loss: 1.4843 | Train Acc: 0.4106
+ Site-Latino_Hispanic          | Train Loss: 1.4079 | Train Acc: 0.4404
+ Site-Black                    | Train Loss: 1.6783 | Train Acc: 0.3413
+ Site-Black                    | Train Loss: 1.6428 | Train Acc: 0.3592
+ Site-East_Asian               | Train Loss: 1.4028 | Train Acc: 0.4071
+ Site-East_Asian               | Train Loss: 1.4341 | Train Acc: 0.4731
+ Site-Indian                   | Train Loss: 1.4292 | Train Acc: 0.4156
+ Site-Indian                   | Train Loss: 1.5544 | Train Acc: 0.4513
+ Site-Southeast_Asian          | Train Loss: 1.6207 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.5350 | Train Acc: 0.3816
+ Site-Middle_Eastern           | Train Loss: 1.4726 | Train Acc: 0.4286
+ Site-Middle_Eastern           | Train Loss: 1.5055 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.2357 | Val  Acc: 0.5643
+ Site-White                         | Val  Loss: 1.2230 | Val  Acc: 0.5395
+ Site-Latino_Hispanic               | Val  Loss: 1.4646 | Val  Acc: 0.3436
+ Site-Latino_Hispanic               | Val  Loss: 1.3834 | Val  Acc: 0.4232
+ Site-Black                         | Val  Loss: 1.5994 | Val  Acc: 0.4414
+ Site-Black                         | Val  Loss: 1.7283 | Val  Acc: 0.2699
+ Site-East_Asian                    | Val  Loss: 1.5389 | Val  Acc: 0.4533
+ Site-East_Asian                    | Val  Loss: 1.4492 | Val  Acc: 0.4595
+ Site-Indian                        | Val  Loss: 1.5954 | Val  Acc: 0.4314
+ Site-Indian                        | Val  Loss: 1.4188 | Val  Acc: 0.4400
+ Site-Southeast_Asian               | Val  Loss: 1.5900 | Val  Acc: 0.3824
+ Site-Southeast_Asian               | Val  Loss: 1.7199 | Val  Acc: 0.3725
+ Site-Middle_Eastern                | Val  Loss: 1.7506 | Val  Acc: 0.3913
+ Site-Middle_Eastern                | Val  Loss: 1.3493 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.4253
+============ Train epoch 29 ============
+ Site-White                    | Train Loss: 1.2544 | Train Acc: 0.5651
+ Site-White                    | Train Loss: 1.2288 | Train Acc: 0.5338
+ Site-Latino_Hispanic          | Train Loss: 1.4662 | Train Acc: 0.3984
+ Site-Latino_Hispanic          | Train Loss: 1.4271 | Train Acc: 0.3906
+ Site-Black                    | Train Loss: 1.7267 | Train Acc: 0.3533
+ Site-Black                    | Train Loss: 1.5972 | Train Acc: 0.3755
+ Site-East_Asian               | Train Loss: 1.3845 | Train Acc: 0.4336
+ Site-East_Asian               | Train Loss: 1.4227 | Train Acc: 0.4371
+ Site-Indian                   | Train Loss: 1.4847 | Train Acc: 0.4286
+ Site-Indian                   | Train Loss: 1.5988 | Train Acc: 0.4071
+ Site-Southeast_Asian          | Train Loss: 1.5963 | Train Acc: 0.4038
+ Site-Southeast_Asian          | Train Loss: 1.5552 | Train Acc: 0.4342
+ Site-Middle_Eastern           | Train Loss: 1.5462 | Train Acc: 0.2857
+ Site-Middle_Eastern           | Train Loss: 1.4620 | Train Acc: 0.3269
+ Site-White                         | Val  Loss: 1.2887 | Val  Acc: 0.5228
+ Site-White                         | Val  Loss: 1.2106 | Val  Acc: 0.5734
+ Site-Latino_Hispanic               | Val  Loss: 1.4463 | Val  Acc: 0.3865
+ Site-Latino_Hispanic               | Val  Loss: 1.3767 | Val  Acc: 0.4606
+ Site-Black                         | Val  Loss: 1.6278 | Val  Acc: 0.4505
+ Site-Black                         | Val  Loss: 1.6279 | Val  Acc: 0.4049
+ Site-East_Asian                    | Val  Loss: 1.4282 | Val  Acc: 0.4533
+ Site-East_Asian                    | Val  Loss: 1.4525 | Val  Acc: 0.4685
+ Site-Indian                        | Val  Loss: 1.6772 | Val  Acc: 0.3725
+ Site-Indian                        | Val  Loss: 1.4057 | Val  Acc: 0.4667
+ Site-Southeast_Asian               | Val  Loss: 1.6342 | Val  Acc: 0.3824
+ Site-Southeast_Asian               | Val  Loss: 1.6143 | Val  Acc: 0.3333
+ Site-Middle_Eastern                | Val  Loss: 1.5862 | Val  Acc: 0.3478
+ Site-Middle_Eastern                | Val  Loss: 1.3088 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.4332
+ Best site-White                     | Epoch:29 | Val Acc: 0.5228
+ Best site-White                     | Epoch:29 | Val Acc: 0.5734
+ Best site-Latino_Hispanic           | Epoch:29 | Val Acc: 0.3865
+ Best site-Latino_Hispanic           | Epoch:29 | Val Acc: 0.4606
+ Best site-Black                     | Epoch:29 | Val Acc: 0.4505
+ Best site-Black                     | Epoch:29 | Val Acc: 0.4049
+ Best site-East_Asian                | Epoch:29 | Val Acc: 0.4533
+ Best site-East_Asian                | Epoch:29 | Val Acc: 0.4685
+ Best site-Indian                    | Epoch:29 | Val Acc: 0.3725
+ Best site-Indian                    | Epoch:29 | Val Acc: 0.4667
+ Best site-Southeast_Asian           | Epoch:29 | Val Acc: 0.3824
+ Best site-Southeast_Asian           | Epoch:29 | Val Acc: 0.3333
+ Best site-Middle_Eastern            | Epoch:29 | Val Acc: 0.3478
+ Best site-Middle_Eastern            | Epoch:29 | Val Acc: 0.4412
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+ Test site-White                     | Epoch:29 | Test Acc: 0.4198
+ Test site-Latino_Hispanic           | Epoch:29 | Test Acc: 0.3513
+ Test site-Black                     | Epoch:29 | Test Acc: 0.3063
+ Test site-East_Asian                | Epoch:29 | Test Acc: 0.4351
+ Test site-Indian                    | Epoch:29 | Test Acc: 0.3182
+ Test site-Southeast_Asian           | Epoch:29 | Test Acc: 0.4185
+ Test site-Middle_Eastern            | Epoch:29 | Test Acc: 0.3918
+White: 0.4198, Latino_Hispanic: 0.3513, Black: 0.3063, East_Asian: 0.4351, Indian: 0.3182, Southeast_Asian: 0.4185, Middle_Eastern: 0.3918, 
+Average Test Accuracy(group): 0.3773, Average Test Accuracy(individual): 0.3773,
+domain std=0.0482, cluster std=-1.0000, individual std=0.0482, 
+============ Train epoch 30 ============
+ Site-White                    | Train Loss: 1.2400 | Train Acc: 0.5512
+ Site-White                    | Train Loss: 1.2140 | Train Acc: 0.5301
+ Site-Latino_Hispanic          | Train Loss: 1.4729 | Train Acc: 0.4268
+ Site-Latino_Hispanic          | Train Loss: 1.4100 | Train Acc: 0.4432
+ Site-Black                    | Train Loss: 1.6631 | Train Acc: 0.3533
+ Site-Black                    | Train Loss: 1.6592 | Train Acc: 0.4000
+ Site-East_Asian               | Train Loss: 1.3684 | Train Acc: 0.4248
+ Site-East_Asian               | Train Loss: 1.4196 | Train Acc: 0.4611
+ Site-Indian                   | Train Loss: 1.3653 | Train Acc: 0.4545
+ Site-Indian                   | Train Loss: 1.5419 | Train Acc: 0.4248
+ Site-Southeast_Asian          | Train Loss: 1.5390 | Train Acc: 0.4615
+ Site-Southeast_Asian          | Train Loss: 1.6541 | Train Acc: 0.4342
+ Site-Middle_Eastern           | Train Loss: 1.5513 | Train Acc: 0.3429
+ Site-Middle_Eastern           | Train Loss: 1.4831 | Train Acc: 0.3846
+ Site-White                         | Val  Loss: 1.2184 | Val  Acc: 0.5519
+ Site-White                         | Val  Loss: 1.1985 | Val  Acc: 0.5311
+ Site-Latino_Hispanic               | Val  Loss: 1.4716 | Val  Acc: 0.3988
+ Site-Latino_Hispanic               | Val  Loss: 1.3577 | Val  Acc: 0.4481
+ Site-Black                         | Val  Loss: 1.6154 | Val  Acc: 0.4144
+ Site-Black                         | Val  Loss: 1.6852 | Val  Acc: 0.3804
+ Site-East_Asian                    | Val  Loss: 1.5264 | Val  Acc: 0.4400
+ Site-East_Asian                    | Val  Loss: 1.4161 | Val  Acc: 0.4595
+ Site-Indian                        | Val  Loss: 1.6928 | Val  Acc: 0.3922
+ Site-Indian                        | Val  Loss: 1.4049 | Val  Acc: 0.3867
+ Site-Southeast_Asian               | Val  Loss: 1.5475 | Val  Acc: 0.3529
+ Site-Southeast_Asian               | Val  Loss: 1.6857 | Val  Acc: 0.3529
+ Site-Middle_Eastern                | Val  Loss: 1.5025 | Val  Acc: 0.3043
+ Site-Middle_Eastern                | Val  Loss: 1.3332 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.4182
+============ Train epoch 31 ============
+ Site-White                    | Train Loss: 1.2441 | Train Acc: 0.5319
+ Site-White                    | Train Loss: 1.1866 | Train Acc: 0.5395
+ Site-Latino_Hispanic          | Train Loss: 1.4478 | Train Acc: 0.4024
+ Site-Latino_Hispanic          | Train Loss: 1.3972 | Train Acc: 0.4211
+ Site-Black                    | Train Loss: 1.5890 | Train Acc: 0.3473
+ Site-Black                    | Train Loss: 1.6580 | Train Acc: 0.3469
+ Site-East_Asian               | Train Loss: 1.3936 | Train Acc: 0.4513
+ Site-East_Asian               | Train Loss: 1.4461 | Train Acc: 0.4251
+ Site-Indian                   | Train Loss: 1.3212 | Train Acc: 0.4675
+ Site-Indian                   | Train Loss: 1.5561 | Train Acc: 0.4071
+ Site-Southeast_Asian          | Train Loss: 1.6163 | Train Acc: 0.3846
+ Site-Southeast_Asian          | Train Loss: 1.7112 | Train Acc: 0.4079
+ Site-Middle_Eastern           | Train Loss: 1.4809 | Train Acc: 0.4286
+ Site-Middle_Eastern           | Train Loss: 1.5063 | Train Acc: 0.4231
+ Site-White                         | Val  Loss: 1.2397 | Val  Acc: 0.5643
+ Site-White                         | Val  Loss: 1.2177 | Val  Acc: 0.5537
+ Site-Latino_Hispanic               | Val  Loss: 1.4304 | Val  Acc: 0.4294
+ Site-Latino_Hispanic               | Val  Loss: 1.3746 | Val  Acc: 0.4440
+ Site-Black                         | Val  Loss: 1.5808 | Val  Acc: 0.4414
+ Site-Black                         | Val  Loss: 1.6946 | Val  Acc: 0.3558
+ Site-East_Asian                    | Val  Loss: 1.5833 | Val  Acc: 0.4667
+ Site-East_Asian                    | Val  Loss: 1.4883 | Val  Acc: 0.4324
+ Site-Indian                        | Val  Loss: 1.6916 | Val  Acc: 0.3725
+ Site-Indian                        | Val  Loss: 1.3649 | Val  Acc: 0.4000
+ Site-Southeast_Asian               | Val  Loss: 1.5682 | Val  Acc: 0.4412
+ Site-Southeast_Asian               | Val  Loss: 1.5902 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.5911 | Val  Acc: 0.3043
+ Site-Middle_Eastern                | Val  Loss: 1.3365 | Val  Acc: 0.4706
+Average Valid Accuracy: 0.4335
+ Best site-White                     | Epoch:31 | Val Acc: 0.5643
+ Best site-White                     | Epoch:31 | Val Acc: 0.5537
+ Best site-Latino_Hispanic           | Epoch:31 | Val Acc: 0.4294
+ Best site-Latino_Hispanic           | Epoch:31 | Val Acc: 0.4440
+ Best site-Black                     | Epoch:31 | Val Acc: 0.4414
+ Best site-Black                     | Epoch:31 | Val Acc: 0.3558
+ Best site-East_Asian                | Epoch:31 | Val Acc: 0.4667
+ Best site-East_Asian                | Epoch:31 | Val Acc: 0.4324
+ Best site-Indian                    | Epoch:31 | Val Acc: 0.3725
+ Best site-Indian                    | Epoch:31 | Val Acc: 0.4000
+ Best site-Southeast_Asian           | Epoch:31 | Val Acc: 0.4412
+ Best site-Southeast_Asian           | Epoch:31 | Val Acc: 0.3922
+ Best site-Middle_Eastern            | Epoch:31 | Val Acc: 0.3043
+ Best site-Middle_Eastern            | Epoch:31 | Val Acc: 0.4706
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+============ Train epoch 32 ============
+ Site-White                    | Train Loss: 1.2439 | Train Acc: 0.5540
+ Site-White                    | Train Loss: 1.2228 | Train Acc: 0.5602
+ Site-Latino_Hispanic          | Train Loss: 1.4406 | Train Acc: 0.4350
+ Site-Latino_Hispanic          | Train Loss: 1.3766 | Train Acc: 0.4488
+ Site-Black                    | Train Loss: 1.7052 | Train Acc: 0.3413
+ Site-Black                    | Train Loss: 1.6433 | Train Acc: 0.3796
+ Site-East_Asian               | Train Loss: 1.4402 | Train Acc: 0.4071
+ Site-East_Asian               | Train Loss: 1.4590 | Train Acc: 0.4671
+ Site-Indian                   | Train Loss: 1.4030 | Train Acc: 0.4286
+ Site-Indian                   | Train Loss: 1.5610 | Train Acc: 0.3894
+ Site-Southeast_Asian          | Train Loss: 1.6182 | Train Acc: 0.4423
+ Site-Southeast_Asian          | Train Loss: 1.6204 | Train Acc: 0.3816
+ Site-Middle_Eastern           | Train Loss: 1.4930 | Train Acc: 0.3714
+ Site-Middle_Eastern           | Train Loss: 1.4781 | Train Acc: 0.2885
+ Site-White                         | Val  Loss: 1.2642 | Val  Acc: 0.5228
+ Site-White                         | Val  Loss: 1.1989 | Val  Acc: 0.5819
+ Site-Latino_Hispanic               | Val  Loss: 1.4421 | Val  Acc: 0.3681
+ Site-Latino_Hispanic               | Val  Loss: 1.3374 | Val  Acc: 0.4564
+ Site-Black                         | Val  Loss: 1.5813 | Val  Acc: 0.4955
+ Site-Black                         | Val  Loss: 1.6547 | Val  Acc: 0.3252
+ Site-East_Asian                    | Val  Loss: 1.5288 | Val  Acc: 0.3733
+ Site-East_Asian                    | Val  Loss: 1.4577 | Val  Acc: 0.4955
+ Site-Indian                        | Val  Loss: 1.6234 | Val  Acc: 0.4118
+ Site-Indian                        | Val  Loss: 1.4037 | Val  Acc: 0.4000
+ Site-Southeast_Asian               | Val  Loss: 1.5888 | Val  Acc: 0.3824
+ Site-Southeast_Asian               | Val  Loss: 1.6768 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.7493 | Val  Acc: 0.3043
+ Site-Middle_Eastern                | Val  Loss: 1.3583 | Val  Acc: 0.4706
+Average Valid Accuracy: 0.4271
+============ Train epoch 33 ============
+ Site-White                    | Train Loss: 1.2282 | Train Acc: 0.5346
+ Site-White                    | Train Loss: 1.1860 | Train Acc: 0.5526
+ Site-Latino_Hispanic          | Train Loss: 1.4802 | Train Acc: 0.3984
+ Site-Latino_Hispanic          | Train Loss: 1.3848 | Train Acc: 0.4571
+ Site-Black                    | Train Loss: 1.6811 | Train Acc: 0.2934
+ Site-Black                    | Train Loss: 1.6616 | Train Acc: 0.4204
+ Site-East_Asian               | Train Loss: 1.3768 | Train Acc: 0.4425
+ Site-East_Asian               | Train Loss: 1.4112 | Train Acc: 0.4491
+ Site-Indian                   | Train Loss: 1.6045 | Train Acc: 0.4156
+ Site-Indian                   | Train Loss: 1.5096 | Train Acc: 0.4336
+ Site-Southeast_Asian          | Train Loss: 1.5343 | Train Acc: 0.5000
+ Site-Southeast_Asian          | Train Loss: 1.5541 | Train Acc: 0.4211
+ Site-Middle_Eastern           | Train Loss: 1.5494 | Train Acc: 0.4286
+ Site-Middle_Eastern           | Train Loss: 1.5452 | Train Acc: 0.3846
+ Site-White                         | Val  Loss: 1.2295 | Val  Acc: 0.5145
+ Site-White                         | Val  Loss: 1.2109 | Val  Acc: 0.5452
+ Site-Latino_Hispanic               | Val  Loss: 1.4687 | Val  Acc: 0.3865
+ Site-Latino_Hispanic               | Val  Loss: 1.3573 | Val  Acc: 0.4481
+ Site-Black                         | Val  Loss: 1.5321 | Val  Acc: 0.4595
+ Site-Black                         | Val  Loss: 1.7092 | Val  Acc: 0.3681
+ Site-East_Asian                    | Val  Loss: 1.5825 | Val  Acc: 0.5200
+ Site-East_Asian                    | Val  Loss: 1.4192 | Val  Acc: 0.4775
+ Site-Indian                        | Val  Loss: 1.6320 | Val  Acc: 0.3725
+ Site-Indian                        | Val  Loss: 1.3500 | Val  Acc: 0.4800
+ Site-Southeast_Asian               | Val  Loss: 1.4851 | Val  Acc: 0.4412
+ Site-Southeast_Asian               | Val  Loss: 1.5890 | Val  Acc: 0.3725
+ Site-Middle_Eastern                | Val  Loss: 1.8452 | Val  Acc: 0.2609
+ Site-Middle_Eastern                | Val  Loss: 1.2917 | Val  Acc: 0.4118
+Average Valid Accuracy: 0.4327
+============ Train epoch 34 ============
+ Site-White                    | Train Loss: 1.2117 | Train Acc: 0.5512
+ Site-White                    | Train Loss: 1.1847 | Train Acc: 0.5414
+ Site-Latino_Hispanic          | Train Loss: 1.4631 | Train Acc: 0.4228
+ Site-Latino_Hispanic          | Train Loss: 1.3810 | Train Acc: 0.4515
+ Site-Black                    | Train Loss: 1.6375 | Train Acc: 0.3533
+ Site-Black                    | Train Loss: 1.6232 | Train Acc: 0.3878
+ Site-East_Asian               | Train Loss: 1.4037 | Train Acc: 0.4336
+ Site-East_Asian               | Train Loss: 1.4503 | Train Acc: 0.4491
+ Site-Indian                   | Train Loss: 1.3915 | Train Acc: 0.4156
+ Site-Indian                   | Train Loss: 1.5436 | Train Acc: 0.4159
+ Site-Southeast_Asian          | Train Loss: 1.5654 | Train Acc: 0.4423
+ Site-Southeast_Asian          | Train Loss: 1.5064 | Train Acc: 0.3684
+ Site-Middle_Eastern           | Train Loss: 1.5588 | Train Acc: 0.3429
+ Site-Middle_Eastern           | Train Loss: 1.4759 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.1882 | Val  Acc: 0.5726
+ Site-White                         | Val  Loss: 1.1717 | Val  Acc: 0.5537
+ Site-Latino_Hispanic               | Val  Loss: 1.4374 | Val  Acc: 0.4233
+ Site-Latino_Hispanic               | Val  Loss: 1.3449 | Val  Acc: 0.4647
+ Site-Black                         | Val  Loss: 1.5864 | Val  Acc: 0.4144
+ Site-Black                         | Val  Loss: 1.7511 | Val  Acc: 0.3558
+ Site-East_Asian                    | Val  Loss: 1.4563 | Val  Acc: 0.4800
+ Site-East_Asian                    | Val  Loss: 1.4586 | Val  Acc: 0.4775
+ Site-Indian                        | Val  Loss: 1.6794 | Val  Acc: 0.3922
+ Site-Indian                        | Val  Loss: 1.3666 | Val  Acc: 0.4400
+ Site-Southeast_Asian               | Val  Loss: 1.5005 | Val  Acc: 0.3235
+ Site-Southeast_Asian               | Val  Loss: 1.6449 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.7849 | Val  Acc: 0.2609
+ Site-Middle_Eastern                | Val  Loss: 1.3494 | Val  Acc: 0.5294
+Average Valid Accuracy: 0.4343
+ Best site-White                     | Epoch:34 | Val Acc: 0.5726
+ Best site-White                     | Epoch:34 | Val Acc: 0.5537
+ Best site-Latino_Hispanic           | Epoch:34 | Val Acc: 0.4233
+ Best site-Latino_Hispanic           | Epoch:34 | Val Acc: 0.4647
+ Best site-Black                     | Epoch:34 | Val Acc: 0.4144
+ Best site-Black                     | Epoch:34 | Val Acc: 0.3558
+ Best site-East_Asian                | Epoch:34 | Val Acc: 0.4800
+ Best site-East_Asian                | Epoch:34 | Val Acc: 0.4775
+ Best site-Indian                    | Epoch:34 | Val Acc: 0.3922
+ Best site-Indian                    | Epoch:34 | Val Acc: 0.4400
+ Best site-Southeast_Asian           | Epoch:34 | Val Acc: 0.3235
+ Best site-Southeast_Asian           | Epoch:34 | Val Acc: 0.3922
+ Best site-Middle_Eastern            | Epoch:34 | Val Acc: 0.2609
+ Best site-Middle_Eastern            | Epoch:34 | Val Acc: 0.5294
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+============ Train epoch 35 ============
+ Site-White                    | Train Loss: 1.2056 | Train Acc: 0.5623
+ Site-White                    | Train Loss: 1.1825 | Train Acc: 0.5489
+ Site-Latino_Hispanic          | Train Loss: 1.4495 | Train Acc: 0.4228
+ Site-Latino_Hispanic          | Train Loss: 1.3534 | Train Acc: 0.4598
+ Site-Black                    | Train Loss: 1.6725 | Train Acc: 0.3234
+ Site-Black                    | Train Loss: 1.5955 | Train Acc: 0.3878
+ Site-East_Asian               | Train Loss: 1.4143 | Train Acc: 0.4071
+ Site-East_Asian               | Train Loss: 1.3978 | Train Acc: 0.4731
+ Site-Indian                   | Train Loss: 1.2522 | Train Acc: 0.4156
+ Site-Indian                   | Train Loss: 1.5519 | Train Acc: 0.3894
+ Site-Southeast_Asian          | Train Loss: 1.5424 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.4994 | Train Acc: 0.3553
+ Site-Middle_Eastern           | Train Loss: 1.6305 | Train Acc: 0.3429
+ Site-Middle_Eastern           | Train Loss: 1.5602 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.2339 | Val  Acc: 0.5270
+ Site-White                         | Val  Loss: 1.1751 | Val  Acc: 0.5537
+ Site-Latino_Hispanic               | Val  Loss: 1.4442 | Val  Acc: 0.3804
+ Site-Latino_Hispanic               | Val  Loss: 1.3393 | Val  Acc: 0.4564
+ Site-Black                         | Val  Loss: 1.5804 | Val  Acc: 0.4324
+ Site-Black                         | Val  Loss: 1.7259 | Val  Acc: 0.3129
+ Site-East_Asian                    | Val  Loss: 1.3857 | Val  Acc: 0.5600
+ Site-East_Asian                    | Val  Loss: 1.4527 | Val  Acc: 0.4955
+ Site-Indian                        | Val  Loss: 1.6911 | Val  Acc: 0.4314
+ Site-Indian                        | Val  Loss: 1.4307 | Val  Acc: 0.4800
+ Site-Southeast_Asian               | Val  Loss: 1.4526 | Val  Acc: 0.4706
+ Site-Southeast_Asian               | Val  Loss: 1.6813 | Val  Acc: 0.4118
+ Site-Middle_Eastern                | Val  Loss: 1.5103 | Val  Acc: 0.3913
+ Site-Middle_Eastern                | Val  Loss: 1.2686 | Val  Acc: 0.5588
+Average Valid Accuracy: 0.4616
+ Best site-White                     | Epoch:35 | Val Acc: 0.5270
+ Best site-White                     | Epoch:35 | Val Acc: 0.5537
+ Best site-Latino_Hispanic           | Epoch:35 | Val Acc: 0.3804
+ Best site-Latino_Hispanic           | Epoch:35 | Val Acc: 0.4564
+ Best site-Black                     | Epoch:35 | Val Acc: 0.4324
+ Best site-Black                     | Epoch:35 | Val Acc: 0.3129
+ Best site-East_Asian                | Epoch:35 | Val Acc: 0.5600
+ Best site-East_Asian                | Epoch:35 | Val Acc: 0.4955
+ Best site-Indian                    | Epoch:35 | Val Acc: 0.4314
+ Best site-Indian                    | Epoch:35 | Val Acc: 0.4800
+ Best site-Southeast_Asian           | Epoch:35 | Val Acc: 0.4706
+ Best site-Southeast_Asian           | Epoch:35 | Val Acc: 0.4118
+ Best site-Middle_Eastern            | Epoch:35 | Val Acc: 0.3913
+ Best site-Middle_Eastern            | Epoch:35 | Val Acc: 0.5588
+ Saving the local and server checkpoint to ../checkpoint/fed_fairface_even_1.0_1_random_dis_cluster_-1/CoCoOP...
+============ Train epoch 36 ============
+ Site-White                    | Train Loss: 1.2088 | Train Acc: 0.5845
+ Site-White                    | Train Loss: 1.1586 | Train Acc: 0.5620
+ Site-Latino_Hispanic          | Train Loss: 1.4474 | Train Acc: 0.4390
+ Site-Latino_Hispanic          | Train Loss: 1.3770 | Train Acc: 0.4488
+ Site-Black                    | Train Loss: 1.6307 | Train Acc: 0.3713
+ Site-Black                    | Train Loss: 1.5812 | Train Acc: 0.3755
+ Site-East_Asian               | Train Loss: 1.3872 | Train Acc: 0.4602
+ Site-East_Asian               | Train Loss: 1.4194 | Train Acc: 0.4371
+ Site-Indian                   | Train Loss: 1.4176 | Train Acc: 0.4156
+ Site-Indian                   | Train Loss: 1.5816 | Train Acc: 0.4248
+ Site-Southeast_Asian          | Train Loss: 1.5543 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.6007 | Train Acc: 0.4342
+ Site-Middle_Eastern           | Train Loss: 1.5306 | Train Acc: 0.4000
+ Site-Middle_Eastern           | Train Loss: 1.4625 | Train Acc: 0.4231
+ Site-White                         | Val  Loss: 1.2197 | Val  Acc: 0.5602
+ Site-White                         | Val  Loss: 1.1775 | Val  Acc: 0.5650
+ Site-Latino_Hispanic               | Val  Loss: 1.4372 | Val  Acc: 0.3681
+ Site-Latino_Hispanic               | Val  Loss: 1.3458 | Val  Acc: 0.4564
+ Site-Black                         | Val  Loss: 1.5806 | Val  Acc: 0.3874
+ Site-Black                         | Val  Loss: 1.6567 | Val  Acc: 0.3926
+ Site-East_Asian                    | Val  Loss: 1.4694 | Val  Acc: 0.4533
+ Site-East_Asian                    | Val  Loss: 1.4370 | Val  Acc: 0.4685
+ Site-Indian                        | Val  Loss: 1.6598 | Val  Acc: 0.4118
+ Site-Indian                        | Val  Loss: 1.3472 | Val  Acc: 0.5200
+ Site-Southeast_Asian               | Val  Loss: 1.5438 | Val  Acc: 0.3529
+ Site-Southeast_Asian               | Val  Loss: 1.5998 | Val  Acc: 0.3725
+ Site-Middle_Eastern                | Val  Loss: 1.7384 | Val  Acc: 0.2174
+ Site-Middle_Eastern                | Val  Loss: 1.3805 | Val  Acc: 0.4118
+Average Valid Accuracy: 0.4241
+============ Train epoch 37 ============
+ Site-White                    | Train Loss: 1.2058 | Train Acc: 0.5679
+ Site-White                    | Train Loss: 1.1769 | Train Acc: 0.5470
+ Site-Latino_Hispanic          | Train Loss: 1.4489 | Train Acc: 0.4187
+ Site-Latino_Hispanic          | Train Loss: 1.3761 | Train Acc: 0.4460
+ Site-Black                    | Train Loss: 1.6754 | Train Acc: 0.3593
+ Site-Black                    | Train Loss: 1.6258 | Train Acc: 0.3959
+ Site-East_Asian               | Train Loss: 1.3993 | Train Acc: 0.4336
+ Site-East_Asian               | Train Loss: 1.4915 | Train Acc: 0.4910
+ Site-Indian                   | Train Loss: 1.4833 | Train Acc: 0.4026
+ Site-Indian                   | Train Loss: 1.6108 | Train Acc: 0.3894
+ Site-Southeast_Asian          | Train Loss: 1.5037 | Train Acc: 0.4423
+ Site-Southeast_Asian          | Train Loss: 1.5044 | Train Acc: 0.4079
+ Site-Middle_Eastern           | Train Loss: 1.4528 | Train Acc: 0.4857
+ Site-Middle_Eastern           | Train Loss: 1.5359 | Train Acc: 0.4231
+ Site-White                         | Val  Loss: 1.1856 | Val  Acc: 0.5643
+ Site-White                         | Val  Loss: 1.1393 | Val  Acc: 0.5734
+ Site-Latino_Hispanic               | Val  Loss: 1.4388 | Val  Acc: 0.4110
+ Site-Latino_Hispanic               | Val  Loss: 1.3185 | Val  Acc: 0.4647
+ Site-Black                         | Val  Loss: 1.6086 | Val  Acc: 0.3784
+ Site-Black                         | Val  Loss: 1.6633 | Val  Acc: 0.3374
+ Site-East_Asian                    | Val  Loss: 1.5395 | Val  Acc: 0.4267
+ Site-East_Asian                    | Val  Loss: 1.4110 | Val  Acc: 0.5135
+ Site-Indian                        | Val  Loss: 1.6689 | Val  Acc: 0.3922
+ Site-Indian                        | Val  Loss: 1.4139 | Val  Acc: 0.4133
+ Site-Southeast_Asian               | Val  Loss: 1.5043 | Val  Acc: 0.4118
+ Site-Southeast_Asian               | Val  Loss: 1.6359 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.7350 | Val  Acc: 0.3478
+ Site-Middle_Eastern                | Val  Loss: 1.2782 | Val  Acc: 0.5000
+Average Valid Accuracy: 0.4376
+============ Train epoch 38 ============
+ Site-White                    | Train Loss: 1.2034 | Train Acc: 0.5679
+ Site-White                    | Train Loss: 1.1718 | Train Acc: 0.5620
+ Site-Latino_Hispanic          | Train Loss: 1.4277 | Train Acc: 0.4553
+ Site-Latino_Hispanic          | Train Loss: 1.3976 | Train Acc: 0.4349
+ Site-Black                    | Train Loss: 1.6365 | Train Acc: 0.3713
+ Site-Black                    | Train Loss: 1.6180 | Train Acc: 0.3755
+ Site-East_Asian               | Train Loss: 1.3964 | Train Acc: 0.4336
+ Site-East_Asian               | Train Loss: 1.4533 | Train Acc: 0.4491
+ Site-Indian                   | Train Loss: 1.4631 | Train Acc: 0.4416
+ Site-Indian                   | Train Loss: 1.5621 | Train Acc: 0.4159
+ Site-Southeast_Asian          | Train Loss: 1.5827 | Train Acc: 0.4615
+ Site-Southeast_Asian          | Train Loss: 1.5266 | Train Acc: 0.4079
+ Site-Middle_Eastern           | Train Loss: 1.5187 | Train Acc: 0.4000
+ Site-Middle_Eastern           | Train Loss: 1.5178 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.1934 | Val  Acc: 0.5726
+ Site-White                         | Val  Loss: 1.1686 | Val  Acc: 0.5904
+ Site-Latino_Hispanic               | Val  Loss: 1.4228 | Val  Acc: 0.3926
+ Site-Latino_Hispanic               | Val  Loss: 1.3410 | Val  Acc: 0.4440
+ Site-Black                         | Val  Loss: 1.5403 | Val  Acc: 0.4685
+ Site-Black                         | Val  Loss: 1.6907 | Val  Acc: 0.3436
+ Site-East_Asian                    | Val  Loss: 1.5771 | Val  Acc: 0.4800
+ Site-East_Asian                    | Val  Loss: 1.4110 | Val  Acc: 0.4775
+ Site-Indian                        | Val  Loss: 1.6870 | Val  Acc: 0.4510
+ Site-Indian                        | Val  Loss: 1.4057 | Val  Acc: 0.4267
+ Site-Southeast_Asian               | Val  Loss: 1.5428 | Val  Acc: 0.3824
+ Site-Southeast_Asian               | Val  Loss: 1.5669 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.7364 | Val  Acc: 0.3478
+ Site-Middle_Eastern                | Val  Loss: 1.2974 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.4436
+============ Train epoch 39 ============
+ Site-White                    | Train Loss: 1.2056 | Train Acc: 0.5789
+ Site-White                    | Train Loss: 1.1379 | Train Acc: 0.5564
+ Site-Latino_Hispanic          | Train Loss: 1.4347 | Train Acc: 0.4065
+ Site-Latino_Hispanic          | Train Loss: 1.3818 | Train Acc: 0.4432
+ Site-Black                    | Train Loss: 1.6464 | Train Acc: 0.3353
+ Site-Black                    | Train Loss: 1.6192 | Train Acc: 0.4000
+ Site-East_Asian               | Train Loss: 1.3938 | Train Acc: 0.4513
+ Site-East_Asian               | Train Loss: 1.5017 | Train Acc: 0.3713
+ Site-Indian                   | Train Loss: 1.3283 | Train Acc: 0.4026
+ Site-Indian                   | Train Loss: 1.5498 | Train Acc: 0.4336
+ Site-Southeast_Asian          | Train Loss: 1.5059 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.4592 | Train Acc: 0.4211
+ Site-Middle_Eastern           | Train Loss: 1.5579 | Train Acc: 0.3714
+ Site-Middle_Eastern           | Train Loss: 1.5382 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.1756 | Val  Acc: 0.5768
+ Site-White                         | Val  Loss: 1.1698 | Val  Acc: 0.5847
+ Site-Latino_Hispanic               | Val  Loss: 1.4929 | Val  Acc: 0.3804
+ Site-Latino_Hispanic               | Val  Loss: 1.3484 | Val  Acc: 0.4647
+ Site-Black                         | Val  Loss: 1.5644 | Val  Acc: 0.4054
+ Site-Black                         | Val  Loss: 1.6705 | Val  Acc: 0.3742
+ Site-East_Asian                    | Val  Loss: 1.4716 | Val  Acc: 0.4667
+ Site-East_Asian                    | Val  Loss: 1.4140 | Val  Acc: 0.5405
+ Site-Indian                        | Val  Loss: 1.5693 | Val  Acc: 0.3725
+ Site-Indian                        | Val  Loss: 1.4159 | Val  Acc: 0.4133
+ Site-Southeast_Asian               | Val  Loss: 1.4973 | Val  Acc: 0.3529
+ Site-Southeast_Asian               | Val  Loss: 1.6004 | Val  Acc: 0.3529
+ Site-Middle_Eastern                | Val  Loss: 1.6797 | Val  Acc: 0.3043
+ Site-Middle_Eastern                | Val  Loss: 1.3846 | Val  Acc: 0.3824
+Average Valid Accuracy: 0.4266
+============ Train epoch 40 ============
+ Site-White                    | Train Loss: 1.2083 | Train Acc: 0.5374
+ Site-White                    | Train Loss: 1.1654 | Train Acc: 0.5526
+ Site-Latino_Hispanic          | Train Loss: 1.4282 | Train Acc: 0.4472
+ Site-Latino_Hispanic          | Train Loss: 1.3898 | Train Acc: 0.4321
+ Site-Black                    | Train Loss: 1.6461 | Train Acc: 0.3473
+ Site-Black                    | Train Loss: 1.6224 | Train Acc: 0.3959
+ Site-East_Asian               | Train Loss: 1.3770 | Train Acc: 0.4513
+ Site-East_Asian               | Train Loss: 1.3789 | Train Acc: 0.4731
+ Site-Indian                   | Train Loss: 1.4009 | Train Acc: 0.4416
+ Site-Indian                   | Train Loss: 1.5627 | Train Acc: 0.4248
+ Site-Southeast_Asian          | Train Loss: 1.4989 | Train Acc: 0.4423
+ Site-Southeast_Asian          | Train Loss: 1.4273 | Train Acc: 0.4211
+ Site-Middle_Eastern           | Train Loss: 1.5769 | Train Acc: 0.4286
+ Site-Middle_Eastern           | Train Loss: 1.4500 | Train Acc: 0.4038
+ Site-White                         | Val  Loss: 1.1841 | Val  Acc: 0.5602
+ Site-White                         | Val  Loss: 1.1499 | Val  Acc: 0.5706
+ Site-Latino_Hispanic               | Val  Loss: 1.4278 | Val  Acc: 0.3926
+ Site-Latino_Hispanic               | Val  Loss: 1.3128 | Val  Acc: 0.4730
+ Site-Black                         | Val  Loss: 1.5867 | Val  Acc: 0.4234
+ Site-Black                         | Val  Loss: 1.7006 | Val  Acc: 0.3313
+ Site-East_Asian                    | Val  Loss: 1.4781 | Val  Acc: 0.4933
+ Site-East_Asian                    | Val  Loss: 1.3832 | Val  Acc: 0.5045
+ Site-Indian                        | Val  Loss: 1.6899 | Val  Acc: 0.4314
+ Site-Indian                        | Val  Loss: 1.3376 | Val  Acc: 0.5067
+ Site-Southeast_Asian               | Val  Loss: 1.5219 | Val  Acc: 0.4412
+ Site-Southeast_Asian               | Val  Loss: 1.6629 | Val  Acc: 0.3529
+ Site-Middle_Eastern                | Val  Loss: 1.6662 | Val  Acc: 0.3478
+ Site-Middle_Eastern                | Val  Loss: 1.3748 | Val  Acc: 0.5588
+Average Valid Accuracy: 0.4563
+============ Train epoch 41 ============
+ Site-White                    | Train Loss: 1.1985 | Train Acc: 0.5706
+ Site-White                    | Train Loss: 1.1654 | Train Acc: 0.5602
+ Site-Latino_Hispanic          | Train Loss: 1.4500 | Train Acc: 0.4675
+ Site-Latino_Hispanic          | Train Loss: 1.3663 | Train Acc: 0.4460
+ Site-Black                    | Train Loss: 1.6588 | Train Acc: 0.3653
+ Site-Black                    | Train Loss: 1.6438 | Train Acc: 0.3714
+ Site-East_Asian               | Train Loss: 1.3419 | Train Acc: 0.4690
+ Site-East_Asian               | Train Loss: 1.4135 | Train Acc: 0.4910
+ Site-Indian                   | Train Loss: 1.3544 | Train Acc: 0.4026
+ Site-Indian                   | Train Loss: 1.5341 | Train Acc: 0.4071
+ Site-Southeast_Asian          | Train Loss: 1.5286 | Train Acc: 0.4423
+ Site-Southeast_Asian          | Train Loss: 1.4159 | Train Acc: 0.3947
+ Site-Middle_Eastern           | Train Loss: 1.6088 | Train Acc: 0.3429
+ Site-Middle_Eastern           | Train Loss: 1.4689 | Train Acc: 0.4038
+ Site-White                         | Val  Loss: 1.1631 | Val  Acc: 0.5851
+ Site-White                         | Val  Loss: 1.1418 | Val  Acc: 0.5932
+ Site-Latino_Hispanic               | Val  Loss: 1.4140 | Val  Acc: 0.3865
+ Site-Latino_Hispanic               | Val  Loss: 1.3059 | Val  Acc: 0.4647
+ Site-Black                         | Val  Loss: 1.6313 | Val  Acc: 0.4054
+ Site-Black                         | Val  Loss: 1.6797 | Val  Acc: 0.3497
+ Site-East_Asian                    | Val  Loss: 1.4495 | Val  Acc: 0.5067
+ Site-East_Asian                    | Val  Loss: 1.4176 | Val  Acc: 0.5135
+ Site-Indian                        | Val  Loss: 1.5674 | Val  Acc: 0.3922
+ Site-Indian                        | Val  Loss: 1.3509 | Val  Acc: 0.4800
+ Site-Southeast_Asian               | Val  Loss: 1.5418 | Val  Acc: 0.4118
+ Site-Southeast_Asian               | Val  Loss: 1.6456 | Val  Acc: 0.4314
+ Site-Middle_Eastern                | Val  Loss: 1.7059 | Val  Acc: 0.2174
+ Site-Middle_Eastern                | Val  Loss: 1.2913 | Val  Acc: 0.4706
+Average Valid Accuracy: 0.4434
+============ Train epoch 42 ============
+ Site-White                    | Train Loss: 1.1708 | Train Acc: 0.5845
+ Site-White                    | Train Loss: 1.1650 | Train Acc: 0.5902
+ Site-Latino_Hispanic          | Train Loss: 1.4300 | Train Acc: 0.4228
+ Site-Latino_Hispanic          | Train Loss: 1.3616 | Train Acc: 0.4598
+ Site-Black                    | Train Loss: 1.6739 | Train Acc: 0.3533
+ Site-Black                    | Train Loss: 1.6109 | Train Acc: 0.3837
+ Site-East_Asian               | Train Loss: 1.4134 | Train Acc: 0.4159
+ Site-East_Asian               | Train Loss: 1.4065 | Train Acc: 0.4970
+ Site-Indian                   | Train Loss: 1.5302 | Train Acc: 0.4026
+ Site-Indian                   | Train Loss: 1.4974 | Train Acc: 0.4248
+ Site-Southeast_Asian          | Train Loss: 1.5024 | Train Acc: 0.5000
+ Site-Southeast_Asian          | Train Loss: 1.5695 | Train Acc: 0.3816
+ Site-Middle_Eastern           | Train Loss: 1.5497 | Train Acc: 0.3143
+ Site-Middle_Eastern           | Train Loss: 1.5186 | Train Acc: 0.3462
+ Site-White                         | Val  Loss: 1.1977 | Val  Acc: 0.5643
+ Site-White                         | Val  Loss: 1.1324 | Val  Acc: 0.5904
+ Site-Latino_Hispanic               | Val  Loss: 1.3867 | Val  Acc: 0.4110
+ Site-Latino_Hispanic               | Val  Loss: 1.3238 | Val  Acc: 0.4647
+ Site-Black                         | Val  Loss: 1.5468 | Val  Acc: 0.3964
+ Site-Black                         | Val  Loss: 1.6194 | Val  Acc: 0.3804
+ Site-East_Asian                    | Val  Loss: 1.3997 | Val  Acc: 0.4800
+ Site-East_Asian                    | Val  Loss: 1.4256 | Val  Acc: 0.5135
+ Site-Indian                        | Val  Loss: 1.7232 | Val  Acc: 0.3922
+ Site-Indian                        | Val  Loss: 1.3043 | Val  Acc: 0.4400
+ Site-Southeast_Asian               | Val  Loss: 1.4959 | Val  Acc: 0.4706
+ Site-Southeast_Asian               | Val  Loss: 1.6875 | Val  Acc: 0.4118
+ Site-Middle_Eastern                | Val  Loss: 1.6104 | Val  Acc: 0.4348
+ Site-Middle_Eastern                | Val  Loss: 1.2967 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.4565
+============ Train epoch 43 ============
+ Site-White                    | Train Loss: 1.1915 | Train Acc: 0.5679
+ Site-White                    | Train Loss: 1.1532 | Train Acc: 0.5827
+ Site-Latino_Hispanic          | Train Loss: 1.4305 | Train Acc: 0.4309
+ Site-Latino_Hispanic          | Train Loss: 1.3966 | Train Acc: 0.4432
+ Site-Black                    | Train Loss: 1.6208 | Train Acc: 0.3473
+ Site-Black                    | Train Loss: 1.5878 | Train Acc: 0.4000
+ Site-East_Asian               | Train Loss: 1.3997 | Train Acc: 0.4336
+ Site-East_Asian               | Train Loss: 1.4286 | Train Acc: 0.4790
+ Site-Indian                   | Train Loss: 1.3788 | Train Acc: 0.4675
+ Site-Indian                   | Train Loss: 1.5160 | Train Acc: 0.4690
+ Site-Southeast_Asian          | Train Loss: 1.6293 | Train Acc: 0.4615
+ Site-Southeast_Asian          | Train Loss: 1.7141 | Train Acc: 0.3816
+ Site-Middle_Eastern           | Train Loss: 1.5446 | Train Acc: 0.3714
+ Site-Middle_Eastern           | Train Loss: 1.5243 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.2003 | Val  Acc: 0.5685
+ Site-White                         | Val  Loss: 1.0965 | Val  Acc: 0.6045
+ Site-Latino_Hispanic               | Val  Loss: 1.4041 | Val  Acc: 0.4172
+ Site-Latino_Hispanic               | Val  Loss: 1.3057 | Val  Acc: 0.4730
+ Site-Black                         | Val  Loss: 1.5718 | Val  Acc: 0.4234
+ Site-Black                         | Val  Loss: 1.6740 | Val  Acc: 0.3681
+ Site-East_Asian                    | Val  Loss: 1.3985 | Val  Acc: 0.4800
+ Site-East_Asian                    | Val  Loss: 1.4493 | Val  Acc: 0.5045
+ Site-Indian                        | Val  Loss: 1.6798 | Val  Acc: 0.4510
+ Site-Indian                        | Val  Loss: 1.3711 | Val  Acc: 0.4400
+ Site-Southeast_Asian               | Val  Loss: 1.5012 | Val  Acc: 0.4706
+ Site-Southeast_Asian               | Val  Loss: 1.5991 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.7153 | Val  Acc: 0.2609
+ Site-Middle_Eastern                | Val  Loss: 1.3260 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.4496
+============ Train epoch 44 ============
+ Site-White                    | Train Loss: 1.1549 | Train Acc: 0.5873
+ Site-White                    | Train Loss: 1.1422 | Train Acc: 0.5827
+ Site-Latino_Hispanic          | Train Loss: 1.4126 | Train Acc: 0.4553
+ Site-Latino_Hispanic          | Train Loss: 1.3283 | Train Acc: 0.4681
+ Site-Black                    | Train Loss: 1.6825 | Train Acc: 0.3772
+ Site-Black                    | Train Loss: 1.6020 | Train Acc: 0.4041
+ Site-East_Asian               | Train Loss: 1.3867 | Train Acc: 0.4867
+ Site-East_Asian               | Train Loss: 1.4842 | Train Acc: 0.4731
+ Site-Indian                   | Train Loss: 1.3125 | Train Acc: 0.4416
+ Site-Indian                   | Train Loss: 1.5088 | Train Acc: 0.4956
+ Site-Southeast_Asian          | Train Loss: 1.5720 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.5735 | Train Acc: 0.3816
+ Site-Middle_Eastern           | Train Loss: 1.5307 | Train Acc: 0.3429
+ Site-Middle_Eastern           | Train Loss: 1.4891 | Train Acc: 0.3846
+ Site-White                         | Val  Loss: 1.1618 | Val  Acc: 0.5975
+ Site-White                         | Val  Loss: 1.1218 | Val  Acc: 0.6299
+ Site-Latino_Hispanic               | Val  Loss: 1.4140 | Val  Acc: 0.4110
+ Site-Latino_Hispanic               | Val  Loss: 1.2811 | Val  Acc: 0.4896
+ Site-Black                         | Val  Loss: 1.5492 | Val  Acc: 0.4234
+ Site-Black                         | Val  Loss: 1.6711 | Val  Acc: 0.3497
+ Site-East_Asian                    | Val  Loss: 1.4990 | Val  Acc: 0.4933
+ Site-East_Asian                    | Val  Loss: 1.3636 | Val  Acc: 0.5315
+ Site-Indian                        | Val  Loss: 1.7198 | Val  Acc: 0.4118
+ Site-Indian                        | Val  Loss: 1.3442 | Val  Acc: 0.4933
+ Site-Southeast_Asian               | Val  Loss: 1.4368 | Val  Acc: 0.4412
+ Site-Southeast_Asian               | Val  Loss: 1.6033 | Val  Acc: 0.4118
+ Site-Middle_Eastern                | Val  Loss: 1.6754 | Val  Acc: 0.3478
+ Site-Middle_Eastern                | Val  Loss: 1.3864 | Val  Acc: 0.2941
+Average Valid Accuracy: 0.4519
+============ Train epoch 45 ============
+ Site-White                    | Train Loss: 1.1741 | Train Acc: 0.5789
+ Site-White                    | Train Loss: 1.1430 | Train Acc: 0.5921
+ Site-Latino_Hispanic          | Train Loss: 1.4480 | Train Acc: 0.4187
+ Site-Latino_Hispanic          | Train Loss: 1.3417 | Train Acc: 0.4875
+ Site-Black                    | Train Loss: 1.6683 | Train Acc: 0.3653
+ Site-Black                    | Train Loss: 1.5879 | Train Acc: 0.3755
+ Site-East_Asian               | Train Loss: 1.3980 | Train Acc: 0.4159
+ Site-East_Asian               | Train Loss: 1.4675 | Train Acc: 0.4192
+ Site-Indian                   | Train Loss: 1.4903 | Train Acc: 0.4416
+ Site-Indian                   | Train Loss: 1.4758 | Train Acc: 0.4248
+ Site-Southeast_Asian          | Train Loss: 1.5789 | Train Acc: 0.3846
+ Site-Southeast_Asian          | Train Loss: 1.5148 | Train Acc: 0.3816
+ Site-Middle_Eastern           | Train Loss: 1.5893 | Train Acc: 0.3429
+ Site-Middle_Eastern           | Train Loss: 1.4897 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.1482 | Val  Acc: 0.6141
+ Site-White                         | Val  Loss: 1.1109 | Val  Acc: 0.5819
+ Site-Latino_Hispanic               | Val  Loss: 1.3674 | Val  Acc: 0.4540
+ Site-Latino_Hispanic               | Val  Loss: 1.3059 | Val  Acc: 0.4730
+ Site-Black                         | Val  Loss: 1.5694 | Val  Acc: 0.3964
+ Site-Black                         | Val  Loss: 1.6723 | Val  Acc: 0.3926
+ Site-East_Asian                    | Val  Loss: 1.5720 | Val  Acc: 0.4800
+ Site-East_Asian                    | Val  Loss: 1.4294 | Val  Acc: 0.5225
+ Site-Indian                        | Val  Loss: 1.6687 | Val  Acc: 0.4118
+ Site-Indian                        | Val  Loss: 1.3722 | Val  Acc: 0.4533
+ Site-Southeast_Asian               | Val  Loss: 1.4879 | Val  Acc: 0.4412
+ Site-Southeast_Asian               | Val  Loss: 1.6086 | Val  Acc: 0.3725
+ Site-Middle_Eastern                | Val  Loss: 1.5908 | Val  Acc: 0.3478
+ Site-Middle_Eastern                | Val  Loss: 1.3213 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.4559
+============ Train epoch 46 ============
+ Site-White                    | Train Loss: 1.2050 | Train Acc: 0.5679
+ Site-White                    | Train Loss: 1.1338 | Train Acc: 0.5658
+ Site-Latino_Hispanic          | Train Loss: 1.4202 | Train Acc: 0.4472
+ Site-Latino_Hispanic          | Train Loss: 1.3803 | Train Acc: 0.4321
+ Site-Black                    | Train Loss: 1.5767 | Train Acc: 0.3713
+ Site-Black                    | Train Loss: 1.6283 | Train Acc: 0.3918
+ Site-East_Asian               | Train Loss: 1.3862 | Train Acc: 0.4602
+ Site-East_Asian               | Train Loss: 1.4699 | Train Acc: 0.4731
+ Site-Indian                   | Train Loss: 1.4172 | Train Acc: 0.4026
+ Site-Indian                   | Train Loss: 1.5398 | Train Acc: 0.4336
+ Site-Southeast_Asian          | Train Loss: 1.5874 | Train Acc: 0.4231
+ Site-Southeast_Asian          | Train Loss: 1.5133 | Train Acc: 0.3947
+ Site-Middle_Eastern           | Train Loss: 1.4796 | Train Acc: 0.3714
+ Site-Middle_Eastern           | Train Loss: 1.4884 | Train Acc: 0.4423
+ Site-White                         | Val  Loss: 1.1738 | Val  Acc: 0.5602
+ Site-White                         | Val  Loss: 1.1218 | Val  Acc: 0.5932
+ Site-Latino_Hispanic               | Val  Loss: 1.3901 | Val  Acc: 0.4356
+ Site-Latino_Hispanic               | Val  Loss: 1.2948 | Val  Acc: 0.4647
+ Site-Black                         | Val  Loss: 1.5495 | Val  Acc: 0.4324
+ Site-Black                         | Val  Loss: 1.6081 | Val  Acc: 0.3436
+ Site-East_Asian                    | Val  Loss: 1.4353 | Val  Acc: 0.5333
+ Site-East_Asian                    | Val  Loss: 1.4471 | Val  Acc: 0.4955
+ Site-Indian                        | Val  Loss: 1.6354 | Val  Acc: 0.3725
+ Site-Indian                        | Val  Loss: 1.3992 | Val  Acc: 0.4133
+ Site-Southeast_Asian               | Val  Loss: 1.4913 | Val  Acc: 0.4706
+ Site-Southeast_Asian               | Val  Loss: 1.6351 | Val  Acc: 0.3725
+ Site-Middle_Eastern                | Val  Loss: 1.6387 | Val  Acc: 0.3478
+ Site-Middle_Eastern                | Val  Loss: 1.4055 | Val  Acc: 0.4412
+Average Valid Accuracy: 0.4483
+============ Train epoch 47 ============
+ Site-White                    | Train Loss: 1.1599 | Train Acc: 0.5928
+ Site-White                    | Train Loss: 1.1444 | Train Acc: 0.5921
+ Site-Latino_Hispanic          | Train Loss: 1.3994 | Train Acc: 0.4472
+ Site-Latino_Hispanic          | Train Loss: 1.3521 | Train Acc: 0.4460
+ Site-Black                    | Train Loss: 1.6343 | Train Acc: 0.3593
+ Site-Black                    | Train Loss: 1.6006 | Train Acc: 0.3633
+ Site-East_Asian               | Train Loss: 1.3580 | Train Acc: 0.4159
+ Site-East_Asian               | Train Loss: 1.3723 | Train Acc: 0.5090
+ Site-Indian                   | Train Loss: 1.3374 | Train Acc: 0.4416
+ Site-Indian                   | Train Loss: 1.4709 | Train Acc: 0.4248
+ Site-Southeast_Asian          | Train Loss: 1.5208 | Train Acc: 0.4808
+ Site-Southeast_Asian          | Train Loss: 1.4521 | Train Acc: 0.4605
+ Site-Middle_Eastern           | Train Loss: 1.5359 | Train Acc: 0.3429
+ Site-Middle_Eastern           | Train Loss: 1.4643 | Train Acc: 0.4231
+ Site-White                         | Val  Loss: 1.1486 | Val  Acc: 0.5519
+ Site-White                         | Val  Loss: 1.1210 | Val  Acc: 0.5876
+ Site-Latino_Hispanic               | Val  Loss: 1.4115 | Val  Acc: 0.4356
+ Site-Latino_Hispanic               | Val  Loss: 1.2822 | Val  Acc: 0.4896
+ Site-Black                         | Val  Loss: 1.5500 | Val  Acc: 0.4414
+ Site-Black                         | Val  Loss: 1.7245 | Val  Acc: 0.3436
+ Site-East_Asian                    | Val  Loss: 1.4668 | Val  Acc: 0.4667
+ Site-East_Asian                    | Val  Loss: 1.4302 | Val  Acc: 0.4595
+ Site-Indian                        | Val  Loss: 1.6462 | Val  Acc: 0.3725
+ Site-Indian                        | Val  Loss: 1.3943 | Val  Acc: 0.4133
+ Site-Southeast_Asian               | Val  Loss: 1.5944 | Val  Acc: 0.3529
+ Site-Southeast_Asian               | Val  Loss: 1.5727 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.7495 | Val  Acc: 0.3043
+ Site-Middle_Eastern                | Val  Loss: 1.3390 | Val  Acc: 0.3824
+Average Valid Accuracy: 0.4281
+============ Train epoch 48 ============
+ Site-White                    | Train Loss: 1.1465 | Train Acc: 0.5900
+ Site-White                    | Train Loss: 1.1347 | Train Acc: 0.6015
+ Site-Latino_Hispanic          | Train Loss: 1.4086 | Train Acc: 0.4634
+ Site-Latino_Hispanic          | Train Loss: 1.3373 | Train Acc: 0.4875
+ Site-Black                    | Train Loss: 1.6807 | Train Acc: 0.3653
+ Site-Black                    | Train Loss: 1.5818 | Train Acc: 0.4245
+ Site-East_Asian               | Train Loss: 1.3773 | Train Acc: 0.4956
+ Site-East_Asian               | Train Loss: 1.4628 | Train Acc: 0.4551
+ Site-Indian                   | Train Loss: 1.4851 | Train Acc: 0.4545
+ Site-Indian                   | Train Loss: 1.4772 | Train Acc: 0.4779
+ Site-Southeast_Asian          | Train Loss: 1.4736 | Train Acc: 0.4808
+ Site-Southeast_Asian          | Train Loss: 1.4432 | Train Acc: 0.3947
+ Site-Middle_Eastern           | Train Loss: 1.5858 | Train Acc: 0.3429
+ Site-Middle_Eastern           | Train Loss: 1.4720 | Train Acc: 0.3846
+ Site-White                         | Val  Loss: 1.1556 | Val  Acc: 0.5892
+ Site-White                         | Val  Loss: 1.0840 | Val  Acc: 0.6243
+ Site-Latino_Hispanic               | Val  Loss: 1.4135 | Val  Acc: 0.3865
+ Site-Latino_Hispanic               | Val  Loss: 1.2894 | Val  Acc: 0.4855
+ Site-Black                         | Val  Loss: 1.4984 | Val  Acc: 0.4505
+ Site-Black                         | Val  Loss: 1.6922 | Val  Acc: 0.3804
+ Site-East_Asian                    | Val  Loss: 1.4643 | Val  Acc: 0.4800
+ Site-East_Asian                    | Val  Loss: 1.4400 | Val  Acc: 0.5045
+ Site-Indian                        | Val  Loss: 1.6643 | Val  Acc: 0.4314
+ Site-Indian                        | Val  Loss: 1.2800 | Val  Acc: 0.4933
+ Site-Southeast_Asian               | Val  Loss: 1.5346 | Val  Acc: 0.3235
+ Site-Southeast_Asian               | Val  Loss: 1.5863 | Val  Acc: 0.3922
+ Site-Middle_Eastern                | Val  Loss: 1.6810 | Val  Acc: 0.3043
+ Site-Middle_Eastern                | Val  Loss: 1.3801 | Val  Acc: 0.3824
+Average Valid Accuracy: 0.4449
+============ Train epoch 49 ============
+ Site-White                    | Train Loss: 1.1670 | Train Acc: 0.5651
+ Site-White                    | Train Loss: 1.1100 | Train Acc: 0.6071
+ Site-Latino_Hispanic          | Train Loss: 1.4115 | Train Acc: 0.4431
+ Site-Latino_Hispanic          | Train Loss: 1.3436 | Train Acc: 0.4543
+ Site-Black                    | Train Loss: 1.6173 | Train Acc: 0.3772
+ Site-Black                    | Train Loss: 1.6043 | Train Acc: 0.4000
+ Site-East_Asian               | Train Loss: 1.4214 | Train Acc: 0.4513
+ Site-East_Asian               | Train Loss: 1.3495 | Train Acc: 0.4371
+ Site-Indian                   | Train Loss: 1.2758 | Train Acc: 0.4286
+ Site-Indian                   | Train Loss: 1.5327 | Train Acc: 0.4248
+ Site-Southeast_Asian          | Train Loss: 1.5109 | Train Acc: 0.3846
+ Site-Southeast_Asian          | Train Loss: 1.5296 | Train Acc: 0.4342
+ Site-Middle_Eastern           | Train Loss: 1.5789 | Train Acc: 0.3429
+ Site-Middle_Eastern           | Train Loss: 1.4445 | Train Acc: 0.3654
+ Site-White                         | Val  Loss: 1.1586 | Val  Acc: 0.5975
+ Site-White                         | Val  Loss: 1.1038 | Val  Acc: 0.6045
+ Site-Latino_Hispanic               | Val  Loss: 1.3537 | Val  Acc: 0.4110
+ Site-Latino_Hispanic               | Val  Loss: 1.2842 | Val  Acc: 0.5270
+ Site-Black                         | Val  Loss: 1.5348 | Val  Acc: 0.4955
+ Site-Black                         | Val  Loss: 1.6271 | Val  Acc: 0.3804
+ Site-East_Asian                    | Val  Loss: 1.5159 | Val  Acc: 0.4933
+ Site-East_Asian                    | Val  Loss: 1.3765 | Val  Acc: 0.5045
+ Site-Indian                        | Val  Loss: 1.6928 | Val  Acc: 0.3725
+ Site-Indian                        | Val  Loss: 1.3825 | Val  Acc: 0.4133
+ Site-Southeast_Asian               | Val  Loss: 1.4393 | Val  Acc: 0.4118
+ Site-Southeast_Asian               | Val  Loss: 1.5653 | Val  Acc: 0.4706
+ Site-Middle_Eastern                | Val  Loss: 1.6305 | Val  Acc: 0.3478
+ Site-Middle_Eastern                | Val  Loss: 1.3711 | Val  Acc: 0.3529
+Average Valid Accuracy: 0.4559
+===2023-06-09 04:09:58===
+===2023-06-09 04:10:12===
+===Setting===
+    dataset: fairface
+    lr: 0.01
+    batch: 64
+    iters: 50
+    wk_iters: 1
+    si: False
+    domain_num: 7
+    quantile: 0
+    std_rw: False
+    gender_label: False
+    binary_race: False
+    save_iter: -1
+data_number=[361,532,246,361,167,245,113,167,77,113,52,76,35,52,]
+client_nums=[2,2,2,2,2,2,2,]
+len_dataset=[2980,2027,1378,937,637,433,294,]
+domain number = 7
+Loading snapshots...
+ Test site-White                     (1)| Epoch:35 | Test Acc: 0.4144
+ Test site-Latino_Hispanic           (0)| Epoch:35 | Test Acc: 0.3639
+ Test site-Black                     (2)| Epoch:35 | Test Acc: 0.2969
+ Test site-East_Asian                (0)| Epoch:35 | Test Acc: 0.4123
+ Test site-Indian                    (6)| Epoch:35 | Test Acc: 0.3158
+ Test site-Southeast_Asian           (4)| Epoch:35 | Test Acc: 0.4148
+ Test site-Middle_Eastern            (3)| Epoch:35 | Test Acc: 0.3918
+White: 0.4144, Latino_Hispanic: 0.3639, Black: 0.2969, East_Asian: 0.4123, Indian: 0.3158, Southeast_Asian: 0.4148, Middle_Eastern: 0.3918, 
+Average Test Accuracy(group): 0.3728, Average Test Accuracy(individual): 0.3728,
+domain std=0.0455, cluster std=nan, individual std=0.0455, 

@@ -22,7 +22,7 @@ def write_log(args, msg):
     if args.binary_race: log_path += "_binary_race"
     if args.sam: log_path += f"_sam"
     if args.color_jitter: log_path += f"_color_jitter"
-    if args.relu: log_path += f"_relu"
+    if args.cb: log_path += f"_cb"
     if args.q!=1: log_fname = f'{args.mode}_q={args.q}.log'
     if not os.path.exists(log_path):
         os.makedirs(log_path)
@@ -373,19 +373,22 @@ def prepare_fairface_iid_uneven(args):
         # client number = 1.4^k, k=0~5
         # data_len = {5, 4, 3, 2, 1, 1}
         decay_speed = args.ratio
+        data_decay = 1.47
         # if args.binary_race:
         #     client_nums = {"White": 10, "Black": 2}
         #     len_dataset[decay_order[0]] = len(train_sets[decay_order[0]])
         #     len_dataset[decay_order[1]] = int(len(train_sets[decay_order[0]]) * (client_nums[decay_order[1]] / client_nums[decay_order[0]]))
         # else:
         for i, name in enumerate(decay_order):
-                client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
-                if i==0: 
-                    len_dataset[name] = len(train_sets[name])
-                else:
-                    len_dataset[name] = int(len_dataset[decay_order[i-1]]/decay_speed)
+            client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
+            if i==0: 
+                len_dataset[name] = len(train_sets[name])
+            else:
+                len_dataset[name] = int(len_dataset[decay_order[i-1]]/data_decay)
     else:
         decay_speed = 3
+        data_decay = 1.47
+        decay_speed = data_decay
         min_len = -1
         for _, train_set in train_sets.items():
             if min_len==-1:
@@ -393,8 +396,12 @@ def prepare_fairface_iid_uneven(args):
             else:
                 min_len = min(min_len, len(train_set))
         for i, name in enumerate(decay_order):
+            # len_dataset[name] = min_len
             client_nums[name] = 2
-            len_dataset[name] = min_len
+            if i==0: 
+                len_dataset[name] = len(train_sets[name])
+            else:
+                len_dataset[name] = int(len_dataset[decay_order[i-1]]/data_decay)
             
     print(client_nums)
     for name, val in len_dataset.items():
@@ -490,11 +497,8 @@ def prepare_fairface_gender_uneven(args):
         max_clientnum = round(np.float_power(decay_speed, len(decay_order)-1))
         distribution_mode = f"imbalance{max_clientnum}_{args.gender_dis}"
         if args.small_test: distribution_mode += '_small'
-        # if args.binary_race:
-        #     client_nums = {"White": 10, "Black": 2}
-        # else:
         for i, name in enumerate(decay_order):
-                client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
+            client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
     else:
         decay_speed = 3
         distribution_mode = f"balance_{args.gender_dis}"
@@ -1153,10 +1157,6 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             losses = []
             for client_idx in range(client_num):
                 losses.append(multi / (Eas[client_idx]))
-            if args.std_rw:
-                domain_std = domain_fairness(args, gmap, losses)
-            else:
-                domain_std = 0
             loss_i, loss_c = [], []
             for client_idx in range(client_num):
                 loss = multi / (Eas[client_idx])
@@ -1165,31 +1165,23 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                 loss_i.append(Li)
                 loss_c.append(Lc)
                 Lrb = np.float_power(Li, powerI) * np.float_power(Lc, powerC) + 1e-10
-                Srb = client_weights[client_idx] / (1 + domain_std)
+                if args.cb:
+                    Srb = client_weights[client_idx] / gsize[gmap[client_idx]]
+                else:
+                    Srb = client_weights[client_idx]
                 weight = Srb * np.float_power(Lrb, (q+1))
                 new_weights[client_idx] = weight
             if args.quan > 0:
                 quan_i = np.quantile(np.asarray(loss_i), args.quan)
                 quan_c = np.quantile(np.asarray(loss_c), args.quan)
-                if args.relu:
-                    write_log(args, f"quan_i={quan_i:.2f}, quan_c={quan_c:.2f}\n")
-                    write_log(args, f"enlarge weight of clients:[")
-                    for client_idx in range(client_num):
-                        if loss_i[client_idx] > quan_i and loss_c[client_idx] > quan_c:
-                            write_log(args, f"{client_idx}, ")
-                            Srb = client_weights[client_idx]
-                            weight = Srb * np.float_power(loss_i[client_idx], loss_c[client_idx])
-                            new_weights[client_idx] = weight
-                    write_log(args, f"]\n")
-                else:
-                    min_w = min(new_weights)
-                    write_log(args, f"min_w={min_w:.5f}, quan_i={quan_i:.2f}, quan_c={quan_c:.2f}\n")
-                    write_log(args, f"minimize weight of clients:[")
-                    for client_idx in range(client_num):
-                        if loss_i[client_idx] < quan_i and loss_c[client_idx] < quan_c:
-                            write_log(args, f"{client_idx}, ")
-                            new_weights[client_idx] = min_w
-                    write_log(args, f"]\n")
+                min_w = min(new_weights)
+                write_log(args, f"min_w={min_w:.5f}, quan_i={quan_i:.2f}, quan_c={quan_c:.2f}\n")
+                write_log(args, f"minimize weight of clients:[")
+                for client_idx in range(client_num):
+                    if loss_i[client_idx] < quan_i and loss_c[client_idx] < quan_c:
+                        write_log(args, f"{client_idx}, ")
+                        new_weights[client_idx] = min_w
+                write_log(args, f"]\n")
             all_weight = sum(new_weights) 
             new_weights = [wi/all_weight for wi in new_weights]
             for key in server_model.state_dict().keys():

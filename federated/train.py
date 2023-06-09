@@ -79,7 +79,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
     parser.add_argument('--color_jitter', action='store_true', help='whether to color_jitter for fairface')
-    parser.add_argument('--relu', action='store_true', help='whether to relu for re-weighting')
+    parser.add_argument('--cb', action='store_true', help='whether to cb for re-weighting')
     parser.add_argument('--debug', action='store_true', help='whether to debug for inference/test')
     parser.add_argument('--save_all_gmap', action='store_true', help='whether to save_all_gmap')
     parser.add_argument('--freeze_ckpt', action='store_true', help='whether to freeze_ckpt')
@@ -159,7 +159,7 @@ if __name__ == '__main__':
     if args.binary_race: exp_folder += "_binary_race"
     if args.sam: exp_folder += f"_sam"
     if args.color_jitter:  exp_folder += f"_color_jitter"
-    if args.relu:  exp_folder += f"_relu"
+    if args.cb:  exp_folder += f"_cb"
 
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
