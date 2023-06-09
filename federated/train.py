@@ -60,16 +60,16 @@ def test_score(server_model, test_loaders, datasets, best_epoch, gmap):
     print(domain_test_accs)
     cluster_test_accs = list(cluster_test_accs.values())
     domain_test_accs = list(domain_test_accs.values())
-    if gmap: std_cluster = np.std(cluster_test_accs, dtype=np.float64)
-    else: std_cluster = -1
-    std_domain = np.std(domain_test_accs, dtype=np.float64)
-    std_individual = np.std(individual_test_acc, dtype=np.float64)
+    if gmap: cv_cluster = np.std(cluster_test_accs, dtype=np.float64) / np.mean(cluster_test_accs, dtype=np.float64)
+    else:cv_cluster = -1
+    cv_domain = np.std(domain_test_accs, dtype=np.float64) / np.mean(domain_test_accs, dtype=np.float64)
+    cv_individual = np.std(individual_test_acc, dtype=np.float64) /  np.mean(individual_test_acc, dtype=np.float64)
     msg = \
         f"Average Test Accuracy(group): {np.mean(domain_test_accs):.4f}, " \
         + f"Average Test Accuracy(individual): {np.mean(individual_test_acc):.4f},\n" \
-        + f"domain std={std_domain:.4f}, " \
-        + f"cluster std={std_cluster:.4f}, " \
-        + f"individual std={std_individual:.4f}, " 
+        + f"domain CV={cv_domain:.4f}, " \
+        + f"cluster CV={cv_cluster:.4f}, " \
+        + f"individual CV={cv_individual:.4f}, " 
     write_log(args, f'{msg}\n')
     # todo individual std
     return domain_test_accs

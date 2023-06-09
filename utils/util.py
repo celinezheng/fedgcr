@@ -1136,7 +1136,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-        elif args.mode.lower() == 'ccop':
+        elif args.mode.lower() in ['ccop', 'ablation']:
             multi = 100
             
             q = args.q
@@ -1191,66 +1191,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             all_weight = sum(new_weights) 
             new_weights = [wi/all_weight for wi in new_weights]
             for key in server_model.state_dict().keys():
-                if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
-                    print(key)
-                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
-                    for client_idx in range(client_num):
-                        weight = new_weights[client_idx]
-                        temp += weight * models[client_idx].state_dict()[key]
-                    server_model.state_dict()[key].data.copy_(temp)
-                    for client_idx in range(client_num):
-                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-        elif args.mode.lower() == 'ablation':
-            multi = 100
-            q = args.q
-            gmap, cnt = cluster(args, all_feat, domain_num)
-            gsize = [0 for _ in range(domain_num)]
-            gloss = [1e-10 for _ in range(domain_num)]
-            loss_i, loss_c = [], []
-            for i in range(client_num):
-                gsize[gmap[i]] += client_weights[i]
-                loss = multi / (Eas[i])
-                gloss[gmap[i]] += loss * client_weights[i]
-            for i in range(domain_num):
-                if gsize[i]>0:
-                    gloss[i] /= gsize[i]
-            all_weight = 0
-            new_weights = [0 for _ in range(client_num)]
-            power_decay = 0.9
-            base = 0.5
-            powerI = base + (1-base) * np.float_power(power_decay, a_iter+1)
-            powerC = 1 - powerI
-            print("========")
-            print(gloss)
-            write_log(args, f"power_decay: {power_decay}, powerI: {powerI:.4f}, powerC: {powerC:.4f}\n")
-            print("========")
-
-            for client_idx in range(client_num):
-                loss = multi / (Eas[client_idx])
-                Li  = loss
-                Lc = gloss[gmap[client_idx]]
-                loss_i.append(Li)
-                loss_c.append(Lc)
-                Lrb = np.float_power(Li, powerI) * np.float_power(Lc, powerC) + 1e-10
-                Srb = client_weights[client_idx]
-                weight = Srb * np.float_power(Lrb, (q+1))
-                new_weights[client_idx] = weight
-            if args.quan > 0:
-                quan_i = np.quantile(np.asarray(loss_i), args.quan)
-                quan_c = np.quantile(np.asarray(loss_c), args.quan)
-                min_w = min(new_weights)
-                write_log(args, f"min_w={min_w:.5f}, quan_i={quan_i:.2f}, quan_c={quan_c:.2f}\n")
-                write_log(args, f"minimize weight of clients:[")
-                for client_idx in range(client_num):
-                    if loss_i[client_idx] < quan_i and loss_c[client_idx] < quan_c:
-                        write_log(args, f"{client_idx}, ")
-                        new_weights[client_idx] = min_w
-                write_log(args, f"]\n")
-            all_weight = sum(new_weights)
-            new_weights = [wi/all_weight for wi in new_weights]
-            write_log(args, f"sum of wi : {sum(new_weights):.4f}\n")
-            for key in server_model.state_dict().keys():
-                if  'prompt' in key or 'head' in key:
+                if  'prompt' in key or 'head' in key or 'classifier' in key or 'meta_net' in key :
                     print(key)
                     temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
                     for client_idx in range(client_num):
