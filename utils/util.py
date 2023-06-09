@@ -1208,6 +1208,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             gmap, cnt = cluster(args, all_feat, domain_num)
             gsize = [0 for _ in range(domain_num)]
             gloss = [1e-10 for _ in range(domain_num)]
+            loss_i, loss_c = [], []
             for i in range(client_num):
                 gsize[gmap[i]] += client_weights[i]
                 loss = multi / (Eas[i])
@@ -1230,6 +1231,8 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                 loss = multi / (Eas[client_idx])
                 Li  = loss
                 Lc = gloss[gmap[client_idx]]
+                loss_i.append(Li)
+                loss_c.append(Lc)
                 Lrb = np.float_power(Li, powerI) * np.float_power(Lc, powerC) + 1e-10
                 Srb = client_weights[client_idx]
                 weight = Srb * np.float_power(Lrb, (q+1))
