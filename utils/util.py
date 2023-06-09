@@ -567,6 +567,7 @@ def prepare_fairface_binary_race(args):
             transforms.ToTensor(),
     ])
     client_nums = {}
+    len_dataset = {}
     decay_order = ['White', 'Black']
     client_nums = {'White': 10, 'Black': 2}
     print(client_nums)
@@ -578,6 +579,7 @@ def prepare_fairface_binary_race(args):
     datasets = []
     sum_len = 0
     for key, value in client_nums.items():
+        len_dataset[key] = 0
         for j in range(value):
             dataset_name = f"{key}-{j}"
             train_set = FairFaceBinaryDataset(base_path=base_path, site=key, client_idx=j, gender_label=args.gender_label, train=True, transform=transform_train)
@@ -595,6 +597,7 @@ def prepare_fairface_binary_race(args):
             val_loaders.append(val_loader)
             client_weights.append(len(train_set))
             sum_len += len(train_set)
+            len_dataset[key] += len(train_set)
             # print(len(cur_trainset), len(cur_valset))
     print(client_weights)
     write_log(args, f"data_number=[")
@@ -603,6 +606,9 @@ def prepare_fairface_binary_race(args):
     write_log(args, f"]\nclient_nums=[")
     for name in decay_order:
         write_log(args, f"{client_nums[name]},")
+    write_log(args, f"]\nlen_dataset[")
+    for name in decay_order:
+        write_log(args, f"{len_dataset[name]},")
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
     check_labels(args, train_loaders)
