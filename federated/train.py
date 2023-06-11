@@ -78,6 +78,8 @@ if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
+    parser.add_argument('--no_val', action='store_true', help='whether to disable validation set')
+    parser.add_argument('--cq', action='store_true', help='whether to use loss c as power for re-weight')
     parser.add_argument('--color_jitter', action='store_true', help='whether to color_jitter for fairface')
     parser.add_argument('--cb', action='store_true', help='whether to cb for re-weighting')
     parser.add_argument('--debug', action='store_true', help='whether to debug for inference/test')
@@ -160,6 +162,7 @@ if __name__ == '__main__':
     if args.sam: exp_folder += f"_sam"
     if args.color_jitter:  exp_folder += f"_color_jitter"
     if args.cb:  exp_folder += f"_cb"
+    if args.cq:  exp_folder += f"_cq"
 
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
@@ -391,33 +394,40 @@ if __name__ == '__main__':
                 server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, all_feat, prompt_bank)
 
             # Report loss after aggregation
+            train_acc_list = [None for j in range(client_num)]
             for client_idx, model in enumerate(models):
                 train_loss, train_acc = test(model, train_loaders[client_idx], loss_fun, device, prompt_bank)
+                train_acc_list[client_idx] = train_acc
                 Eas[client_idx] = int(multi / train_loss)
-                write_log(args, ' Site-{:<25s}| Train Loss: {:.4f} | Train Acc: {:.4f}\n'.format(datasets[client_idx] ,train_loss, train_acc))
+                group_info = f"({gmap[client_idx]})" if args.mode.lower()=='ccop' else ""
+                write_log(args, ' Site-{:<25s} {:<4s}| Train Loss: {:.4f} | Train Acc: {:.4f}\n'.format(datasets[client_idx], group_info, train_loss, train_acc))
+            write_log(args, f'Average Train Accuracy: {np.mean(train_acc_list):.4f}\n')
+            save_criteria = train_acc_list
 
             # Validation
-            val_acc_list = [None for j in range(client_num)]
-            for client_idx, model in enumerate(models):
-                val_loss, val_acc = test(model, val_loaders[client_idx], loss_fun, device, prompt_bank)
-                val_acc_list[client_idx] = val_acc
-                # train_accs[client_idx] = int(multi * val_acc)
-                # print(' Site-{:<25s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}'.format(datasets[client_idx], val_loss, val_acc))
-                group_info = f"({gmap[client_idx]})" if args.mode.lower()=='ccop' else ""
-                write_log(args, ' Site-{:<25s} {:<4s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}\n'.format(datasets[client_idx], group_info, val_loss, val_acc))
-            write_log(args, f'Average Valid Accuracy: {np.mean(val_acc_list):.4f}\n')
-                    
+            if not args.no_val:
+                val_acc_list = [None for j in range(client_num)]
+                for client_idx, model in enumerate(models):
+                    val_loss, val_acc = test(model, val_loaders[client_idx], loss_fun, device, prompt_bank)
+                    val_acc_list[client_idx] = val_acc
+                    # train_accs[client_idx] = int(multi * val_acc)
+                    # print(' Site-{:<25s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}'.format(datasets[client_idx], val_loss, val_acc))
+                    group_info = f"({gmap[client_idx]})" if args.mode.lower()=='ccop' else ""
+                    write_log(args, ' Site-{:<25s} {:<4s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}\n'.format(datasets[client_idx], group_info, val_loss, val_acc))
+                write_log(args, f'Average Valid Accuracy: {np.mean(val_acc_list):.4f}\n')
+                save_criteria = val_acc_list
+            
             # Record best
             if args.mode.lower() in ['nova', 'ccop', 'ablation']:
                 if args.sam or args.dataset.lower() != 'digit': threshold = args.iters - 10
                 else: threshold = args.iters - 5
                 threshold = max(10, threshold)
                 if args.debug: threshold = 0
-                if np.mean(val_acc_list) > np.mean(best_acc):
+                if np.mean(save_criteria) > np.mean(best_acc):
                     best_epoch = a_iter
                     best_changed=True
                     for client_idx in range(client_num):
-                        best_acc[client_idx] = val_acc_list[client_idx]
+                        best_acc[client_idx] = save_criteria[client_idx]
                         group_info = f"({gmap[client_idx]})" if args.mode.lower()=='ccop' else ""
                         write_log(args, ' Best site-{:<25s}{:<4s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], group_info, best_epoch, best_acc[client_idx]))
                 if ((a_iter+1)*(wi+1)) > threshold:
@@ -430,9 +440,9 @@ if __name__ == '__main__':
                     else:
                         best_changed = False
                     write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')        
-            elif np.mean(val_acc_list) > np.mean(best_acc):
+            elif np.mean(save_criteria) > np.mean(best_acc):
                 for client_idx in range(client_num):
-                    best_acc[client_idx] = val_acc_list[client_idx]
+                    best_acc[client_idx] = save_criteria[client_idx]
                     best_epoch = a_iter
                     best_changed=True
                     write_log(args, ' Best site-{:<25s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))

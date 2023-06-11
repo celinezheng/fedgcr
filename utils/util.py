@@ -23,6 +23,7 @@ def write_log(args, msg):
     if args.sam: log_path += f"_sam"
     if args.color_jitter: log_path += f"_color_jitter"
     if args.cb: log_path += f"_cb"
+    if args.cq: log_path += f"_cq"
     if args.q!=1: log_fname = f'{args.mode}_q={args.q}.log'
     if not os.path.exists(log_path):
         os.makedirs(log_path)
@@ -589,12 +590,13 @@ def prepare_fairface_binary_race(args):
             # Random split
             train_set_size = int(len(train_set) * 0.8)
             valid_set_size = len(train_set) - train_set_size
-            train_set, valid_set = data.random_split(train_set, [train_set_size, valid_set_size])
+            if not args.no_val:
+                train_set, valid_set = data.random_split(train_set, [train_set_size, valid_set_size])
+                val_loader = torch.utils.data.DataLoader(valid_set, batch_size=args.batch, shuffle=False)
+                val_loaders.append(val_loader)
             train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch, shuffle=True)
-            val_loader = torch.utils.data.DataLoader(valid_set, batch_size=args.batch, shuffle=False)
             datasets.append(dataset_name)
             train_loaders.append(train_loader)
-            val_loaders.append(val_loader)
             client_weights.append(len(train_set))
             sum_len += len(train_set)
             len_dataset[key] += len(train_set)
@@ -1175,7 +1177,10 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     Srb = client_weights[client_idx] / gsize[gmap[client_idx]]
                 else:
                     Srb = client_weights[client_idx]
-                weight = Srb * np.float_power(Lrb, (q+1))
+                power = q + 1
+                if args.cq:
+                    power = Lc * (q+1)
+                weight = Srb * np.float_power(Lrb, power)
                 new_weights[client_idx] = weight
             if args.quan > 0:
                 quan_i = np.quantile(np.asarray(loss_i), args.quan)
