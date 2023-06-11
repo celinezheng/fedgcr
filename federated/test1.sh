@@ -1,15 +1,5 @@
 
 
-# python train.py --dataset digit --percent 1 --expname uneven --ratio 1.5 --mode fedavg --test
-# python train.py --dataset digit --percent 1 --expname uneven --ratio 1.5 --mode q-ffl --test
-# python train.py --dataset digit --percent 1 --expname uneven --ratio 1.5 --mode drfl --test
-# python train.py --dataset digit --percent 1 --expname uneven --ratio 1.5 --mode CoCoOP --test
-# python train.py --dataset digit --percent 1 --expname uneven --ratio 1.5 --mode ccop --test
-
-# python train.py --dataset digit --percent 1 --expname uneven --ratio 1.8 --mode fedavg --test
-# python train.py --dataset digit --percent 1 --expname uneven --ratio 1.8 --mode q-ffl --test
-# python train.py --dataset digit --percent 1 --expname uneven --ratio 1.8 --mode drfl --test
-# python train.py --dataset digit --percent 1 --expname uneven --ratio 1.8 --mode CoCoOP --test
-# python train.py --dataset digit --percent 1 --expname uneven --ratio 1.8 --mode ccop --test
-
+python train.py --dataset domainnet --percent 1 --expname uneven --ratio 1.6 --mode ccop --test --cb
+# python train.py --dataset fairface --percent 1 --expname uneven --cb --ratio 1.31 --mode ccop --iters 50 --cluster 7 --batch 64 --test
 
