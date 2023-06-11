@@ -492,7 +492,10 @@ if __name__ == '__main__':
                     }, SAVE_PATH)
                 # todo save gmap
                 else:
-                    if ((a_iter+1)*(wi+1)) % 10 == 0:
+                    skip_test = False
+                    if args.mode.lower in ['ccop', 'ablation']:
+                        skip_test = True
+                    if not skip_test and ((a_iter+1)*(wi+1)) % 10 == 0:
                         test_accs = test_score(server_model, test_loaders, datasets, best_epoch, gmap)
                         if np.mean(test_accs) > np.mean(best_test):
                             best_epoch = a_iter
