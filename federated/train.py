@@ -79,6 +79,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
     parser.add_argument('--no_val', action='store_true', help='whether to disable validation set')
+    parser.add_argument('--mix', action='store_true', help='whether to mix dataset for face')
+    parser.add_argument('--mix2', action='store_true', help='whether to mix dataset for face')
+    parser.add_argument('--mix3', action='store_true', help='whether to mix dataset for face')
+    parser.add_argument('--mix4', action='store_true', help='whether to mix dataset for face')
+    parser.add_argument('--mix5', action='store_true', help='whether to mix dataset for face')
     parser.add_argument('--cq', action='store_true', help='whether to use loss c as power for re-weight')
     parser.add_argument('--color_jitter', action='store_true', help='whether to color_jitter for fairface')
     parser.add_argument('--cb', action='store_true', help='whether to cb for re-weighting')
@@ -194,6 +199,10 @@ if __name__ == '__main__':
     write_log(args, '    gender_label: {}\n'.format(args.gender_label))
     write_log(args, '    binary_race: {}\n'.format(args.binary_race))
     write_log(args, '    save_iter: {}\n'.format(args.save_iter))
+    write_log(args, '    mix: {}\n'.format(args.mix))
+    write_log(args, '    mix2: {}\n'.format(args.mix2))
+    write_log(args, '    mix3: {}\n'.format(args.mix3))
+    write_log(args, '    mix4: {}\n'.format(args.mix4))
 
     if args.hparams_seed == 0:
         hparams = hparams_registry.default_hparams(args.mode, args.dataset)
@@ -399,7 +408,7 @@ if __name__ == '__main__':
                 train_loss, train_acc = test(model, train_loaders[client_idx], loss_fun, device, prompt_bank)
                 train_acc_list[client_idx] = train_acc
                 Eas[client_idx] = int(multi / train_loss)
-                group_info = f"({gmap[client_idx]})" if args.mode.lower()=='ccop' else ""
+                group_info = f"({gmap[client_idx]})" if args.mode.lower() in ['ccop', 'ablation'] else ""
                 write_log(args, ' Site-{:<25s} {:<4s}| Train Loss: {:.4f} | Train Acc: {:.4f}\n'.format(datasets[client_idx], group_info, train_loss, train_acc))
             write_log(args, f'Average Train Accuracy: {np.mean(train_acc_list):.4f}\n')
             save_criteria = train_acc_list
@@ -412,7 +421,7 @@ if __name__ == '__main__':
                     val_acc_list[client_idx] = val_acc
                     # train_accs[client_idx] = int(multi * val_acc)
                     # print(' Site-{:<25s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}'.format(datasets[client_idx], val_loss, val_acc))
-                    group_info = f"({gmap[client_idx]})" if args.mode.lower()=='ccop' else ""
+                    group_info = f"({gmap[client_idx]})" if args.mode.lower() in ['ccop', 'ablation'] else ""
                     write_log(args, ' Site-{:<25s} {:<4s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}\n'.format(datasets[client_idx], group_info, val_loss, val_acc))
                 write_log(args, f'Average Valid Accuracy: {np.mean(val_acc_list):.4f}\n')
                 save_criteria = val_acc_list
@@ -428,7 +437,7 @@ if __name__ == '__main__':
                     best_changed=True
                     for client_idx in range(client_num):
                         best_acc[client_idx] = save_criteria[client_idx]
-                        group_info = f"({gmap[client_idx]})" if args.mode.lower()=='ccop' else ""
+                        group_info = f"({gmap[client_idx]})" if args.mode.lower() in ['ccop', 'ablation'] else ""
                         write_log(args, ' Best site-{:<25s}{:<4s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], group_info, best_epoch, best_acc[client_idx]))
                 if ((a_iter+1)*(wi+1)) > threshold:
                     test_accs = test_score(server_model, test_loaders, datasets, best_epoch, gmap)
@@ -453,6 +462,8 @@ if __name__ == '__main__':
                     'gmap': gmap
                 }, GMAP_SAVE_PATH)
             best_changed = a_iter==args.save_iter or (best_changed and not args.freeze_ckpt)
+            if ((a_iter+1)*(wi+1)) % 10 == 0:
+                test_accs = test_score(server_model, test_loaders, datasets, best_epoch, gmap)
             if best_changed:  
                 best_changed = False
                 # print(' Saving the local and server checkpoint to {}...'.format(SAVE_PATH))
@@ -492,15 +503,10 @@ if __name__ == '__main__':
                     }, SAVE_PATH)
                 # todo save gmap
                 else:
-                    skip_test = False
-                    if args.mode.lower in ['ccop', 'ablation']:
-                        skip_test = True
-                    if not skip_test and ((a_iter+1)*(wi+1)) % 10 == 0:
-                        test_accs = test_score(server_model, test_loaders, datasets, best_epoch, gmap)
-                        if np.mean(test_accs) > np.mean(best_test):
-                            best_epoch = a_iter
-                            for i in range(len(test_accs)):
-                                best_test[i] = test_accs[i]
+                    if  ((a_iter+1)*(wi+1)) % 10 == 0 and np.mean(test_accs) > np.mean(best_test):
+                        best_epoch = a_iter
+                        for i in range(len(test_accs)):
+                            best_test[i] = test_accs[i]
                    
                     torch.save({
                         'server_model': server_model.state_dict(),

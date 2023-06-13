@@ -364,8 +364,20 @@ def prepare_fairface_iid_uneven(args):
     train_sets = {}
     test_sets = {}
     decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
-    # if args.binary_race:
-    #     decay_order = ['White', 'Black']
+    if args.mix:
+        decay_order = ['White_utk', 'Latino_Hispanic', 'Black_utk', 'East_Asian', 'Indian_utk', 'Southeast_Asian', 'Middle_Eastern']
+    elif args.mix2:
+        decay_order = ['White_utk', 'White', 'Black_utk', 'Latino_Hispanic', 'Indian_utk', 'Southeast_Asian', 'Middle_Eastern']
+    elif args.mix3:
+        decay_order = ['White_utk', 'White', 'Black_utk', 'Indian_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern']
+    elif args.mix4:
+        # decay_order = ['White_utk', 'White', 'Black_utk', 'Indian_utk', 'Latino_Hispanic_gan', 'Southeast_Asian', 'Middle_Eastern_gan']
+        # decay_order = ['White_utk', 'White', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_gan']
+        # decay_order = ['White_utk', 'East_Asian', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_gan']
+        decay_order = ['White_utk', 'White', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_gan']
+    elif args.mix5:
+        decay_order = ['White_utk', 'East_Asian', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_gan']
+
     for name in decay_order:
         train_sets[name] = FairFaceIIDDataset(args, data_base_path, name, gender_label=args.gender_label, transform=transform_train)
         test_sets[name] = FairFaceIIDDataset(args, data_base_path, name, gender_label=args.gender_label, transform=transform_test, train=False)
@@ -375,6 +387,7 @@ def prepare_fairface_iid_uneven(args):
         # data_len = {5, 4, 3, 2, 1, 1}
         decay_speed = args.ratio
         data_decay = 1.47
+        data_decay = decay_speed
         # if args.binary_race:
         #     client_nums = {"White": 10, "Black": 2}
         #     len_dataset[decay_order[0]] = len(train_sets[decay_order[0]])
@@ -385,11 +398,13 @@ def prepare_fairface_iid_uneven(args):
             if i==0: 
                 len_dataset[name] = len(train_sets[name])
             else:
-                len_dataset[name] = int(len_dataset[decay_order[i-1]]/data_decay)
+                divider = np.float_power(data_decay, i)
+                len_dataset[name] = int(len_dataset[decay_order[0]] / divider)
+                len_dataset[name] = min(len_dataset[name], len(train_sets[name]))
     else:
         decay_speed = 3
         data_decay = 1.47
-        decay_speed = data_decay
+        data_decay = decay_speed
         min_len = -1
         for _, train_set in train_sets.items():
             if min_len==-1:
@@ -613,7 +628,7 @@ def prepare_fairface_binary_race(args):
         write_log(args, f"{len_dataset[name]},")
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
-    check_labels(args, train_loaders)
+    # check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 

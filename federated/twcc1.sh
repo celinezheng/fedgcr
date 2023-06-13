@@ -1,56 +1,9 @@
 
-# python train.py --dataset fairface --percent 1 --expname uneven --quan 0.7 --ratio 1.31 --mode ccop --iters 50 --cluster 7 --batch 64
-# python train.py --dataset fairface --percent 1 --expname uneven --quan 0.7 --ratio 1.31 --mode ccop --iters 50 --cluster 7 --batch 64 --test
-# python train.py --dataset fairface --percent 0.5 --expname even --quan 0.7 --mode ccop --iters 50 --cluster 7 --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname even --quan 0.7 --mode ccop --iters 50 --cluster 7 --batch 64 --test
+python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.31 --mix4 --mode fedavg --iters 50 --batch 64
+python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.31 --mix4 --mode fedavg --iters 50 --batch 64 --test
 
-# python train.py --dataset fairface --percent 1 --expname uneven --ratio 1.31 --mode CoCoOP --iters 50 --cluster 7 --batch 64
-# python train.py --dataset fairface --percent 1 --expname uneven --ratio 1.31 --mode CoCoOP --iters 50 --cluster 7 --batch 64 --test
-# python train.py --dataset fairface --percent 0.5 --expname even --mode CoCoOP --iters 50 --cluster 7 --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname even --mode CoCoOP --iters 50 --cluster 7 --batch 64 --test
-
-# python train.py --dataset fairface --percent 1 --expname uneven --cb --ratio 1.31 --mode ccop --iters 50 --cluster 7 --batch 64
-# python train.py --dataset fairface --percent 1 --expname uneven --cb --ratio 1.31 --mode ccop --iters 50 --cluster 7 --batch 64 --test
-# python train.py --dataset fairface --percent 0.5 --expname even --cb --mode ccop --iters 50 --cluster 7 --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname even --cb --mode ccop --iters 50 --cluster 7 --batch 64 --test
-
-# python train.py --dataset fairface --percent 0.5 --expname even --mode drfl --iters 50 --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname even --mode drfl --iters 50 --batch 64 --test
-# python train.py --dataset fairface --percent 0.5 --expname even --mode fedavg --iters 50 --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname even --mode fedavg --iters 50 --batch 64 --test
-# python train.py --dataset fairface --percent 0.5 --expname even --mode q-ffl --iters 50 --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname even --mode q-ffl --iters 50 --batch 64 --test
-# python train.py --dataset fairface --percent 0.5 --expname even --quan 0.7 --mode ccop --iters 50 --cluster 7 --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname even --quan 0.7 --mode ccop --iters 50 --cluster 7 --batch 64 --test
-
-# python train.py --dataset fairface --percent 1 --expname uneven --cb --ratio 1.47 --mode ccop --iters 50 --cluster 7 --batch 64
-# python train.py --dataset fairface --percent 1 --expname uneven --cb --ratio 1.47 --mode ccop --iters 50 --cluster 7 --batch 64 --test
-
-
-
-# python train.py --dataset domainnet --percent 1 --expname uneven --cb --ratio 1.47 --mode ccop --iters 50 --batch 64 
-# python train.py --dataset domainnet --percent 1 --expname uneven --cb --ratio 1.47 --mode ccop --iters 50 --batch 64 --test
-
-# python train.py --dataset fairface --percent 1 --expname uneven --ratio 1.47 --mode CoCoOP --iters 50 --batch 64
-# python train.py --dataset fairface --percent 1 --expname uneven --ratio 1.47 --mode CoCoOP --iters 50 --batch 64 --test
-
-# domainnet
-# python train.py --dataset domainnet --percent 0.5 --expname even --cb --mode ccop --iters 50 --batch 64 
-# python train.py --dataset domainnet --percent 0.5 --expname even --cb --mode ccop --iters 50 --batch 64 --test
-
-# rerun digit-five
-# python train.py --dataset digit --percent 1 --expname uneven --cb --ratio 1.5 --mode ccop --iters 50 --batch 64 
-# python train.py --dataset digit --percent 1 --expname uneven --cb --ratio 1.5 --mode ccop --iters 50 --batch 64 --test
-
-
-# python train.py --dataset digit --percent 1 --expname uneven --cb --ratio 1.8 --mode ccop --iters 50 --batch 64 
-# python train.py --dataset digit --percent 1 --expname uneven --cb --ratio 1.8 --mode ccop --iters 50 --batch 64 --test
-python train.py --dataset digit --percent 0.5 --expname even --cb --mode ccop --iters 50 --batch 64 
-python train.py --dataset digit --percent 0.5 --expname even --cb --mode ccop --iters 50 --batch 64 --test
-python train.py --dataset digit --percent 0.5 --expname even --mode CoCoOP --iters 50 --batch 64 --test
-python train.py --dataset digit --percent 0.5 --expname even --mode fedavg --iters 50 --batch 64 --test
-python train.py --dataset digit --percent 0.5 --expname even --mode drfl --iters 50 --batch 64 --test
-python train.py --dataset digit --percent 0.5 --expname even --mode q-ffl --iters 50 --batch 64 --test
+python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.31 --mix5 --mode CoCoOP --iters 50 --batch 64
+python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.31 --mix5 --mode CoCoOP --iters 50 --batch 64 --test
 
 
 
