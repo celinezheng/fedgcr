@@ -381,7 +381,7 @@ def prepare_fairface_iid_uneven(args):
     elif args.mix5:
         decay_order = ['White_utk', 'East_Asian', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_gan']
     elif args.weak_white:
-        decay_order = ['White_utk', 'Black_utk', 'Southeast_Asian', 'Middle_Eastern_gan', 'White', 'White_gan']
+        decay_order = ['White_utk', 'Black_utk', 'Southeast_Asian', 'Indian_utk',, 'Middle_Eastern_gan', 'White', 'White_gan']
 
     for name in decay_order:
         train_sets[name] = FairFaceIIDDataset(args, data_base_path, name, gender_label=args.gender_label, transform=transform_train)
