@@ -339,6 +339,9 @@ def prepare_domainnet_uneven(args):
 
 def prepare_fairface_iid_uneven(args):
     data_base_path = '../../data/FairFace'
+    if args.netdb:
+        data_base_path = '../../data/fairface-preprocess/FairFace'
+    print(data_base_path)
     s = 1
     color_jitter = transforms.ColorJitter(0.8 * s, 0.8 * s, 0.8 * s, 0.2 * s)
     transform_train = transforms.Compose([
@@ -377,6 +380,8 @@ def prepare_fairface_iid_uneven(args):
         decay_order = ['White_utk', 'White', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_gan']
     elif args.mix5:
         decay_order = ['White_utk', 'East_Asian', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_gan']
+    elif args.weak_white:
+        decay_order = ['White_utk', 'Black_utk', 'Southeast_Asian', 'Middle_Eastern_gan', 'White', 'White_gan']
 
     for name in decay_order:
         train_sets[name] = FairFaceIIDDataset(args, data_base_path, name, gender_label=args.gender_label, transform=transform_train)
@@ -562,6 +567,8 @@ def prepare_fairface_gender_uneven(args):
 
 def prepare_fairface_binary_race(args):
     base_path = '../../data/FairFace'
+    if args.netdb:
+        base_path = '../../data/fairface-preprocess/FairFace'
     s = 1
     color_jitter = transforms.ColorJitter(0.8 * s, 0.8 * s, 0.8 * s, 0.2 * s)
     transform_train = transforms.Compose([

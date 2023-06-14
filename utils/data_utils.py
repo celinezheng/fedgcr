@@ -115,9 +115,9 @@ class DomainNetDataset(Dataset):
 class FairFaceIIDDataset(Dataset):
     def __init__(self, args, base_path, site, gender_label=False, train=True, transform=None):
         if train:
-            self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/{args.gender_dis}/{site}_train.pkl', allow_pickle=True)
+            self.paths, self.gender, self.age = np.load(f'{base_path}/pkl/{args.gender_dis}/{site}_train.pkl', allow_pickle=True)
         else:
-            self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/{args.gender_dis}/{site}_test.pkl', allow_pickle=True)
+            self.paths, self.gender, self.age = np.load(f'{base_path}/pkl/{args.gender_dis}/{site}_test.pkl', allow_pickle=True)
         
         self.path = np.asarray(self.paths)
         gender_dict = {'Male':0, 'Female':1}     
@@ -148,11 +148,11 @@ class FairFaceIIDDataset(Dataset):
 class FairFaceBinaryDataset(Dataset):
     def __init__(self, base_path, site, client_idx, gender_label=False, train=True, transform=None):
         if gender_label: distribution = 'binary_race_gender'
-        else: distribution  = 'binary_race_split'
+        else: distribution  = 'binary_race_mix'
         if train:
-            self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/{distribution}/train_{site}_{client_idx}.pkl', allow_pickle=True)
+            self.paths, self.gender, self.age = np.load(f'{base_path}/pkl/{distribution}/train_{site}_{client_idx}.pkl', allow_pickle=True)
         else:
-            self.paths, self.gender, self.age = np.load(f'../../data/FairFace/pkl/{distribution}/test_{site}_{client_idx}.pkl', allow_pickle=True)
+            self.paths, self.gender, self.age = np.load(f'{base_path}/pkl/{distribution}/test_{site}_{client_idx}.pkl', allow_pickle=True)
         
         self.path = np.asarray(self.paths)
         gender_dict = {'Male':0, 'Female':1}     
