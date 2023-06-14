@@ -404,7 +404,6 @@ def prepare_fairface_iid_uneven(args):
     else:
         decay_speed = 3
         data_decay = 1.47
-        data_decay = decay_speed
         min_len = -1
         for _, train_set in train_sets.items():
             if min_len==-1:
@@ -417,7 +416,9 @@ def prepare_fairface_iid_uneven(args):
             if i==0: 
                 len_dataset[name] = len(train_sets[name])
             else:
-                len_dataset[name] = int(len_dataset[decay_order[i-1]]/data_decay)
+                divider = np.float_power(data_decay, i)
+                len_dataset[name] = int(len_dataset[decay_order[0]] / divider)
+                len_dataset[name] = min(len_dataset[name], len(train_sets[name]))
             
     print(client_nums)
     for name, val in len_dataset.items():
