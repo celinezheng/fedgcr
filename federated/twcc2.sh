@@ -1,24 +1,30 @@
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.31 --mix --mode CoCoOP --iters 50 --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.31 --mix --mode CoCoOP --test --batch 64
-
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.47 --mix2 --mode CoCoOP --iters 50 --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.47 --mix2 --mode CoCoOP --test --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.47 --mix2 --mode fedavg --iters 50 --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.47 --mix2 --mode fedavg --test --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.47 --mix2 --mode drfl --iters 50 --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.47 --mix2 --mode drfl --test --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.47 --mix2 --mode ccop --iters 50 --batch 64 --cluster 7
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.47 --mix2 --mode ccop --test --batch 64 --cluster 7
-
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.31 --mix2 --mode drfl --iters 50 --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.31 --mix2 --mode drfl --test --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.31 --mix2 --mode q-ffl --iters 50 --batch 64
-# python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.31 --mix2 --mode q-ffl --test --batch 64
 
 
-python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.47 --mix4 --mode fedavg --iters 50 --batch 64
-python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.47 --mix4 --mode fedavg --test --batch 64
+# python train.py --dataset fairface --ratio 1.7 --expname uneven --weak_white --mode fedavg --iters 50 --batch 64 --split_test 
+# python train.py --dataset fairface --ratio 1.7 --expname uneven --weak_white --mode fedavg --iters 50 --test --split_test 
 
-python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.47 --mix5 --mode CoCoOP --iters 50 --batch 64
-python train.py --dataset fairface --percent 0.5 --expname uneven --ratio 1.47 --mix5 --mode CoCoOP --test --batch 64
+# python train.py --dataset fairface --ratio 1.7 --expname uneven --weak_white --mode drfl --iters 50 --batch 64 --split_test
+# python train.py --dataset fairface --ratio 1.7 --expname uneven --weak_white --mode drfl --iters 50 --test --split_test
+
+# python train.py --dataset fairface --ratio 1.7 --expname uneven --weak_white --mode ccop --cs --iters 50 --batch 64 --cluster 3 --split_test
+# python train.py --dataset fairface --ratio 1.7 --expname uneven --weak_white --mode ccop --cs --iters 50 --test --cluster 3 --split_test
+
+# python train.py --dataset fairface --ratio 1.7 --expname uneven --weak_white --mode ccop --quan 0.7 --iters 50 --batch 64 --cluster 3 --split_test
+# python train.py --dataset fairface --ratio 1.7 --expname uneven --weak_white --mode ccop --quan 0.7 --iters 50 --test --cluster 3 --split_test
+
+
+# python train.py --dataset fairface --ratio 1.7 --expname uneven --weak_white --mode ccop --cs --q 0 --iters 70 --test_freq 5 --save_mean 0.45 --batch 64 --cluster 3 --split_test
+# python train.py --dataset fairface --ratio 1.7 --expname uneven --weak_white --mode ccop --cs --q 0 --iters 70 --test_freq 5 --save_mean 0.45 --test --cluster 3 --split_test
+
+python train.py --dataset fairface --ratio 2.15 --expname uneven --weak_white --mode fedavg --iters 50 --batch 64 --split_test 
+python train.py --dataset fairface --ratio 2.15 --expname uneven --weak_white --mode fedavg --iters 50 --test --split_test 
+
+python train.py --dataset fairface --ratio 2.15 --expname uneven --weak_white --mode ccop --cs --iters 50 --batch 64 --cluster 5 --split_test
+python train.py --dataset fairface --ratio 2.15 --expname uneven --weak_white --mode ccop --cs --iters 50 --test --cluster 5 --split_test
+
+python train.py --dataset fairface --ratio 1.47 --expname uneven-mix5 --mix5 --mode fedavg --iters 50 --batch 64 --split_test
+python train.py --dataset fairface --ratio 1.47 --expname uneven-mix5 --mix5 --mode fedavg --iters 50 --test --split_test
+
+python train.py --dataset fairface --ratio 1.47 --expname uneven-mix5 --mix5 --mode drfl --iters 50 --batch 64 --split_test
+python train.py --dataset fairface --ratio 1.47 --expname uneven-mix5 --mix5 --mode drfl --iters 50 --test --split_test
 

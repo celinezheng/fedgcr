@@ -17,6 +17,8 @@ def write_log(args, msg):
         log_path += f"_{args.gender_dis}_cluster_{args.cluster_num}"
     else:
         log_path += f"_{args.cluster_num}"
+    if args.weak_white: log_path += "_weak_white"
+    if args.split_test:  log_path += f"_split"
     if args.small_test: log_path += "_small_test"
     if args.gender_label: log_path += "_gender_label"
     if args.binary_race: log_path += "_binary_race"
@@ -24,6 +26,7 @@ def write_log(args, msg):
     if args.color_jitter: log_path += f"_color_jitter"
     if args.cb: log_path += f"_cb"
     if args.cq: log_path += f"_cq"
+    if args.cs: log_path += f"_cs"
     if args.q!=1: log_fname = f'{args.mode}_q={args.q}.log'
     if not os.path.exists(log_path):
         os.makedirs(log_path)
@@ -374,14 +377,17 @@ def prepare_fairface_iid_uneven(args):
     elif args.mix3:
         decay_order = ['White_utk', 'White', 'Black_utk', 'Indian_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern']
     elif args.mix4:
-        # decay_order = ['White_utk', 'White', 'Black_utk', 'Indian_utk', 'Latino_Hispanic_gan', 'Southeast_Asian', 'Middle_Eastern_gan']
-        # decay_order = ['White_utk', 'White', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_gan']
-        # decay_order = ['White_utk', 'East_Asian', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_gan']
-        decay_order = ['White_utk', 'White', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_gan']
+        # decay_order = ['White_utk', 'White', 'Black_utk', 'Indian_utk', 'Latino_Hispanic_ffhq', 'Southeast_Asian', 'Middle_Eastern_ffhq']
+        # decay_order = ['White_utk', 'White', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_ffhq']
+        # decay_order = ['White_utk', 'East_Asian', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_ffhq']
+        decay_order = ['White_utk', 'White', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_ffhq']
     elif args.mix5:
-        decay_order = ['White_utk', 'East_Asian', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_gan']
+        # decay_order = ['White_utk', 'Latino_Hispanic_ffhq', 'Black_utk' , 'East_Asian', 'Indian_utk', 'Southeast_Asian', 'Middle_Eastern_ffhq']
+        decay_order = ['White_utk', 'East_Asian', 'Indian_utk' , 'Black_utk', 'Southeast_Asian', 'Asian_ffhq', 'Latino_Hispanic_ffhq']
     elif args.weak_white:
-        decay_order = ['White_utk', 'Black_utk', 'Southeast_Asian', 'Indian_utk',, 'Middle_Eastern_gan', 'White', 'White_gan']
+        # decay_order = ['White_utk', 'Latino_Hispanic_ffhq', 'Black_utk' , 'East_Asian', 'Indian_utk', 'Southeast_Asian', 'Middle_Eastern_ffhq']
+        # decay_order = ['White', 'Middle_Eastern', 'Black', 'White_ffhq']
+        decay_order = ['White', 'Indian', 'Middle_Eastern', 'Black_utk']
 
     for name in decay_order:
         train_sets[name] = FairFaceIIDDataset(args, data_base_path, name, gender_label=args.gender_label, transform=transform_train)
@@ -393,6 +399,7 @@ def prepare_fairface_iid_uneven(args):
         decay_speed = args.ratio
         data_decay = 1.47
         data_decay = decay_speed
+        
         # if args.binary_race:
         #     client_nums = {"White": 10, "Black": 2}
         #     len_dataset[decay_order[0]] = len(train_sets[decay_order[0]])
@@ -408,7 +415,7 @@ def prepare_fairface_iid_uneven(args):
                 len_dataset[name] = min(len_dataset[name], len(train_sets[name]))
     else:
         decay_speed = 3
-        data_decay = 1.47
+        # data_decay = 1.31
         min_len = -1
         for _, train_set in train_sets.items():
             if min_len==-1:
@@ -416,14 +423,14 @@ def prepare_fairface_iid_uneven(args):
             else:
                 min_len = min(min_len, len(train_set))
         for i, name in enumerate(decay_order):
-            # len_dataset[name] = min_len
+            len_dataset[name] = min_len
             client_nums[name] = 2
-            if i==0: 
-                len_dataset[name] = len(train_sets[name])
-            else:
-                divider = np.float_power(data_decay, i)
-                len_dataset[name] = int(len_dataset[decay_order[0]] / divider)
-                len_dataset[name] = min(len_dataset[name], len(train_sets[name]))
+            # if i==0: 
+            #     len_dataset[name] = len(train_sets[name])
+            # else:
+            #     divider = np.float_power(data_decay, i)
+            #     len_dataset[name] = int(len_dataset[decay_order[0]] / divider)
+            #     len_dataset[name] = min(len_dataset[name], len(train_sets[name]))
             
     print(client_nums)
     for name, val in len_dataset.items():
@@ -439,12 +446,19 @@ def prepare_fairface_iid_uneven(args):
     train_loaders, val_loaders, test_loaders = [], [], []
     datasets = []
     sum_len = 0
-    all_test_len = min([len(test_sets[key]) for key in client_nums])
-    test_len = int(all_test_len / client_nums[decay_order[0]])
+
     for key, value in client_nums.items():
-        all_len = len_dataset[key] * args.percent
-        all_train_len = int(all_len * 0.6)
-        all_val_len = int(all_len * 0.4)
+        if args.split_test:
+            ratio = 0.5
+            if args.debug: ratio = 0.2
+            all_len = int(len_dataset[key] * ratio)
+            decay_speed = min(1.47, args.ratio)
+            all_train_len = all_len
+            all_val_len = -1
+        else:
+            all_len = len_dataset[key] * args.percent
+            all_train_len = int(all_len * 0.6)
+            all_val_len = int(all_len * 0.4)
         cur_dataset_len = len_dataset[key]
         train_begin = 0
         valid_begin = -all_val_len
@@ -455,23 +469,33 @@ def prepare_fairface_iid_uneven(args):
             dataset_name = key
             client_ratio = np.float_power(decay_speed, j) / partition_num
             train_len = int(all_train_len * client_ratio)
-            val_len = int(all_val_len * client_ratio)
             if args.split_test:
+                # test_len = int(all_test_len * client_ratio)
+                all_test_len = len(test_sets[key])
+                test_len = all_test_len // value
                 dataset_name = f"{key}-{j}"
-                cur_testset = torch.utils.data.Subset(test_sets[key], list(range(all_test_len))[test_begin : test_begin+test_len])
+                # Random split
+                train_set_size, valid_set_size = int(train_len * 0.7), int(train_len * 0.1)
+                test_set_size = train_len - train_set_size - valid_set_size
+                train_set = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
+                cur_trainset, cur_valset, test_set_split = data.random_split(train_set, [train_set_size, valid_set_size, test_set_size])
+                # cur_testset = torch.utils.data.Subset(test_set_all, test_set_split.indices)
+                cur_testset = torch.utils.data.Subset(test_sets[key], list(range(all_train_len))[test_begin : test_begin+test_len])
                 test_loader = torch.utils.data.DataLoader(cur_testset, batch_size=1, shuffle=False)
                 test_begin += test_len
+            else:
+                val_len = int(all_val_len * client_ratio)
+                cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
+                cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
+                valid_begin += val_len
 
+            train_begin += train_len
             test_loaders.append(test_loader)
             datasets.append(dataset_name)
-            cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
-            cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
             train_loader = torch.utils.data.DataLoader(cur_trainset, batch_size=args.batch, shuffle=True)
             val_loader = torch.utils.data.DataLoader(cur_valset, batch_size=args.batch, shuffle=False)
             train_loaders.append(train_loader)
             val_loaders.append(val_loader)
-            train_begin += train_len
-            valid_begin += val_len
             client_weights.append(len(cur_trainset))
             sum_len += len(cur_trainset)
             # print(len(cur_trainset), len(cur_valset))
@@ -1118,7 +1142,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
         elif args.mode.lower() == 'q-ffl':
             lr = 0.001
             hs = []
-            q = 1.0
+            q = args.q
             for client_idx in range(client_num):
                 loss = train_losses[client_idx] # compute loss on the whole training data, with respect to the starting point (the global model)
                 new_weights = models[client_idx]
@@ -1142,7 +1166,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
         elif args.mode.lower() == 'drfl':
             multi = 100
-            q = 1
+            q = args.q
             all_w = 0
             new_weights = [0 for _ in range(client_num)]
             for client_idx in range(client_num):
@@ -1205,6 +1229,20 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     power = Lc * (q+1)
                 weight = Srb * np.float_power(Lrb, power)
                 new_weights[client_idx] = weight
+            if args.cs:
+                quans_i = [np.quantile(np.asarray(loss_i), i*0.1) for i in range(10)]
+                quans_c = [np.quantile(np.asarray(loss_c), i*0.1) for i in range(10)]
+                for client_idx in range(client_num):
+                    i = 1
+                    while i <= 10 and loss_i[client_idx]>quans_i[i-1]:
+                        i+=1
+                    order_i = i
+                    i = 1
+                    while i <= 10 and loss_c[gmap[client_idx]]>quans_c[i-1]:
+                        i+=1
+                    order_c = i
+                    new_weights[client_idx] *= (order_i*powerI + order_c*powerC)
+                    
             if args.quan > 0:
                 quan_i = np.quantile(np.asarray(loss_i), args.quan)
                 quan_c = np.quantile(np.asarray(loss_c), args.quan)
@@ -1218,6 +1256,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                 write_log(args, f"]\n")
             all_weight = sum(new_weights) 
             new_weights = [wi/all_weight for wi in new_weights]
+            print(new_weights)
             for key in server_model.state_dict().keys():
                 if  'prompt' in key or 'head' in key or 'classifier' in key or 'meta_net' in key :
                     print(key)

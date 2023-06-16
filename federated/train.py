@@ -24,10 +24,11 @@ from utils import util
 from utils.weight_perturbation import WPOptim
 from utils.sam import SAM
 
-def test_score(server_model, test_loaders, datasets, best_epoch, gmap):
+def test_score(args, server_model, test_loaders, datasets, best_epoch, gmap):
     domain_test_accs = {}
     cluster_test_accs = {}
     individual_test_acc = []
+    server_model.eval()
     if gmap:
         for client_idx in gmap:
             cluster_test_accs[gmap[client_idx]] = list()
@@ -41,14 +42,16 @@ def test_score(server_model, test_loaders, datasets, best_epoch, gmap):
             _, test_acc = test(server_model, test_loaders[client_idx], loss_fun, device, prompt_bank)
             domain_test_accs[domain_name].append(test_acc)
             if gmap:
-                cluster_test_accs[gmap[client_idx]].append(test_acc)
                 group_info = f"({gmap[client_idx]})"
             else:
                 group_info = f""
             # print(' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
             write_log(args, ' Test site-{:<25s} {}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, group_info, best_epoch, test_acc))
         print(f"{datasite}, domain = {domain_name}")
-        individual_test_acc.append(domain_test_accs[domain_name][-1])
+        test_acc = domain_test_accs[domain_name][-1]
+        if gmap:
+            cluster_test_accs[gmap[client_idx]].append(test_acc)
+        individual_test_acc.append(test_acc)
     if gmap:
         for gidx in gmap.values():
             cluster_test_accs[gidx] = np.mean(cluster_test_accs[gidx], dtype=np.float64)
@@ -60,31 +63,47 @@ def test_score(server_model, test_loaders, datasets, best_epoch, gmap):
     print(domain_test_accs)
     cluster_test_accs = list(cluster_test_accs.values())
     domain_test_accs = list(domain_test_accs.values())
-    if gmap: cv_cluster = np.std(cluster_test_accs, dtype=np.float64) / np.mean(cluster_test_accs, dtype=np.float64)
-    else:cv_cluster = -1
-    cv_domain = np.std(domain_test_accs, dtype=np.float64) / np.mean(domain_test_accs, dtype=np.float64)
-    cv_individual = np.std(individual_test_acc, dtype=np.float64) /  np.mean(individual_test_acc, dtype=np.float64)
+    if gmap: std_cluster = np.std(cluster_test_accs, dtype=np.float64) 
+    else: std_cluster = -1
+    std_domain = np.std(domain_test_accs, dtype=np.float64)
+    std_individual = np.std(individual_test_acc, dtype=np.float64)
+    mean_domain = np.mean(domain_test_accs)
     msg = \
         f"Average Test Accuracy(group): {np.mean(domain_test_accs):.4f}, " \
         + f"Average Test Accuracy(individual): {np.mean(individual_test_acc):.4f},\n" \
-        + f"domain CV={cv_domain:.4f}, " \
-        + f"cluster CV={cv_cluster:.4f}, " \
-        + f"individual CV={cv_individual:.4f}, " 
+        + f"domain std={std_domain:.4f}, " \
+        + f"cluster std={std_cluster:.4f}, " \
+        + f"individual std={std_individual:.4f}, " 
     write_log(args, f'{msg}\n')
+
+    # todo: remove
+    done = False
+    if args.mode.lower() in ["ablation", 'ccop']:
+        if args.save_std > 0 and std_domain < args.save_std:
+            done = True
+            if args.save_mean > 0 and mean_domain < args.save_mean:
+                done = False
+        elif args.save_mean > 0 and mean_domain > args.save_mean:
+            done = True
     # todo individual std
-    return domain_test_accs
+    return domain_test_accs, done
 
 if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
+    parser.add_argument('--Ea_val', action='store_true', help='whether to Ea_val')
+    parser.add_argument('--save_mean', type=float, default=-1, help='threshold std')
+    parser.add_argument('--save_std', type=float, default=-1, help='threshold std')
     parser.add_argument('--no_val', action='store_true', help='whether to disable validation set')
+    parser.add_argument('--freeze_pi', action='store_true', help='whether to freeze_pi')
     parser.add_argument('--mix', action='store_true', help='whether to mix dataset for face')
     parser.add_argument('--mix2', action='store_true', help='whether to mix dataset for face')
     parser.add_argument('--mix3', action='store_true', help='whether to mix dataset for face')
     parser.add_argument('--mix4', action='store_true', help='whether to mix dataset for face')
     parser.add_argument('--mix5', action='store_true', help='whether to mix dataset for face')
     parser.add_argument('--netdb', action='store_true', help='whether is run at netdb gpu')
+    parser.add_argument('--cs', action='store_true', help='whether to use std for re-weight')
     parser.add_argument('--cq', action='store_true', help='whether to use loss c as power for re-weight')
     parser.add_argument('--color_jitter', action='store_true', help='whether to color_jitter for fairface')
     parser.add_argument('--cb', action='store_true', help='whether to cb for re-weighting')
@@ -107,6 +126,7 @@ if __name__ == '__main__':
     parser.add_argument('--lambda_con', type=float, default=0.5, help='lambda for contrastive loss')
     parser.add_argument('--lr', type=float, default=1e-2, help='learning rate')
     parser.add_argument('--q', type = float, default=1, help ='q value for fairness')
+    parser.add_argument('--test_freq', type = int, default=10, help ='test_freq')
     parser.add_argument('--save_iter', type = int, default=-1, help ='save_iter')
     parser.add_argument('--batch', type = int, default=32, help ='batch size')
     parser.add_argument('--iters', type = int, default=10, help = 'iterations for communication')
@@ -163,6 +183,8 @@ if __name__ == '__main__':
         else:
             args.cluster_num = domain_num
     
+    if args.weak_white:  exp_folder += f"_weak_white"
+    if args.split_test:  exp_folder += f"_split"
     if args.small_test:  exp_folder += f"_small_test"
     if args.gender_label: exp_folder += "_gender_label"
     if args.binary_race: exp_folder += "_binary_race"
@@ -170,6 +192,7 @@ if __name__ == '__main__':
     if args.color_jitter:  exp_folder += f"_color_jitter"
     if args.cb:  exp_folder += f"_cb"
     if args.cq:  exp_folder += f"_cq"
+    if args.cs:  exp_folder += f"_cs"
 
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
@@ -245,6 +268,11 @@ if __name__ == '__main__':
         print(prompt_bank.shape)
     elif args.mode.lower() in ['cocoop', 'nova', 'ccop']:
         server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams)
+        #todo: remove
+        if args.freeze_pi:
+            for name, param in server_model.named_parameters():
+                if 'meta_net' in name:
+                    param.requires_grad = False
     elif args.mode.lower() in ['full']:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args)
@@ -306,7 +334,7 @@ if __name__ == '__main__':
             test_accs = list(test_accs.values())
             write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
         else:
-            test_accs = test_score(server_model, test_loaders, datasets, best_epoch, gmap)
+            test_accs, done = test_score(args, server_model, test_loaders, datasets, best_epoch, gmap)
         exit(0)
 
     if args.resume:
@@ -330,10 +358,13 @@ if __name__ == '__main__':
         start_iter = 0
 
     # Start training
+    #todo: remove
+    done = False
     gmap = {}
     multi = 100
     Eas = [multi for _ in range(client_num)]
     all_feat = None
+    test_freq = args.test_freq
     if args.mode.lower() in ['nova', 'ccop']:
         write_log(args, f'multiply {multi} for Ea!\n')
         write_log(args, f'use train loss for Ea\n')
@@ -403,7 +434,7 @@ if __name__ == '__main__':
                 if args.mode.lower() in ['nova', 'ccop', 'ablation']:
                     print(Eas)
                 server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, all_feat, prompt_bank)
-
+                
             # Report loss after aggregation
             train_acc_list = [None for j in range(client_num)]
             for client_idx, model in enumerate(models):
@@ -421,6 +452,10 @@ if __name__ == '__main__':
                 for client_idx, model in enumerate(models):
                     val_loss, val_acc = test(model, val_loaders[client_idx], loss_fun, device, prompt_bank)
                     val_acc_list[client_idx] = val_acc
+                    if args.Ea_val:
+                        val_ratio = 0.9
+                        Eas[client_idx] = val_ratio*Eas[client_idx] + (1-val_ratio)*multi / val_loss
+
                     # train_accs[client_idx] = int(multi * val_acc)
                     # print(' Site-{:<25s}| Val  Loss: {:.4f} | Val  Acc: {:.4f}'.format(datasets[client_idx], val_loss, val_acc))
                     group_info = f"({gmap[client_idx]})" if args.mode.lower() in ['ccop', 'ablation'] else ""
@@ -442,7 +477,7 @@ if __name__ == '__main__':
                         group_info = f"({gmap[client_idx]})" if args.mode.lower() in ['ccop', 'ablation'] else ""
                         write_log(args, ' Best site-{:<25s}{:<4s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], group_info, best_epoch, best_acc[client_idx]))
                 if ((a_iter+1)*(wi+1)) > threshold:
-                    test_accs = test_score(server_model, test_loaders, datasets, best_epoch, gmap)
+                    test_accs, done = test_score(args, server_model, test_loaders, datasets, best_epoch, gmap)
                     if np.mean(test_accs) > np.mean(best_test):
                         best_changed = True
                         best_epoch = a_iter
@@ -452,7 +487,7 @@ if __name__ == '__main__':
                         best_changed = False
                     write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')        
             elif np.mean(save_criteria) > np.mean(best_acc):
-                for client_idx in range(client_num):
+                for client_idx in range(min(len(best_acc), client_num)):
                     best_acc[client_idx] = save_criteria[client_idx]
                     best_epoch = a_iter
                     best_changed=True
@@ -464,8 +499,9 @@ if __name__ == '__main__':
                     'gmap': gmap
                 }, GMAP_SAVE_PATH)
             best_changed = a_iter==args.save_iter or (best_changed and not args.freeze_ckpt)
-            if ((a_iter+1)*(wi+1)) % 10 == 0:
-                test_accs = test_score(server_model, test_loaders, datasets, best_epoch, gmap)
+            if ((a_iter+1)*(wi+1)) % test_freq == 0:
+                test_accs, done = test_score(args, server_model, test_loaders, datasets, best_epoch, gmap)
+                best_changed = best_changed or done
             if best_changed:  
                 best_changed = False
                 # print(' Saving the local and server checkpoint to {}...'.format(SAVE_PATH))
@@ -505,8 +541,10 @@ if __name__ == '__main__':
                     }, SAVE_PATH)
                 # todo save gmap
                 else:
-                    if  ((a_iter+1)*(wi+1)) % 10 == 0 and np.mean(test_accs) > np.mean(best_test):
+                    if  ((a_iter+1)*(wi+1)) % test_freq == 0 and np.mean(test_accs) > np.mean(best_test):
                         best_epoch = a_iter
+                        if len(best_test) < len(test_accs):
+                            best_test = [0. for _ in range(len(test_accs))]
                         for i in range(len(test_accs)):
                             best_test[i] = test_accs[i]
                    
@@ -520,6 +558,7 @@ if __name__ == '__main__':
                     }, SAVE_PATH)
                 
                  
+                if done: exit(0)
                 # print(f'Average Test Accuracy: {np.mean(test_accs):.4f}')
     
     write_log(args, '==={}===\n'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
