@@ -206,6 +206,8 @@ def prepare_digit_uneven(args):
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
     # check_labels(args, train_loaders)
+    for name in datasets:
+        name = name.replace('-', '_')
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 def prepare_domainnet_uneven(args):
@@ -1232,6 +1234,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             if args.cs:
                 quans_i = [np.quantile(np.asarray(loss_i), i*0.1) for i in range(10)]
                 quans_c = [np.quantile(np.asarray(loss_c), i*0.1) for i in range(10)]
+
                 for client_idx in range(client_num):
                     i = 1
                     while i <= 10 and loss_i[client_idx]>quans_i[i-1]:
@@ -1241,7 +1244,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     while i <= 10 and loss_c[gmap[client_idx]]>quans_c[i-1]:
                         i+=1
                     order_c = i
-                    new_weights[client_idx] *= (order_i*powerI + order_c*powerC)
+                    new_weights[client_idx] *= (order_i*powerI + order_c*powerC) * args.power_cs
                     
             if args.quan > 0:
                 quan_i = np.quantile(np.asarray(loss_i), args.quan)
