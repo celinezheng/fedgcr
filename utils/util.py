@@ -1067,9 +1067,6 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     if args.mode.lower() != 'fedprompt':
         prompt_bank = None
-    for model in models:
-        model.to(device)
-    server_model.to(device)
     with torch.no_grad():
         # aggregate params
         if args.mode.lower() == 'fedbn':
@@ -1113,9 +1110,6 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
                     print(key)
         elif args.mode.lower() == 'harmo-fl':
-            for model in models:
-                model.to(device)
-
             for key in server_model.state_dict().keys():
                 if not ('prompt' in key or 'head' in key or 'running_amp' in key):
                     continue
@@ -1322,6 +1316,4 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                         server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(len(client_weights)):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-    for model in models:
-        model.to('cpu')
     return server_model, models, prompt_bank, gmap
