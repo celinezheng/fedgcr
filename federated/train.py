@@ -92,6 +92,7 @@ if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
+    parser.add_argument('--super_quan', action='store_true', help='whether to super_quan')
     parser.add_argument('--Ea_val', action='store_true', help='whether to Ea_val')
     parser.add_argument('--power_cs', type=float, default=1, help='threshold std')
     parser.add_argument('--save_mean', type=float, default=-1, help='threshold std')
@@ -194,6 +195,7 @@ if __name__ == '__main__':
     if args.cb:  exp_folder += f"_cb"
     if args.cq:  exp_folder += f"_cq"
     if args.cs:  exp_folder += f"_cs"
+    if args.super_quan:  exp_folder += f"_sq"
 
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
