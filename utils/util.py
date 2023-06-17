@@ -27,6 +27,7 @@ def write_log(args, msg):
     if args.cb: log_path += f"_cb"
     if args.cq: log_path += f"_cq"
     if args.cs: log_path += f"_cs"
+    if args.super_quan:  log_path += f"_sq"
     if args.q!=1: log_fname = f'{args.mode}_q={args.q}.log'
     if not os.path.exists(log_path):
         os.makedirs(log_path)
@@ -1225,10 +1226,9 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     power = Lc * (q+1)
                 weight = Srb * np.float_power(Lrb, power)
                 new_weights[client_idx] = weight
-            if args.cs:
+            if args.cs or args.super_quan:
                 quans_i = [np.quantile(np.asarray(loss_i), i*0.1) for i in range(10)]
                 quans_c = [np.quantile(np.asarray(loss_c), i*0.1) for i in range(10)]
-
                 for client_idx in range(client_num):
                     i = 1
                     while i <= 10 and loss_i[client_idx]>quans_i[i-1]:
@@ -1238,8 +1238,12 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     while i <= 10 and loss_c[gmap[client_idx]]>quans_c[i-1]:
                         i+=1
                     order_c = i
-                    new_weights[client_idx] *= (order_i*powerI + order_c*powerC) * args.power_cs
-                    
+                    if args.super_quan:
+                        mean_order = np.float_power(order_i, powerI) * np.float_power(order_c, powerC)
+                        new_weights[client_idx] = client_weights[client_idx] * np.exp(mean_order * args.power_cs)
+                    else:
+                        mean_order = order_i*powerI + order_c*powerC
+                        new_weights[client_idx] *= np.float_power(mean_order, args.power_cs)
             if args.quan > 0:
                 quan_i = np.quantile(np.asarray(loss_i), args.quan)
                 quan_c = np.quantile(np.asarray(loss_c), args.quan)
