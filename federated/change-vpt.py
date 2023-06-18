@@ -16,7 +16,7 @@ import time
 import copy
 import random
 import numpy as np
-from utils.doprompt import DoPrompt, FedPrompt, CoCoOP
+from utils.doprompt import DoPrompt, FedPrompt, CoCoOP, VPT
 from domainbed import hparams_registry, misc
 import json
 from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log, train_CoCoOP, agg_rep, train_harmofl, train_sam
@@ -279,16 +279,12 @@ if __name__ == '__main__':
             for name, param in server_model.named_parameters():
                 if 'meta_net' in name:
                     param.requires_grad = False
-    elif args.mode.lower() in ['full']:
-        model_type="sup_vitb16_imagenet21k"
-        server_model = PromptViT(model_type=model_type, args=args)
-    # fedavg, ablation
+    # elif args.mode.lower() in ['full']:
+    #     model_type="sup_vitb16_imagenet21k"
+    #     server_model = PromptViT(model_type=model_type, args=args)
+    # # fedavg, ablation
     else:
-        model_type="sup_vitb16_imagenet21k"
-        server_model = PromptViT(model_type=model_type, args=args)
-        for name, param in server_model.named_parameters():
-            if 'prompt' not in name and 'head' not in name:
-                param.requires_grad = False
+        server_model = VPT(num_classes=args.num_classes, hparams=hparams)
     if args.memory:
         param_size = 0
         trained_param = 0
@@ -419,7 +415,8 @@ if __name__ == '__main__':
                     else:
                         all_feat = torch.concat((all_feat, feat_i)) 
                 elif args.mode.lower() == 'ablation':
-                    train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
+                    train_loss, train_acc = train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device)
+                    # train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                     feat_i = agg_rep(args, server_model, train_loaders[client_idx], device)
                     feat_i = feat_i.unsqueeze(0)
                     if all_feat == None:
@@ -431,7 +428,8 @@ if __name__ == '__main__':
                 elif args.mode.lower() == 'harmo-fl':
                     train_harmofl(args, model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                 else:
-                    train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
+                    train_loss, train_acc = train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device)
+                    # train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                     train_losses[client_idx] = train_loss
         
         with torch.no_grad():

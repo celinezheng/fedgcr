@@ -445,6 +445,72 @@ class FedPrompt(ERM):
             logit = self.network(x)
         return logit
 
+class VPT(ERM):
+    def __init__(self, input_shape=(3, 224, 224), num_classes=10, hparams=None):
+        super().__init__(input_shape, num_classes, 1, hparams)
+        self.hidden_dim = self.featurizer.network.hidden_dim
+        self.prompt_num = 4
+        self.mlp_dim = 3072
+        assert self.hparams['vit_base_16'] == True
+        
+        # prompt tokens
+        self.prompt_tokens = nn.Parameter(
+            torch.empty(self.prompt_num, self.featurizer.network.hidden_dim).normal_(std=0.02)
+        )
+
+        # optimizer
+        self.prompt_opt = torch.optim.AdamW(
+            [self.prompt_tokens],
+            lr=self.hparams["lr_prompt"],
+            weight_decay=1e-5
+        )
+
+        self.optimizer = torch.optim.AdamW(
+            [
+                # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
+                {'params': self.classifier.parameters(), 'lr': self.hparams["lr_classifier"], 'weight_decay': self.hparams['wd_classifier']}
+            ]
+        )
+        
+    def forward_prompt(self, x):
+        repeat_prompt = self.prompt_tokens.repeat((x.shape[0], 1, 1)).to(self.prompt_tokens.device)
+        with PrependPrompt(self.featurizer, repeat_prompt):
+            logit = self.network(x)
+        return logit
+    
+    @torch.no_grad()
+    def forward_raw(self, all_x):
+        all_z = self.featurizer(all_x)
+        return all_z
+    
+    def update(self, loss_fun, x, y):
+        self.prompt_opt.zero_grad()
+        self.optimizer.zero_grad()
+        
+        # domain prompt learning
+        all_logit = self.forward_prompt(x)
+        loss_p = loss_fun(all_logit, y)
+        loss_p.backward()
+
+        pred = all_logit.data.max(1)[1]
+        correct = pred.eq(y.view(-1)).sum().item()
+
+        self.prompt_opt.step()
+        self.optimizer.step()
+
+        return {
+            "loss": (loss_p).item(),
+            "correct": correct
+        }
+    
+    def forward(self, x):
+        return self.forward_prompt(x)
+    
+    def predict(self, x):
+        all_logit = self.forward_prompt(x)
+        return all_logit
+
+
 class CoCoOP(ERM):
     def __init__(self, input_shape=(3, 224, 224), num_classes=10, hparams=None):
         super().__init__(input_shape, num_classes, 1, hparams)
