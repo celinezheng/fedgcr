@@ -1210,14 +1210,15 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             losses = []
             for client_idx in range(client_num):
                 losses.append(multi / (Eas[client_idx]))
-            loss_i, loss_c = [], []
+            loss_i, loss_c, loss_e = [], [], []
             for client_idx in range(client_num):
                 loss = multi / (Eas[client_idx])
                 Li  = loss
                 Lc = gloss[gmap[client_idx]]
+                Lrb = np.float_power(Li, powerI) * np.float_power(Lc, powerC) + 1e-10
                 loss_i.append(Li)
                 loss_c.append(Lc)
-                Lrb = np.float_power(Li, powerI) * np.float_power(Lc, powerC) + 1e-10
+                loss_e.append(Lrb)
                 if args.cb:
                     Srb = client_weights[client_idx] / gsize[gmap[client_idx]]
                 else:
@@ -1229,17 +1230,13 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                 new_weights[client_idx] = weight
             if args.relu:
                 min_w = min(new_weights)
-                threshold_rb = np.quantile(new_weights, 0.1)
-                min_w = -1
+                threshold_e = np.quantile(loss_e, 0.1)
                 write_log(args, f"shrink weight of clients:[")
                 for client_idx in range(client_num):
-                    new_w = 0
-                    if new_weights[client_idx] < threshold_rb:
+                    if loss_e[client_idx] < threshold_e:
                         write_log(args, f"{client_idx}, ")
-                        new_w = min_w
+                        new_weights[client_idx] = min_w
 
-                for client_idx in range(client_num):
-                    new_weights[client_idx] = max(new_weights[client_idx], min_w)
                 write_log(args, f"]\n")
 
             if args.cs or args.super_quan:
