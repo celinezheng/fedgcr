@@ -471,6 +471,13 @@ class VPT(ERM):
                 {'params': self.classifier.parameters(), 'lr': self.hparams["lr_classifier"], 'weight_decay': self.hparams['wd_classifier']}
             ]
         )
+        self.all_opt = torch.optim.AdamW(
+            [
+                # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
+                {'params': [self.prompt_tokens], 'lr': 1e-2, 'weight_decay': 1e-5},
+                {'params': self.classifier.parameters(), 'lr': 1e-2, 'weight_decay': self.hparams['wd_classifier']}
+            ]
+        )
         
     def forward_prompt(self, x):
         repeat_prompt = self.prompt_tokens.repeat((x.shape[0], 1, 1)).to(self.prompt_tokens.device)
@@ -495,8 +502,7 @@ class VPT(ERM):
         pred = all_logit.data.max(1)[1]
         correct = pred.eq(y.view(-1)).sum().item()
 
-        self.prompt_opt.step()
-        self.optimizer.step()
+        self.all_opt.step()
 
         return {
             "loss": (loss_p).item(),
@@ -525,6 +531,8 @@ class CoCoOP(ERM):
         )
 
         # image projector, similar to meta-net in CoCoOP
+        if num_classes<10:
+            self.mlp_dim = self.hidden_dim // 16
         self.meta_net = networks.MetaNet(self.hidden_dim, 1, self.hidden_dim, self.mlp_dim)
         
         # optimizer
@@ -543,6 +551,14 @@ class CoCoOP(ERM):
         self.optimizer = torch.optim.AdamW(
             [
                 # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
+                {'params': self.classifier.parameters(), 'lr': self.hparams["lr_classifier"], 'weight_decay': self.hparams['wd_classifier']}
+            ]
+        )
+        self.all_opt= torch.optim.AdamW(
+            [
+                # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
+                {'params': [self.prompt_tokens], 'lr': self.hparams["lr_prompt"], 'weight_decay': 1e-5},
+                {'params': self.meta_net.parameters(), 'lr': self.hparams["lr_project"], 'weight_decay': self.hparams['lr_project']},
                 {'params': self.classifier.parameters(), 'lr': self.hparams["lr_classifier"], 'weight_decay': self.hparams['wd_classifier']}
             ]
         )
@@ -578,7 +594,7 @@ class CoCoOP(ERM):
         all_logit = self.forward_prompt(x)
         loss_p = loss_fun(all_logit, y)
         loss_p.backward()
-        self.prompt_opt.step()
+        # self.prompt_opt.step()
 
         # prompt adapter learning
         self.network.eval()
@@ -591,8 +607,9 @@ class CoCoOP(ERM):
         pred = all_logit.data.max(1)[1]
         correct = pred.eq(y.view(-1)).sum().item()
 
-        self.optimizer.step()
-        self.project_opt.step()
+        # self.optimizer.step()
+        # self.project_opt.step()
+        self.all_opt.step()
 
         return {
             "loss": (loss_p + loss_m).item(),
