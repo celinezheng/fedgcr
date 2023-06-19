@@ -1229,12 +1229,12 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                 new_weights[client_idx] = weight
             if args.relu:
                 min_w = min(new_weights)
-                threshold_rb = np.quantile(rb_loss, 0.1)
+                threshold_rb = np.quantile(new_weights, 0.1)
                 min_w = -1
                 write_log(args, f"shrink weight of clients:[")
                 for client_idx in range(client_num):
                     new_w = 0
-                    if rb_loss[client_idx] < threshold_rb:
+                    if new_weights[client_idx] < threshold_rb:
                         write_log(args, f"{client_idx}, ")
                         new_w = min_w
 
