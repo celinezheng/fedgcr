@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+import numpy as np
 from utils import networks
 
 class Algorithm(torch.nn.Module):
@@ -516,6 +516,23 @@ class VPT(ERM):
         all_logit = self.forward_prompt(x)
         return all_logit
 
+class Partial(ERM):
+    def __init__(self, input_shape=(3, 224, 224), num_classes=10, hparams=None):
+        super().__init__(input_shape, num_classes, 1, hparams)
+        self.hidden_dim = self.featurizer.network.hidden_dim
+        self.prompt_num = 4
+        self.mlp_dim = 3072
+        assert self.hparams['vit_base_16'] == True
+        # prompt tokens
+        self.prompt_tokens = nn.Parameter(
+            torch.empty(self.prompt_num, 768, requires_grad=False).normal_(std=0.02)
+        )
+        self.meta_net = networks.MetaNet(self.hidden_dim, 1, self.hidden_dim, self.mlp_dim)
+        for param in self.meta_net.parameters():
+            param.requires_grad = False
+        self.featurizer = None
+        self.network = None
+        self.classifier = None
 
 class CoCoOP(ERM):
     def __init__(self, input_shape=(3, 224, 224), num_classes=10, hparams=None):
@@ -531,8 +548,8 @@ class CoCoOP(ERM):
         )
 
         # image projector, similar to meta-net in CoCoOP
-        if num_classes<10:
-            self.mlp_dim = self.hidden_dim // 16
+        # if num_classes<10:
+        #     self.mlp_dim = self.hidden_dim // 16
         self.meta_net = networks.MetaNet(self.hidden_dim, 1, self.hidden_dim, self.mlp_dim)
         
         # optimizer
@@ -554,7 +571,7 @@ class CoCoOP(ERM):
                 {'params': self.classifier.parameters(), 'lr': self.hparams["lr_classifier"], 'weight_decay': self.hparams['wd_classifier']}
             ]
         )
-        self.all_opt= torch.optim.AdamW(
+        self.all_opt = torch.optim.AdamW(
             [
                 # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
                 {'params': [self.prompt_tokens], 'lr': self.hparams["lr_prompt"], 'weight_decay': 1e-5},
@@ -573,6 +590,12 @@ class CoCoOP(ERM):
     def forward_raw(self, all_x):
         all_z = self.featurizer(all_x)
         return all_z
+
+    @torch.no_grad()
+    def get_dc(self, x):
+        hint = self.forward_raw(x)
+        pi = self.meta_net(hint)
+        return pi
         
     def forward_proj(self, x, z):
         img_proj = self.meta_net(z)
@@ -584,7 +607,35 @@ class CoCoOP(ERM):
         with PrependPrompt(self.featurizer, comb_prompt):
             logit = self.network(x)
         return logit
-    
+
+    def forward_pi_cst(self, x):
+        self.network.eval()
+        z = self.forward_raw(x)
+        self.network.train()
+        pi = self.meta_net(z)
+        img_proj = pi.repeat((self.prompt_num, 1))
+        img_proj = img_proj.reshape((x.shape[0], self.prompt_num, self.featurizer.network.hidden_dim)).cuda()
+        pi_repeat = self.prompt_tokens.repeat((x.shape[0], 1, 1)).to(self.prompt_tokens.device)
+        # comb_prompt = torch.concat((img_proj, pi_repeat), dim=1)
+        comb_prompt = img_proj + pi_repeat
+        with PrependPrompt(self.featurizer, comb_prompt):
+            feat = self.featurizer(x)
+        logit = self.classifier(feat)
+        return logit, pi, feat
+
+    @torch.no_grad()
+    def forward_pre(self, x, pre_net):
+        hint = self.forward_raw(x)
+        pi = pre_net.meta_net(hint)
+        img_proj = pi.repeat((self.prompt_num, 1))
+        img_proj = img_proj.reshape((x.shape[0], self.prompt_num, self.featurizer.network.hidden_dim)).cuda()
+        global_prompt = pre_net.prompt_tokens.repeat((x.shape[0], 1, 1)).cuda()
+        # combine domain prompt and sample prompt
+        comb_prompt = global_prompt + img_proj
+        with PrependPrompt(self.featurizer, comb_prompt):
+            feat = self.featurizer(x)
+        return pi, feat
+
     def update(self, loss_fun, x, y):
         self.prompt_opt.zero_grad()
         self.optimizer.zero_grad()
@@ -613,6 +664,140 @@ class CoCoOP(ERM):
 
         return {
             "loss": (loss_p + loss_m).item(),
+            "correct": correct
+        }
+    def update_con(self, loss_fun, x, y, cluster_pis, pre_pi, gidx, mean_feat, pre_feat, iter_ratio):
+        self.prompt_opt.zero_grad()
+        self.optimizer.zero_grad()
+        self.project_opt.zero_grad()
+        
+        # domain prompt learning
+        all_logit, pi, feat = self.forward_pi_cst(x)
+        loss_m = loss_fun(all_logit, y)    
+
+        cos = torch.nn.CosineSimilarity(dim=-1)
+        temperature = 0.5
+        base = 0.5
+        mu = 0.5 + base * iter_ratio
+        # moon on outpot feauture to CLUSTER feature
+        posi = cos(cluster_pis[gidx], pi)
+        logits_con = posi.reshape(-1,1)
+        for i in range(cluster_pis.shape[0]):
+            if i==gidx: continue
+            nega = cos(cluster_pis[i], pi)
+            logits_con = torch.cat((logits_con, nega.reshape(-1,1)), dim=1)
+        nega = cos(pre_pi, pi)
+        logits_con = torch.cat((logits_con, nega.reshape(-1,1)), dim=1)
+        logits_con /= temperature
+        # y_con = torch.full((x.shape[0],), gidx).cuda().long()
+        y_con = torch.full((x.shape[0],), 0).cuda().long()
+        loss_con1 = mu * loss_fun(logits_con, y_con)
+        # moon on outpot feauture to GLOBAL feature
+        posi = cos(mean_feat, feat)
+        logits_con = posi.reshape(-1,1)
+        nega = cos(pre_feat, feat)
+        logits_con = torch.cat((logits_con, nega.reshape(-1,1)), dim=1)
+        y_con = torch.full((x.shape[0],), 0).cuda().long()
+        loss_con2 = loss_fun(logits_con, y_con)
+        loss_con = loss_con1 + loss_con2
+        loss = loss_m + loss_con
+
+        loss.backward()
+        pred = all_logit.data.max(1)[1]
+        correct = pred.eq(y.view(-1)).sum().item()
+
+        self.all_opt.step()
+
+        return {
+            "loss": (loss).item(),
+            "correct": correct
+        }
+    def update_clscon(self, loss_fun, x, y, pre_glob, pre_local, pre_clusters, gidx, iter_ratio):
+        self.prompt_opt.zero_grad()
+        self.optimizer.zero_grad()
+        self.project_opt.zero_grad()
+        
+        # domain prompt learning
+        all_logit, pi, z = self.forward_pi_cst(x)
+        loss_m = loss_fun(all_logit, y)    
+
+        mu = 1
+        temperature = 0.5
+        cos = torch.nn.CosineSimilarity(dim=-1)
+        # moon on outpot feauture to GLOBAL feature
+        _, z_glob = self.forward_pre(x, pre_glob)
+        posi = cos(z_glob, z)
+        logits_con = posi.reshape(-1,1)
+        pre_pi, z_prev = self.forward_pre(x, pre_local)
+        nega = cos(z_prev, z)
+        logits_con = torch.cat((logits_con, nega.reshape(-1,1)), dim=1)
+        logits_con /= temperature
+        y_con = torch.full((x.shape[0],), 0).cuda().long()
+        loss_con1 = mu * loss_fun(logits_con, y_con)
+        # moon on outpot feauture to CLUSTER feature
+        base = 0.5
+        mu = base + (1-base) * iter_ratio
+        pi_cls, _ = self.forward_pre(x, pre_clusters[gidx])
+        posi = cos(pi_cls, pi)
+        logits_con = posi.reshape(-1,1)
+        for i, pre_cluster in enumerate(pre_clusters):
+            if i==gidx: continue
+            pi_cls, _ = self.forward_pre(x, pre_cluster)
+            nega = cos(pi_cls, pi)
+            logits_con = torch.cat((logits_con, nega.reshape(-1,1)), dim=1)
+        # moon negative to prev pi feature
+        nega = cos(pre_pi, pi)
+        logits_con = torch.cat((logits_con, nega.reshape(-1,1)), dim=1)
+        logits_con /= temperature
+        y_con = torch.full((x.shape[0],), 0).cuda().long()
+        loss_con2 = mu * loss_fun(logits_con, y_con)
+        loss_con = 2 * loss_con1 + loss_con2
+        
+        loss = loss_m + 0.1*loss_con
+
+        loss.backward()
+        pred = all_logit.data.max(1)[1]
+        correct = pred.eq(y.view(-1)).sum().item()
+
+        self.all_opt.step()
+
+        return {
+            "loss": (loss).item(),
+            "correct": correct
+        }
+    def update_moon(self, loss_fun, x, y, pre_glob, pre_local, iter_ratio):
+        self.prompt_opt.zero_grad()
+        self.optimizer.zero_grad()
+        self.project_opt.zero_grad()
+        
+        # domain prompt learning
+        all_logit, pi, z = self.forward_pi_cst(x)
+        loss_m = loss_fun(all_logit, y)    
+
+        mu = 1
+        temperature = 0.5
+        cos = torch.nn.CosineSimilarity(dim=-1)
+        # moon on outpot feauture to CLUSTER feature
+        _, z_glob = self.forward_pre(x, pre_glob)
+        posi = cos(z_glob, z)
+        logits_con = posi.reshape(-1,1)
+        _, z_prev = self.forward_pre(x, pre_local)
+        nega = cos(z_prev, z)
+        logits_con = torch.cat((logits_con, nega.reshape(-1,1)), dim=1)
+        logits_con /= temperature
+        y_con = torch.full((x.shape[0],), 0).cuda().long()
+        loss_con = mu * loss_fun(logits_con, y_con)
+        
+        loss = loss_m + loss_con
+
+        loss.backward()
+        pred = all_logit.data.max(1)[1]
+        correct = pred.eq(y.view(-1)).sum().item()
+
+        self.all_opt.step()
+
+        return {
+            "loss": (loss).item(),
             "correct": correct
         }
     

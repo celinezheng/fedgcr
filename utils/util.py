@@ -8,9 +8,14 @@ import math
 import torch.nn.functional as tf
 import numpy as np
 import copy
+from utils.project import project, solve_centered_w
+from utils.aggregate import aggregate, aggregate_lr, sum_models, zero_model, \
+                            assign_models, avg_models, add_models, scale_model, sub_models, norm2_model
+import torch.autograd as autograd
+
 def write_log(args, msg):
     log_path = f'../logs/{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
-    log_fname = f'{args.mode}.log'
+    log_fname = f'{args.mode}'
     if args.dg:
         log_path = f'../logs/{args.dataset}_{args.expname}_{args.target_domain}'
     if args.gender_dis != 'iid':
@@ -28,11 +33,14 @@ def write_log(args, msg):
     if args.cq: log_path += f"_cq"
     if args.cs: log_path += f"_cs"
     if args.super_quan:  log_path += f"_sq"
-    if args.relu:  log_path += f"_relu"
-    if args.q!=1: log_fname = f'{args.mode}_q={args.q}.log'
+    if args.moon:  log_path += f"_moon"
+    if args.q!=1: log_fname += f'_q={args.q}'
+    if args.dc:  log_fname += f"_dc"
+    if args.clscon:  log_fname += f"_clscon"
+    if args.pcon:  log_fname += f"_pcon"
     if not os.path.exists(log_path):
         os.makedirs(log_path)
-    with open(os.path.join(log_path, log_fname), 'a') as logfile:
+    with open(os.path.join(log_path, f'{log_fname}.log'), 'a') as logfile:
         logfile.write(msg)
 
 def prepare_digit_uneven(args):
@@ -182,7 +190,7 @@ def prepare_digit_uneven(args):
         for j in range(value):
             train_len = int(all_train_len * np.float_power(decay_speed, j) / partition_num)
             val_len = int(all_val_len * np.float_power(decay_speed, j) / partition_num)
-            datasets.append(key)
+            datasets.append(key.replace('-', '_'))
             cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
             cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
             train_loader = torch.utils.data.DataLoader(cur_trainset, batch_size=args.batch, shuffle=True)
@@ -208,8 +216,6 @@ def prepare_digit_uneven(args):
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
     # check_labels(args, train_loaders)
-    for name in datasets:
-        name = name.replace('-', '_')
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
 
 def prepare_domainnet_uneven(args):
@@ -704,7 +710,7 @@ def norm_grad_diff(weights_before, new_weights, lr):
     # output: square of the L-2 norm
     norms = 0
     for key in weights_before.state_dict().keys():
-        if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
+        if  'prompt' in key or 'head' in key or 'meta_net' in key:
             temp = (weights_before.state_dict()[key] - new_weights.state_dict()[key]) * 1.0 / lr
             norms += torch.norm(temp, p=2).cpu()
     return norms
@@ -725,6 +731,47 @@ def train(model, train_loader, optimizer, loss_fun, device):
         output = model(x)
 
         loss = loss_fun(output, y)
+        loss.backward()
+        loss_all += loss.item()
+        optimizer.step()
+        # optimizer.first_step(zero_grad=True)
+        # loss_fun(model(x), y).backward()
+        # optimizer.second_step(zero_grad=True)
+
+        pred = output.data.max(1)[1]
+        correct += pred.eq(y.view(-1)).sum().item()
+    model.to('cpu')
+    return loss_all/len(train_iter), correct/num_data
+
+def train_propfair(model, train_loader, optimizer, loss_fun, device):
+    def log_loss(output, target, base=2.0):
+        ce_loss = loss_fun(output, target)
+        base = torch.tensor(base).to(device)
+        epsilon = 0.2
+        huber = False
+        if base - ce_loss < epsilon:           
+            # for the bad performing batches, we enforce a constant to avoid divergence
+            if not huber:
+                return ce_loss/base
+            else:
+                return ce_loss/epsilon
+        else:
+            return -torch.log(1 - ce_loss/base)
+    model.to(device)
+    model.train()
+    num_data = 0
+    correct = 0
+    loss_all = 0
+    train_iter = iter(train_loader)
+    for step in tqdm(range(len(train_iter))):
+        optimizer.zero_grad()
+        x, y = next(train_iter)
+        num_data += y.size(0)
+        x = x.to(device).float()
+        y = y.to(device).long()
+        output = model(x)
+
+        loss = log_loss(output, y)
         loss.backward()
         loss_all += loss.item()
         optimizer.step()
@@ -775,19 +822,26 @@ def train_fedprompt(gidx, model, train_loader, prompt_bank, device):
 
     return loss_all/len(train_iter), correct/num_data
 
-def train_CoCoOP(args, model, train_loader, loss_fun, device):
+def train_CoCoOP(args, model, train_loader, loss_fun, device, gidx=-1, mean_feat=None, pre_feat=None, cluster_pis=None, pre_pi=None, a_iter=-1):
     model.to(device)
     model.train()
     num_data = 0
     correct = 0
     loss_all = 0
     train_iter = iter(train_loader)
+    if cluster_pis is not None:
+        cluster_pis = cluster_pis.to(device)
+        mean_feat = mean_feat.to(device)
     for step in tqdm(range(len(train_iter))):
         x, y = next(train_iter)
         x = x.to(device).float()
         y = y.to(device).long()
         num_data += y.size(0)
-        result = model.update(loss_fun, x, y)
+        if a_iter>0 and (args.pcon): 
+            iter_ratio = a_iter/args.iters
+            result = model.update_con(loss_fun, x, y, cluster_pis, pre_pi, gidx, mean_feat, pre_feat, iter_ratio)
+        else:
+            result = model.update(loss_fun, x, y)
         loss_all += result['loss']
         correct += result['correct']
     model.to('cpu')
@@ -843,9 +897,8 @@ def train_harmofl(args, model, data_loader, optimizer, loss_fun, device):
 
     for step, (data, target) in enumerate(data_loader):
         optimizer.zero_grad()
-
-        data = data.to(device)
-        target = target.to(device)
+        data = data.to(device).float()
+        target = target.to(device).long()
         
         output = model(data)
         loss = loss_fun(output, target)
@@ -904,6 +957,48 @@ def train_fedprox(args, server_model, model, train_loader, optimizer, loss_fun, 
     model.to('cpu')
     return loss_all/len(train_iter), correct/num_data
 
+def train_fedmix(model, Xg, Yg, lamb, train_loader, optimizer, loss_fun, device):
+    model.to(device)
+    model.train()
+    num_data = 0
+    correct = 0
+    loss_all = 0
+    train_iter = iter(train_loader)
+    for step in tqdm(range(len(train_iter))):
+        optimizer.zero_grad()
+        x, y = next(train_iter)
+        num_data += y.size(0)
+        x = x.to(device).float()
+        y = y.to(device).long()
+        inputX = (1 - lamb) * x
+        inputX.requires_grad_()
+        idg = torch.randint(len(Xg), (1, ))
+        xg = Xg[idg].to(device)[0]
+        yg = Yg[idg].to(device)[0]
+        output = model(inputX)
+
+        loss1 = (1 - lamb) * loss_fun(output, y)
+        loss2 = lamb * loss_fun(output, y)
+        loss = loss1 + loss2
+        if x.size(0) == xg.size(0):
+            gradients = autograd.grad(outputs=loss1, inputs=inputX,
+                                            create_graph=True, retain_graph=True)[0]
+                                            
+            loss3 = lamb * torch.inner(gradients.flatten(start_dim=1), xg.flatten(start_dim=1))
+            loss3 = torch.mean(loss3)
+            loss += loss3
+        loss.backward()
+        loss_all += loss.item()
+        optimizer.step()
+        # optimizer.first_step(zero_grad=True)
+        # loss_fun(model(x), y).backward()
+        # optimizer.second_step(zero_grad=True)
+
+        pred = output.data.max(1)[1]
+        correct += pred.eq(y.view(-1)).sum().item()
+    model.to('cpu')
+    return loss_all/len(train_iter), correct/num_data
+    
 def test(model, test_loader, loss_fun, device, prompt_bank=None):
     model.to(device)
     model.eval()
@@ -943,7 +1038,7 @@ def get_domain_idx(pi, prompt_bank):
 
     return torch.argmax(domain_sim)
 
-def agg_rep(args, model, test_loader, device):
+def agg_rep(args, model, test_loader, device, pcon=False):
     model.to(device)
     model.eval()
     agg_protos_label = {}
@@ -954,8 +1049,8 @@ def agg_rep(args, model, test_loader, device):
         data, target = batch
         data = data.to(device).float()
         target = target.to(device).long()
-        if 'raw' in args.expname.lower():
-            features = model.forward_raw(data)
+        if pcon:
+            features = model.get_dc(data)
         else:
             features = model.forward_feat(data)
         for i in range(len(target)):
@@ -975,6 +1070,44 @@ def agg_rep(args, model, test_loader, device):
     avg_rep = torch.mean(all_rep, dim=0).data
     model.to('cpu')
     return avg_rep
+
+def agg_feat(args, model, test_loader, device):
+    model.to(device)
+    model.eval()
+    all_feat = np.empty((0, 768))  
+    y = np.empty(0, dtype=int)
+    mid = 800
+    idx = 0
+    for _, batch in enumerate(tqdm(test_loader)):
+        if idx==mid: break
+        data, target = batch
+        data = data.to(device).float()
+        feat = model.forward_feat(data)
+        # if target[0].item() != 1: continue
+        all_feat = np.concatenate((all_feat, feat.detach().cpu().numpy()), axis=0)
+        y = np.concatenate((y, target.detach().cpu().numpy()), axis=0)
+        idx += 1
+    model.to('cpu')
+    return all_feat, y
+
+def agg_dc_tokens(args, model, test_loader, device):
+    model.to(device)
+    model.eval()
+    dc_tokens = np.empty((0, 768))  
+    y = np.empty(0, dtype=int)
+    mid = 600
+    idx = 0
+    for _, batch in enumerate(tqdm(test_loader)):
+        if idx==mid: break
+        data, target = batch
+        data = data.to(device).float()
+        features = model.get_dc(data)
+        # if target[0].item() != 1: continue
+        dc_tokens = np.concatenate((dc_tokens, features.detach().cpu().numpy()), axis=0)
+        y = np.concatenate((y, target.detach().cpu().numpy()), axis=0)
+        idx += 1
+    model.to('cpu')
+    return dc_tokens, y
 
 from sklearn.cluster import AgglomerativeClustering as Agg
 from sklearn.cluster import KMeans
@@ -1001,6 +1134,17 @@ def cluster(args, all_pi, domain_num):
     write_log(args, f']\n')
     print(cnt)
     return gmap, cnt
+
+def cluster_avg_feat(args, all_pi, domain_num):
+    cluster_feats = torch.zeros((domain_num, 768), requires_grad=False)
+    all_pi_reshape = all_pi.cpu().reshape(all_pi.shape[0], -1)
+    gmap={}
+    gmap, cnt = cluster(args, all_pi, domain_num)
+    for cidx in gmap:
+        gidx = gmap[cidx]
+        cluster_feats[gidx] += (1/cnt[gidx]) * all_pi_reshape[cidx] 
+
+    return gmap, cnt, cluster_feats
 
 def agg_cluster(all_pi, prompt_bank):
     all_pi_reshape = all_pi.cpu().reshape(all_pi.shape[0], -1)
@@ -1046,29 +1190,17 @@ def random_replace(all_pi, prompt_bank):
     perm = torch.randperm(all_pi.size(0))[:prompt_bank.shape[0]]
     return all_pi[perm].detach().clone()
 
-def domain_fairness(args, gmap, train_losses):
-    domain_losses = {}
-    for cidx, gidx in gmap.items():
-        domain_losses[gidx] = list()
-    for cidx, loss in enumerate(train_losses):
-        gidx = gmap[cidx]
-        domain_losses[gidx].append(loss)
-    for gidx in domain_losses:
-        mean = sum(domain_losses[gidx]) / len(domain_losses[gidx])
-        domain_losses[gidx] = mean
-    domain_losses = list(domain_losses.values())
-    std = np.std(domain_losses, keepdims=False)
-    print(f"domain fairness std = {std}")
-    write_log(args, f"domain fairness std = {std}\n")
-    return std
 
 ################# Key Function ########################
-def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, all_feat=None, prompt_bank=None):
+# def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, pre_clusters, all_feat=None, all_pi=None, prompt_bank=None):
+def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, all_feat=None, all_pi=None, prompt_bank=None):
     gmap = {}
     alpha = 0.99
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     if args.mode.lower() != 'fedprompt':
         prompt_bank = None
+    cluster_pis = None
+    mean_feat = None
     with torch.no_grad():
         # aggregate params
         if args.mode.lower() == 'fedbn':
@@ -1162,6 +1294,54 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
+        elif args.mode.lower() == 'afl':
+            y = np.array(client_weights) + 0.1 * np.array(train_losses)
+            new_weights = project(y)
+            sum_w = sum(new_weights)
+            new_weights = [w / sum_w for w in new_weights]
+            for key in server_model.state_dict().keys():
+                if  'prompt' in key or 'head' in key:
+                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
+                    for client_idx in range(client_num):
+                        weight = new_weights[client_idx]
+                        temp += weight * models[client_idx].state_dict()[key]
+                    server_model.state_dict()[key].data.copy_(temp)
+                    for client_idx in range(client_num):
+                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
+        elif args.mode.lower() == 'term':
+            alpha = 0.01
+            new_weights = [np.exp(alpha * train_losses[i]) * client_weights[i] \
+                for i in range(client_num)]
+            new_weights = list(new_weights / np.sum(new_weights))
+            for key in server_model.state_dict().keys():
+                if  'prompt' in key or 'head' in key:
+                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
+                    for client_idx in range(client_num):
+                        weight = new_weights[client_idx]
+                        temp += weight * models[client_idx].state_dict()[key]
+                    server_model.state_dict()[key].data.copy_(temp)
+                    for client_idx in range(client_num):
+                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
+        elif args.mode.lower() == 'gifair':
+            ranks = np.linspace(-(client_num - 1), client_num - 1, num=client_num)
+            coeff = 0.1 
+            lambda_max = min(np.array(client_weights) / (client_num - 1))
+            weights_gi = np.zeros(client_num)
+            weights_gi[np.argsort(train_losses)] = ranks
+            new_weights = [client_weights[i] + coeff * lambda_max * weights_gi[i] \
+                       for i in range(client_num)]
+            for key in server_model.state_dict().keys():
+                if  'prompt' in key or 'head' in key:
+                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
+                    for client_idx in range(client_num):
+                        weight = new_weights[client_idx]
+                        temp += weight * models[client_idx].state_dict()[key]
+                    server_model.state_dict()[key].data.copy_(temp)
+                    for client_idx in range(client_num):
+                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
+            # sort small to big
+            # i: i client with smaller loss, d-i-1 clients with larger loss
+            # rank = -i + (d-i-1) = d-2*i-1
         elif args.mode.lower() == 'drfl':
             multi = 100
             q = args.q
@@ -1187,7 +1367,12 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             multi = 100
             
             q = args.q
-            gmap, cnt = cluster(args, all_feat, domain_num)
+            if args.pcon:
+                gmap, cnt, cluster_pis = cluster_avg_feat(args, all_pi, domain_num)
+                _, _, cluster_feats = cluster_avg_feat(args, all_feat, domain_num)
+                mean_feat = torch.mean(cluster_feats, dim=0)
+            else:
+                gmap, cnt = cluster(args, all_feat, domain_num)
             gsize = [0 for _ in range(domain_num)]
             gloss = [1e-10 for _ in range(domain_num)]
             for i in range(client_num):
@@ -1228,46 +1413,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     power = Lc * (q+1)
                 weight = Srb * np.float_power(Lrb, power)
                 new_weights[client_idx] = weight
-            if args.relu:
-                min_w = min(new_weights)
-                threshold_e = np.quantile(loss_e, 0.1)
-                write_log(args, f"shrink weight of clients:[")
-                for client_idx in range(client_num):
-                    if loss_e[client_idx] < threshold_e:
-                        write_log(args, f"{client_idx}, ")
-                        new_weights[client_idx] = min_w
-
-                write_log(args, f"]\n")
-
-            if args.cs or args.super_quan:
-                quans_i = [np.quantile(np.asarray(loss_i), i*0.1) for i in range(10)]
-                quans_c = [np.quantile(np.asarray(loss_c), i*0.1) for i in range(10)]
-                for client_idx in range(client_num):
-                    i = 1
-                    while i <= 10 and loss_i[client_idx]>quans_i[i-1]:
-                        i+=1
-                    order_i = i
-                    i = 1
-                    while i <= 10 and loss_c[gmap[client_idx]]>quans_c[i-1]:
-                        i+=1
-                    order_c = i
-                    mean_order = order_i*powerI + order_c*powerC
-                    if args.super_quan:
-                        new_weights[client_idx] = client_weights[client_idx] * np.float_power(mean_order, args.power_cs)
-                        # new_weights[client_idx] = client_weights[client_idx] * np.exp(mean_order * args.power_cs)
-                    else:
-                        new_weights[client_idx] *= np.float_power(mean_order, args.power_cs)
-            if args.quan > 0:
-                quan_i = np.quantile(np.asarray(loss_i), args.quan)
-                quan_c = np.quantile(np.asarray(loss_c), args.quan)
-                min_w = min(new_weights)
-                write_log(args, f"min_w={min_w:.5f}, quan_i={quan_i:.2f}, quan_c={quan_c:.2f}\n")
-                write_log(args, f"minimize weight of clients:[")
-                for client_idx in range(client_num):
-                    if loss_i[client_idx] < quan_i and loss_c[client_idx] < quan_c:
-                        write_log(args, f"{client_idx}, ")
-                        new_weights[client_idx] = min_w
-                write_log(args, f"]\n")
+            
             all_weight = sum(new_weights) 
             new_weights = [wi/all_weight for wi in new_weights]
             print(new_weights)
@@ -1333,4 +1479,4 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                         server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(len(client_weights)):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-    return server_model, models, prompt_bank, gmap
+    return server_model, models, prompt_bank, gmap, cluster_pis, mean_feat

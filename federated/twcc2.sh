@@ -1,8 +1,8 @@
-python train.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --cluster 7 --mode ccop --iters 50 --batch 64 --cs --power_cs 2
-python train.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --cluster 7 --mode ccop --test --batch 64 --cs --power_cs 2
 
-# run at 112
-# python train.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --cluster 7 --mode ccop --iters 50 --batch 64 --cs --power_cs 5
-# python train.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --cluster 7 --mode ccop --test --batch 64 --cs --power_cs 5
+# python train.py --dataset domainnet --percent 0.01 --ratio 1.1 --expname uneven --mode ccop --pcon --iters 5 --batch 64
+
+
+python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode ccop --pcon --iters 50 --batch 64
+python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode ccop --pcon --test --batch 64
 
 

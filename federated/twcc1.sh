@@ -1,31 +1,43 @@
 
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --mode fedavg --iters 50 --batch 64
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --mode fedavg --test --batch 64
 
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --mode drfl --iters 50 --batch 64
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --mode drfl --test --batch 64
+# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode gifair --iters 2 --batch 64
 
 
-# python train.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --cluster 7 --mode ablation --iters 50 --batch 64 --cs --power_cs 5
-# python train.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --cluster 7 --mode ablation --test --batch 64 --cs --power_cs 5
+# python train.py --dataset digit --percent 1 --ratio 1.5 --expname uneven --mode gifair --iters 50 --batch 64
+# python train.py --dataset digit --percent 1 --ratio 1.5 --expname uneven --mode gifair --test --batch 64
+
+# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode ccop --iters 50 --batch 64 --pcon
+# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode ccop --test --batch 64 --pcon
 
 
+# python train.py --dataset digit --percent 1 --ratio 1.8 --expname uneven --mode gifair --iters 50 --batch 64
+# python train.py --dataset digit --percent 1 --ratio 1.8 --expname uneven --mode gifair --test --batch 64
+
+# python train.py --dataset digit --percent 1 --ratio 1.5 --expname uneven --mode propfair --iters 50 --batch 64
+# python train.py --dataset digit --percent 1 --ratio 1.5 --expname uneven --mode propfair --test --batch 64
+
+# python train.py --dataset digit --percent 1 --ratio 1.8 --expname uneven --mode propfair --iters 50 --batch 64
+# python train.py --dataset digit --percent 1 --ratio 1.8 --expname uneven --mode propfair --test --batch 64
+
+# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode propfair --iters 50 --batch 64
+# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode propfair --test --batch 64
+
+# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode propfair --iters 50 --batch 64
+# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode propfair --test --batch 64
 
 
-# python train.py --dataset digit --ratio 1.5 --expname uneven --cluster 5 --mode ccop --iters 50 --batch 64 --cs
-# python train.py --dataset digit --ratio 1.5 --expname uneven --cluster 5 --mode ccop --test --batch 64 --cs
-# python train.py --dataset digit --ratio 1.8 --expname uneven --cluster 5 --mode ccop --iters 50 --batch 64 --cs
-# python train.py --dataset digit --ratio 1.8 --expname uneven --cluster 5 --mode ccop --test --batch 64 --cs
+# python train.py --dataset digit --percent 0.5 --ratio 1.5 --expname uneven --mode ccop --iters 50 --batch 64 --pcon --test_freq 25
+# python train.py --dataset digit --percent 0.5 --ratio 1.5 --expname uneven --mode ccop --test --batch 64 --pcon
+# python train.py --dataset digit --percent 0.5 --ratio 1.8 --expname uneven --mode ccop --iters 50 --batch 64 --pcon --test_freq 25
+# python train.py --dataset digit --percent 0.5 --ratio 1.8 --expname uneven --mode ccop --test --batch 64 --pcon
 
-# python train.py --dataset domainnet --ratio 1.4 --expname uneven --cluster 6 --mode ccop --iters 50 --batch 64 --cs
-# python train.py --dataset domainnet --ratio 1.4 --expname uneven --cluster 6 --mode ccop --test --batch 64 --cs
-# python train.py --dataset domainnet --ratio 1.6 --expname uneven --cluster 6 --mode ccop --iters 50 --batch 64 --cs
-# python train.py --dataset domainnet --ratio 1.6 --expname uneven --cluster 6 --mode ccop --test --batch 64 --cs
+# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode ccop --moon --iters 50 --batch 64
+# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode ccop --moon --test --batch 64
 
-# python train.py --dataset digit --expname even --cluster 5 --mode ccop --iters 50 --batch 64 --cs
-# python train.py --dataset digit --expname even --cluster 5 --mode ccop --test --batch 64 --cs
-# python train.py --dataset domainnet --expname even --cluster 6 --mode ccop --iters 50 --batch 64 --cs
-# python train.py --dataset domainnet --expname even --cluster 6 --mode ccop --test --batch 64 --cs
+python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode ccop --pcon --iters 50 --batch 64
+python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode ccop --pcon --test --batch 64
+
+# python train.py --dataset domainnet --percent 0.1 --ratio 1.4 --expname uneven --mode propfair --iters 2 --batch 64
 
 
 # tar -zcvf - ./checkpoint |ssh shulingcheng@140.112.42.29 "tar -zxvf - -C ~/experiment/Fed/FedBN-master/"

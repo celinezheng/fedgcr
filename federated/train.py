@@ -19,10 +19,12 @@ import numpy as np
 from utils.doprompt import DoPrompt, FedPrompt, CoCoOP
 from domainbed import hparams_registry, misc
 import json
-from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log, train_CoCoOP, agg_rep, train_harmofl, train_sam
+from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log, train_CoCoOP, agg_rep, train_harmofl, train_sam, train_fedmix
+from utils.util import train_propfair
 from utils import util
 from utils.weight_perturbation import WPOptim
 from utils.sam import SAM
+from utils.aggregate import agg_smash_data
 
 def test_score(args, server_model, test_loaders, datasets, best_epoch, gmap):
     domain_test_accs = {}
@@ -92,7 +94,10 @@ if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
-    parser.add_argument('--relu', action='store_true', help='whether to relu for superquantile')
+    parser.add_argument('--pcon', action='store_true', help='whether to pcon')
+    parser.add_argument('--clscon', action='store_true', help='whether to pcon')
+    parser.add_argument('--moon', action='store_true', help='whether to moon')
+    parser.add_argument('--dc', action='store_true', help='whether to use balanced weight for meta-net')
     parser.add_argument('--super_quan', action='store_true', help='whether to super_quan')
     parser.add_argument('--Ea_val', action='store_true', help='whether to Ea_val')
     parser.add_argument('--power_relu', type=float, default=1, help='threshold std')
@@ -197,7 +202,8 @@ if __name__ == '__main__':
     if args.cb:  exp_folder += f"_cb"
     if args.cq:  exp_folder += f"_cq"
     if args.cs:  exp_folder += f"_cs"
-    if args.relu:  exp_folder += f"_relu"
+    if args.moon:  exp_folder += f"_moon"
+    if args.clscon:  exp_folder += f"_clscon"
 
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
@@ -208,6 +214,7 @@ if __name__ == '__main__':
     if 'ccop' in args.mode.lower():
         SAVE_PATH += f"_q={args.q}"
         if args.power_cs != 1: SAVE_PATH += f"_pcs={args.power_cs}"
+        if args.pcon: SAVE_PATH += "_pcon"
     GMAP_SAVE_PATH = args.gmap_path
     if GMAP_SAVE_PATH == 'none':
         GMAP_SAVE_PATH = f"{SAVE_PATH}_gmap"
@@ -274,11 +281,6 @@ if __name__ == '__main__':
         print(prompt_bank.shape)
     elif args.mode.lower() in ['cocoop', 'nova', 'ccop']:
         server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams)
-        #todo: remove
-        if args.freeze_pi:
-            for name, param in server_model.named_parameters():
-                if 'meta_net' in name:
-                    param.requires_grad = False
     elif args.mode.lower() in ['full']:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args)
@@ -316,6 +318,9 @@ if __name__ == '__main__':
     
     # each local client model
     models = [copy.deepcopy(server_model) for _ in range(client_num)]
+    # pre_server = Partial(num_classes=args.num_classes, hparams=hparams)
+    # pre_locals = [copy.deepcopy(pre_server) for _ in range(client_num)]
+    # pre_clusters = [copy.deepcopy(pre_server) for _ in range(domain_num)]
     best_changed = False
     try:
         gmap_ckpt = torch.load(GMAP_SAVE_PATH)
@@ -369,14 +374,24 @@ if __name__ == '__main__':
     gmap = {}
     multi = 100
     Eas = [multi for _ in range(client_num)]
-    all_feat = None
+    
     test_freq = args.test_freq
+    if args.mode.lower()=='fedmix':
+        Xg, Yg = agg_smash_data(args, server_model, train_loaders)
+
     if args.mode.lower() in ['nova', 'ccop']:
         write_log(args, f'multiply {multi} for Ea!\n')
         write_log(args, f'use train loss for Ea\n')
     train_losses = [1.0 for _ in range(client_num)]
     if args.freeze_ckpt and start_iter>0: 
         args.iters = start_iter + 1
+    
+    # naively aggregate feat, pi
+    all_feat = None
+    all_pi = None
+    # average along clusters
+    cluster_pis = None
+    mean_feat = None
     for a_iter in range(start_iter, args.iters):
         print(best_test)
         if args.mode.lower() in ['doprompt', 'fedprompt', 'cocoop', 'nova']:
@@ -389,8 +404,12 @@ if __name__ == '__main__':
             project_opts = [SAM(params=models[idx].meta_net.parameters(), base_optimizer=optim.Adam, lr=args.lr) for idx in range(client_num)]
         else:
             optimizers = [optim.SGD(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
+        pre_pis = copy.deepcopy(all_pi)
+        pre_feats = copy.deepcopy(all_feat)
+        # pre_glob = copy.deepcopy(server_model)
         for wi in range(args.wk_iters):
             all_feat = None
+            all_pi = None
             print("============ Train epoch {} ============".format(wi + a_iter * args.wk_iters))
             write_log(args, "============ Train epoch {} ============\n".format(wi + a_iter * args.wk_iters)) 
 
@@ -411,13 +430,27 @@ if __name__ == '__main__':
                     if args.sam:
                         train_sam(model, train_loaders[client_idx], prompt_opts[client_idx], prompt_opts[client_idx], optimizers[client_idx], loss_fun, device)
                     else:
-                        train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device)
-                    feat_i = agg_rep(args, server_model, train_loaders[client_idx], device)
-                    feat_i = feat_i.unsqueeze(0)
+                        if len(gmap) == 0: 
+                            gidx = -1
+                            pre_feat = None
+                            pre_pi = None
+                            mean_feat = None
+                        else:
+                            gidx = gmap[client_idx]
+                            pre_pi = pre_pis[client_idx]
+                            pre_feat = pre_feats[client_idx]
+                        train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device, 
+                        #  pre_locals[client_idx], pre_glob, pre_clusters, single, 
+                        gidx, mean_feat, pre_feat, cluster_pis, pre_pi,
+                        a_iter)
+                    feat_i = agg_rep(args, server_model, train_loaders[client_idx], device).unsqueeze(0)
+                    pi_i = agg_rep(args, server_model, train_loaders[client_idx], device, args.pcon).unsqueeze(0)
                     if all_feat == None:
                         all_feat = feat_i
+                        all_pi = pi_i
                     else:
                         all_feat = torch.concat((all_feat, feat_i)) 
+                        all_pi = torch.concat((all_pi, pi_i)) 
                 elif args.mode.lower() == 'ablation':
                     train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                     feat_i = agg_rep(args, server_model, train_loaders[client_idx], device)
@@ -430,16 +463,22 @@ if __name__ == '__main__':
                     train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device)
                 elif args.mode.lower() == 'harmo-fl':
                     train_harmofl(args, model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
+                elif args.mode.lower() == 'fedmix':
+                    lamb = 0.05
+                    train_fedmix(model, Xg, Yg, lamb, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
+                elif args.mode.lower() == 'propfair':
+                    train_loss, train_acc = train_propfair(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                 else:
                     train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                     train_losses[client_idx] = train_loss
-        
+
         with torch.no_grad():
             # Aggregation
             if args.mode.lower() != 'solo':
                 if args.mode.lower() in ['nova', 'ccop', 'ablation']:
                     print(Eas)
-                server_model, models, prompt_bank, gmap = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, all_feat, prompt_bank)
+                # server_model, models, prompt_bank, gmap, cluster_pis, mean_feat = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, pre_clusters, all_feat, all_pi, prompt_bank)
+                server_model, models, prompt_bank, gmap, cluster_pis, mean_feat = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, all_feat, all_pi, prompt_bank)
                 
             # Report loss after aggregation
             train_acc_list = [None for j in range(client_num)]
