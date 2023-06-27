@@ -822,8 +822,12 @@ def train_fedprompt(gidx, model, train_loader, prompt_bank, device):
 
     return loss_all/len(train_iter), correct/num_data
 
-def train_CoCoOP(args, model, train_loader, loss_fun, device, gidx=-1, mean_feat=None, pre_feat=None, cluster_pis=None, pre_pi=None, a_iter=-1):
+def train_CoCoOP(args, model, train_loader, loss_fun, device, gidx=-1, mean_feat=None, pre_feat=None, cluster_pis=None, pre_pi=None, pre_glob=None, pre_local=None, a_iter=-1):
     model.to(device)
+    pre_glob.to(device)
+    pre_local.to(device)
+    pre_glob.eval()
+    pre_local.eval()
     model.train()
     num_data = 0
     correct = 0
@@ -837,14 +841,18 @@ def train_CoCoOP(args, model, train_loader, loss_fun, device, gidx=-1, mean_feat
         x = x.to(device).float()
         y = y.to(device).long()
         num_data += y.size(0)
+        iter_ratio = a_iter/args.iters
         if a_iter>0 and (args.pcon): 
-            iter_ratio = a_iter/args.iters
             result = model.update_con(loss_fun, x, y, cluster_pis, pre_pi, gidx, mean_feat, pre_feat, iter_ratio)
+        elif a_iter>0 and (args.clscon):
+            result = model.update_clscon(loss_fun, x, y, cluster_pis, pre_pi, gidx, pre_glob=pre_glob, pre_local=pre_local, iter_ratio=iter_ratio)
         else:
             result = model.update(loss_fun, x, y)
         loss_all += result['loss']
         correct += result['correct']
     model.to('cpu')
+    pre_glob.to('cpu')
+    pre_local.to('cpu')
     return loss_all/len(train_iter), correct/num_data
 
 import torch.nn.functional as F
@@ -1038,7 +1046,7 @@ def get_domain_idx(pi, prompt_bank):
 
     return torch.argmax(domain_sim)
 
-def agg_rep(args, model, test_loader, device, pcon=False):
+def agg_rep(args, model, test_loader, device, use_dc=False):
     model.to(device)
     model.eval()
     agg_protos_label = {}
@@ -1049,7 +1057,7 @@ def agg_rep(args, model, test_loader, device, pcon=False):
         data, target = batch
         data = data.to(device).float()
         target = target.to(device).long()
-        if pcon:
+        if use_dc:
             features = model.get_dc(data)
         else:
             features = model.forward_feat(data)
@@ -1367,7 +1375,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             multi = 100
             
             q = args.q
-            if args.pcon:
+            if args.pcon or args.clscon:
                 gmap, cnt, cluster_pis = cluster_avg_feat(args, all_pi, domain_num)
                 _, _, cluster_feats = cluster_avg_feat(args, all_feat, domain_num)
                 mean_feat = torch.mean(cluster_feats, dim=0)

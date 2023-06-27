@@ -1,8 +1,8 @@
 import numpy as np
 
-domains_acc = [0.8935, 0.9441, 0.9128, 0.8791, 0.7140, 0.5145]
+domains_acc = [0.9278, 0.9548, 0.9321, 0.9097, 0.7190, 0.5525]
 individual_acc = []
-decay_speed = 1.6
+decay_speed = 1
 domain_num = len(domains_acc)
 client_nums = [0 for _ in range(domain_num)]
 for i in range(domain_num):

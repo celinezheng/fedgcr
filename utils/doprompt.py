@@ -712,48 +712,43 @@ class CoCoOP(ERM):
             "loss": (loss).item(),
             "correct": correct
         }
-    def update_clscon(self, loss_fun, x, y, pre_glob, pre_local, pre_clusters, gidx, iter_ratio):
+    def update_clscon(self, loss_fun, x, y, cluster_pis, pre_pi, gidx, pre_glob, pre_local, iter_ratio):
         self.prompt_opt.zero_grad()
         self.optimizer.zero_grad()
         self.project_opt.zero_grad()
         
         # domain prompt learning
-        all_logit, pi, z = self.forward_pi_cst(x)
+        all_logit, pi, feat = self.forward_pi_cst(x)
         loss_m = loss_fun(all_logit, y)    
 
-        mu = 1
-        temperature = 0.5
         cos = torch.nn.CosineSimilarity(dim=-1)
-        # moon on outpot feauture to GLOBAL feature
-        _, z_glob = self.forward_pre(x, pre_glob)
-        posi = cos(z_glob, z)
-        logits_con = posi.reshape(-1,1)
-        pre_pi, z_prev = self.forward_pre(x, pre_local)
-        nega = cos(z_prev, z)
-        logits_con = torch.cat((logits_con, nega.reshape(-1,1)), dim=1)
-        logits_con /= temperature
-        y_con = torch.full((x.shape[0],), 0).cuda().long()
-        loss_con1 = mu * loss_fun(logits_con, y_con)
-        # moon on outpot feauture to CLUSTER feature
+        temperature = 0.5
         base = 0.5
-        mu = base + (1-base) * iter_ratio
-        pi_cls, _ = self.forward_pre(x, pre_clusters[gidx])
-        posi = cos(pi_cls, pi)
+        mu = 0.5 + base * iter_ratio
+        # moon on outpot feauture to CLUSTER feature
+        posi = cos(cluster_pis[gidx], pi)
         logits_con = posi.reshape(-1,1)
-        for i, pre_cluster in enumerate(pre_clusters):
+        for i in range(cluster_pis.shape[0]):
             if i==gidx: continue
-            pi_cls, _ = self.forward_pre(x, pre_cluster)
-            nega = cos(pi_cls, pi)
+            nega = cos(cluster_pis[i], pi)
             logits_con = torch.cat((logits_con, nega.reshape(-1,1)), dim=1)
-        # moon negative to prev pi feature
         nega = cos(pre_pi, pi)
         logits_con = torch.cat((logits_con, nega.reshape(-1,1)), dim=1)
         logits_con /= temperature
+        # y_con = torch.full((x.shape[0],), gidx).cuda().long()
         y_con = torch.full((x.shape[0],), 0).cuda().long()
-        loss_con2 = mu * loss_fun(logits_con, y_con)
-        loss_con = 2 * loss_con1 + loss_con2
-        
-        loss = loss_m + 0.1*loss_con
+        loss_con1 = mu * loss_fun(logits_con, y_con)
+        # moon on outpot feauture to GLOBAL feature
+        _, _, z_glob = pre_glob.forward_pi_cst(x)
+        _, _, z_prev = pre_local.forward_pi_cst(x)
+        posi = cos(z_glob, feat)
+        logits_con = posi.reshape(-1,1)
+        nega = cos(z_prev, feat)
+        logits_con = torch.cat((logits_con, nega.reshape(-1,1)), dim=1)
+        y_con = torch.full((x.shape[0],), 0).cuda().long()
+        loss_con2 = 0.5 * loss_fun(logits_con, y_con)
+        loss_con = loss_con1 + loss_con2
+        loss = loss_m + 0.1 * loss_con
 
         loss.backward()
         pred = all_logit.data.max(1)[1]

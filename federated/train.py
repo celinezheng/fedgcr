@@ -318,9 +318,8 @@ if __name__ == '__main__':
     
     # each local client model
     models = [copy.deepcopy(server_model) for _ in range(client_num)]
-    # pre_server = Partial(num_classes=args.num_classes, hparams=hparams)
-    # pre_locals = [copy.deepcopy(pre_server) for _ in range(client_num)]
-    # pre_clusters = [copy.deepcopy(pre_server) for _ in range(domain_num)]
+    pre_locals = [copy.deepcopy(server_model) for _ in range(client_num)]
+    pre_glob = copy.deepcopy(server_model)
     best_changed = False
     try:
         gmap_ckpt = torch.load(GMAP_SAVE_PATH)
@@ -406,7 +405,6 @@ if __name__ == '__main__':
             optimizers = [optim.SGD(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
         pre_pis = copy.deepcopy(all_pi)
         pre_feats = copy.deepcopy(all_feat)
-        # pre_glob = copy.deepcopy(server_model)
         for wi in range(args.wk_iters):
             all_feat = None
             all_pi = None
@@ -440,11 +438,11 @@ if __name__ == '__main__':
                             pre_pi = pre_pis[client_idx]
                             pre_feat = pre_feats[client_idx]
                         train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device, 
-                        #  pre_locals[client_idx], pre_glob, pre_clusters, single, 
                         gidx, mean_feat, pre_feat, cluster_pis, pre_pi,
-                        a_iter)
+                        pre_glob=pre_glob, pre_local=pre_locals[client_idx],
+                        a_iter=a_iter)
                     feat_i = agg_rep(args, server_model, train_loaders[client_idx], device).unsqueeze(0)
-                    pi_i = agg_rep(args, server_model, train_loaders[client_idx], device, args.pcon).unsqueeze(0)
+                    pi_i = agg_rep(args, server_model, train_loaders[client_idx], device, True).unsqueeze(0)
                     if all_feat == None:
                         all_feat = feat_i
                         all_pi = pi_i
@@ -471,7 +469,18 @@ if __name__ == '__main__':
                 else:
                     train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                     train_losses[client_idx] = train_loss
-
+        if args.clscon:
+            for key in server_model.state_dict().keys():
+                if 'prompt' in key or 'meta_net' in key:
+                    pre_glob.state_dict()[key].data.copy_(server_model.state_dict()[key])
+            for param in pre_glob.parameters():
+                param.requires_grad = False
+            for i in range(client_num):
+                for key in pre_locals[i].state_dict().keys():
+                    if 'prompt' in key or 'meta_net' in key:
+                        pre_locals[i].state_dict()[key].data.copy_(models[i].state_dict()[key])
+                for param in pre_locals[i].parameters():
+                    param.requires_grad = False
         with torch.no_grad():
             # Aggregation
             if args.mode.lower() != 'solo':
