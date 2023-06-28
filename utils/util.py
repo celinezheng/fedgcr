@@ -29,13 +29,10 @@ def write_log(args, msg):
     if args.binary_race: log_path += "_binary_race"
     if args.sam: log_path += f"_sam"
     if args.color_jitter: log_path += f"_color_jitter"
-    if args.cb: log_path += f"_cb"
-    if args.cq: log_path += f"_cq"
     if args.cs: log_path += f"_cs"
-    if args.super_quan:  log_path += f"_sq"
     if args.moon:  log_path += f"_moon"
     if args.q!=1: log_fname += f'_q={args.q}'
-    if args.dc:  log_fname += f"_dc"
+    if args.shuffle:  log_fname += f"_shuffle"
     if args.clscon:  log_fname += f"_clscon"
     if args.pcon:  log_fname += f"_pcon"
     if not os.path.exists(log_path):
@@ -124,55 +121,33 @@ def prepare_digit_uneven(args):
         'SynthDigits': synth_testset,
         'MNIST-M': mnistm_testset,
         }
-    # len_dataset = {
-    #     'MNIST': int(0.8 * len(mnist_trainset) ),
-    #     'SVHN': int(0.45 * len(svhn_trainset)),
-    #     'USPS': int(0.4 * len(usps_trainset)),
-    #     'SynthDigits': int(0.5 * len(synth_trainset)),
-    #     'MNIST-M': int(0.3 * len(mnistm_trainset)),
-    #     }
-    len_dataset = {
-        'MNIST': int(0.8 * len(mnist_trainset) ),
-        'SVHN': int(0.4 * len(svhn_trainset)),
-        'USPS': int(0.4 * len(usps_trainset)),
-        'SynthDigits': int(0.5 * len(synth_trainset)),
-        'MNIST-M': int(0.2 * len(mnistm_trainset)),
-        }
+    len_dataset = {}
     client_nums = {}
-    if args.dg:
-        if 'uneven-1' in args.expname.lower():
-            data_len = [4, 4, 1, 1]
-        elif 'uneven-2' in args.expname.lower():
-            data_len = [7, 1, 1, 1]
-        else:
-            data_len = [3, 3, 3, 3]
+    if args.shuffle:
+        decay_order = ['USPS', 'MNIST', 'SynthDigits', 'SVHN', 'MNIST-M']
     else:
         decay_order = ['MNIST', 'USPS', 'SynthDigits', 'MNIST-M', 'SVHN']
-        if 'uneven' in args.expname.lower():
-            # data_len = [4, 1, 1, 3, 1]
-            decay_speed = args.ratio
-            for i, name in enumerate(decay_order):
-                client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
-                if i==0:
-                    len_dataset[name] = len(train_sets[name])
-                else:
-                    len_dataset[name] = int(len_dataset[decay_order[i-1]]/decay_speed)
-        else:
-            min_len = int(0.5 * len(mnist_trainset))
-            decay_speed = 3
-            for i, name in enumerate(decay_order):
-                client_nums[name] = 2
-                len_dataset[name] = min_len
-    
+    if 'uneven' in args.expname.lower():
+        # data_len = [4, 1, 1, 3, 1]
+        decay_speed = args.ratio
+        for i, name in enumerate(decay_order):
+            client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
+            if i==0:
+                len_dataset[name] = len(train_sets[name])
+            else:
+                len_dataset[name] = int(len_dataset[decay_order[i-1]]/decay_speed)
+    else:
+        min_len = int(0.5 * len(mnist_trainset))
+        decay_speed = 3
+        for i, name in enumerate(decay_order):
+            client_nums[name] = 2
+            len_dataset[name] = min_len
+
     for name, val in len_dataset.items():
         print(f"{name}: {val * 0.6}")
-    target_loader = None
+    
     client_weights = []
     sum_len = 0
-    if args.dg:
-        print(f"target domain is {args.target_domain}")
-        client_nums[args.target_domain] = 0
-        target_loader = torch.utils.data.DataLoader(test_sets[args.target_domain], batch_size=args.batch, shuffle=False)
     print(client_nums)
     train_loaders, val_loaders, test_loaders = [], [], []
     datasets = []
@@ -216,7 +191,7 @@ def prepare_digit_uneven(args):
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
     # check_labels(args, train_loaders)
-    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
+    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets
 
 def prepare_domainnet_uneven(args):
     data_base_path = '../../data'
@@ -270,7 +245,11 @@ def prepare_domainnet_uneven(args):
         }
     len_dataset = {}
     client_nums = {}
-    decay_order = ['Clipart', 'Real', 'Painting', 'Sketch', 'QuickDraw', 'Infograph']
+    if args.shuffle:
+        decay_order = ['Real', 'Clipart', 'Painting', 'Sketch', 'Infograph', 'QuickDraw']
+    else:
+        decay_order = ['Clipart', 'Real', 'Painting', 'Sketch', 'QuickDraw', 'Infograph']
+
     if 'uneven' in args.expname.lower():
         # client number = 1.4^k, k=0~5
         # data_len = {5, 4, 3, 2, 1, 1}
@@ -298,13 +277,8 @@ def prepare_domainnet_uneven(args):
     for name, val in len_dataset.items():
         print(f"{name}: {val * args.percent * 0.6}")
 
-    target_loader = None
     client_weights = []
-    if args.dg:
-        print(f"target domain is {args.target_domain}")
-        client_nums[args.target_domain] = 0
-        target_loader = torch.utils.data.DataLoader(test_sets[args.target_domain], batch_size=args.batch, shuffle=False)
-
+    
     train_loaders, val_loaders, test_loaders = [], [], []
     datasets = []
     sum_len = 0
@@ -348,7 +322,7 @@ def prepare_domainnet_uneven(args):
     write_log(args, f"]\n")
     client_weights = [ci/sum_len for ci in client_weights]
     # check_labels(args, train_loaders)
-    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
+    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets
 
 def prepare_fairface_iid_uneven(args):
     data_base_path = '../../data/FairFace'

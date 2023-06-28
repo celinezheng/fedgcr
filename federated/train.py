@@ -97,7 +97,7 @@ if __name__ == '__main__':
     parser.add_argument('--pcon', action='store_true', help='whether to pcon')
     parser.add_argument('--clscon', action='store_true', help='whether to pcon')
     parser.add_argument('--moon', action='store_true', help='whether to moon')
-    parser.add_argument('--dc', action='store_true', help='whether to use balanced weight for meta-net')
+    parser.add_argument('--shuffle', action='store_true', help='whether to shuffle the order of majority/minority')
     parser.add_argument('--super_quan', action='store_true', help='whether to super_quan')
     parser.add_argument('--Ea_val', action='store_true', help='whether to Ea_val')
     parser.add_argument('--power_relu', type=float, default=1, help='threshold std')
@@ -198,10 +198,7 @@ if __name__ == '__main__':
     if args.gender_label: exp_folder += "_gender_label"
     if args.binary_race: exp_folder += "_binary_race"
     if args.sam: exp_folder += f"_sam"
-    if args.color_jitter:  exp_folder += f"_color_jitter"
-    if args.cb:  exp_folder += f"_cb"
-    if args.cq:  exp_folder += f"_cq"
-    if args.cs:  exp_folder += f"_cs"
+    if args.shuffle:  exp_folder += f"_shuffle"
     if args.moon:  exp_folder += f"_moon"
     if args.clscon:  exp_folder += f"_clscon"
 
@@ -252,7 +249,7 @@ if __name__ == '__main__':
     
     
     loss_fun = nn.CrossEntropyLoss()
-    client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
+    client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets = prepare_data(args)
     print(datasets)
     client_num = len(train_loaders)
     if args.dg:
