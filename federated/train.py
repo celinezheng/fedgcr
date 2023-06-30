@@ -20,7 +20,7 @@ from utils.doprompt import DoPrompt, FedPrompt, CoCoOP
 from domainbed import hparams_registry, misc
 import json
 from utils.util import train, train_doprompt, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log, train_CoCoOP, agg_rep, train_harmofl, train_sam, train_fedmix
-from utils.util import train_propfair
+from utils.util import train_propfair, train_fedsam
 from utils import util
 from utils.weight_perturbation import WPOptim
 from utils.sam import SAM
@@ -276,7 +276,7 @@ if __name__ == '__main__':
         prompt_bank.detach_()
         prompt_bank = util.random_replace(all_pi, prompt_bank)
         print(prompt_bank.shape)
-    elif args.mode.lower() in ['cocoop', 'nova', 'ccop']:
+    elif args.mode.lower() in ['cocoop', 'nova', 'ccop', 'only_dcnet']:
         server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams)
     elif args.mode.lower() in ['full']:
         model_type="sup_vitb16_imagenet21k"
@@ -398,8 +398,13 @@ if __name__ == '__main__':
             optimizers = [SAM(params=models[idx].classifier.parameters(), base_optimizer=optim.Adam, lr=args.lr) for idx in range(client_num)]
             prompt_opts = [SAM(params=[models[idx].prompt_tokens], base_optimizer=optim.Adam, lr=args.lr) for idx in range(client_num)]
             project_opts = [SAM(params=models[idx].meta_net.parameters(), base_optimizer=optim.Adam, lr=args.lr) for idx in range(client_num)]
+        elif args.mode.lower() == 'fedsam':
+            optimizers = [SAM(params=models[idx].parameters(), base_optimizer=optim.Adam, lr=args.lr) for idx in range(client_num)]
         else:
-            optimizers = [optim.SGD(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
+            if args.mode.lower()=='ablation':   
+                optimizers = [optim.AdamW(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
+            else:
+                optimizers = [optim.AdamW(params=models[idx].parameters(), lr=0.001) for idx in range(client_num)]
         pre_pis = copy.deepcopy(all_pi)
         pre_feats = copy.deepcopy(all_feat)
         for wi in range(args.wk_iters):
@@ -421,7 +426,7 @@ if __name__ == '__main__':
                     if len(gmap) == 0: gidx = -1
                     else: gidx = gmap[client_idx]
                     train_fedprompt(gidx, model, train_loaders[client_idx], prompt_bank, device)
-                elif args.mode.lower() in ['nova', 'ccop']:
+                elif args.mode.lower() in ['nova', 'ccop', 'only_dcnet']:
                     if args.sam:
                         train_sam(model, train_loaders[client_idx], prompt_opts[client_idx], prompt_opts[client_idx], optimizers[client_idx], loss_fun, device)
                     else:
@@ -454,7 +459,7 @@ if __name__ == '__main__':
                         all_feat = feat_i
                     else:
                         all_feat = torch.concat((all_feat, feat_i))
-                elif args.mode.lower() in ['cocoop']:
+                elif args.mode.lower() == 'cocoop':
                     train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device)
                 elif args.mode.lower() == 'harmo-fl':
                     train_harmofl(args, model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
@@ -463,10 +468,12 @@ if __name__ == '__main__':
                     train_fedmix(model, Xg, Yg, lamb, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                 elif args.mode.lower() == 'propfair':
                     train_loss, train_acc = train_propfair(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
+                elif args.mode.lower() == 'fedsam':
+                    train_loss, train_acc = train_fedsam(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                 else:
                     train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                     train_losses[client_idx] = train_loss
-        if args.clscon:
+        if args.clscon or args.mode.lower()=='only_dcnet':
             for key in server_model.state_dict().keys():
                 if 'prompt' in key or 'meta_net' in key:
                     pre_glob.state_dict()[key].data.copy_(server_model.state_dict()[key])

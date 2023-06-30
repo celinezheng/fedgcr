@@ -1,18 +1,12 @@
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --mode fedavg --iters 50 --batch 16 --netdb
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --mode fedavg --test --batch 16 --netdb
-
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --mode drfl --iters 50 --batch 16 --netdb
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 1.47 --expname uneven-mix5 --mix5 --mode drfl --test --batch 16 --netdb
-
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 1.31 --expname uneven-mix5 --mix5 --mode fedavg --iters 50 --batch 16 --netdb
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 1.31 --expname uneven-mix5 --mix5 --mode fedavg --test --batch 16 --netdb
-
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 1.31 --expname uneven-mix5 --mix5 --mode drfl --iters 50 --batch 16 --netdb
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 1.31 --expname uneven-mix5 --mix5 --mode drfl --test --batch 16 --netdb
-
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 2.15 --expname uneven --weak_whte --split_test --mode fedavg --iters 50 --batch 16 --netdb
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 2.15 --expname uneven --weak_whte --split_test --mode fedavg --test --batch 16 --netdb
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 2.15 --expname uneven --weak_whte --split_test --mode drfl --iters 50 --batch 16 --netdb
-python change-vpt.py --dataset fairface --percent 0.5 --ratio 2.15 --expname uneven --weak_whte --split_test --mode drfl --test --batch 16 --netdb
-
-
+python train.py --dataset digit --percent 0.5 --ratio 1.8 --expname uneven --mode fedsam --iters 50 --batch 32 --test_freq 51
+python train.py --dataset digit --percent 0.5 --ratio 1.8 --expname uneven --mode fedsam --test --batch 32
+python train.py --dataset digit --percent 0.5 --ratio 1.5 --expname uneven --mode fedsam --iters 50 --batch 32 --test_freq 51
+python train.py --dataset digit --percent 0.5 --ratio 1.5 --expname uneven --mode fedsam --test --batch 32
+python train.py --dataset digit --percent 0.5 --expname even --mode fedsam --iters 50 --batch 32 --test_freq 51
+python train.py --dataset digit --percent 0.5 --expname even --mode fedsam --test --batch 32
+python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode fedsam --iters 50 --batch 32 --test_freq 51
+python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode fedsam --test --batch 32
+python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode fedsam --iters 50 --batch 32 --test_freq 51
+python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode fedsam --test --batch 32
+python train.py --dataset domainnet --percent 0.5 --expname even --mode fedsam --iters 50 --batch 32 --test_freq 51
+python train.py --dataset domainnet --percent 0.5 --expname even --mode fedsam --test --batch 32

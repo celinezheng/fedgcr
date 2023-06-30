@@ -1,58 +1,48 @@
 
-
-# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode gifair --iters 2 --batch 64
-
-
-# python train.py --dataset digit --percent 1 --ratio 1.5 --expname uneven --mode gifair --iters 50 --batch 64
-# python train.py --dataset digit --percent 1 --ratio 1.5 --expname uneven --mode gifair --test --batch 64
-
-# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode ccop --iters 50 --batch 64 --pcon
-# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode ccop --test --batch 64 --pcon
-
-
-# python train.py --dataset digit --percent 1 --ratio 1.8 --expname uneven --mode gifair --iters 50 --batch 64
-# python train.py --dataset digit --percent 1 --ratio 1.8 --expname uneven --mode gifair --test --batch 64
-
-# python train.py --dataset digit --percent 1 --ratio 1.5 --expname uneven --mode propfair --iters 50 --batch 64
-# python train.py --dataset digit --percent 1 --ratio 1.5 --expname uneven --mode propfair --test --batch 64
-
-# python train.py --dataset digit --percent 1 --ratio 1.8 --expname uneven --mode propfair --iters 50 --batch 64
-# python train.py --dataset digit --percent 1 --ratio 1.8 --expname uneven --mode propfair --test --batch 64
-
-# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode propfair --iters 50 --batch 64
-# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode propfair --test --batch 64
-
-# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode propfair --iters 50 --batch 64
-# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode propfair --test --batch 64
+# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode fedavg --iters 50 --batch 64 --test_freq 51
+# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode fedavg --test --batch 64
+# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode afl --iters 50 --batch 64 --test_freq 51
+# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode afl --test --batch 64
+# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode q-ffl --iters 50 --batch 64 --test_freq 51
+# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode q-ffl --test --batch 64
+# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode drfl --iters 50 --batch 64 --test_freq 51
+# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode drfl --test --batch 64
+# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode term --iters 50 --batch 64 --test_freq 51
+# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode term --test --batch 64
 
 
-# python train.py --dataset digit --percent 0.5 --ratio 1.5 --expname uneven --mode ccop --iters 50 --batch 64 --pcon --test_freq 25
-# python train.py --dataset digit --percent 0.5 --ratio 1.5 --expname uneven --mode ccop --test --batch 64 --pcon
-# python train.py --dataset digit --percent 0.5 --ratio 1.8 --expname uneven --mode ccop --iters 50 --batch 64 --pcon --test_freq 25
-# python train.py --dataset digit --percent 0.5 --ratio 1.8 --expname uneven --mode ccop --test --batch 64 --pcon
 
-# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode ccop --moon --iters 50 --batch 64
-# python train.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode ccop --moon --test --batch 64
+python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode fedmix --iters 50 --batch 64 --test_freq 51
+python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode fedmix --test --batch 64
+python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode ablation --iters 50 --batch 64 --test_freq 51
+python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode ablation --test --batch 64
 
-# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode ccop --clscon --iters 50 --batch 64
-# python train.py --dataset domainnet --percent 1 --ratio 1.6 --expname uneven --mode ccop --clscon --test --batch 64
+python train.py --dataset domainnet --shuffle --percent 0.5 --ratio 1.6 --expname uneven --mode fedavg --iters 50 --batch 64 --test_freq 51
+python train.py --dataset domainnet --shuffle --percent 0.5 --ratio 1.6 --expname uneven --mode fedavg --test --batch 64
+python train.py --dataset domainnet --shuffle --percent 0.5 --ratio 1.6 --expname uneven --mode afl --iters 50 --batch 64 --test_freq 51
+python train.py --dataset domainnet --shuffle --percent 0.5 --ratio 1.6 --expname uneven --mode afl --test --batch 64
+python train.py --dataset domainnet --shuffle --percent 0.5 --ratio 1.6 --expname uneven --mode q-ffl --iters 50 --batch 64 --test_freq 51
+python train.py --dataset domainnet --shuffle --percent 0.5 --ratio 1.6 --expname uneven --mode q-ffl --test --batch 64
 
-# python train.py --dataset digit --percent 0.5 --ratio 1.5 --test_freq 25 --expname uneven --mode ccop --clscon --iters 50 --batch 64
-# python train.py --dataset digit --percent 0.5 --ratio 1.5 --test_freq 25 --expname uneven --mode ccop --clscon --test --batch 64
 
-# python train.py --dataset digit --percent 0.5 --expname even --mode ccop --clscon --iters 50 --batch 64
-# python train.py --dataset digit --percent 0.5 --expname even --mode ccop --clscon --test --batch 64
 
-# python train.py --dataset digit --percent 0.5 --test_freq 50 --expname even --mode afl --iters 50 --batch 64
-# python train.py --dataset digit --percent 0.5 --test_freq 50 --expname even --mode afl --test --batch 64
-# python train.py --dataset digit --percent 0.5 --test_freq 50 --expname even --mode term --iters 50 --batch 64
-# python train.py --dataset digit --percent 0.5 --test_freq 50 --expname even --mode term --test --batch 64
-# python train.py --dataset digit --percent 0.5 --test_freq 50 --expname even --mode gifair --iters 50 --batch 64
-# python train.py --dataset digit --percent 0.5 --test_freq 50 --expname even --mode gifair --test --batch 64
-# python train.py --dataset digit --percent 0.5 --test_freq 50 --expname even --mode fedmix --iters 50 --batch 64
-# python train.py --dataset digit --percent 0.5 --test_freq 50 --expname even --mode fedmix --test --batch 64
-python train.py --dataset digit --percent 0.5 --test_freq 50 --expname even --mode propfair --iters 50 --batch 64
-python train.py --dataset digit --percent 0.5 --test_freq 50 --expname even --mode propfair --test --batch 64
+
+# python train.py --dataset digit --percent 1 --ratio 1.5 --test_freq 25 --expname uneven --mode ccop --clscon --iters 50 --batch 64
+# python train.py --dataset digit --percent 1 --ratio 1.5 --test_freq 25 --expname uneven --mode ccop --clscon --test --batch 64
+
+# python train.py --dataset digit --percent 1 --expname even --mode ccop --clscon --iters 50 --batch 64
+# python train.py --dataset digit --percent 1 --expname even --mode ccop --clscon --test --batch 64
+
+# python train.py --dataset digit --percent 1 --test_freq 50 --expname even --mode afl --iters 50 --batch 64
+# python train.py --dataset digit --percent 1 --test_freq 50 --expname even --mode afl --test --batch 64
+# python train.py --dataset digit --percent 1 --test_freq 50 --expname even --mode term --iters 50 --batch 64
+# python train.py --dataset digit --percent 1 --test_freq 50 --expname even --mode term --test --batch 64
+# python train.py --dataset digit --percent 1 --test_freq 50 --expname even --mode gifair --iters 50 --batch 64
+# python train.py --dataset digit --percent 1 --test_freq 50 --expname even --mode gifair --test --batch 64
+# python train.py --dataset digit --percent 1 --test_freq 50 --expname even --mode fedmix --iters 50 --batch 64
+# python train.py --dataset digit --percent 1 --test_freq 50 --expname even --mode fedmix --test --batch 64
+# python train.py --dataset digit --percent 1 --test_freq 50 --expname even --mode propfair --iters 50 --batch 64
+# python train.py --dataset digit --percent 1 --test_freq 50 --expname even --mode propfair --test --batch 64
 
 # python train.py --dataset domainnet --percent 0.1 --ratio 1.4 --expname uneven --mode propfair --iters 2 --batch 64
 

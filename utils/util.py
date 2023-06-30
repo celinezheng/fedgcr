@@ -12,6 +12,7 @@ from utils.project import project, solve_centered_w
 from utils.aggregate import aggregate, aggregate_lr, sum_models, zero_model, \
                             assign_models, avg_models, add_models, scale_model, sub_models, norm2_model
 import torch.autograd as autograd
+import torch.nn.functional as F
 
 def write_log(args, msg):
     log_path = f'../logs/{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
@@ -29,10 +30,10 @@ def write_log(args, msg):
     if args.binary_race: log_path += "_binary_race"
     if args.sam: log_path += f"_sam"
     if args.color_jitter: log_path += f"_color_jitter"
+    if args.shuffle:  log_path += f"_shuffle"
     if args.cs: log_path += f"_cs"
     if args.moon:  log_path += f"_moon"
     if args.q!=1: log_fname += f'_q={args.q}'
-    if args.shuffle:  log_fname += f"_shuffle"
     if args.clscon:  log_fname += f"_clscon"
     if args.pcon:  log_fname += f"_pcon"
     if not os.path.exists(log_path):
@@ -717,6 +718,36 @@ def train(model, train_loader, optimizer, loss_fun, device):
     model.to('cpu')
     return loss_all/len(train_iter), correct/num_data
 
+def train_fedsam(model, train_loader, optimizer, loss_fun, device):
+    model.to(device)
+    model.train()
+    num_data = 0
+    correct = 0
+    loss_all = 0
+    train_iter = iter(train_loader)
+    # for step in range(len(train_iter)):
+    for step in tqdm(range(len(train_iter))):
+
+        x, y = next(train_iter)
+        num_data += y.size(0)
+        x = x.to(device).float()
+        y = y.to(device).long()
+        output = model(x)
+
+        loss = loss_fun(output, y)
+        loss.backward()
+        loss_all += loss.item()
+        optimizer.first_step(zero_grad=True)
+        loss_fun(model(x), y).backward()
+        optimizer.second_step(zero_grad=True)
+
+        pred = output.data.max(1)[1]
+        correct += pred.eq(y.view(-1)).sum().item()
+    model.to('cpu')
+    return loss_all/len(train_iter), correct/num_data
+
+
+
 def train_propfair(model, train_loader, optimizer, loss_fun, device):
     def log_loss(output, target, base=2.0):
         ce_loss = loss_fun(output, target)
@@ -818,7 +849,7 @@ def train_CoCoOP(args, model, train_loader, loss_fun, device, gidx=-1, mean_feat
         iter_ratio = a_iter/args.iters
         if a_iter>0 and (args.pcon): 
             result = model.update_con(loss_fun, x, y, cluster_pis, pre_pi, gidx, mean_feat, pre_feat, iter_ratio)
-        elif a_iter>0 and (args.clscon):
+        elif a_iter>0 and (args.clscon or args.mode.lower()=='only_dcnet'):
             result = model.update_clscon(loss_fun, x, y, cluster_pis, pre_pi, gidx, pre_glob=pre_glob, pre_local=pre_local, iter_ratio=iter_ratio)
         else:
             result = model.update(loss_fun, x, y)
@@ -829,7 +860,7 @@ def train_CoCoOP(args, model, train_loader, loss_fun, device, gidx=-1, mean_feat
     pre_local.to('cpu')
     return loss_all/len(train_iter), correct/num_data
 
-import torch.nn.functional as F
+
 def train_sam(model, train_loader, prompt_opt, project_opt, optimizer, loss_fun, device):
     model.to(device)
     model.train()
@@ -1241,7 +1272,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.amp_norm.fix_amp = True
                     for model in models:
                         model.amp_norm.fix_amp = True
-        elif args.mode.lower() == 'cocoop':
+        elif args.mode.lower() in ['cocoop']:
             for key in server_model.state_dict().keys():
                 if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
                     print(key)
@@ -1258,7 +1289,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
             for client_idx in range(client_num):
                 loss = train_losses[client_idx] # compute loss on the whole training data, with respect to the starting point (the global model)
                 new_weights = models[client_idx]
-                temp = copy.deepcopy(server_model).to(device)
+                temp = copy.deepcopy(server_model)
                 # estimation of the local Lipchitz constant
                 hs.append(q * np.float_power(loss+1e-10, (q-1)) * norm_grad_diff(temp, new_weights, lr) + (1.0/lr) * np.float_power(loss+1e-10, q))
 
@@ -1345,59 +1376,59 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-        elif args.mode.lower() in ['ccop', 'ablation']:
+        elif args.mode.lower() in ['ccop', 'ablation', 'only_dcnet']:
             multi = 100
-            
             q = args.q
-            if args.pcon or args.clscon:
+            if args.pcon or args.clscon or args.mode.lower()=='only_dcnet':
                 gmap, cnt, cluster_pis = cluster_avg_feat(args, all_pi, domain_num)
                 _, _, cluster_feats = cluster_avg_feat(args, all_feat, domain_num)
                 mean_feat = torch.mean(cluster_feats, dim=0)
             else:
                 gmap, cnt = cluster(args, all_feat, domain_num)
-            gsize = [0 for _ in range(domain_num)]
-            gloss = [1e-10 for _ in range(domain_num)]
-            for i in range(client_num):
-                gsize[gmap[i]] += client_weights[i]
-                loss = multi / (Eas[i])
-                gloss[gmap[i]] += loss * client_weights[i]
-            for i in range(domain_num):
-                if gsize[i]>0:
-                    gloss[i] /= gsize[i]
-            all_weight = 0
-            new_weights = [0 for _ in range(client_num)]
-            power_decay = 0.9
-            base = 0.5
-            powerI = base + (1-base) * np.float_power(power_decay, a_iter+1)
-            powerC = 1 - powerI
-            print("========")
-            print(gloss)
-            write_log(args, f"power_decay: {power_decay}, powerI: {powerI:.4f}, powerC: {powerC:.4f}\n")
-            print("========")
-            losses = []
-            for client_idx in range(client_num):
-                losses.append(multi / (Eas[client_idx]))
-            loss_i, loss_c, loss_e = [], [], []
-            for client_idx in range(client_num):
-                loss = multi / (Eas[client_idx])
-                Li  = loss
-                Lc = gloss[gmap[client_idx]]
-                Lrb = np.float_power(Li, powerI) * np.float_power(Lc, powerC) + 1e-10
-                loss_i.append(Li)
-                loss_c.append(Lc)
-                loss_e.append(Lrb)
-                if args.cb:
-                    Srb = client_weights[client_idx] / gsize[gmap[client_idx]]
-                else:
-                    Srb = client_weights[client_idx]
-                power = q + 1
-                if args.cq:
-                    power = Lc * (q+1)
-                weight = Srb * np.float_power(Lrb, power)
-                new_weights[client_idx] = weight
-            
-            all_weight = sum(new_weights) 
-            new_weights = [wi/all_weight for wi in new_weights]
+            new_weights = [wi for wi in client_weights]
+            if args.mode.lower() in ['ccop', 'ablation']:
+                gsize = [0 for _ in range(domain_num)]
+                gloss = [1e-10 for _ in range(domain_num)]
+                for i in range(client_num):
+                    gsize[gmap[i]] += client_weights[i]
+                    loss = multi / (Eas[i])
+                    gloss[gmap[i]] += loss * client_weights[i]
+                for i in range(domain_num):
+                    if gsize[i]>0:
+                        gloss[i] /= gsize[i]
+                all_weight = 0
+                power_decay = 0.9
+                base = 0.5
+                powerI = base + (1-base) * np.float_power(power_decay, a_iter+1)
+                powerC = 1 - powerI
+                print("========")
+                print(gloss)
+                write_log(args, f"power_decay: {power_decay}, powerI: {powerI:.4f}, powerC: {powerC:.4f}\n")
+                print("========")
+                new_weights = [0 for _ in range(client_num)]
+                losses = []
+                for client_idx in range(client_num):
+                    losses.append(multi / (Eas[client_idx]))
+                loss_i, loss_c, loss_e = [], [], []
+                for client_idx in range(client_num):
+                    loss = multi / (Eas[client_idx])
+                    Li  = loss
+                    Lc = gloss[gmap[client_idx]]
+                    Lrb = np.float_power(Li, powerI) * np.float_power(Lc, powerC) + 1e-10
+                    loss_i.append(Li)
+                    loss_c.append(Lc)
+                    loss_e.append(Lrb)
+                    if args.cb:
+                        Srb = client_weights[client_idx] / gsize[gmap[client_idx]]
+                    else:
+                        Srb = client_weights[client_idx]
+                    power = q + 1
+                    if args.cq:
+                        power = Lc * (q+1)
+                    weight = Srb * np.float_power(Lrb, power)
+                    new_weights[client_idx] = weight
+                all_weight = sum(new_weights) 
+                new_weights = [wi/all_weight for wi in new_weights]
             print(new_weights)
             for key in server_model.state_dict().keys():
                 if  'prompt' in key or 'head' in key or 'classifier' in key or 'meta_net' in key :

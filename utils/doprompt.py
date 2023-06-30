@@ -48,7 +48,7 @@ class ERM(Algorithm):
         print(self.featurizer.n_outputs, self.hparams['nonlinear_classifier'])
         self.network = nn.Sequential(self.featurizer, self.classifier)
         if self.hparams['vit_base_16']:
-            optimizer = torch.optim.AdamW
+            optimizer = torch.optim.Adam
         else:
             optimizer = torch.optim.Adam
         self.fulltune = False
@@ -122,18 +122,18 @@ class DoPrompt(ERM):
         self.project = networks.Project(self.hidden_dim, num_domains * self.prompt_dim, self.mlp_dim)
         
         # optimizer
-        self.prompt_opt = torch.optim.AdamW(
+        self.prompt_opt = torch.optim.Adam(
             [self.prompt_tokens],
             lr=self.hparams["lr_prompt"],
             weight_decay=1e-5
         )
-        self.project_opt = torch.optim.AdamW(
+        self.project_opt = torch.optim.Adam(
             self.project.parameters(),
             lr=self.hparams["lr_project"],
             weight_decay=self.hparams["wd_project"],
         )
         
-        self.optimizer = torch.optim.AdamW(
+        self.optimizer = torch.optim.Adam(
             [
                 # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
                 {'params': self.classifier.parameters(), 'lr': self.hparams["lr_classifier"], 'weight_decay': self.hparams['wd_classifier']}
@@ -314,19 +314,19 @@ class FedPrompt(ERM):
         self.project = networks.MetaNet(self.hidden_dim, self.prompt_num, self.hidden_dim, self.mlp_dim)
         
         # optimizer
-        self.prompt_opt = torch.optim.AdamW(
+        self.prompt_opt = torch.optim.Adam(
             [self.prompt_tokens],
             lr=self.hparams["lr_prompt"],
             weight_decay=1e-5
         )
 
-        self.project_opt = torch.optim.AdamW(
+        self.project_opt = torch.optim.Adam(
             self.project.parameters(),
             lr=self.hparams["lr_project"],
             weight_decay=self.hparams["wd_project"],
         )
         
-        self.optimizer = torch.optim.AdamW(
+        self.optimizer = torch.optim.Adam(
             [
                 # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
                 {'params': self.classifier.parameters(), 'lr': self.hparams["lr_classifier"], 'weight_decay': self.hparams['wd_classifier']}
@@ -459,19 +459,19 @@ class VPT(ERM):
         )
 
         # optimizer
-        self.prompt_opt = torch.optim.AdamW(
+        self.prompt_opt = torch.optim.Adam(
             [self.prompt_tokens],
             lr=self.hparams["lr_prompt"],
             weight_decay=1e-5
         )
 
-        self.optimizer = torch.optim.AdamW(
+        self.optimizer = torch.optim.Adam(
             [
                 # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
                 {'params': self.classifier.parameters(), 'lr': self.hparams["lr_classifier"], 'weight_decay': self.hparams['wd_classifier']}
             ]
         )
-        self.all_opt = torch.optim.AdamW(
+        self.all_opt = torch.optim.Adam(
             [
                 # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
                 {'params': [self.prompt_tokens], 'lr': 1e-2, 'weight_decay': 1e-5},
@@ -553,25 +553,25 @@ class CoCoOP(ERM):
         self.meta_net = networks.MetaNet(self.hidden_dim, 1, self.hidden_dim, self.mlp_dim)
         
         # optimizer
-        self.prompt_opt = torch.optim.AdamW(
+        self.prompt_opt = torch.optim.Adam(
             [self.prompt_tokens],
             lr=self.hparams["lr_prompt"],
             weight_decay=1e-5
         )
 
-        self.project_opt = torch.optim.AdamW(
+        self.project_opt = torch.optim.Adam(
             self.meta_net.parameters(),
             lr=self.hparams["lr_project"],
             weight_decay=self.hparams["wd_project"],
         )
         
-        self.optimizer = torch.optim.AdamW(
+        self.optimizer = torch.optim.Adam(
             [
                 # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
                 {'params': self.classifier.parameters(), 'lr': self.hparams["lr_classifier"], 'weight_decay': self.hparams['wd_classifier']}
             ]
         )
-        self.all_opt = torch.optim.AdamW(
+        self.all_opt = torch.optim.Adam(
             [
                 # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
                 {'params': [self.prompt_tokens], 'lr': self.hparams["lr_prompt"], 'weight_decay': 1e-5},
