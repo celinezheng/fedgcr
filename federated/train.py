@@ -25,6 +25,7 @@ from utils import util
 from utils.weight_perturbation import WPOptim
 from utils.sam import SAM
 from utils.aggregate import agg_smash_data
+from utils.fpl import train_fpl, proto_aggregation
 
 def test_score(args, server_model, test_loaders, datasets, best_epoch, gmap):
     domain_test_accs = {}
@@ -98,8 +99,9 @@ if __name__ == '__main__':
     parser.add_argument('--clscon', action='store_true', help='whether to pcon')
     parser.add_argument('--moon', action='store_true', help='whether to moon')
     parser.add_argument('--shuffle', action='store_true', help='whether to shuffle the order of majority/minority')
-    parser.add_argument('--super_quan', action='store_true', help='whether to super_quan')
+    parser.add_argument('--distinct', action='store_true', help='whether to distinct domain')
     parser.add_argument('--Ea_val', action='store_true', help='whether to Ea_val')
+    parser.add_argument('--w_con', type=float, default=0.1, help='threshold std')
     parser.add_argument('--power_relu', type=float, default=1, help='threshold std')
     parser.add_argument('--power_cs', type=float, default=1, help='threshold std')
     parser.add_argument('--save_mean', type=float, default=-1, help='threshold std')
@@ -201,6 +203,7 @@ if __name__ == '__main__':
     if args.shuffle:  exp_folder += f"_shuffle"
     if args.moon:  exp_folder += f"_moon"
     if args.clscon:  exp_folder += f"_clscon"
+    if args.distinct:  exp_folder += f"_distinct"
 
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
@@ -212,6 +215,9 @@ if __name__ == '__main__':
         SAVE_PATH += f"_q={args.q}"
         if args.power_cs != 1: SAVE_PATH += f"_pcs={args.power_cs}"
         if args.pcon: SAVE_PATH += "_pcon"
+    if 'only_dcnet' in args.mode.lower():
+        if args.w_con!=0.1: SAVE_PATH += f"_wcon={args.w_con}"
+
     GMAP_SAVE_PATH = args.gmap_path
     if GMAP_SAVE_PATH == 'none':
         GMAP_SAVE_PATH = f"{SAVE_PATH}_gmap"
@@ -259,24 +265,7 @@ if __name__ == '__main__':
     write_log(args, f"domain number = {domain_num}\n")
     prompt_bank = None
     # setup model
-    if args.mode.lower() == 'doprompt':
-        server_model = DoPrompt(num_classes=args.num_classes, num_domains=client_num, hparams=hparams)
-    elif args.mode.lower() == 'fedprompt':
-        server_model = FedPrompt(num_classes=args.num_classes, hparams=hparams, lambda_con=args.lambda_con)
-        prompt_bank = nn.Parameter(
-            torch.empty(domain_num, 4, 768, requires_grad=False).normal_(std=0.02)
-        )
-        all_pi = None
-        for client_idx in range(client_num):
-            pi = server_model.state_dict()['prompt_tokens'].unsqueeze(0)
-            if client_idx == 0:
-                all_pi = pi
-            else:
-                all_pi = torch.concat((all_pi, pi))
-        prompt_bank.detach_()
-        prompt_bank = util.random_replace(all_pi, prompt_bank)
-        print(prompt_bank.shape)
-    elif args.mode.lower() in ['cocoop', 'nova', 'ccop', 'only_dcnet']:
+    if args.mode.lower() in ['cocoop', 'nova', 'ccop', 'only_dcnet']:
         server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams)
     elif args.mode.lower() in ['full']:
         model_type="sup_vitb16_imagenet21k"
@@ -370,6 +359,9 @@ if __name__ == '__main__':
     gmap = {}
     multi = 100
     Eas = [multi for _ in range(client_num)]
+    # fpl
+    global_protos = []
+    local_protos = {}
     
     test_freq = args.test_freq
     if args.mode.lower()=='fedmix':
@@ -401,10 +393,7 @@ if __name__ == '__main__':
         elif args.mode.lower() == 'fedsam':
             optimizers = [SAM(params=models[idx].parameters(), base_optimizer=optim.Adam, lr=args.lr) for idx in range(client_num)]
         else:
-            if args.mode.lower()=='ablation':   
-                optimizers = [optim.AdamW(params=models[idx].parameters(), lr=args.lr) for idx in range(client_num)]
-            else:
-                optimizers = [optim.AdamW(params=models[idx].parameters(), lr=0.001) for idx in range(client_num)]
+            optimizers = [optim.AdamW(params=models[idx].parameters(), lr=0.001) for idx in range(client_num)]
         pre_pis = copy.deepcopy(all_pi)
         pre_feats = copy.deepcopy(all_feat)
         for wi in range(args.wk_iters):
@@ -420,13 +409,7 @@ if __name__ == '__main__':
                         train_loss, train_acc = train_fedprox(args, server_model, model ,train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                     else:
                         train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)    
-                elif args.mode.lower() == 'doprompt':
-                    train_doprompt(args, model, train_loaders[client_idx], client_idx, device)
-                elif args.mode.lower() == 'fedprompt':
-                    if len(gmap) == 0: gidx = -1
-                    else: gidx = gmap[client_idx]
-                    train_fedprompt(gidx, model, train_loaders[client_idx], prompt_bank, device)
-                elif args.mode.lower() in ['nova', 'ccop', 'only_dcnet']:
+                elif args.mode.lower() in ['ccop', 'only_dcnet']:
                     if args.sam:
                         train_sam(model, train_loaders[client_idx], prompt_opts[client_idx], prompt_opts[client_idx], optimizers[client_idx], loss_fun, device)
                     else:
@@ -470,6 +453,8 @@ if __name__ == '__main__':
                     train_loss, train_acc = train_propfair(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                 elif args.mode.lower() == 'fedsam':
                     train_loss, train_acc = train_fedsam(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
+                elif args.mode.lower() == 'fpl':
+                    local_protos, train_loss, train_acc = train_fpl(client_idx, model, train_loaders[client_idx], optimizers[client_idx], global_protos, local_protos)
                 else:
                     train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                     train_losses[client_idx] = train_loss
@@ -486,6 +471,9 @@ if __name__ == '__main__':
                 for param in pre_locals[i].parameters():
                     param.requires_grad = False
         with torch.no_grad():
+            if args.mode.lower() == 'fpl':
+                global_protos = proto_aggregation(local_protos, client_num)
+            
             # Aggregation
             if args.mode.lower() != 'solo':
                 if args.mode.lower() in ['nova', 'ccop', 'ablation']:
@@ -522,7 +510,7 @@ if __name__ == '__main__':
                 save_criteria = val_acc_list
             
             # Record best
-            if args.mode.lower() in ['nova', 'ccop', 'ablation']:
+            if args.mode.lower() in ['nova', 'ccop', 'ablation', 'only_dcnet']:
                 if args.sam or args.dataset.lower() != 'digit': threshold = args.iters - 10
                 else: threshold = args.iters - 5
                 threshold = max(10, threshold)

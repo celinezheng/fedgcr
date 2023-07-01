@@ -48,7 +48,7 @@ class ERM(Algorithm):
         print(self.featurizer.n_outputs, self.hparams['nonlinear_classifier'])
         self.network = nn.Sequential(self.featurizer, self.classifier)
         if self.hparams['vit_base_16']:
-            optimizer = torch.optim.Adam
+            optimizer = torch.optim.AdamW
         else:
             optimizer = torch.optim.Adam
         self.fulltune = False
@@ -133,7 +133,7 @@ class DoPrompt(ERM):
             weight_decay=self.hparams["wd_project"],
         )
         
-        self.optimizer = torch.optim.Adam(
+        self.optimizer = torch.optim.AdamW(
             [
                 # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
                 {'params': self.classifier.parameters(), 'lr': self.hparams["lr_classifier"], 'weight_decay': self.hparams['wd_classifier']}
@@ -559,19 +559,19 @@ class CoCoOP(ERM):
             weight_decay=1e-5
         )
 
-        self.project_opt = torch.optim.Adam(
+        self.project_opt = torch.optim.AdamW(
             self.meta_net.parameters(),
             lr=self.hparams["lr_project"],
             weight_decay=self.hparams["wd_project"],
         )
         
-        self.optimizer = torch.optim.Adam(
+        self.optimizer = torch.optim.AdamW(
             [
                 # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
                 {'params': self.classifier.parameters(), 'lr': self.hparams["lr_classifier"], 'weight_decay': self.hparams['wd_classifier']}
             ]
         )
-        self.all_opt = torch.optim.Adam(
+        self.all_opt = torch.optim.AdamW(
             [
                 # {'params': self.featurizer.parameters(), 'lr': self.hparams["lr"], 'weight_decay': self.hparams['weight_decay']},
                 {'params': [self.prompt_tokens], 'lr': self.hparams["lr_prompt"], 'weight_decay': 1e-5},
@@ -666,7 +666,7 @@ class CoCoOP(ERM):
             "loss": (loss_p + loss_m).item(),
             "correct": correct
         }
-    def update_con(self, loss_fun, x, y, cluster_pis, pre_pi, gidx, mean_feat, pre_feat, iter_ratio):
+    def update_con(self, w_con, loss_fun, x, y, cluster_pis, pre_pi, gidx, mean_feat, pre_feat, iter_ratio):
         self.prompt_opt.zero_grad()
         self.optimizer.zero_grad()
         self.project_opt.zero_grad()
@@ -700,7 +700,7 @@ class CoCoOP(ERM):
         y_con = torch.full((x.shape[0],), 0).cuda().long()
         loss_con2 = loss_fun(logits_con, y_con)
         loss_con = loss_con1 + loss_con2
-        loss = loss_m + loss_con
+        loss = loss_m + w_con*loss_con
 
         loss.backward()
         pred = all_logit.data.max(1)[1]
@@ -712,7 +712,7 @@ class CoCoOP(ERM):
             "loss": (loss).item(),
             "correct": correct
         }
-    def update_clscon(self, loss_fun, x, y, cluster_pis, pre_pi, gidx, pre_glob, pre_local, iter_ratio):
+    def update_clscon(self, w_con, loss_fun, x, y, cluster_pis, pre_pi, gidx, pre_glob, pre_local, iter_ratio):
         self.prompt_opt.zero_grad()
         self.optimizer.zero_grad()
         self.project_opt.zero_grad()
@@ -748,7 +748,7 @@ class CoCoOP(ERM):
         y_con = torch.full((x.shape[0],), 0).cuda().long()
         loss_con2 = 0.5 * loss_fun(logits_con, y_con)
         loss_con = loss_con1 + loss_con2
-        loss = loss_m + 0.1 * loss_con
+        loss = loss_m + w_con * loss_con
 
         loss.backward()
         pred = all_logit.data.max(1)[1]

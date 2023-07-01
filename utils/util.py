@@ -33,7 +33,10 @@ def write_log(args, msg):
     if args.shuffle:  log_path += f"_shuffle"
     if args.cs: log_path += f"_cs"
     if args.moon:  log_path += f"_moon"
+    if args.distinct:  log_path += f"_distinct"
+    
     if args.q!=1: log_fname += f'_q={args.q}'
+    if args.w_con!=0.1: log_fname += f'_w_con={args.w_con}'
     if args.clscon:  log_fname += f"_clscon"
     if args.pcon:  log_fname += f"_pcon"
     if not os.path.exists(log_path):
@@ -153,6 +156,10 @@ def prepare_digit_uneven(args):
     train_loaders, val_loaders, test_loaders = [], [], []
     datasets = []
     train_ratio = 0.8
+    if args.distinct:
+        for i, name in enumerate(decay_order):
+            client_nums[name] = 1
+
     for key, value in client_nums.items():
         all_len = len_dataset[key]
         all_train_len = int(all_len * train_ratio)
@@ -160,7 +167,10 @@ def prepare_digit_uneven(args):
         cur_dataset_len = len_dataset[key]
         train_begin = 0
         valid_begin = -all_val_len
-        partition_num = (np.float_power(decay_speed, value)-1) / (decay_speed - 1)
+        if args.distinct:
+            partition_num = 1
+        else:
+            partition_num = (np.float_power(decay_speed, value)-1) / (decay_speed - 1)
 
         test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
         for j in range(value):
@@ -284,6 +294,10 @@ def prepare_domainnet_uneven(args):
     datasets = []
     sum_len = 0
 
+    if args.distinct:
+        for i, name in enumerate(decay_order):
+            client_nums[name] = 1
+
     for key, value in client_nums.items():
         all_len = len_dataset[key] * args.percent
         all_train_len = int(all_len * 0.6)
@@ -291,7 +305,10 @@ def prepare_domainnet_uneven(args):
         cur_dataset_len = len_dataset[key]
         train_begin = 0
         valid_begin = -all_val_len
-        partition_num = (np.float_power(decay_speed, value)-1) / (decay_speed - 1)
+        if args.distinct:
+            partition_num = 1
+        else:
+            partition_num = (np.float_power(decay_speed, value)-1) / (decay_speed - 1)
         
         test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
         for j in range(value):
@@ -849,8 +866,8 @@ def train_CoCoOP(args, model, train_loader, loss_fun, device, gidx=-1, mean_feat
         iter_ratio = a_iter/args.iters
         if a_iter>0 and (args.pcon): 
             result = model.update_con(loss_fun, x, y, cluster_pis, pre_pi, gidx, mean_feat, pre_feat, iter_ratio)
-        elif a_iter>0 and (args.clscon or args.mode.lower()=='only_dcnet'):
-            result = model.update_clscon(loss_fun, x, y, cluster_pis, pre_pi, gidx, pre_glob=pre_glob, pre_local=pre_local, iter_ratio=iter_ratio)
+        elif gidx!=-1 and (args.clscon or args.mode.lower()=='only_dcnet'):
+            result = model.update_clscon(args.w_con, loss_fun, x, y, cluster_pis, pre_pi, gidx, pre_glob=pre_glob, pre_local=pre_local, iter_ratio=iter_ratio)
         else:
             result = model.update(loss_fun, x, y)
         loss_all += result['loss']
@@ -1130,26 +1147,32 @@ import matplotlib.pyplot as plt
 def cluster(args, all_pi, domain_num):
     all_pi_reshape = all_pi.cpu().reshape(all_pi.shape[0], -1)
     print(all_pi_reshape.shape)
-    cluster = GMM(n_components=domain_num)
+    cluster_num = domain_num
+    if args.distinct:
+        cluster_num = domain_num - 1
+    cluster = GMM(n_components=cluster_num)
     # cluster = KMeans(n_clusters=domain_num, random_state=0)
     # cluster = SpectralClustering(n_clusters=domain_num,
     #      assign_labels='discretize',
     #      random_state=0)
     labels = cluster.fit_predict(all_pi_reshape)
     gmap = {}
-    cnt = [0 for _ in range(domain_num)]
+    cnt = [0 for _ in range(cluster_num)]
     for cidx, gidx in enumerate(labels):
         gmap[cidx] = gidx
         cnt[gidx] += 1
     write_log(args, f'cnt=[')
-    for didx in range(domain_num):
+    for didx in range(cluster_num):
         write_log(args, f'{cnt[didx]}, ')
     write_log(args, f']\n')
     print(cnt)
     return gmap, cnt
 
 def cluster_avg_feat(args, all_pi, domain_num):
-    cluster_feats = torch.zeros((domain_num, 768), requires_grad=False)
+    cluster_num = domain_num
+    if args.distinct:
+        cluster_num = domain_num - 1
+    cluster_feats = torch.zeros((cluster_num, 768), requires_grad=False)
     all_pi_reshape = all_pi.cpu().reshape(all_pi.shape[0], -1)
     gmap={}
     gmap, cnt = cluster(args, all_pi, domain_num)

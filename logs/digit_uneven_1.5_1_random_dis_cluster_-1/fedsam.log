@@ -1,0 +1,1980 @@
+===2023-07-01 08:48:50===
+===Setting===
+    dataset: digit
+    lr: 0.01
+    batch: 64
+    iters: 50
+    wk_iters: 1
+    si: False
+    domain_num: 5
+    quantile: 0
+    power_cs: 1
+    std_rw: False
+    gender_label: False
+    binary_race: False
+    save_iter: -1
+    mix5: False
+    power_relu: 1
+    Ea_val: False
+data_number=[225,338,507,761,1142,417,626,939,528,792,352,528,587,
+client_nums=[5,3,2,2,1,]
+len_dataset=[3719,2479,1652,1101,734,]
+domain number = 5
+============ Train epoch 0 ============
+ Site-MNIST                         | Train Loss: 1.1041 | Train Acc: 0.8089
+ Site-MNIST                         | Train Loss: 1.1760 | Train Acc: 0.7929
+ Site-MNIST                         | Train Loss: 1.2196 | Train Acc: 0.7318
+ Site-MNIST                         | Train Loss: 1.1530 | Train Acc: 0.7937
+ Site-MNIST                         | Train Loss: 1.1558 | Train Acc: 0.7828
+ Site-USPS                          | Train Loss: 1.0320 | Train Acc: 0.7482
+ Site-USPS                          | Train Loss: 1.0073 | Train Acc: 0.7907
+ Site-USPS                          | Train Loss: 0.9965 | Train Acc: 0.7966
+ Site-SynthDigits                   | Train Loss: 1.9327 | Train Acc: 0.3750
+ Site-SynthDigits                   | Train Loss: 1.8765 | Train Acc: 0.3952
+ Site-MNIST_M                       | Train Loss: 2.1299 | Train Acc: 0.2983
+ Site-MNIST_M                       | Train Loss: 2.1143 | Train Acc: 0.2500
+ Site-SVHN                          | Train Loss: 2.2023 | Train Acc: 0.2095
+Average Train Accuracy: 0.5980
+ Site-MNIST                         | Val  Loss: 1.1726 | Val  Acc: 0.8036
+ Site-MNIST                         | Val  Loss: 1.1904 | Val  Acc: 0.8095
+ Site-MNIST                         | Val  Loss: 1.1293 | Val  Acc: 0.7937
+ Site-MNIST                         | Val  Loss: 1.1890 | Val  Acc: 0.7000
+ Site-MNIST                         | Val  Loss: 1.1799 | Val  Acc: 0.7825
+ Site-USPS                          | Val  Loss: 0.9947 | Val  Acc: 0.7788
+ Site-USPS                          | Val  Loss: 1.0426 | Val  Acc: 0.7628
+ Site-USPS                          | Val  Loss: 1.0361 | Val  Acc: 0.7564
+ Site-SynthDigits                   | Val  Loss: 2.0690 | Val  Acc: 0.3788
+ Site-SynthDigits                   | Val  Loss: 1.9192 | Val  Acc: 0.3939
+ Site-MNIST_M                       | Val  Loss: 2.0954 | Val  Acc: 0.3182
+ Site-MNIST_M                       | Val  Loss: 2.1613 | Val  Acc: 0.2576
+ Site-SVHN                          | Val  Loss: 2.1915 | Val  Acc: 0.2397
+Average Valid Accuracy: 0.5981
+ Best site-MNIST                     | Epoch:0 | Val Acc: 0.8036
+ Best site-MNIST                     | Epoch:0 | Val Acc: 0.8095
+ Best site-MNIST                     | Epoch:0 | Val Acc: 0.7937
+ Best site-MNIST                     | Epoch:0 | Val Acc: 0.7000
+ Best site-MNIST                     | Epoch:0 | Val Acc: 0.7825
+ Best site-USPS                      | Epoch:0 | Val Acc: 0.7788
+ Best site-USPS                      | Epoch:0 | Val Acc: 0.7628
+ Best site-USPS                      | Epoch:0 | Val Acc: 0.7564
+ Best site-SynthDigits               | Epoch:0 | Val Acc: 0.3788
+ Best site-SynthDigits               | Epoch:0 | Val Acc: 0.3939
+ Best site-MNIST_M                   | Epoch:0 | Val Acc: 0.3182
+ Best site-MNIST_M                   | Epoch:0 | Val Acc: 0.2576
+ Best site-SVHN                      | Epoch:0 | Val Acc: 0.2397
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 1 ============
+ Site-MNIST                         | Train Loss: 0.6983 | Train Acc: 0.8356
+ Site-MNIST                         | Train Loss: 0.7449 | Train Acc: 0.8580
+ Site-MNIST                         | Train Loss: 0.8023 | Train Acc: 0.8067
+ Site-MNIST                         | Train Loss: 0.7217 | Train Acc: 0.8318
+ Site-MNIST                         | Train Loss: 0.7262 | Train Acc: 0.8459
+ Site-USPS                          | Train Loss: 0.7184 | Train Acc: 0.7866
+ Site-USPS                          | Train Loss: 0.6603 | Train Acc: 0.8147
+ Site-USPS                          | Train Loss: 0.6542 | Train Acc: 0.8317
+ Site-SynthDigits                   | Train Loss: 1.7486 | Train Acc: 0.4337
+ Site-SynthDigits                   | Train Loss: 1.6355 | Train Acc: 0.4697
+ Site-MNIST_M                       | Train Loss: 1.9723 | Train Acc: 0.3523
+ Site-MNIST_M                       | Train Loss: 1.9881 | Train Acc: 0.3314
+ Site-SVHN                          | Train Loss: 2.1177 | Train Acc: 0.2538
+Average Train Accuracy: 0.6501
+ Site-MNIST                         | Val  Loss: 0.7293 | Val  Acc: 0.8571
+ Site-MNIST                         | Val  Loss: 0.7387 | Val  Acc: 0.8571
+ Site-MNIST                         | Val  Loss: 0.6989 | Val  Acc: 0.8492
+ Site-MNIST                         | Val  Loss: 0.7617 | Val  Acc: 0.8211
+ Site-MNIST                         | Val  Loss: 0.7504 | Val  Acc: 0.8491
+ Site-USPS                          | Val  Loss: 0.6199 | Val  Acc: 0.8654
+ Site-USPS                          | Val  Loss: 0.7014 | Val  Acc: 0.7949
+ Site-USPS                          | Val  Loss: 0.7391 | Val  Acc: 0.7735
+ Site-SynthDigits                   | Val  Loss: 1.9016 | Val  Acc: 0.4091
+ Site-SynthDigits                   | Val  Loss: 1.7221 | Val  Acc: 0.4545
+ Site-MNIST_M                       | Val  Loss: 1.8893 | Val  Acc: 0.4432
+ Site-MNIST_M                       | Val  Loss: 2.0184 | Val  Acc: 0.3258
+ Site-SVHN                          | Val  Loss: 2.1383 | Val  Acc: 0.2603
+Average Valid Accuracy: 0.6585
+ Best site-MNIST                     | Epoch:1 | Val Acc: 0.8571
+ Best site-MNIST                     | Epoch:1 | Val Acc: 0.8571
+ Best site-MNIST                     | Epoch:1 | Val Acc: 0.8492
+ Best site-MNIST                     | Epoch:1 | Val Acc: 0.8211
+ Best site-MNIST                     | Epoch:1 | Val Acc: 0.8491
+ Best site-USPS                      | Epoch:1 | Val Acc: 0.8654
+ Best site-USPS                      | Epoch:1 | Val Acc: 0.7949
+ Best site-USPS                      | Epoch:1 | Val Acc: 0.7735
+ Best site-SynthDigits               | Epoch:1 | Val Acc: 0.4091
+ Best site-SynthDigits               | Epoch:1 | Val Acc: 0.4545
+ Best site-MNIST_M                   | Epoch:1 | Val Acc: 0.4432
+ Best site-MNIST_M                   | Epoch:1 | Val Acc: 0.3258
+ Best site-SVHN                      | Epoch:1 | Val Acc: 0.2603
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 2 ============
+ Site-MNIST                         | Train Loss: 0.5198 | Train Acc: 0.8756
+ Site-MNIST                         | Train Loss: 0.5517 | Train Acc: 0.8698
+ Site-MNIST                         | Train Loss: 0.6151 | Train Acc: 0.8363
+ Site-MNIST                         | Train Loss: 0.5478 | Train Acc: 0.8647
+ Site-MNIST                         | Train Loss: 0.5465 | Train Acc: 0.8809
+ Site-USPS                          | Train Loss: 0.5803 | Train Acc: 0.8034
+ Site-USPS                          | Train Loss: 0.5164 | Train Acc: 0.8339
+ Site-USPS                          | Train Loss: 0.5018 | Train Acc: 0.8669
+ Site-SynthDigits                   | Train Loss: 1.6604 | Train Acc: 0.4451
+ Site-SynthDigits                   | Train Loss: 1.5309 | Train Acc: 0.5114
+ Site-MNIST_M                       | Train Loss: 1.8342 | Train Acc: 0.3977
+ Site-MNIST_M                       | Train Loss: 1.8551 | Train Acc: 0.3845
+ Site-SVHN                          | Train Loss: 2.0745 | Train Acc: 0.2794
+Average Train Accuracy: 0.6807
+ Site-MNIST                         | Val  Loss: 0.5348 | Val  Acc: 0.8929
+ Site-MNIST                         | Val  Loss: 0.5218 | Val  Acc: 0.8929
+ Site-MNIST                         | Val  Loss: 0.5175 | Val  Acc: 0.8492
+ Site-MNIST                         | Val  Loss: 0.5792 | Val  Acc: 0.8368
+ Site-MNIST                         | Val  Loss: 0.5670 | Val  Acc: 0.8596
+ Site-USPS                          | Val  Loss: 0.4855 | Val  Acc: 0.8365
+ Site-USPS                          | Val  Loss: 0.5593 | Val  Acc: 0.8013
+ Site-USPS                          | Val  Loss: 0.6024 | Val  Acc: 0.7991
+ Site-SynthDigits                   | Val  Loss: 1.8143 | Val  Acc: 0.4167
+ Site-SynthDigits                   | Val  Loss: 1.5987 | Val  Acc: 0.4747
+ Site-MNIST_M                       | Val  Loss: 1.7098 | Val  Acc: 0.4545
+ Site-MNIST_M                       | Val  Loss: 1.8744 | Val  Acc: 0.3712
+ Site-SVHN                          | Val  Loss: 2.0905 | Val  Acc: 0.2808
+Average Valid Accuracy: 0.6743
+ Best site-MNIST                     | Epoch:2 | Val Acc: 0.8929
+ Best site-MNIST                     | Epoch:2 | Val Acc: 0.8929
+ Best site-MNIST                     | Epoch:2 | Val Acc: 0.8492
+ Best site-MNIST                     | Epoch:2 | Val Acc: 0.8368
+ Best site-MNIST                     | Epoch:2 | Val Acc: 0.8596
+ Best site-USPS                      | Epoch:2 | Val Acc: 0.8365
+ Best site-USPS                      | Epoch:2 | Val Acc: 0.8013
+ Best site-USPS                      | Epoch:2 | Val Acc: 0.7991
+ Best site-SynthDigits               | Epoch:2 | Val Acc: 0.4167
+ Best site-SynthDigits               | Epoch:2 | Val Acc: 0.4747
+ Best site-MNIST_M                   | Epoch:2 | Val Acc: 0.4545
+ Best site-MNIST_M                   | Epoch:2 | Val Acc: 0.3712
+ Best site-SVHN                      | Epoch:2 | Val Acc: 0.2808
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 3 ============
+ Site-MNIST                         | Train Loss: 0.4275 | Train Acc: 0.8844
+ Site-MNIST                         | Train Loss: 0.4331 | Train Acc: 0.8787
+ Site-MNIST                         | Train Loss: 0.5062 | Train Acc: 0.8738
+ Site-MNIST                         | Train Loss: 0.4511 | Train Acc: 0.8725
+ Site-MNIST                         | Train Loss: 0.4443 | Train Acc: 0.8975
+ Site-USPS                          | Train Loss: 0.4874 | Train Acc: 0.8513
+ Site-USPS                          | Train Loss: 0.4084 | Train Acc: 0.8818
+ Site-USPS                          | Train Loss: 0.4028 | Train Acc: 0.8946
+ Site-SynthDigits                   | Train Loss: 1.5239 | Train Acc: 0.5019
+ Site-SynthDigits                   | Train Loss: 1.4027 | Train Acc: 0.5518
+ Site-MNIST_M                       | Train Loss: 1.7500 | Train Acc: 0.4318
+ Site-MNIST_M                       | Train Loss: 1.8322 | Train Acc: 0.3996
+ Site-SVHN                          | Train Loss: 2.0229 | Train Acc: 0.2930
+Average Train Accuracy: 0.7087
+ Site-MNIST                         | Val  Loss: 0.4085 | Val  Acc: 0.9107
+ Site-MNIST                         | Val  Loss: 0.3950 | Val  Acc: 0.9524
+ Site-MNIST                         | Val  Loss: 0.4248 | Val  Acc: 0.9206
+ Site-MNIST                         | Val  Loss: 0.4617 | Val  Acc: 0.8895
+ Site-MNIST                         | Val  Loss: 0.4624 | Val  Acc: 0.8702
+ Site-USPS                          | Val  Loss: 0.3574 | Val  Acc: 0.8942
+ Site-USPS                          | Val  Loss: 0.4577 | Val  Acc: 0.8462
+ Site-USPS                          | Val  Loss: 0.5014 | Val  Acc: 0.8419
+ Site-SynthDigits                   | Val  Loss: 1.6971 | Val  Acc: 0.4621
+ Site-SynthDigits                   | Val  Loss: 1.4305 | Val  Acc: 0.5202
+ Site-MNIST_M                       | Val  Loss: 1.6142 | Val  Acc: 0.4886
+ Site-MNIST_M                       | Val  Loss: 1.7489 | Val  Acc: 0.3485
+ Site-SVHN                          | Val  Loss: 2.0483 | Val  Acc: 0.2603
+Average Valid Accuracy: 0.7081
+ Best site-MNIST                     | Epoch:3 | Val Acc: 0.9107
+ Best site-MNIST                     | Epoch:3 | Val Acc: 0.9524
+ Best site-MNIST                     | Epoch:3 | Val Acc: 0.9206
+ Best site-MNIST                     | Epoch:3 | Val Acc: 0.8895
+ Best site-MNIST                     | Epoch:3 | Val Acc: 0.8702
+ Best site-USPS                      | Epoch:3 | Val Acc: 0.8942
+ Best site-USPS                      | Epoch:3 | Val Acc: 0.8462
+ Best site-USPS                      | Epoch:3 | Val Acc: 0.8419
+ Best site-SynthDigits               | Epoch:3 | Val Acc: 0.4621
+ Best site-SynthDigits               | Epoch:3 | Val Acc: 0.5202
+ Best site-MNIST_M                   | Epoch:3 | Val Acc: 0.4886
+ Best site-MNIST_M                   | Epoch:3 | Val Acc: 0.3485
+ Best site-SVHN                      | Epoch:3 | Val Acc: 0.2603
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 4 ============
+ Site-MNIST                         | Train Loss: 0.3928 | Train Acc: 0.8978
+ Site-MNIST                         | Train Loss: 0.3772 | Train Acc: 0.8846
+ Site-MNIST                         | Train Loss: 0.4494 | Train Acc: 0.8817
+ Site-MNIST                         | Train Loss: 0.3978 | Train Acc: 0.8883
+ Site-MNIST                         | Train Loss: 0.3880 | Train Acc: 0.9089
+ Site-USPS                          | Train Loss: 0.4431 | Train Acc: 0.8657
+ Site-USPS                          | Train Loss: 0.3760 | Train Acc: 0.8882
+ Site-USPS                          | Train Loss: 0.3661 | Train Acc: 0.9042
+ Site-SynthDigits                   | Train Loss: 1.3821 | Train Acc: 0.5208
+ Site-SynthDigits                   | Train Loss: 1.2975 | Train Acc: 0.5770
+ Site-MNIST_M                       | Train Loss: 1.6466 | Train Acc: 0.4688
+ Site-MNIST_M                       | Train Loss: 1.7517 | Train Acc: 0.4261
+ Site-SVHN                          | Train Loss: 1.9852 | Train Acc: 0.3135
+Average Train Accuracy: 0.7250
+ Site-MNIST                         | Val  Loss: 0.3629 | Val  Acc: 0.9107
+ Site-MNIST                         | Val  Loss: 0.3434 | Val  Acc: 0.9286
+ Site-MNIST                         | Val  Loss: 0.3717 | Val  Acc: 0.9048
+ Site-MNIST                         | Val  Loss: 0.4184 | Val  Acc: 0.8789
+ Site-MNIST                         | Val  Loss: 0.4207 | Val  Acc: 0.8772
+ Site-USPS                          | Val  Loss: 0.3235 | Val  Acc: 0.9135
+ Site-USPS                          | Val  Loss: 0.4255 | Val  Acc: 0.8590
+ Site-USPS                          | Val  Loss: 0.4692 | Val  Acc: 0.8547
+ Site-SynthDigits                   | Val  Loss: 1.5816 | Val  Acc: 0.4697
+ Site-SynthDigits                   | Val  Loss: 1.2868 | Val  Acc: 0.5303
+ Site-MNIST_M                       | Val  Loss: 1.4717 | Val  Acc: 0.5568
+ Site-MNIST_M                       | Val  Loss: 1.6229 | Val  Acc: 0.4167
+ Site-SVHN                          | Val  Loss: 2.0128 | Val  Acc: 0.2808
+Average Valid Accuracy: 0.7217
+ Best site-MNIST                     | Epoch:4 | Val Acc: 0.9107
+ Best site-MNIST                     | Epoch:4 | Val Acc: 0.9286
+ Best site-MNIST                     | Epoch:4 | Val Acc: 0.9048
+ Best site-MNIST                     | Epoch:4 | Val Acc: 0.8789
+ Best site-MNIST                     | Epoch:4 | Val Acc: 0.8772
+ Best site-USPS                      | Epoch:4 | Val Acc: 0.9135
+ Best site-USPS                      | Epoch:4 | Val Acc: 0.8590
+ Best site-USPS                      | Epoch:4 | Val Acc: 0.8547
+ Best site-SynthDigits               | Epoch:4 | Val Acc: 0.4697
+ Best site-SynthDigits               | Epoch:4 | Val Acc: 0.5303
+ Best site-MNIST_M                   | Epoch:4 | Val Acc: 0.5568
+ Best site-MNIST_M                   | Epoch:4 | Val Acc: 0.4167
+ Best site-SVHN                      | Epoch:4 | Val Acc: 0.2808
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 5 ============
+ Site-MNIST                         | Train Loss: 0.3444 | Train Acc: 0.9156
+ Site-MNIST                         | Train Loss: 0.3446 | Train Acc: 0.8994
+ Site-MNIST                         | Train Loss: 0.3900 | Train Acc: 0.8895
+ Site-MNIST                         | Train Loss: 0.3495 | Train Acc: 0.9054
+ Site-MNIST                         | Train Loss: 0.3337 | Train Acc: 0.9159
+ Site-USPS                          | Train Loss: 0.3874 | Train Acc: 0.8777
+ Site-USPS                          | Train Loss: 0.3172 | Train Acc: 0.9042
+ Site-USPS                          | Train Loss: 0.3092 | Train Acc: 0.9191
+ Site-SynthDigits                   | Train Loss: 1.3585 | Train Acc: 0.5360
+ Site-SynthDigits                   | Train Loss: 1.2177 | Train Acc: 0.5972
+ Site-MNIST_M                       | Train Loss: 1.6302 | Train Acc: 0.4858
+ Site-MNIST_M                       | Train Loss: 1.7204 | Train Acc: 0.4318
+ Site-SVHN                          | Train Loss: 1.9570 | Train Acc: 0.3390
+Average Train Accuracy: 0.7397
+ Site-MNIST                         | Val  Loss: 0.3074 | Val  Acc: 0.9286
+ Site-MNIST                         | Val  Loss: 0.2801 | Val  Acc: 0.9405
+ Site-MNIST                         | Val  Loss: 0.3214 | Val  Acc: 0.9206
+ Site-MNIST                         | Val  Loss: 0.3567 | Val  Acc: 0.9000
+ Site-MNIST                         | Val  Loss: 0.3645 | Val  Acc: 0.8947
+ Site-USPS                          | Val  Loss: 0.2763 | Val  Acc: 0.9327
+ Site-USPS                          | Val  Loss: 0.3832 | Val  Acc: 0.8590
+ Site-USPS                          | Val  Loss: 0.4175 | Val  Acc: 0.8547
+ Site-SynthDigits                   | Val  Loss: 1.5015 | Val  Acc: 0.5000
+ Site-SynthDigits                   | Val  Loss: 1.1692 | Val  Acc: 0.5303
+ Site-MNIST_M                       | Val  Loss: 1.4568 | Val  Acc: 0.5795
+ Site-MNIST_M                       | Val  Loss: 1.5994 | Val  Acc: 0.4394
+ Site-SVHN                          | Val  Loss: 1.9864 | Val  Acc: 0.3151
+Average Valid Accuracy: 0.7381
+ Best site-MNIST                     | Epoch:5 | Val Acc: 0.9286
+ Best site-MNIST                     | Epoch:5 | Val Acc: 0.9405
+ Best site-MNIST                     | Epoch:5 | Val Acc: 0.9206
+ Best site-MNIST                     | Epoch:5 | Val Acc: 0.9000
+ Best site-MNIST                     | Epoch:5 | Val Acc: 0.8947
+ Best site-USPS                      | Epoch:5 | Val Acc: 0.9327
+ Best site-USPS                      | Epoch:5 | Val Acc: 0.8590
+ Best site-USPS                      | Epoch:5 | Val Acc: 0.8547
+ Best site-SynthDigits               | Epoch:5 | Val Acc: 0.5000
+ Best site-SynthDigits               | Epoch:5 | Val Acc: 0.5303
+ Best site-MNIST_M                   | Epoch:5 | Val Acc: 0.5795
+ Best site-MNIST_M                   | Epoch:5 | Val Acc: 0.4394
+ Best site-SVHN                      | Epoch:5 | Val Acc: 0.3151
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 6 ============
+ Site-MNIST                         | Train Loss: 0.3600 | Train Acc: 0.8800
+ Site-MNIST                         | Train Loss: 0.3173 | Train Acc: 0.9053
+ Site-MNIST                         | Train Loss: 0.3562 | Train Acc: 0.8974
+ Site-MNIST                         | Train Loss: 0.3265 | Train Acc: 0.9054
+ Site-MNIST                         | Train Loss: 0.3074 | Train Acc: 0.9256
+ Site-USPS                          | Train Loss: 0.3642 | Train Acc: 0.9017
+ Site-USPS                          | Train Loss: 0.2817 | Train Acc: 0.9217
+ Site-USPS                          | Train Loss: 0.2831 | Train Acc: 0.9244
+ Site-SynthDigits                   | Train Loss: 1.2720 | Train Acc: 0.5701
+ Site-SynthDigits                   | Train Loss: 1.1748 | Train Acc: 0.6061
+ Site-MNIST_M                       | Train Loss: 1.5667 | Train Acc: 0.5028
+ Site-MNIST_M                       | Train Loss: 1.6301 | Train Acc: 0.4451
+ Site-SVHN                          | Train Loss: 1.9096 | Train Acc: 0.3271
+Average Train Accuracy: 0.7471
+ Site-MNIST                         | Val  Loss: 0.2494 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.2253 | Val  Acc: 0.9524
+ Site-MNIST                         | Val  Loss: 0.2868 | Val  Acc: 0.9286
+ Site-MNIST                         | Val  Loss: 0.3247 | Val  Acc: 0.9211
+ Site-MNIST                         | Val  Loss: 0.3314 | Val  Acc: 0.9053
+ Site-USPS                          | Val  Loss: 0.2431 | Val  Acc: 0.9327
+ Site-USPS                          | Val  Loss: 0.3467 | Val  Acc: 0.8910
+ Site-USPS                          | Val  Loss: 0.3760 | Val  Acc: 0.8803
+ Site-SynthDigits                   | Val  Loss: 1.4223 | Val  Acc: 0.5682
+ Site-SynthDigits                   | Val  Loss: 1.1082 | Val  Acc: 0.6010
+ Site-MNIST_M                       | Val  Loss: 1.3847 | Val  Acc: 0.6136
+ Site-MNIST_M                       | Val  Loss: 1.5284 | Val  Acc: 0.4545
+ Site-SVHN                          | Val  Loss: 1.9657 | Val  Acc: 0.3014
+Average Valid Accuracy: 0.7626
+ Best site-MNIST                     | Epoch:6 | Val Acc: 0.9643
+ Best site-MNIST                     | Epoch:6 | Val Acc: 0.9524
+ Best site-MNIST                     | Epoch:6 | Val Acc: 0.9286
+ Best site-MNIST                     | Epoch:6 | Val Acc: 0.9211
+ Best site-MNIST                     | Epoch:6 | Val Acc: 0.9053
+ Best site-USPS                      | Epoch:6 | Val Acc: 0.9327
+ Best site-USPS                      | Epoch:6 | Val Acc: 0.8910
+ Best site-USPS                      | Epoch:6 | Val Acc: 0.8803
+ Best site-SynthDigits               | Epoch:6 | Val Acc: 0.5682
+ Best site-SynthDigits               | Epoch:6 | Val Acc: 0.6010
+ Best site-MNIST_M                   | Epoch:6 | Val Acc: 0.6136
+ Best site-MNIST_M                   | Epoch:6 | Val Acc: 0.4545
+ Best site-SVHN                      | Epoch:6 | Val Acc: 0.3014
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 7 ============
+ Site-MNIST                         | Train Loss: 0.2767 | Train Acc: 0.9333
+ Site-MNIST                         | Train Loss: 0.2724 | Train Acc: 0.9142
+ Site-MNIST                         | Train Loss: 0.3059 | Train Acc: 0.9112
+ Site-MNIST                         | Train Loss: 0.2777 | Train Acc: 0.9198
+ Site-MNIST                         | Train Loss: 0.2541 | Train Acc: 0.9361
+ Site-USPS                          | Train Loss: 0.3565 | Train Acc: 0.8945
+ Site-USPS                          | Train Loss: 0.2690 | Train Acc: 0.9185
+ Site-USPS                          | Train Loss: 0.2670 | Train Acc: 0.9265
+ Site-SynthDigits                   | Train Loss: 1.2869 | Train Acc: 0.5701
+ Site-SynthDigits                   | Train Loss: 1.1235 | Train Acc: 0.6187
+ Site-MNIST_M                       | Train Loss: 1.5422 | Train Acc: 0.5057
+ Site-MNIST_M                       | Train Loss: 1.6294 | Train Acc: 0.4659
+ Site-SVHN                          | Train Loss: 1.8780 | Train Acc: 0.3475
+Average Train Accuracy: 0.7586
+ Site-MNIST                         | Val  Loss: 0.2133 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.1919 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.2425 | Val  Acc: 0.9365
+ Site-MNIST                         | Val  Loss: 0.2775 | Val  Acc: 0.9263
+ Site-MNIST                         | Val  Loss: 0.2816 | Val  Acc: 0.9123
+ Site-USPS                          | Val  Loss: 0.2286 | Val  Acc: 0.9327
+ Site-USPS                          | Val  Loss: 0.3400 | Val  Acc: 0.8846
+ Site-USPS                          | Val  Loss: 0.3666 | Val  Acc: 0.8761
+ Site-SynthDigits                   | Val  Loss: 1.3656 | Val  Acc: 0.5606
+ Site-SynthDigits                   | Val  Loss: 1.0823 | Val  Acc: 0.5707
+ Site-MNIST_M                       | Val  Loss: 1.3662 | Val  Acc: 0.6250
+ Site-MNIST_M                       | Val  Loss: 1.4793 | Val  Acc: 0.4621
+ Site-SVHN                          | Val  Loss: 1.9326 | Val  Acc: 0.3151
+Average Valid Accuracy: 0.7648
+ Best site-MNIST                     | Epoch:7 | Val Acc: 0.9643
+ Best site-MNIST                     | Epoch:7 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:7 | Val Acc: 0.9365
+ Best site-MNIST                     | Epoch:7 | Val Acc: 0.9263
+ Best site-MNIST                     | Epoch:7 | Val Acc: 0.9123
+ Best site-USPS                      | Epoch:7 | Val Acc: 0.9327
+ Best site-USPS                      | Epoch:7 | Val Acc: 0.8846
+ Best site-USPS                      | Epoch:7 | Val Acc: 0.8761
+ Best site-SynthDigits               | Epoch:7 | Val Acc: 0.5606
+ Best site-SynthDigits               | Epoch:7 | Val Acc: 0.5707
+ Best site-MNIST_M                   | Epoch:7 | Val Acc: 0.6250
+ Best site-MNIST_M                   | Epoch:7 | Val Acc: 0.4621
+ Best site-SVHN                      | Epoch:7 | Val Acc: 0.3151
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 8 ============
+ Site-MNIST                         | Train Loss: 0.2727 | Train Acc: 0.9111
+ Site-MNIST                         | Train Loss: 0.2722 | Train Acc: 0.9142
+ Site-MNIST                         | Train Loss: 0.2892 | Train Acc: 0.9093
+ Site-MNIST                         | Train Loss: 0.2554 | Train Acc: 0.9172
+ Site-MNIST                         | Train Loss: 0.2376 | Train Acc: 0.9475
+ Site-USPS                          | Train Loss: 0.3277 | Train Acc: 0.9041
+ Site-USPS                          | Train Loss: 0.2459 | Train Acc: 0.9297
+ Site-USPS                          | Train Loss: 0.2549 | Train Acc: 0.9255
+ Site-SynthDigits                   | Train Loss: 1.2165 | Train Acc: 0.6023
+ Site-SynthDigits                   | Train Loss: 1.0635 | Train Acc: 0.6503
+ Site-MNIST_M                       | Train Loss: 1.5153 | Train Acc: 0.5142
+ Site-MNIST_M                       | Train Loss: 1.6092 | Train Acc: 0.4697
+ Site-SVHN                          | Train Loss: 1.8785 | Train Acc: 0.3560
+Average Train Accuracy: 0.7655
+ Site-MNIST                         | Val  Loss: 0.2174 | Val  Acc: 0.9286
+ Site-MNIST                         | Val  Loss: 0.1814 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.2238 | Val  Acc: 0.9365
+ Site-MNIST                         | Val  Loss: 0.2642 | Val  Acc: 0.9263
+ Site-MNIST                         | Val  Loss: 0.2738 | Val  Acc: 0.9123
+ Site-USPS                          | Val  Loss: 0.2013 | Val  Acc: 0.9423
+ Site-USPS                          | Val  Loss: 0.3107 | Val  Acc: 0.8974
+ Site-USPS                          | Val  Loss: 0.3440 | Val  Acc: 0.8846
+ Site-SynthDigits                   | Val  Loss: 1.2989 | Val  Acc: 0.6136
+ Site-SynthDigits                   | Val  Loss: 1.0262 | Val  Acc: 0.6111
+ Site-MNIST_M                       | Val  Loss: 1.3318 | Val  Acc: 0.5909
+ Site-MNIST_M                       | Val  Loss: 1.4485 | Val  Acc: 0.4773
+ Site-SVHN                          | Val  Loss: 1.9042 | Val  Acc: 0.3219
+Average Valid Accuracy: 0.7698
+ Best site-MNIST                     | Epoch:8 | Val Acc: 0.9286
+ Best site-MNIST                     | Epoch:8 | Val Acc: 0.9643
+ Best site-MNIST                     | Epoch:8 | Val Acc: 0.9365
+ Best site-MNIST                     | Epoch:8 | Val Acc: 0.9263
+ Best site-MNIST                     | Epoch:8 | Val Acc: 0.9123
+ Best site-USPS                      | Epoch:8 | Val Acc: 0.9423
+ Best site-USPS                      | Epoch:8 | Val Acc: 0.8974
+ Best site-USPS                      | Epoch:8 | Val Acc: 0.8846
+ Best site-SynthDigits               | Epoch:8 | Val Acc: 0.6136
+ Best site-SynthDigits               | Epoch:8 | Val Acc: 0.6111
+ Best site-MNIST_M                   | Epoch:8 | Val Acc: 0.5909
+ Best site-MNIST_M                   | Epoch:8 | Val Acc: 0.4773
+ Best site-SVHN                      | Epoch:8 | Val Acc: 0.3219
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 9 ============
+ Site-MNIST                         | Train Loss: 0.2526 | Train Acc: 0.9378
+ Site-MNIST                         | Train Loss: 0.2480 | Train Acc: 0.9231
+ Site-MNIST                         | Train Loss: 0.2695 | Train Acc: 0.9172
+ Site-MNIST                         | Train Loss: 0.2378 | Train Acc: 0.9304
+ Site-MNIST                         | Train Loss: 0.2147 | Train Acc: 0.9466
+ Site-USPS                          | Train Loss: 0.2884 | Train Acc: 0.9137
+ Site-USPS                          | Train Loss: 0.2288 | Train Acc: 0.9329
+ Site-USPS                          | Train Loss: 0.2351 | Train Acc: 0.9318
+ Site-SynthDigits                   | Train Loss: 1.1653 | Train Acc: 0.6193
+ Site-SynthDigits                   | Train Loss: 1.0367 | Train Acc: 0.6705
+ Site-MNIST_M                       | Train Loss: 1.4760 | Train Acc: 0.5142
+ Site-MNIST_M                       | Train Loss: 1.5560 | Train Acc: 0.4811
+ Site-SVHN                          | Train Loss: 1.8463 | Train Acc: 0.3680
+Average Train Accuracy: 0.7759
+ Site-MNIST                         | Val  Loss: 0.2108 | Val  Acc: 0.9286
+ Site-MNIST                         | Val  Loss: 0.1793 | Val  Acc: 0.9524
+ Site-MNIST                         | Val  Loss: 0.2031 | Val  Acc: 0.9444
+ Site-MNIST                         | Val  Loss: 0.2453 | Val  Acc: 0.9316
+ Site-MNIST                         | Val  Loss: 0.2477 | Val  Acc: 0.9228
+ Site-USPS                          | Val  Loss: 0.1857 | Val  Acc: 0.9519
+ Site-USPS                          | Val  Loss: 0.2839 | Val  Acc: 0.9231
+ Site-USPS                          | Val  Loss: 0.3151 | Val  Acc: 0.9017
+ Site-SynthDigits                   | Val  Loss: 1.2427 | Val  Acc: 0.6212
+ Site-SynthDigits                   | Val  Loss: 0.9836 | Val  Acc: 0.6364
+ Site-MNIST_M                       | Val  Loss: 1.3061 | Val  Acc: 0.6023
+ Site-MNIST_M                       | Val  Loss: 1.4056 | Val  Acc: 0.4697
+ Site-SVHN                          | Val  Loss: 1.8756 | Val  Acc: 0.3425
+Average Valid Accuracy: 0.7791
+ Best site-MNIST                     | Epoch:9 | Val Acc: 0.9286
+ Best site-MNIST                     | Epoch:9 | Val Acc: 0.9524
+ Best site-MNIST                     | Epoch:9 | Val Acc: 0.9444
+ Best site-MNIST                     | Epoch:9 | Val Acc: 0.9316
+ Best site-MNIST                     | Epoch:9 | Val Acc: 0.9228
+ Best site-USPS                      | Epoch:9 | Val Acc: 0.9519
+ Best site-USPS                      | Epoch:9 | Val Acc: 0.9231
+ Best site-USPS                      | Epoch:9 | Val Acc: 0.9017
+ Best site-SynthDigits               | Epoch:9 | Val Acc: 0.6212
+ Best site-SynthDigits               | Epoch:9 | Val Acc: 0.6364
+ Best site-MNIST_M                   | Epoch:9 | Val Acc: 0.6023
+ Best site-MNIST_M                   | Epoch:9 | Val Acc: 0.4697
+ Best site-SVHN                      | Epoch:9 | Val Acc: 0.3425
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 10 ============
+ Site-MNIST                         | Train Loss: 0.2495 | Train Acc: 0.9378
+ Site-MNIST                         | Train Loss: 0.2230 | Train Acc: 0.9260
+ Site-MNIST                         | Train Loss: 0.2449 | Train Acc: 0.9310
+ Site-MNIST                         | Train Loss: 0.2139 | Train Acc: 0.9435
+ Site-MNIST                         | Train Loss: 0.1976 | Train Acc: 0.9536
+ Site-USPS                          | Train Loss: 0.2890 | Train Acc: 0.9161
+ Site-USPS                          | Train Loss: 0.2133 | Train Acc: 0.9457
+ Site-USPS                          | Train Loss: 0.2270 | Train Acc: 0.9318
+ Site-SynthDigits                   | Train Loss: 1.1176 | Train Acc: 0.6307
+ Site-SynthDigits                   | Train Loss: 0.9966 | Train Acc: 0.6755
+ Site-MNIST_M                       | Train Loss: 1.4502 | Train Acc: 0.5256
+ Site-MNIST_M                       | Train Loss: 1.5294 | Train Acc: 0.4792
+ Site-SVHN                          | Train Loss: 1.7955 | Train Acc: 0.3714
+Average Train Accuracy: 0.7821
+ Site-MNIST                         | Val  Loss: 0.1813 | Val  Acc: 0.9464
+ Site-MNIST                         | Val  Loss: 0.1473 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.1807 | Val  Acc: 0.9603
+ Site-MNIST                         | Val  Loss: 0.2288 | Val  Acc: 0.9368
+ Site-MNIST                         | Val  Loss: 0.2314 | Val  Acc: 0.9263
+ Site-USPS                          | Val  Loss: 0.1802 | Val  Acc: 0.9519
+ Site-USPS                          | Val  Loss: 0.2817 | Val  Acc: 0.9103
+ Site-USPS                          | Val  Loss: 0.3089 | Val  Acc: 0.9017
+ Site-SynthDigits                   | Val  Loss: 1.1929 | Val  Acc: 0.6439
+ Site-SynthDigits                   | Val  Loss: 0.9508 | Val  Acc: 0.6313
+ Site-MNIST_M                       | Val  Loss: 1.2585 | Val  Acc: 0.6364
+ Site-MNIST_M                       | Val  Loss: 1.3774 | Val  Acc: 0.4924
+ Site-SVHN                          | Val  Loss: 1.8563 | Val  Acc: 0.3219
+Average Valid Accuracy: 0.7883
+ Best site-MNIST                     | Epoch:10 | Val Acc: 0.9464
+ Best site-MNIST                     | Epoch:10 | Val Acc: 0.9881
+ Best site-MNIST                     | Epoch:10 | Val Acc: 0.9603
+ Best site-MNIST                     | Epoch:10 | Val Acc: 0.9368
+ Best site-MNIST                     | Epoch:10 | Val Acc: 0.9263
+ Best site-USPS                      | Epoch:10 | Val Acc: 0.9519
+ Best site-USPS                      | Epoch:10 | Val Acc: 0.9103
+ Best site-USPS                      | Epoch:10 | Val Acc: 0.9017
+ Best site-SynthDigits               | Epoch:10 | Val Acc: 0.6439
+ Best site-SynthDigits               | Epoch:10 | Val Acc: 0.6313
+ Best site-MNIST_M                   | Epoch:10 | Val Acc: 0.6364
+ Best site-MNIST_M                   | Epoch:10 | Val Acc: 0.4924
+ Best site-SVHN                      | Epoch:10 | Val Acc: 0.3219
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 11 ============
+ Site-MNIST                         | Train Loss: 0.2290 | Train Acc: 0.9511
+ Site-MNIST                         | Train Loss: 0.2156 | Train Acc: 0.9349
+ Site-MNIST                         | Train Loss: 0.2382 | Train Acc: 0.9329
+ Site-MNIST                         | Train Loss: 0.2076 | Train Acc: 0.9356
+ Site-MNIST                         | Train Loss: 0.1896 | Train Acc: 0.9580
+ Site-USPS                          | Train Loss: 0.2806 | Train Acc: 0.9281
+ Site-USPS                          | Train Loss: 0.2001 | Train Acc: 0.9537
+ Site-USPS                          | Train Loss: 0.2207 | Train Acc: 0.9350
+ Site-SynthDigits                   | Train Loss: 1.0942 | Train Acc: 0.6402
+ Site-SynthDigits                   | Train Loss: 0.9688 | Train Acc: 0.6982
+ Site-MNIST_M                       | Train Loss: 1.4061 | Train Acc: 0.5426
+ Site-MNIST_M                       | Train Loss: 1.4923 | Train Acc: 0.4981
+ Site-SVHN                          | Train Loss: 1.8298 | Train Acc: 0.3833
+Average Train Accuracy: 0.7917
+ Site-MNIST                         | Val  Loss: 0.1635 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.1440 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.1772 | Val  Acc: 0.9603
+ Site-MNIST                         | Val  Loss: 0.2215 | Val  Acc: 0.9474
+ Site-MNIST                         | Val  Loss: 0.2176 | Val  Acc: 0.9368
+ Site-USPS                          | Val  Loss: 0.1609 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.2710 | Val  Acc: 0.9231
+ Site-USPS                          | Val  Loss: 0.2890 | Val  Acc: 0.9145
+ Site-SynthDigits                   | Val  Loss: 1.1822 | Val  Acc: 0.6288
+ Site-SynthDigits                   | Val  Loss: 0.8948 | Val  Acc: 0.6566
+ Site-MNIST_M                       | Val  Loss: 1.2366 | Val  Acc: 0.6250
+ Site-MNIST_M                       | Val  Loss: 1.3660 | Val  Acc: 0.4924
+ Site-SVHN                          | Val  Loss: 1.8477 | Val  Acc: 0.3288
+Average Valid Accuracy: 0.7944
+ Best site-MNIST                     | Epoch:11 | Val Acc: 0.9643
+ Best site-MNIST                     | Epoch:11 | Val Acc: 0.9881
+ Best site-MNIST                     | Epoch:11 | Val Acc: 0.9603
+ Best site-MNIST                     | Epoch:11 | Val Acc: 0.9474
+ Best site-MNIST                     | Epoch:11 | Val Acc: 0.9368
+ Best site-USPS                      | Epoch:11 | Val Acc: 0.9615
+ Best site-USPS                      | Epoch:11 | Val Acc: 0.9231
+ Best site-USPS                      | Epoch:11 | Val Acc: 0.9145
+ Best site-SynthDigits               | Epoch:11 | Val Acc: 0.6288
+ Best site-SynthDigits               | Epoch:11 | Val Acc: 0.6566
+ Best site-MNIST_M                   | Epoch:11 | Val Acc: 0.6250
+ Best site-MNIST_M                   | Epoch:11 | Val Acc: 0.4924
+ Best site-SVHN                      | Epoch:11 | Val Acc: 0.3288
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 12 ============
+ Site-MNIST                         | Train Loss: 0.2021 | Train Acc: 0.9422
+ Site-MNIST                         | Train Loss: 0.1909 | Train Acc: 0.9349
+ Site-MNIST                         | Train Loss: 0.2258 | Train Acc: 0.9310
+ Site-MNIST                         | Train Loss: 0.1905 | Train Acc: 0.9448
+ Site-MNIST                         | Train Loss: 0.1751 | Train Acc: 0.9606
+ Site-USPS                          | Train Loss: 0.2667 | Train Acc: 0.9281
+ Site-USPS                          | Train Loss: 0.1832 | Train Acc: 0.9521
+ Site-USPS                          | Train Loss: 0.2072 | Train Acc: 0.9414
+ Site-SynthDigits                   | Train Loss: 1.0775 | Train Acc: 0.6458
+ Site-SynthDigits                   | Train Loss: 0.9335 | Train Acc: 0.7071
+ Site-MNIST_M                       | Train Loss: 1.4532 | Train Acc: 0.5284
+ Site-MNIST_M                       | Train Loss: 1.4802 | Train Acc: 0.5133
+ Site-SVHN                          | Train Loss: 1.7765 | Train Acc: 0.3884
+Average Train Accuracy: 0.7937
+ Site-MNIST                         | Val  Loss: 0.1523 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.1321 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.1644 | Val  Acc: 0.9603
+ Site-MNIST                         | Val  Loss: 0.2090 | Val  Acc: 0.9421
+ Site-MNIST                         | Val  Loss: 0.2054 | Val  Acc: 0.9368
+ Site-USPS                          | Val  Loss: 0.1620 | Val  Acc: 0.9519
+ Site-USPS                          | Val  Loss: 0.2491 | Val  Acc: 0.9231
+ Site-USPS                          | Val  Loss: 0.2678 | Val  Acc: 0.9188
+ Site-SynthDigits                   | Val  Loss: 1.1114 | Val  Acc: 0.6288
+ Site-SynthDigits                   | Val  Loss: 0.8646 | Val  Acc: 0.6667
+ Site-MNIST_M                       | Val  Loss: 1.2628 | Val  Acc: 0.6136
+ Site-MNIST_M                       | Val  Loss: 1.3634 | Val  Acc: 0.4848
+ Site-SVHN                          | Val  Loss: 1.8177 | Val  Acc: 0.3288
+Average Valid Accuracy: 0.7929
+============ Train epoch 13 ============
+ Site-MNIST                         | Train Loss: 0.2263 | Train Acc: 0.9467
+ Site-MNIST                         | Train Loss: 0.2113 | Train Acc: 0.9349
+ Site-MNIST                         | Train Loss: 0.2111 | Train Acc: 0.9369
+ Site-MNIST                         | Train Loss: 0.1819 | Train Acc: 0.9514
+ Site-MNIST                         | Train Loss: 0.1675 | Train Acc: 0.9623
+ Site-USPS                          | Train Loss: 0.2564 | Train Acc: 0.9305
+ Site-USPS                          | Train Loss: 0.1735 | Train Acc: 0.9585
+ Site-USPS                          | Train Loss: 0.1960 | Train Acc: 0.9436
+ Site-SynthDigits                   | Train Loss: 1.0433 | Train Acc: 0.6572
+ Site-SynthDigits                   | Train Loss: 0.8865 | Train Acc: 0.7109
+ Site-MNIST_M                       | Train Loss: 1.4269 | Train Acc: 0.5284
+ Site-MNIST_M                       | Train Loss: 1.4527 | Train Acc: 0.5133
+ Site-SVHN                          | Train Loss: 1.7577 | Train Acc: 0.3952
+Average Train Accuracy: 0.7977
+ Site-MNIST                         | Val  Loss: 0.1415 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.1203 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.1593 | Val  Acc: 0.9603
+ Site-MNIST                         | Val  Loss: 0.1981 | Val  Acc: 0.9421
+ Site-MNIST                         | Val  Loss: 0.2007 | Val  Acc: 0.9368
+ Site-USPS                          | Val  Loss: 0.1448 | Val  Acc: 0.9519
+ Site-USPS                          | Val  Loss: 0.2375 | Val  Acc: 0.9359
+ Site-USPS                          | Val  Loss: 0.2629 | Val  Acc: 0.9231
+ Site-SynthDigits                   | Val  Loss: 1.0852 | Val  Acc: 0.6288
+ Site-SynthDigits                   | Val  Loss: 0.8424 | Val  Acc: 0.6667
+ Site-MNIST_M                       | Val  Loss: 1.2406 | Val  Acc: 0.6023
+ Site-MNIST_M                       | Val  Loss: 1.3681 | Val  Acc: 0.4773
+ Site-SVHN                          | Val  Loss: 1.8019 | Val  Acc: 0.3425
+Average Valid Accuracy: 0.7938
+============ Train epoch 14 ============
+ Site-MNIST                         | Train Loss: 0.1791 | Train Acc: 0.9644
+ Site-MNIST                         | Train Loss: 0.1637 | Train Acc: 0.9379
+ Site-MNIST                         | Train Loss: 0.2010 | Train Acc: 0.9369
+ Site-MNIST                         | Train Loss: 0.1711 | Train Acc: 0.9501
+ Site-MNIST                         | Train Loss: 0.1518 | Train Acc: 0.9676
+ Site-USPS                          | Train Loss: 0.2476 | Train Acc: 0.9281
+ Site-USPS                          | Train Loss: 0.1721 | Train Acc: 0.9617
+ Site-USPS                          | Train Loss: 0.1985 | Train Acc: 0.9414
+ Site-SynthDigits                   | Train Loss: 1.0212 | Train Acc: 0.6610
+ Site-SynthDigits                   | Train Loss: 0.8868 | Train Acc: 0.7222
+ Site-MNIST_M                       | Train Loss: 1.3880 | Train Acc: 0.5398
+ Site-MNIST_M                       | Train Loss: 1.4029 | Train Acc: 0.5265
+ Site-SVHN                          | Train Loss: 1.7984 | Train Acc: 0.3935
+Average Train Accuracy: 0.8024
+ Site-MNIST                         | Val  Loss: 0.1392 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.1160 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.1490 | Val  Acc: 0.9683
+ Site-MNIST                         | Val  Loss: 0.1878 | Val  Acc: 0.9474
+ Site-MNIST                         | Val  Loss: 0.1842 | Val  Acc: 0.9404
+ Site-USPS                          | Val  Loss: 0.1452 | Val  Acc: 0.9519
+ Site-USPS                          | Val  Loss: 0.2360 | Val  Acc: 0.9295
+ Site-USPS                          | Val  Loss: 0.2570 | Val  Acc: 0.9188
+ Site-SynthDigits                   | Val  Loss: 1.0810 | Val  Acc: 0.6364
+ Site-SynthDigits                   | Val  Loss: 0.8471 | Val  Acc: 0.6566
+ Site-MNIST_M                       | Val  Loss: 1.2175 | Val  Acc: 0.6364
+ Site-MNIST_M                       | Val  Loss: 1.3532 | Val  Acc: 0.4924
+ Site-SVHN                          | Val  Loss: 1.7872 | Val  Acc: 0.3425
+Average Valid Accuracy: 0.7979
+ Best site-MNIST                     | Epoch:14 | Val Acc: 0.9643
+ Best site-MNIST                     | Epoch:14 | Val Acc: 0.9881
+ Best site-MNIST                     | Epoch:14 | Val Acc: 0.9683
+ Best site-MNIST                     | Epoch:14 | Val Acc: 0.9474
+ Best site-MNIST                     | Epoch:14 | Val Acc: 0.9404
+ Best site-USPS                      | Epoch:14 | Val Acc: 0.9519
+ Best site-USPS                      | Epoch:14 | Val Acc: 0.9295
+ Best site-USPS                      | Epoch:14 | Val Acc: 0.9188
+ Best site-SynthDigits               | Epoch:14 | Val Acc: 0.6364
+ Best site-SynthDigits               | Epoch:14 | Val Acc: 0.6566
+ Best site-MNIST_M                   | Epoch:14 | Val Acc: 0.6364
+ Best site-MNIST_M                   | Epoch:14 | Val Acc: 0.4924
+ Best site-SVHN                      | Epoch:14 | Val Acc: 0.3425
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 15 ============
+ Site-MNIST                         | Train Loss: 0.1798 | Train Acc: 0.9600
+ Site-MNIST                         | Train Loss: 0.1781 | Train Acc: 0.9349
+ Site-MNIST                         | Train Loss: 0.1926 | Train Acc: 0.9369
+ Site-MNIST                         | Train Loss: 0.1624 | Train Acc: 0.9540
+ Site-MNIST                         | Train Loss: 0.1494 | Train Acc: 0.9632
+ Site-USPS                          | Train Loss: 0.2276 | Train Acc: 0.9400
+ Site-USPS                          | Train Loss: 0.1557 | Train Acc: 0.9601
+ Site-USPS                          | Train Loss: 0.1750 | Train Acc: 0.9510
+ Site-SynthDigits                   | Train Loss: 1.0494 | Train Acc: 0.6780
+ Site-SynthDigits                   | Train Loss: 0.8632 | Train Acc: 0.7348
+ Site-MNIST_M                       | Train Loss: 1.3816 | Train Acc: 0.5398
+ Site-MNIST_M                       | Train Loss: 1.4286 | Train Acc: 0.5227
+ Site-SVHN                          | Train Loss: 1.6887 | Train Acc: 0.4055
+Average Train Accuracy: 0.8062
+ Site-MNIST                         | Val  Loss: 0.1345 | Val  Acc: 0.9464
+ Site-MNIST                         | Val  Loss: 0.1108 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.1409 | Val  Acc: 0.9683
+ Site-MNIST                         | Val  Loss: 0.1814 | Val  Acc: 0.9421
+ Site-MNIST                         | Val  Loss: 0.1870 | Val  Acc: 0.9368
+ Site-USPS                          | Val  Loss: 0.1317 | Val  Acc: 0.9519
+ Site-USPS                          | Val  Loss: 0.2192 | Val  Acc: 0.9359
+ Site-USPS                          | Val  Loss: 0.2390 | Val  Acc: 0.9316
+ Site-SynthDigits                   | Val  Loss: 1.0498 | Val  Acc: 0.6818
+ Site-SynthDigits                   | Val  Loss: 0.8091 | Val  Acc: 0.6869
+ Site-MNIST_M                       | Val  Loss: 1.2164 | Val  Acc: 0.6250
+ Site-MNIST_M                       | Val  Loss: 1.3228 | Val  Acc: 0.4924
+ Site-SVHN                          | Val  Loss: 1.7745 | Val  Acc: 0.3493
+Average Valid Accuracy: 0.8028
+ Best site-MNIST                     | Epoch:15 | Val Acc: 0.9464
+ Best site-MNIST                     | Epoch:15 | Val Acc: 0.9881
+ Best site-MNIST                     | Epoch:15 | Val Acc: 0.9683
+ Best site-MNIST                     | Epoch:15 | Val Acc: 0.9421
+ Best site-MNIST                     | Epoch:15 | Val Acc: 0.9368
+ Best site-USPS                      | Epoch:15 | Val Acc: 0.9519
+ Best site-USPS                      | Epoch:15 | Val Acc: 0.9359
+ Best site-USPS                      | Epoch:15 | Val Acc: 0.9316
+ Best site-SynthDigits               | Epoch:15 | Val Acc: 0.6818
+ Best site-SynthDigits               | Epoch:15 | Val Acc: 0.6869
+ Best site-MNIST_M                   | Epoch:15 | Val Acc: 0.6250
+ Best site-MNIST_M                   | Epoch:15 | Val Acc: 0.4924
+ Best site-SVHN                      | Epoch:15 | Val Acc: 0.3493
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 16 ============
+ Site-MNIST                         | Train Loss: 0.1887 | Train Acc: 0.9556
+ Site-MNIST                         | Train Loss: 0.1889 | Train Acc: 0.9379
+ Site-MNIST                         | Train Loss: 0.1879 | Train Acc: 0.9349
+ Site-MNIST                         | Train Loss: 0.1557 | Train Acc: 0.9553
+ Site-MNIST                         | Train Loss: 0.1460 | Train Acc: 0.9658
+ Site-USPS                          | Train Loss: 0.2192 | Train Acc: 0.9376
+ Site-USPS                          | Train Loss: 0.1496 | Train Acc: 0.9617
+ Site-USPS                          | Train Loss: 0.1729 | Train Acc: 0.9499
+ Site-SynthDigits                   | Train Loss: 0.9806 | Train Acc: 0.6780
+ Site-SynthDigits                   | Train Loss: 0.8309 | Train Acc: 0.7487
+ Site-MNIST_M                       | Train Loss: 1.3596 | Train Acc: 0.5540
+ Site-MNIST_M                       | Train Loss: 1.4188 | Train Acc: 0.5379
+ Site-SVHN                          | Train Loss: 1.6998 | Train Acc: 0.4106
+Average Train Accuracy: 0.8098
+ Site-MNIST                         | Val  Loss: 0.1217 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0982 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.1422 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1787 | Val  Acc: 0.9474
+ Site-MNIST                         | Val  Loss: 0.1841 | Val  Acc: 0.9368
+ Site-USPS                          | Val  Loss: 0.1251 | Val  Acc: 0.9519
+ Site-USPS                          | Val  Loss: 0.2069 | Val  Acc: 0.9423
+ Site-USPS                          | Val  Loss: 0.2330 | Val  Acc: 0.9274
+ Site-SynthDigits                   | Val  Loss: 1.0216 | Val  Acc: 0.6818
+ Site-SynthDigits                   | Val  Loss: 0.7928 | Val  Acc: 0.6869
+ Site-MNIST_M                       | Val  Loss: 1.1955 | Val  Acc: 0.6250
+ Site-MNIST_M                       | Val  Loss: 1.3366 | Val  Acc: 0.4848
+ Site-SVHN                          | Val  Loss: 1.7489 | Val  Acc: 0.3562
+Average Valid Accuracy: 0.8053
+ Best site-MNIST                     | Epoch:16 | Val Acc: 0.9643
+ Best site-MNIST                     | Epoch:16 | Val Acc: 0.9881
+ Best site-MNIST                     | Epoch:16 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:16 | Val Acc: 0.9474
+ Best site-MNIST                     | Epoch:16 | Val Acc: 0.9368
+ Best site-USPS                      | Epoch:16 | Val Acc: 0.9519
+ Best site-USPS                      | Epoch:16 | Val Acc: 0.9423
+ Best site-USPS                      | Epoch:16 | Val Acc: 0.9274
+ Best site-SynthDigits               | Epoch:16 | Val Acc: 0.6818
+ Best site-SynthDigits               | Epoch:16 | Val Acc: 0.6869
+ Best site-MNIST_M                   | Epoch:16 | Val Acc: 0.6250
+ Best site-MNIST_M                   | Epoch:16 | Val Acc: 0.4848
+ Best site-SVHN                      | Epoch:16 | Val Acc: 0.3562
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 17 ============
+ Site-MNIST                         | Train Loss: 0.1707 | Train Acc: 0.9600
+ Site-MNIST                         | Train Loss: 0.1663 | Train Acc: 0.9379
+ Site-MNIST                         | Train Loss: 0.1809 | Train Acc: 0.9369
+ Site-MNIST                         | Train Loss: 0.1499 | Train Acc: 0.9553
+ Site-MNIST                         | Train Loss: 0.1396 | Train Acc: 0.9676
+ Site-USPS                          | Train Loss: 0.2251 | Train Acc: 0.9400
+ Site-USPS                          | Train Loss: 0.1463 | Train Acc: 0.9617
+ Site-USPS                          | Train Loss: 0.1722 | Train Acc: 0.9489
+ Site-SynthDigits                   | Train Loss: 0.9596 | Train Acc: 0.6913
+ Site-SynthDigits                   | Train Loss: 0.8051 | Train Acc: 0.7614
+ Site-MNIST_M                       | Train Loss: 1.3255 | Train Acc: 0.5568
+ Site-MNIST_M                       | Train Loss: 1.3917 | Train Acc: 0.5379
+ Site-SVHN                          | Train Loss: 1.7227 | Train Acc: 0.4089
+Average Train Accuracy: 0.8127
+ Site-MNIST                         | Val  Loss: 0.1065 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0950 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.1362 | Val  Acc: 0.9683
+ Site-MNIST                         | Val  Loss: 0.1816 | Val  Acc: 0.9421
+ Site-MNIST                         | Val  Loss: 0.1800 | Val  Acc: 0.9404
+ Site-USPS                          | Val  Loss: 0.1226 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.2108 | Val  Acc: 0.9423
+ Site-USPS                          | Val  Loss: 0.2289 | Val  Acc: 0.9359
+ Site-SynthDigits                   | Val  Loss: 0.9914 | Val  Acc: 0.6894
+ Site-SynthDigits                   | Val  Loss: 0.7673 | Val  Acc: 0.6919
+ Site-MNIST_M                       | Val  Loss: 1.1591 | Val  Acc: 0.6364
+ Site-MNIST_M                       | Val  Loss: 1.3110 | Val  Acc: 0.5000
+ Site-SVHN                          | Val  Loss: 1.7417 | Val  Acc: 0.3562
+Average Valid Accuracy: 0.8090
+ Best site-MNIST                     | Epoch:17 | Val Acc: 0.9643
+ Best site-MNIST                     | Epoch:17 | Val Acc: 0.9881
+ Best site-MNIST                     | Epoch:17 | Val Acc: 0.9683
+ Best site-MNIST                     | Epoch:17 | Val Acc: 0.9421
+ Best site-MNIST                     | Epoch:17 | Val Acc: 0.9404
+ Best site-USPS                      | Epoch:17 | Val Acc: 0.9615
+ Best site-USPS                      | Epoch:17 | Val Acc: 0.9423
+ Best site-USPS                      | Epoch:17 | Val Acc: 0.9359
+ Best site-SynthDigits               | Epoch:17 | Val Acc: 0.6894
+ Best site-SynthDigits               | Epoch:17 | Val Acc: 0.6919
+ Best site-MNIST_M                   | Epoch:17 | Val Acc: 0.6364
+ Best site-MNIST_M                   | Epoch:17 | Val Acc: 0.5000
+ Best site-SVHN                      | Epoch:17 | Val Acc: 0.3562
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 18 ============
+ Site-MNIST                         | Train Loss: 0.1674 | Train Acc: 0.9689
+ Site-MNIST                         | Train Loss: 0.1546 | Train Acc: 0.9408
+ Site-MNIST                         | Train Loss: 0.1717 | Train Acc: 0.9428
+ Site-MNIST                         | Train Loss: 0.1422 | Train Acc: 0.9606
+ Site-MNIST                         | Train Loss: 0.1267 | Train Acc: 0.9676
+ Site-USPS                          | Train Loss: 0.2210 | Train Acc: 0.9400
+ Site-USPS                          | Train Loss: 0.1418 | Train Acc: 0.9633
+ Site-USPS                          | Train Loss: 0.1660 | Train Acc: 0.9510
+ Site-SynthDigits                   | Train Loss: 0.9757 | Train Acc: 0.6970
+ Site-SynthDigits                   | Train Loss: 0.7868 | Train Acc: 0.7702
+ Site-MNIST_M                       | Train Loss: 1.3389 | Train Acc: 0.5625
+ Site-MNIST_M                       | Train Loss: 1.3420 | Train Acc: 0.5511
+ Site-SVHN                          | Train Loss: 1.6637 | Train Acc: 0.4174
+Average Train Accuracy: 0.8179
+ Site-MNIST                         | Val  Loss: 0.1060 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0977 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1261 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1743 | Val  Acc: 0.9474
+ Site-MNIST                         | Val  Loss: 0.1712 | Val  Acc: 0.9368
+ Site-USPS                          | Val  Loss: 0.1164 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.2055 | Val  Acc: 0.9359
+ Site-USPS                          | Val  Loss: 0.2216 | Val  Acc: 0.9316
+ Site-SynthDigits                   | Val  Loss: 0.9563 | Val  Acc: 0.6818
+ Site-SynthDigits                   | Val  Loss: 0.7668 | Val  Acc: 0.7071
+ Site-MNIST_M                       | Val  Loss: 1.1664 | Val  Acc: 0.6364
+ Site-MNIST_M                       | Val  Loss: 1.2857 | Val  Acc: 0.5000
+ Site-SVHN                          | Val  Loss: 1.7393 | Val  Acc: 0.3630
+Average Valid Accuracy: 0.8091
+ Best site-MNIST                     | Epoch:18 | Val Acc: 0.9643
+ Best site-MNIST                     | Epoch:18 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:18 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:18 | Val Acc: 0.9474
+ Best site-MNIST                     | Epoch:18 | Val Acc: 0.9368
+ Best site-USPS                      | Epoch:18 | Val Acc: 0.9615
+ Best site-USPS                      | Epoch:18 | Val Acc: 0.9359
+ Best site-USPS                      | Epoch:18 | Val Acc: 0.9316
+ Best site-SynthDigits               | Epoch:18 | Val Acc: 0.6818
+ Best site-SynthDigits               | Epoch:18 | Val Acc: 0.7071
+ Best site-MNIST_M                   | Epoch:18 | Val Acc: 0.6364
+ Best site-MNIST_M                   | Epoch:18 | Val Acc: 0.5000
+ Best site-SVHN                      | Epoch:18 | Val Acc: 0.3630
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 19 ============
+ Site-MNIST                         | Train Loss: 0.1944 | Train Acc: 0.9644
+ Site-MNIST                         | Train Loss: 0.1471 | Train Acc: 0.9467
+ Site-MNIST                         | Train Loss: 0.1718 | Train Acc: 0.9448
+ Site-MNIST                         | Train Loss: 0.1357 | Train Acc: 0.9632
+ Site-MNIST                         | Train Loss: 0.1280 | Train Acc: 0.9676
+ Site-USPS                          | Train Loss: 0.1993 | Train Acc: 0.9424
+ Site-USPS                          | Train Loss: 0.1344 | Train Acc: 0.9665
+ Site-USPS                          | Train Loss: 0.1577 | Train Acc: 0.9574
+ Site-SynthDigits                   | Train Loss: 0.9154 | Train Acc: 0.7102
+ Site-SynthDigits                   | Train Loss: 0.7557 | Train Acc: 0.7702
+ Site-MNIST_M                       | Train Loss: 1.2651 | Train Acc: 0.5710
+ Site-MNIST_M                       | Train Loss: 1.3148 | Train Acc: 0.5625
+ Site-SVHN                          | Train Loss: 1.6714 | Train Acc: 0.4174
+Average Train Accuracy: 0.8219
+ Site-MNIST                         | Val  Loss: 0.1114 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0991 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.1246 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1617 | Val  Acc: 0.9474
+ Site-MNIST                         | Val  Loss: 0.1620 | Val  Acc: 0.9474
+ Site-USPS                          | Val  Loss: 0.1151 | Val  Acc: 0.9519
+ Site-USPS                          | Val  Loss: 0.1916 | Val  Acc: 0.9423
+ Site-USPS                          | Val  Loss: 0.2082 | Val  Acc: 0.9359
+ Site-SynthDigits                   | Val  Loss: 0.9445 | Val  Acc: 0.7121
+ Site-SynthDigits                   | Val  Loss: 0.7269 | Val  Acc: 0.7172
+ Site-MNIST_M                       | Val  Loss: 1.1257 | Val  Acc: 0.6364
+ Site-MNIST_M                       | Val  Loss: 1.2173 | Val  Acc: 0.5000
+ Site-SVHN                          | Val  Loss: 1.7258 | Val  Acc: 0.3699
+Average Valid Accuracy: 0.8145
+ Best site-MNIST                     | Epoch:19 | Val Acc: 0.9643
+ Best site-MNIST                     | Epoch:19 | Val Acc: 0.9881
+ Best site-MNIST                     | Epoch:19 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:19 | Val Acc: 0.9474
+ Best site-MNIST                     | Epoch:19 | Val Acc: 0.9474
+ Best site-USPS                      | Epoch:19 | Val Acc: 0.9519
+ Best site-USPS                      | Epoch:19 | Val Acc: 0.9423
+ Best site-USPS                      | Epoch:19 | Val Acc: 0.9359
+ Best site-SynthDigits               | Epoch:19 | Val Acc: 0.7121
+ Best site-SynthDigits               | Epoch:19 | Val Acc: 0.7172
+ Best site-MNIST_M                   | Epoch:19 | Val Acc: 0.6364
+ Best site-MNIST_M                   | Epoch:19 | Val Acc: 0.5000
+ Best site-SVHN                      | Epoch:19 | Val Acc: 0.3699
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 20 ============
+ Site-MNIST                         | Train Loss: 0.1586 | Train Acc: 0.9689
+ Site-MNIST                         | Train Loss: 0.1584 | Train Acc: 0.9467
+ Site-MNIST                         | Train Loss: 0.1645 | Train Acc: 0.9448
+ Site-MNIST                         | Train Loss: 0.1318 | Train Acc: 0.9632
+ Site-MNIST                         | Train Loss: 0.1183 | Train Acc: 0.9702
+ Site-USPS                          | Train Loss: 0.2029 | Train Acc: 0.9424
+ Site-USPS                          | Train Loss: 0.1324 | Train Acc: 0.9633
+ Site-USPS                          | Train Loss: 0.1575 | Train Acc: 0.9553
+ Site-SynthDigits                   | Train Loss: 0.8826 | Train Acc: 0.7140
+ Site-SynthDigits                   | Train Loss: 0.7565 | Train Acc: 0.7917
+ Site-MNIST_M                       | Train Loss: 1.2828 | Train Acc: 0.5710
+ Site-MNIST_M                       | Train Loss: 1.3144 | Train Acc: 0.5549
+ Site-SVHN                          | Train Loss: 1.6537 | Train Acc: 0.4123
+Average Train Accuracy: 0.8230
+ Site-MNIST                         | Val  Loss: 0.1121 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.1002 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1217 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1680 | Val  Acc: 0.9474
+ Site-MNIST                         | Val  Loss: 0.1635 | Val  Acc: 0.9474
+ Site-USPS                          | Val  Loss: 0.1165 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1953 | Val  Acc: 0.9295
+ Site-USPS                          | Val  Loss: 0.2134 | Val  Acc: 0.9274
+ Site-SynthDigits                   | Val  Loss: 0.9239 | Val  Acc: 0.7045
+ Site-SynthDigits                   | Val  Loss: 0.7274 | Val  Acc: 0.7121
+ Site-MNIST_M                       | Val  Loss: 1.1264 | Val  Acc: 0.6364
+ Site-MNIST_M                       | Val  Loss: 1.2278 | Val  Acc: 0.5076
+ Site-SVHN                          | Val  Loss: 1.7201 | Val  Acc: 0.3425
+Average Valid Accuracy: 0.8102
+============ Train epoch 21 ============
+ Site-MNIST                         | Train Loss: 0.1433 | Train Acc: 0.9689
+ Site-MNIST                         | Train Loss: 0.1550 | Train Acc: 0.9438
+ Site-MNIST                         | Train Loss: 0.1594 | Train Acc: 0.9467
+ Site-MNIST                         | Train Loss: 0.1278 | Train Acc: 0.9632
+ Site-MNIST                         | Train Loss: 0.1161 | Train Acc: 0.9694
+ Site-USPS                          | Train Loss: 0.1934 | Train Acc: 0.9400
+ Site-USPS                          | Train Loss: 0.1262 | Train Acc: 0.9633
+ Site-USPS                          | Train Loss: 0.1557 | Train Acc: 0.9542
+ Site-SynthDigits                   | Train Loss: 0.8624 | Train Acc: 0.7159
+ Site-SynthDigits                   | Train Loss: 0.7461 | Train Acc: 0.7841
+ Site-MNIST_M                       | Train Loss: 1.2915 | Train Acc: 0.5710
+ Site-MNIST_M                       | Train Loss: 1.2794 | Train Acc: 0.5568
+ Site-SVHN                          | Train Loss: 1.6798 | Train Acc: 0.4242
+Average Train Accuracy: 0.8232
+ Site-MNIST                         | Val  Loss: 0.1091 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0919 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1160 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1672 | Val  Acc: 0.9474
+ Site-MNIST                         | Val  Loss: 0.1648 | Val  Acc: 0.9439
+ Site-USPS                          | Val  Loss: 0.1092 | Val  Acc: 0.9519
+ Site-USPS                          | Val  Loss: 0.1844 | Val  Acc: 0.9231
+ Site-USPS                          | Val  Loss: 0.2018 | Val  Acc: 0.9316
+ Site-SynthDigits                   | Val  Loss: 0.9446 | Val  Acc: 0.6970
+ Site-SynthDigits                   | Val  Loss: 0.7078 | Val  Acc: 0.7071
+ Site-MNIST_M                       | Val  Loss: 1.1256 | Val  Acc: 0.6477
+ Site-MNIST_M                       | Val  Loss: 1.1936 | Val  Acc: 0.5000
+ Site-SVHN                          | Val  Loss: 1.7120 | Val  Acc: 0.3630
+Average Valid Accuracy: 0.8099
+============ Train epoch 22 ============
+ Site-MNIST                         | Train Loss: 0.1706 | Train Acc: 0.9600
+ Site-MNIST                         | Train Loss: 0.1494 | Train Acc: 0.9408
+ Site-MNIST                         | Train Loss: 0.1578 | Train Acc: 0.9448
+ Site-MNIST                         | Train Loss: 0.1242 | Train Acc: 0.9645
+ Site-MNIST                         | Train Loss: 0.1139 | Train Acc: 0.9720
+ Site-USPS                          | Train Loss: 0.1910 | Train Acc: 0.9496
+ Site-USPS                          | Train Loss: 0.1238 | Train Acc: 0.9633
+ Site-USPS                          | Train Loss: 0.1453 | Train Acc: 0.9585
+ Site-SynthDigits                   | Train Loss: 0.8454 | Train Acc: 0.7273
+ Site-SynthDigits                   | Train Loss: 0.7024 | Train Acc: 0.7929
+ Site-MNIST_M                       | Train Loss: 1.3137 | Train Acc: 0.5795
+ Site-MNIST_M                       | Train Loss: 1.2600 | Train Acc: 0.5682
+ Site-SVHN                          | Train Loss: 1.6119 | Train Acc: 0.4259
+Average Train Accuracy: 0.8267
+ Site-MNIST                         | Val  Loss: 0.1055 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0898 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1216 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1650 | Val  Acc: 0.9474
+ Site-MNIST                         | Val  Loss: 0.1651 | Val  Acc: 0.9404
+ Site-USPS                          | Val  Loss: 0.1066 | Val  Acc: 0.9423
+ Site-USPS                          | Val  Loss: 0.1797 | Val  Acc: 0.9359
+ Site-USPS                          | Val  Loss: 0.1981 | Val  Acc: 0.9444
+ Site-SynthDigits                   | Val  Loss: 0.9038 | Val  Acc: 0.7045
+ Site-SynthDigits                   | Val  Loss: 0.6873 | Val  Acc: 0.7273
+ Site-MNIST_M                       | Val  Loss: 1.1218 | Val  Acc: 0.6250
+ Site-MNIST_M                       | Val  Loss: 1.2051 | Val  Acc: 0.5076
+ Site-SVHN                          | Val  Loss: 1.6877 | Val  Acc: 0.3562
+Average Valid Accuracy: 0.8114
+============ Train epoch 23 ============
+ Site-MNIST                         | Train Loss: 0.1551 | Train Acc: 0.9600
+ Site-MNIST                         | Train Loss: 0.1298 | Train Acc: 0.9527
+ Site-MNIST                         | Train Loss: 0.1476 | Train Acc: 0.9527
+ Site-MNIST                         | Train Loss: 0.1158 | Train Acc: 0.9711
+ Site-MNIST                         | Train Loss: 0.1075 | Train Acc: 0.9737
+ Site-USPS                          | Train Loss: 0.1824 | Train Acc: 0.9448
+ Site-USPS                          | Train Loss: 0.1171 | Train Acc: 0.9665
+ Site-USPS                          | Train Loss: 0.1436 | Train Acc: 0.9606
+ Site-SynthDigits                   | Train Loss: 0.8340 | Train Acc: 0.7348
+ Site-SynthDigits                   | Train Loss: 0.6967 | Train Acc: 0.7828
+ Site-MNIST_M                       | Train Loss: 1.2826 | Train Acc: 0.5767
+ Site-MNIST_M                       | Train Loss: 1.2926 | Train Acc: 0.5833
+ Site-SVHN                          | Train Loss: 1.6232 | Train Acc: 0.4378
+Average Train Accuracy: 0.8306
+ Site-MNIST                         | Val  Loss: 0.0865 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0795 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1085 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1560 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1550 | Val  Acc: 0.9544
+ Site-USPS                          | Val  Loss: 0.1058 | Val  Acc: 0.9519
+ Site-USPS                          | Val  Loss: 0.1764 | Val  Acc: 0.9295
+ Site-USPS                          | Val  Loss: 0.1912 | Val  Acc: 0.9402
+ Site-SynthDigits                   | Val  Loss: 0.8828 | Val  Acc: 0.7273
+ Site-SynthDigits                   | Val  Loss: 0.6754 | Val  Acc: 0.7424
+ Site-MNIST_M                       | Val  Loss: 1.1350 | Val  Acc: 0.6250
+ Site-MNIST_M                       | Val  Loss: 1.2274 | Val  Acc: 0.5000
+ Site-SVHN                          | Val  Loss: 1.6894 | Val  Acc: 0.3904
+Average Valid Accuracy: 0.8181
+ Best site-MNIST                     | Epoch:23 | Val Acc: 0.9643
+ Best site-MNIST                     | Epoch:23 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:23 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:23 | Val Acc: 0.9579
+ Best site-MNIST                     | Epoch:23 | Val Acc: 0.9544
+ Best site-USPS                      | Epoch:23 | Val Acc: 0.9519
+ Best site-USPS                      | Epoch:23 | Val Acc: 0.9295
+ Best site-USPS                      | Epoch:23 | Val Acc: 0.9402
+ Best site-SynthDigits               | Epoch:23 | Val Acc: 0.7273
+ Best site-SynthDigits               | Epoch:23 | Val Acc: 0.7424
+ Best site-MNIST_M                   | Epoch:23 | Val Acc: 0.6250
+ Best site-MNIST_M                   | Epoch:23 | Val Acc: 0.5000
+ Best site-SVHN                      | Epoch:23 | Val Acc: 0.3904
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 24 ============
+ Site-MNIST                         | Train Loss: 0.1542 | Train Acc: 0.9644
+ Site-MNIST                         | Train Loss: 0.1349 | Train Acc: 0.9556
+ Site-MNIST                         | Train Loss: 0.1457 | Train Acc: 0.9507
+ Site-MNIST                         | Train Loss: 0.1156 | Train Acc: 0.9698
+ Site-MNIST                         | Train Loss: 0.1034 | Train Acc: 0.9781
+ Site-USPS                          | Train Loss: 0.1870 | Train Acc: 0.9424
+ Site-USPS                          | Train Loss: 0.1164 | Train Acc: 0.9696
+ Site-USPS                          | Train Loss: 0.1450 | Train Acc: 0.9563
+ Site-SynthDigits                   | Train Loss: 0.8894 | Train Acc: 0.7254
+ Site-SynthDigits                   | Train Loss: 0.7103 | Train Acc: 0.7980
+ Site-MNIST_M                       | Train Loss: 1.2252 | Train Acc: 0.5682
+ Site-MNIST_M                       | Train Loss: 1.2396 | Train Acc: 0.5871
+ Site-SVHN                          | Train Loss: 1.5669 | Train Acc: 0.4378
+Average Train Accuracy: 0.8310
+ Site-MNIST                         | Val  Loss: 0.0948 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0805 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1096 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1525 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1572 | Val  Acc: 0.9544
+ Site-USPS                          | Val  Loss: 0.0974 | Val  Acc: 0.9712
+ Site-USPS                          | Val  Loss: 0.1762 | Val  Acc: 0.9423
+ Site-USPS                          | Val  Loss: 0.1935 | Val  Acc: 0.9359
+ Site-SynthDigits                   | Val  Loss: 0.8853 | Val  Acc: 0.7045
+ Site-SynthDigits                   | Val  Loss: 0.6775 | Val  Acc: 0.7172
+ Site-MNIST_M                       | Val  Loss: 1.0887 | Val  Acc: 0.6250
+ Site-MNIST_M                       | Val  Loss: 1.1523 | Val  Acc: 0.5076
+ Site-SVHN                          | Val  Loss: 1.6577 | Val  Acc: 0.3767
+Average Valid Accuracy: 0.8161
+============ Train epoch 25 ============
+ Site-MNIST                         | Train Loss: 0.1426 | Train Acc: 0.9689
+ Site-MNIST                         | Train Loss: 0.1273 | Train Acc: 0.9467
+ Site-MNIST                         | Train Loss: 0.1440 | Train Acc: 0.9487
+ Site-MNIST                         | Train Loss: 0.1111 | Train Acc: 0.9724
+ Site-MNIST                         | Train Loss: 0.0988 | Train Acc: 0.9781
+ Site-USPS                          | Train Loss: 0.1821 | Train Acc: 0.9424
+ Site-USPS                          | Train Loss: 0.1150 | Train Acc: 0.9681
+ Site-USPS                          | Train Loss: 0.1371 | Train Acc: 0.9595
+ Site-SynthDigits                   | Train Loss: 0.8216 | Train Acc: 0.7348
+ Site-SynthDigits                   | Train Loss: 0.6531 | Train Acc: 0.8093
+ Site-MNIST_M                       | Train Loss: 1.2388 | Train Acc: 0.5852
+ Site-MNIST_M                       | Train Loss: 1.2144 | Train Acc: 0.5758
+ Site-SVHN                          | Train Loss: 1.5708 | Train Acc: 0.4532
+Average Train Accuracy: 0.8341
+ Site-MNIST                         | Val  Loss: 0.0912 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0816 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1096 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1552 | Val  Acc: 0.9632
+ Site-MNIST                         | Val  Loss: 0.1538 | Val  Acc: 0.9474
+ Site-USPS                          | Val  Loss: 0.1031 | Val  Acc: 0.9519
+ Site-USPS                          | Val  Loss: 0.1708 | Val  Acc: 0.9423
+ Site-USPS                          | Val  Loss: 0.1889 | Val  Acc: 0.9359
+ Site-SynthDigits                   | Val  Loss: 0.8450 | Val  Acc: 0.7197
+ Site-SynthDigits                   | Val  Loss: 0.6435 | Val  Acc: 0.7323
+ Site-MNIST_M                       | Val  Loss: 1.1004 | Val  Acc: 0.6136
+ Site-MNIST_M                       | Val  Loss: 1.1600 | Val  Acc: 0.5000
+ Site-SVHN                          | Val  Loss: 1.6411 | Val  Acc: 0.3836
+Average Valid Accuracy: 0.8159
+============ Train epoch 26 ============
+ Site-MNIST                         | Train Loss: 0.1362 | Train Acc: 0.9689
+ Site-MNIST                         | Train Loss: 0.1269 | Train Acc: 0.9556
+ Site-MNIST                         | Train Loss: 0.1398 | Train Acc: 0.9546
+ Site-MNIST                         | Train Loss: 0.1078 | Train Acc: 0.9737
+ Site-MNIST                         | Train Loss: 0.0925 | Train Acc: 0.9790
+ Site-USPS                          | Train Loss: 0.1771 | Train Acc: 0.9376
+ Site-USPS                          | Train Loss: 0.1132 | Train Acc: 0.9696
+ Site-USPS                          | Train Loss: 0.1396 | Train Acc: 0.9510
+ Site-SynthDigits                   | Train Loss: 0.8087 | Train Acc: 0.7330
+ Site-SynthDigits                   | Train Loss: 0.6635 | Train Acc: 0.7929
+ Site-MNIST_M                       | Train Loss: 1.2775 | Train Acc: 0.5767
+ Site-MNIST_M                       | Train Loss: 1.2657 | Train Acc: 0.5852
+ Site-SVHN                          | Train Loss: 1.6158 | Train Acc: 0.4378
+Average Train Accuracy: 0.8320
+ Site-MNIST                         | Val  Loss: 0.0752 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0722 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1056 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1483 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1428 | Val  Acc: 0.9544
+ Site-USPS                          | Val  Loss: 0.1025 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1743 | Val  Acc: 0.9423
+ Site-USPS                          | Val  Loss: 0.1910 | Val  Acc: 0.9274
+ Site-SynthDigits                   | Val  Loss: 0.8654 | Val  Acc: 0.7273
+ Site-SynthDigits                   | Val  Loss: 0.6524 | Val  Acc: 0.7323
+ Site-MNIST_M                       | Val  Loss: 1.1315 | Val  Acc: 0.6250
+ Site-MNIST_M                       | Val  Loss: 1.1566 | Val  Acc: 0.5152
+ Site-SVHN                          | Val  Loss: 1.6575 | Val  Acc: 0.3767
+Average Valid Accuracy: 0.8196
+ Best site-MNIST                     | Epoch:26 | Val Acc: 0.9821
+ Best site-MNIST                     | Epoch:26 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:26 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:26 | Val Acc: 0.9579
+ Best site-MNIST                     | Epoch:26 | Val Acc: 0.9544
+ Best site-USPS                      | Epoch:26 | Val Acc: 0.9615
+ Best site-USPS                      | Epoch:26 | Val Acc: 0.9423
+ Best site-USPS                      | Epoch:26 | Val Acc: 0.9274
+ Best site-SynthDigits               | Epoch:26 | Val Acc: 0.7273
+ Best site-SynthDigits               | Epoch:26 | Val Acc: 0.7323
+ Best site-MNIST_M                   | Epoch:26 | Val Acc: 0.6250
+ Best site-MNIST_M                   | Epoch:26 | Val Acc: 0.5152
+ Best site-SVHN                      | Epoch:26 | Val Acc: 0.3767
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 27 ============
+ Site-MNIST                         | Train Loss: 0.1369 | Train Acc: 0.9689
+ Site-MNIST                         | Train Loss: 0.1211 | Train Acc: 0.9556
+ Site-MNIST                         | Train Loss: 0.1340 | Train Acc: 0.9566
+ Site-MNIST                         | Train Loss: 0.1030 | Train Acc: 0.9750
+ Site-MNIST                         | Train Loss: 0.0902 | Train Acc: 0.9790
+ Site-USPS                          | Train Loss: 0.1824 | Train Acc: 0.9400
+ Site-USPS                          | Train Loss: 0.1073 | Train Acc: 0.9712
+ Site-USPS                          | Train Loss: 0.1340 | Train Acc: 0.9585
+ Site-SynthDigits                   | Train Loss: 0.8195 | Train Acc: 0.7424
+ Site-SynthDigits                   | Train Loss: 0.6564 | Train Acc: 0.8068
+ Site-MNIST_M                       | Train Loss: 1.2233 | Train Acc: 0.5881
+ Site-MNIST_M                       | Train Loss: 1.1919 | Train Acc: 0.5966
+ Site-SVHN                          | Train Loss: 1.5761 | Train Acc: 0.4344
+Average Train Accuracy: 0.8364
+ Site-MNIST                         | Val  Loss: 0.0743 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0698 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1028 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1471 | Val  Acc: 0.9526
+ Site-MNIST                         | Val  Loss: 0.1406 | Val  Acc: 0.9509
+ Site-USPS                          | Val  Loss: 0.0974 | Val  Acc: 0.9712
+ Site-USPS                          | Val  Loss: 0.1643 | Val  Acc: 0.9423
+ Site-USPS                          | Val  Loss: 0.1814 | Val  Acc: 0.9316
+ Site-SynthDigits                   | Val  Loss: 0.8455 | Val  Acc: 0.7273
+ Site-SynthDigits                   | Val  Loss: 0.6416 | Val  Acc: 0.7374
+ Site-MNIST_M                       | Val  Loss: 1.1172 | Val  Acc: 0.6250
+ Site-MNIST_M                       | Val  Loss: 1.1447 | Val  Acc: 0.5303
+ Site-SVHN                          | Val  Loss: 1.6438 | Val  Acc: 0.3562
+Average Valid Accuracy: 0.8199
+ Best site-MNIST                     | Epoch:27 | Val Acc: 0.9821
+ Best site-MNIST                     | Epoch:27 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:27 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:27 | Val Acc: 0.9526
+ Best site-MNIST                     | Epoch:27 | Val Acc: 0.9509
+ Best site-USPS                      | Epoch:27 | Val Acc: 0.9712
+ Best site-USPS                      | Epoch:27 | Val Acc: 0.9423
+ Best site-USPS                      | Epoch:27 | Val Acc: 0.9316
+ Best site-SynthDigits               | Epoch:27 | Val Acc: 0.7273
+ Best site-SynthDigits               | Epoch:27 | Val Acc: 0.7374
+ Best site-MNIST_M                   | Epoch:27 | Val Acc: 0.6250
+ Best site-MNIST_M                   | Epoch:27 | Val Acc: 0.5303
+ Best site-SVHN                      | Epoch:27 | Val Acc: 0.3562
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 28 ============
+ Site-MNIST                         | Train Loss: 0.1352 | Train Acc: 0.9644
+ Site-MNIST                         | Train Loss: 0.1305 | Train Acc: 0.9556
+ Site-MNIST                         | Train Loss: 0.1330 | Train Acc: 0.9546
+ Site-MNIST                         | Train Loss: 0.1008 | Train Acc: 0.9750
+ Site-MNIST                         | Train Loss: 0.0900 | Train Acc: 0.9781
+ Site-USPS                          | Train Loss: 0.1716 | Train Acc: 0.9472
+ Site-USPS                          | Train Loss: 0.1040 | Train Acc: 0.9712
+ Site-USPS                          | Train Loss: 0.1307 | Train Acc: 0.9627
+ Site-SynthDigits                   | Train Loss: 0.7762 | Train Acc: 0.7500
+ Site-SynthDigits                   | Train Loss: 0.6312 | Train Acc: 0.8131
+ Site-MNIST_M                       | Train Loss: 1.2331 | Train Acc: 0.5909
+ Site-MNIST_M                       | Train Loss: 1.2155 | Train Acc: 0.6004
+ Site-SVHN                          | Train Loss: 1.5803 | Train Acc: 0.4532
+Average Train Accuracy: 0.8397
+ Site-MNIST                         | Val  Loss: 0.0783 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0684 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.1033 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1467 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1456 | Val  Acc: 0.9509
+ Site-USPS                          | Val  Loss: 0.0950 | Val  Acc: 0.9712
+ Site-USPS                          | Val  Loss: 0.1608 | Val  Acc: 0.9423
+ Site-USPS                          | Val  Loss: 0.1696 | Val  Acc: 0.9402
+ Site-SynthDigits                   | Val  Loss: 0.8055 | Val  Acc: 0.7576
+ Site-SynthDigits                   | Val  Loss: 0.6152 | Val  Acc: 0.7424
+ Site-MNIST_M                       | Val  Loss: 1.0896 | Val  Acc: 0.6364
+ Site-MNIST_M                       | Val  Loss: 1.0842 | Val  Acc: 0.5303
+ Site-SVHN                          | Val  Loss: 1.6196 | Val  Acc: 0.3836
+Average Valid Accuracy: 0.8262
+ Best site-MNIST                     | Epoch:28 | Val Acc: 0.9643
+ Best site-MNIST                     | Epoch:28 | Val Acc: 0.9881
+ Best site-MNIST                     | Epoch:28 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:28 | Val Acc: 0.9579
+ Best site-MNIST                     | Epoch:28 | Val Acc: 0.9509
+ Best site-USPS                      | Epoch:28 | Val Acc: 0.9712
+ Best site-USPS                      | Epoch:28 | Val Acc: 0.9423
+ Best site-USPS                      | Epoch:28 | Val Acc: 0.9402
+ Best site-SynthDigits               | Epoch:28 | Val Acc: 0.7576
+ Best site-SynthDigits               | Epoch:28 | Val Acc: 0.7424
+ Best site-MNIST_M                   | Epoch:28 | Val Acc: 0.6364
+ Best site-MNIST_M                   | Epoch:28 | Val Acc: 0.5303
+ Best site-SVHN                      | Epoch:28 | Val Acc: 0.3836
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 29 ============
+ Site-MNIST                         | Train Loss: 0.1255 | Train Acc: 0.9689
+ Site-MNIST                         | Train Loss: 0.1205 | Train Acc: 0.9615
+ Site-MNIST                         | Train Loss: 0.1328 | Train Acc: 0.9507
+ Site-MNIST                         | Train Loss: 0.1005 | Train Acc: 0.9724
+ Site-MNIST                         | Train Loss: 0.0843 | Train Acc: 0.9816
+ Site-USPS                          | Train Loss: 0.1643 | Train Acc: 0.9496
+ Site-USPS                          | Train Loss: 0.1015 | Train Acc: 0.9744
+ Site-USPS                          | Train Loss: 0.1250 | Train Acc: 0.9649
+ Site-SynthDigits                   | Train Loss: 0.7656 | Train Acc: 0.7576
+ Site-SynthDigits                   | Train Loss: 0.6260 | Train Acc: 0.8157
+ Site-MNIST_M                       | Train Loss: 1.2550 | Train Acc: 0.5938
+ Site-MNIST_M                       | Train Loss: 1.1894 | Train Acc: 0.6061
+ Site-SVHN                          | Train Loss: 1.5288 | Train Acc: 0.4600
+Average Train Accuracy: 0.8429
+ Site-MNIST                         | Val  Loss: 0.0799 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0735 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1039 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1431 | Val  Acc: 0.9632
+ Site-MNIST                         | Val  Loss: 0.1413 | Val  Acc: 0.9579
+ Site-USPS                          | Val  Loss: 0.0889 | Val  Acc: 0.9712
+ Site-USPS                          | Val  Loss: 0.1555 | Val  Acc: 0.9423
+ Site-USPS                          | Val  Loss: 0.1692 | Val  Acc: 0.9444
+ Site-SynthDigits                   | Val  Loss: 0.8049 | Val  Acc: 0.7576
+ Site-SynthDigits                   | Val  Loss: 0.6194 | Val  Acc: 0.7576
+ Site-MNIST_M                       | Val  Loss: 1.1080 | Val  Acc: 0.6364
+ Site-MNIST_M                       | Val  Loss: 1.0897 | Val  Acc: 0.5076
+ Site-SVHN                          | Val  Loss: 1.6361 | Val  Acc: 0.4041
+Average Valid Accuracy: 0.8290
+ Best site-MNIST                     | Epoch:29 | Val Acc: 0.9821
+ Best site-MNIST                     | Epoch:29 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:29 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:29 | Val Acc: 0.9632
+ Best site-MNIST                     | Epoch:29 | Val Acc: 0.9579
+ Best site-USPS                      | Epoch:29 | Val Acc: 0.9712
+ Best site-USPS                      | Epoch:29 | Val Acc: 0.9423
+ Best site-USPS                      | Epoch:29 | Val Acc: 0.9444
+ Best site-SynthDigits               | Epoch:29 | Val Acc: 0.7576
+ Best site-SynthDigits               | Epoch:29 | Val Acc: 0.7576
+ Best site-MNIST_M                   | Epoch:29 | Val Acc: 0.6364
+ Best site-MNIST_M                   | Epoch:29 | Val Acc: 0.5076
+ Best site-SVHN                      | Epoch:29 | Val Acc: 0.4041
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 30 ============
+ Site-MNIST                         | Train Loss: 0.1306 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.1590 | Train Acc: 0.9527
+ Site-MNIST                         | Train Loss: 0.1319 | Train Acc: 0.9546
+ Site-MNIST                         | Train Loss: 0.0973 | Train Acc: 0.9737
+ Site-MNIST                         | Train Loss: 0.0831 | Train Acc: 0.9772
+ Site-USPS                          | Train Loss: 0.1794 | Train Acc: 0.9448
+ Site-USPS                          | Train Loss: 0.0960 | Train Acc: 0.9776
+ Site-USPS                          | Train Loss: 0.1191 | Train Acc: 0.9681
+ Site-SynthDigits                   | Train Loss: 0.7795 | Train Acc: 0.7500
+ Site-SynthDigits                   | Train Loss: 0.6180 | Train Acc: 0.8157
+ Site-MNIST_M                       | Train Loss: 1.2065 | Train Acc: 0.5909
+ Site-MNIST_M                       | Train Loss: 1.1901 | Train Acc: 0.6098
+ Site-SVHN                          | Train Loss: 1.5646 | Train Acc: 0.4566
+Average Train Accuracy: 0.8419
+ Site-MNIST                         | Val  Loss: 0.0874 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0783 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1035 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1406 | Val  Acc: 0.9632
+ Site-MNIST                         | Val  Loss: 0.1375 | Val  Acc: 0.9474
+ Site-USPS                          | Val  Loss: 0.0816 | Val  Acc: 0.9712
+ Site-USPS                          | Val  Loss: 0.1507 | Val  Acc: 0.9487
+ Site-USPS                          | Val  Loss: 0.1640 | Val  Acc: 0.9487
+ Site-SynthDigits                   | Val  Loss: 0.8223 | Val  Acc: 0.7500
+ Site-SynthDigits                   | Val  Loss: 0.6089 | Val  Acc: 0.7475
+ Site-MNIST_M                       | Val  Loss: 1.0859 | Val  Acc: 0.6364
+ Site-MNIST_M                       | Val  Loss: 1.0639 | Val  Acc: 0.5076
+ Site-SVHN                          | Val  Loss: 1.6355 | Val  Acc: 0.3904
+Average Valid Accuracy: 0.8252
+============ Train epoch 31 ============
+ Site-MNIST                         | Train Loss: 0.1453 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.1136 | Train Acc: 0.9556
+ Site-MNIST                         | Train Loss: 0.1282 | Train Acc: 0.9546
+ Site-MNIST                         | Train Loss: 0.0940 | Train Acc: 0.9750
+ Site-MNIST                         | Train Loss: 0.0806 | Train Acc: 0.9790
+ Site-USPS                          | Train Loss: 0.1550 | Train Acc: 0.9472
+ Site-USPS                          | Train Loss: 0.0960 | Train Acc: 0.9776
+ Site-USPS                          | Train Loss: 0.1175 | Train Acc: 0.9702
+ Site-SynthDigits                   | Train Loss: 0.7631 | Train Acc: 0.7557
+ Site-SynthDigits                   | Train Loss: 0.6146 | Train Acc: 0.8131
+ Site-MNIST_M                       | Train Loss: 1.1786 | Train Acc: 0.5852
+ Site-MNIST_M                       | Train Loss: 1.1894 | Train Acc: 0.6136
+ Site-SVHN                          | Train Loss: 1.4850 | Train Acc: 0.4668
+Average Train Accuracy: 0.8436
+ Site-MNIST                         | Val  Loss: 0.0795 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0713 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.0975 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1405 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1359 | Val  Acc: 0.9544
+ Site-USPS                          | Val  Loss: 0.0847 | Val  Acc: 0.9712
+ Site-USPS                          | Val  Loss: 0.1471 | Val  Acc: 0.9423
+ Site-USPS                          | Val  Loss: 0.1589 | Val  Acc: 0.9444
+ Site-SynthDigits                   | Val  Loss: 0.8032 | Val  Acc: 0.7576
+ Site-SynthDigits                   | Val  Loss: 0.5946 | Val  Acc: 0.7424
+ Site-MNIST_M                       | Val  Loss: 1.0811 | Val  Acc: 0.6136
+ Site-MNIST_M                       | Val  Loss: 1.0671 | Val  Acc: 0.4848
+ Site-SVHN                          | Val  Loss: 1.6180 | Val  Acc: 0.4110
+Average Valid Accuracy: 0.8237
+============ Train epoch 32 ============
+ Site-MNIST                         | Train Loss: 0.1188 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.1273 | Train Acc: 0.9586
+ Site-MNIST                         | Train Loss: 0.1289 | Train Acc: 0.9586
+ Site-MNIST                         | Train Loss: 0.0945 | Train Acc: 0.9737
+ Site-MNIST                         | Train Loss: 0.0778 | Train Acc: 0.9816
+ Site-USPS                          | Train Loss: 0.1598 | Train Acc: 0.9496
+ Site-USPS                          | Train Loss: 0.0932 | Train Acc: 0.9760
+ Site-USPS                          | Train Loss: 0.1173 | Train Acc: 0.9712
+ Site-SynthDigits                   | Train Loss: 0.7397 | Train Acc: 0.7614
+ Site-SynthDigits                   | Train Loss: 0.6021 | Train Acc: 0.8245
+ Site-MNIST_M                       | Train Loss: 1.2073 | Train Acc: 0.5938
+ Site-MNIST_M                       | Train Loss: 1.2063 | Train Acc: 0.6174
+ Site-SVHN                          | Train Loss: 1.4987 | Train Acc: 0.4651
+Average Train Accuracy: 0.8465
+ Site-MNIST                         | Val  Loss: 0.0786 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0736 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.0948 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1454 | Val  Acc: 0.9474
+ Site-MNIST                         | Val  Loss: 0.1370 | Val  Acc: 0.9509
+ Site-USPS                          | Val  Loss: 0.0813 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1459 | Val  Acc: 0.9423
+ Site-USPS                          | Val  Loss: 0.1612 | Val  Acc: 0.9402
+ Site-SynthDigits                   | Val  Loss: 0.7680 | Val  Acc: 0.7576
+ Site-SynthDigits                   | Val  Loss: 0.5841 | Val  Acc: 0.7626
+ Site-MNIST_M                       | Val  Loss: 1.1011 | Val  Acc: 0.6136
+ Site-MNIST_M                       | Val  Loss: 1.0784 | Val  Acc: 0.4924
+ Site-SVHN                          | Val  Loss: 1.6154 | Val  Acc: 0.3904
+Average Valid Accuracy: 0.8241
+============ Train epoch 33 ============
+ Site-MNIST                         | Train Loss: 0.1346 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.1161 | Train Acc: 0.9556
+ Site-MNIST                         | Train Loss: 0.1275 | Train Acc: 0.9546
+ Site-MNIST                         | Train Loss: 0.0900 | Train Acc: 0.9763
+ Site-MNIST                         | Train Loss: 0.0763 | Train Acc: 0.9799
+ Site-USPS                          | Train Loss: 0.1520 | Train Acc: 0.9544
+ Site-USPS                          | Train Loss: 0.0899 | Train Acc: 0.9808
+ Site-USPS                          | Train Loss: 0.1155 | Train Acc: 0.9681
+ Site-SynthDigits                   | Train Loss: 0.7529 | Train Acc: 0.7595
+ Site-SynthDigits                   | Train Loss: 0.5772 | Train Acc: 0.8270
+ Site-MNIST_M                       | Train Loss: 1.1568 | Train Acc: 0.6023
+ Site-MNIST_M                       | Train Loss: 1.2051 | Train Acc: 0.6193
+ Site-SVHN                          | Train Loss: 1.5194 | Train Acc: 0.4600
+Average Train Accuracy: 0.8470
+ Site-MNIST                         | Val  Loss: 0.0801 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0680 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.0958 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1402 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1359 | Val  Acc: 0.9509
+ Site-USPS                          | Val  Loss: 0.0814 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1463 | Val  Acc: 0.9487
+ Site-USPS                          | Val  Loss: 0.1571 | Val  Acc: 0.9487
+ Site-SynthDigits                   | Val  Loss: 0.7830 | Val  Acc: 0.7576
+ Site-SynthDigits                   | Val  Loss: 0.5777 | Val  Acc: 0.7576
+ Site-MNIST_M                       | Val  Loss: 1.0876 | Val  Acc: 0.6250
+ Site-MNIST_M                       | Val  Loss: 1.0765 | Val  Acc: 0.5303
+ Site-SVHN                          | Val  Loss: 1.6029 | Val  Acc: 0.3904
+Average Valid Accuracy: 0.8290
+============ Train epoch 34 ============
+ Site-MNIST                         | Train Loss: 0.1213 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.1250 | Train Acc: 0.9556
+ Site-MNIST                         | Train Loss: 0.1233 | Train Acc: 0.9546
+ Site-MNIST                         | Train Loss: 0.0868 | Train Acc: 0.9750
+ Site-MNIST                         | Train Loss: 0.0730 | Train Acc: 0.9816
+ Site-USPS                          | Train Loss: 0.1504 | Train Acc: 0.9544
+ Site-USPS                          | Train Loss: 0.0871 | Train Acc: 0.9792
+ Site-USPS                          | Train Loss: 0.1091 | Train Acc: 0.9723
+ Site-SynthDigits                   | Train Loss: 0.7612 | Train Acc: 0.7727
+ Site-SynthDigits                   | Train Loss: 0.5856 | Train Acc: 0.8308
+ Site-MNIST_M                       | Train Loss: 1.1578 | Train Acc: 0.5966
+ Site-MNIST_M                       | Train Loss: 1.1259 | Train Acc: 0.6193
+ Site-SVHN                          | Train Loss: 1.5362 | Train Acc: 0.4600
+Average Train Accuracy: 0.8481
+ Site-MNIST                         | Val  Loss: 0.0734 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0645 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.0959 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1356 | Val  Acc: 0.9526
+ Site-MNIST                         | Val  Loss: 0.1348 | Val  Acc: 0.9474
+ Site-USPS                          | Val  Loss: 0.0796 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1375 | Val  Acc: 0.9551
+ Site-USPS                          | Val  Loss: 0.1563 | Val  Acc: 0.9530
+ Site-SynthDigits                   | Val  Loss: 0.7654 | Val  Acc: 0.7727
+ Site-SynthDigits                   | Val  Loss: 0.5732 | Val  Acc: 0.7677
+ Site-MNIST_M                       | Val  Loss: 1.0797 | Val  Acc: 0.6364
+ Site-MNIST_M                       | Val  Loss: 1.0513 | Val  Acc: 0.5303
+ Site-SVHN                          | Val  Loss: 1.5994 | Val  Acc: 0.3973
+Average Valid Accuracy: 0.8315
+ Best site-MNIST                     | Epoch:34 | Val Acc: 0.9643
+ Best site-MNIST                     | Epoch:34 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:34 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:34 | Val Acc: 0.9526
+ Best site-MNIST                     | Epoch:34 | Val Acc: 0.9474
+ Best site-USPS                      | Epoch:34 | Val Acc: 0.9808
+ Best site-USPS                      | Epoch:34 | Val Acc: 0.9551
+ Best site-USPS                      | Epoch:34 | Val Acc: 0.9530
+ Best site-SynthDigits               | Epoch:34 | Val Acc: 0.7727
+ Best site-SynthDigits               | Epoch:34 | Val Acc: 0.7677
+ Best site-MNIST_M                   | Epoch:34 | Val Acc: 0.6364
+ Best site-MNIST_M                   | Epoch:34 | Val Acc: 0.5303
+ Best site-SVHN                      | Epoch:34 | Val Acc: 0.3973
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 35 ============
+ Site-MNIST                         | Train Loss: 0.1386 | Train Acc: 0.9689
+ Site-MNIST                         | Train Loss: 0.1152 | Train Acc: 0.9586
+ Site-MNIST                         | Train Loss: 0.1165 | Train Acc: 0.9527
+ Site-MNIST                         | Train Loss: 0.0823 | Train Acc: 0.9763
+ Site-MNIST                         | Train Loss: 0.0732 | Train Acc: 0.9816
+ Site-USPS                          | Train Loss: 0.1482 | Train Acc: 0.9544
+ Site-USPS                          | Train Loss: 0.0888 | Train Acc: 0.9808
+ Site-USPS                          | Train Loss: 0.1072 | Train Acc: 0.9702
+ Site-SynthDigits                   | Train Loss: 0.7342 | Train Acc: 0.7746
+ Site-SynthDigits                   | Train Loss: 0.5750 | Train Acc: 0.8295
+ Site-MNIST_M                       | Train Loss: 1.1573 | Train Acc: 0.6165
+ Site-MNIST_M                       | Train Loss: 1.0984 | Train Acc: 0.6231
+ Site-SVHN                          | Train Loss: 1.5206 | Train Acc: 0.4787
+Average Train Accuracy: 0.8512
+ Site-MNIST                         | Val  Loss: 0.0750 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0604 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.0885 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1304 | Val  Acc: 0.9526
+ Site-MNIST                         | Val  Loss: 0.1321 | Val  Acc: 0.9544
+ Site-USPS                          | Val  Loss: 0.0808 | Val  Acc: 0.9712
+ Site-USPS                          | Val  Loss: 0.1369 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1536 | Val  Acc: 0.9530
+ Site-SynthDigits                   | Val  Loss: 0.7411 | Val  Acc: 0.7803
+ Site-SynthDigits                   | Val  Loss: 0.5546 | Val  Acc: 0.7576
+ Site-MNIST_M                       | Val  Loss: 1.0642 | Val  Acc: 0.6818
+ Site-MNIST_M                       | Val  Loss: 1.0246 | Val  Acc: 0.5530
+ Site-SVHN                          | Val  Loss: 1.5931 | Val  Acc: 0.4247
+Average Valid Accuracy: 0.8390
+ Best site-MNIST                     | Epoch:35 | Val Acc: 0.9643
+ Best site-MNIST                     | Epoch:35 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:35 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:35 | Val Acc: 0.9526
+ Best site-MNIST                     | Epoch:35 | Val Acc: 0.9544
+ Best site-USPS                      | Epoch:35 | Val Acc: 0.9712
+ Best site-USPS                      | Epoch:35 | Val Acc: 0.9615
+ Best site-USPS                      | Epoch:35 | Val Acc: 0.9530
+ Best site-SynthDigits               | Epoch:35 | Val Acc: 0.7803
+ Best site-SynthDigits               | Epoch:35 | Val Acc: 0.7576
+ Best site-MNIST_M                   | Epoch:35 | Val Acc: 0.6818
+ Best site-MNIST_M                   | Epoch:35 | Val Acc: 0.5530
+ Best site-SVHN                      | Epoch:35 | Val Acc: 0.4247
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 36 ============
+ Site-MNIST                         | Train Loss: 0.1166 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.1049 | Train Acc: 0.9586
+ Site-MNIST                         | Train Loss: 0.1156 | Train Acc: 0.9625
+ Site-MNIST                         | Train Loss: 0.0808 | Train Acc: 0.9763
+ Site-MNIST                         | Train Loss: 0.0729 | Train Acc: 0.9834
+ Site-USPS                          | Train Loss: 0.1548 | Train Acc: 0.9520
+ Site-USPS                          | Train Loss: 0.0873 | Train Acc: 0.9824
+ Site-USPS                          | Train Loss: 0.1056 | Train Acc: 0.9702
+ Site-SynthDigits                   | Train Loss: 0.7121 | Train Acc: 0.7746
+ Site-SynthDigits                   | Train Loss: 0.5760 | Train Acc: 0.8295
+ Site-MNIST_M                       | Train Loss: 1.1835 | Train Acc: 0.6165
+ Site-MNIST_M                       | Train Loss: 1.0993 | Train Acc: 0.6231
+ Site-SVHN                          | Train Loss: 1.4915 | Train Acc: 0.4838
+Average Train Accuracy: 0.8528
+ Site-MNIST                         | Val  Loss: 0.0681 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0576 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.0905 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1291 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1333 | Val  Acc: 0.9579
+ Site-USPS                          | Val  Loss: 0.0789 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1343 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1520 | Val  Acc: 0.9530
+ Site-SynthDigits                   | Val  Loss: 0.7334 | Val  Acc: 0.7955
+ Site-SynthDigits                   | Val  Loss: 0.5482 | Val  Acc: 0.7677
+ Site-MNIST_M                       | Val  Loss: 1.0578 | Val  Acc: 0.6705
+ Site-MNIST_M                       | Val  Loss: 0.9917 | Val  Acc: 0.5606
+ Site-SVHN                          | Val  Loss: 1.5872 | Val  Acc: 0.3973
+Average Valid Accuracy: 0.8422
+ Best site-MNIST                     | Epoch:36 | Val Acc: 0.9821
+ Best site-MNIST                     | Epoch:36 | Val Acc: 0.9881
+ Best site-MNIST                     | Epoch:36 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:36 | Val Acc: 0.9579
+ Best site-MNIST                     | Epoch:36 | Val Acc: 0.9579
+ Best site-USPS                      | Epoch:36 | Val Acc: 0.9808
+ Best site-USPS                      | Epoch:36 | Val Acc: 0.9615
+ Best site-USPS                      | Epoch:36 | Val Acc: 0.9530
+ Best site-SynthDigits               | Epoch:36 | Val Acc: 0.7955
+ Best site-SynthDigits               | Epoch:36 | Val Acc: 0.7677
+ Best site-MNIST_M                   | Epoch:36 | Val Acc: 0.6705
+ Best site-MNIST_M                   | Epoch:36 | Val Acc: 0.5606
+ Best site-SVHN                      | Epoch:36 | Val Acc: 0.3973
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 37 ============
+ Site-MNIST                         | Train Loss: 0.1176 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.1053 | Train Acc: 0.9645
+ Site-MNIST                         | Train Loss: 0.1125 | Train Acc: 0.9586
+ Site-MNIST                         | Train Loss: 0.0777 | Train Acc: 0.9750
+ Site-MNIST                         | Train Loss: 0.0676 | Train Acc: 0.9834
+ Site-USPS                          | Train Loss: 0.1513 | Train Acc: 0.9496
+ Site-USPS                          | Train Loss: 0.0887 | Train Acc: 0.9744
+ Site-USPS                          | Train Loss: 0.1078 | Train Acc: 0.9670
+ Site-SynthDigits                   | Train Loss: 0.7188 | Train Acc: 0.7803
+ Site-SynthDigits                   | Train Loss: 0.5382 | Train Acc: 0.8434
+ Site-MNIST_M                       | Train Loss: 1.1559 | Train Acc: 0.6023
+ Site-MNIST_M                       | Train Loss: 1.1111 | Train Acc: 0.6174
+ Site-SVHN                          | Train Loss: 1.4559 | Train Acc: 0.4838
+Average Train Accuracy: 0.8518
+ Site-MNIST                         | Val  Loss: 0.0576 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0552 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.0850 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1290 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1269 | Val  Acc: 0.9614
+ Site-USPS                          | Val  Loss: 0.0802 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1340 | Val  Acc: 0.9487
+ Site-USPS                          | Val  Loss: 0.1533 | Val  Acc: 0.9444
+ Site-SynthDigits                   | Val  Loss: 0.7154 | Val  Acc: 0.7727
+ Site-SynthDigits                   | Val  Loss: 0.5412 | Val  Acc: 0.7778
+ Site-MNIST_M                       | Val  Loss: 1.0815 | Val  Acc: 0.6477
+ Site-MNIST_M                       | Val  Loss: 1.0217 | Val  Acc: 0.5303
+ Site-SVHN                          | Val  Loss: 1.5804 | Val  Acc: 0.3904
+Average Valid Accuracy: 0.8338
+============ Train epoch 38 ============
+ Site-MNIST                         | Train Loss: 0.1161 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.1167 | Train Acc: 0.9586
+ Site-MNIST                         | Train Loss: 0.1179 | Train Acc: 0.9586
+ Site-MNIST                         | Train Loss: 0.0792 | Train Acc: 0.9750
+ Site-MNIST                         | Train Loss: 0.0706 | Train Acc: 0.9799
+ Site-USPS                          | Train Loss: 0.1493 | Train Acc: 0.9568
+ Site-USPS                          | Train Loss: 0.0849 | Train Acc: 0.9840
+ Site-USPS                          | Train Loss: 0.1019 | Train Acc: 0.9702
+ Site-SynthDigits                   | Train Loss: 0.6907 | Train Acc: 0.7670
+ Site-SynthDigits                   | Train Loss: 0.5355 | Train Acc: 0.8371
+ Site-MNIST_M                       | Train Loss: 1.1187 | Train Acc: 0.6250
+ Site-MNIST_M                       | Train Loss: 1.0794 | Train Acc: 0.6402
+ Site-SVHN                          | Train Loss: 1.5156 | Train Acc: 0.4906
+Average Train Accuracy: 0.8551
+ Site-MNIST                         | Val  Loss: 0.0718 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0593 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.0938 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1318 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1336 | Val  Acc: 0.9544
+ Site-USPS                          | Val  Loss: 0.0719 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1326 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1477 | Val  Acc: 0.9573
+ Site-SynthDigits                   | Val  Loss: 0.7181 | Val  Acc: 0.7879
+ Site-SynthDigits                   | Val  Loss: 0.5306 | Val  Acc: 0.7576
+ Site-MNIST_M                       | Val  Loss: 1.0287 | Val  Acc: 0.6705
+ Site-MNIST_M                       | Val  Loss: 0.9744 | Val  Acc: 0.5758
+ Site-SVHN                          | Val  Loss: 1.5769 | Val  Acc: 0.4041
+Average Valid Accuracy: 0.8412
+============ Train epoch 39 ============
+ Site-MNIST                         | Train Loss: 0.1169 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.1365 | Train Acc: 0.9675
+ Site-MNIST                         | Train Loss: 0.1124 | Train Acc: 0.9606
+ Site-MNIST                         | Train Loss: 0.0763 | Train Acc: 0.9763
+ Site-MNIST                         | Train Loss: 0.0645 | Train Acc: 0.9825
+ Site-USPS                          | Train Loss: 0.1393 | Train Acc: 0.9592
+ Site-USPS                          | Train Loss: 0.0826 | Train Acc: 0.9792
+ Site-USPS                          | Train Loss: 0.1059 | Train Acc: 0.9723
+ Site-SynthDigits                   | Train Loss: 0.6723 | Train Acc: 0.7917
+ Site-SynthDigits                   | Train Loss: 0.5201 | Train Acc: 0.8472
+ Site-MNIST_M                       | Train Loss: 1.1426 | Train Acc: 0.6193
+ Site-MNIST_M                       | Train Loss: 1.1076 | Train Acc: 0.6307
+ Site-SVHN                          | Train Loss: 1.5004 | Train Acc: 0.4770
+Average Train Accuracy: 0.8567
+ Site-MNIST                         | Val  Loss: 0.0595 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0565 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.0869 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1269 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1273 | Val  Acc: 0.9614
+ Site-USPS                          | Val  Loss: 0.0692 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1278 | Val  Acc: 0.9551
+ Site-USPS                          | Val  Loss: 0.1497 | Val  Acc: 0.9530
+ Site-SynthDigits                   | Val  Loss: 0.7147 | Val  Acc: 0.8030
+ Site-SynthDigits                   | Val  Loss: 0.5357 | Val  Acc: 0.7879
+ Site-MNIST_M                       | Val  Loss: 1.0532 | Val  Acc: 0.6705
+ Site-MNIST_M                       | Val  Loss: 0.9789 | Val  Acc: 0.5379
+ Site-SVHN                          | Val  Loss: 1.5825 | Val  Acc: 0.3973
+Average Valid Accuracy: 0.8424
+ Best site-MNIST                     | Epoch:39 | Val Acc: 0.9821
+ Best site-MNIST                     | Epoch:39 | Val Acc: 0.9881
+ Best site-MNIST                     | Epoch:39 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:39 | Val Acc: 0.9579
+ Best site-MNIST                     | Epoch:39 | Val Acc: 0.9614
+ Best site-USPS                      | Epoch:39 | Val Acc: 0.9808
+ Best site-USPS                      | Epoch:39 | Val Acc: 0.9551
+ Best site-USPS                      | Epoch:39 | Val Acc: 0.9530
+ Best site-SynthDigits               | Epoch:39 | Val Acc: 0.8030
+ Best site-SynthDigits               | Epoch:39 | Val Acc: 0.7879
+ Best site-MNIST_M                   | Epoch:39 | Val Acc: 0.6705
+ Best site-MNIST_M                   | Epoch:39 | Val Acc: 0.5379
+ Best site-SVHN                      | Epoch:39 | Val Acc: 0.3973
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 40 ============
+ Site-MNIST                         | Train Loss: 0.1180 | Train Acc: 0.9689
+ Site-MNIST                         | Train Loss: 0.1006 | Train Acc: 0.9556
+ Site-MNIST                         | Train Loss: 0.1078 | Train Acc: 0.9645
+ Site-MNIST                         | Train Loss: 0.0740 | Train Acc: 0.9777
+ Site-MNIST                         | Train Loss: 0.0652 | Train Acc: 0.9834
+ Site-USPS                          | Train Loss: 0.1374 | Train Acc: 0.9568
+ Site-USPS                          | Train Loss: 0.0794 | Train Acc: 0.9824
+ Site-USPS                          | Train Loss: 0.1000 | Train Acc: 0.9702
+ Site-SynthDigits                   | Train Loss: 0.6860 | Train Acc: 0.7803
+ Site-SynthDigits                   | Train Loss: 0.5361 | Train Acc: 0.8497
+ Site-MNIST_M                       | Train Loss: 1.1621 | Train Acc: 0.6108
+ Site-MNIST_M                       | Train Loss: 1.0584 | Train Acc: 0.6364
+ Site-SVHN                          | Train Loss: 1.4823 | Train Acc: 0.4838
+Average Train Accuracy: 0.8554
+ Site-MNIST                         | Val  Loss: 0.0594 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0506 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.0867 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1223 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1266 | Val  Acc: 0.9509
+ Site-USPS                          | Val  Loss: 0.0704 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1236 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1411 | Val  Acc: 0.9530
+ Site-SynthDigits                   | Val  Loss: 0.7143 | Val  Acc: 0.7879
+ Site-SynthDigits                   | Val  Loss: 0.5285 | Val  Acc: 0.7778
+ Site-MNIST_M                       | Val  Loss: 1.0532 | Val  Acc: 0.6705
+ Site-MNIST_M                       | Val  Loss: 0.9708 | Val  Acc: 0.5303
+ Site-SVHN                          | Val  Loss: 1.5612 | Val  Acc: 0.4041
+Average Valid Accuracy: 0.8401
+============ Train epoch 41 ============
+ Site-MNIST                         | Train Loss: 0.1320 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.1264 | Train Acc: 0.9556
+ Site-MNIST                         | Train Loss: 0.1108 | Train Acc: 0.9645
+ Site-MNIST                         | Train Loss: 0.0758 | Train Acc: 0.9790
+ Site-MNIST                         | Train Loss: 0.0658 | Train Acc: 0.9842
+ Site-USPS                          | Train Loss: 0.1319 | Train Acc: 0.9592
+ Site-USPS                          | Train Loss: 0.0828 | Train Acc: 0.9808
+ Site-USPS                          | Train Loss: 0.0954 | Train Acc: 0.9734
+ Site-SynthDigits                   | Train Loss: 0.6821 | Train Acc: 0.7784
+ Site-SynthDigits                   | Train Loss: 0.5263 | Train Acc: 0.8510
+ Site-MNIST_M                       | Train Loss: 1.1464 | Train Acc: 0.6193
+ Site-MNIST_M                       | Train Loss: 1.0714 | Train Acc: 0.6383
+ Site-SVHN                          | Train Loss: 1.4724 | Train Acc: 0.4855
+Average Train Accuracy: 0.8571
+ Site-MNIST                         | Val  Loss: 0.0701 | Val  Acc: 0.9643
+ Site-MNIST                         | Val  Loss: 0.0581 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.0893 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1214 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1283 | Val  Acc: 0.9509
+ Site-USPS                          | Val  Loss: 0.0698 | Val  Acc: 0.9712
+ Site-USPS                          | Val  Loss: 0.1228 | Val  Acc: 0.9551
+ Site-USPS                          | Val  Loss: 0.1391 | Val  Acc: 0.9573
+ Site-SynthDigits                   | Val  Loss: 0.6955 | Val  Acc: 0.7803
+ Site-SynthDigits                   | Val  Loss: 0.5215 | Val  Acc: 0.7576
+ Site-MNIST_M                       | Val  Loss: 1.0326 | Val  Acc: 0.6591
+ Site-MNIST_M                       | Val  Loss: 0.9478 | Val  Acc: 0.5530
+ Site-SVHN                          | Val  Loss: 1.5651 | Val  Acc: 0.4247
+Average Valid Accuracy: 0.8381
+============ Train epoch 42 ============
+ Site-MNIST                         | Train Loss: 0.1104 | Train Acc: 0.9689
+ Site-MNIST                         | Train Loss: 0.1136 | Train Acc: 0.9556
+ Site-MNIST                         | Train Loss: 0.1125 | Train Acc: 0.9586
+ Site-MNIST                         | Train Loss: 0.0760 | Train Acc: 0.9803
+ Site-MNIST                         | Train Loss: 0.0614 | Train Acc: 0.9842
+ Site-USPS                          | Train Loss: 0.1346 | Train Acc: 0.9568
+ Site-USPS                          | Train Loss: 0.0791 | Train Acc: 0.9840
+ Site-USPS                          | Train Loss: 0.0969 | Train Acc: 0.9712
+ Site-SynthDigits                   | Train Loss: 0.6463 | Train Acc: 0.7879
+ Site-SynthDigits                   | Train Loss: 0.5029 | Train Acc: 0.8497
+ Site-MNIST_M                       | Train Loss: 1.1571 | Train Acc: 0.6222
+ Site-MNIST_M                       | Train Loss: 1.0715 | Train Acc: 0.6439
+ Site-SVHN                          | Train Loss: 1.4453 | Train Acc: 0.5009
+Average Train Accuracy: 0.8588
+ Site-MNIST                         | Val  Loss: 0.0671 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0577 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.0913 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1269 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1310 | Val  Acc: 0.9509
+ Site-USPS                          | Val  Loss: 0.0679 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1241 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1389 | Val  Acc: 0.9573
+ Site-SynthDigits                   | Val  Loss: 0.6938 | Val  Acc: 0.8030
+ Site-SynthDigits                   | Val  Loss: 0.5024 | Val  Acc: 0.7677
+ Site-MNIST_M                       | Val  Loss: 1.0437 | Val  Acc: 0.6818
+ Site-MNIST_M                       | Val  Loss: 0.9624 | Val  Acc: 0.5530
+ Site-SVHN                          | Val  Loss: 1.5561 | Val  Acc: 0.4315
+Average Valid Accuracy: 0.8446
+ Best site-MNIST                     | Epoch:42 | Val Acc: 0.9821
+ Best site-MNIST                     | Epoch:42 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:42 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:42 | Val Acc: 0.9579
+ Best site-MNIST                     | Epoch:42 | Val Acc: 0.9509
+ Best site-USPS                      | Epoch:42 | Val Acc: 0.9808
+ Best site-USPS                      | Epoch:42 | Val Acc: 0.9615
+ Best site-USPS                      | Epoch:42 | Val Acc: 0.9573
+ Best site-SynthDigits               | Epoch:42 | Val Acc: 0.8030
+ Best site-SynthDigits               | Epoch:42 | Val Acc: 0.7677
+ Best site-MNIST_M                   | Epoch:42 | Val Acc: 0.6818
+ Best site-MNIST_M                   | Epoch:42 | Val Acc: 0.5530
+ Best site-SVHN                      | Epoch:42 | Val Acc: 0.4315
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 43 ============
+ Site-MNIST                         | Train Loss: 0.1085 | Train Acc: 0.9689
+ Site-MNIST                         | Train Loss: 0.1122 | Train Acc: 0.9615
+ Site-MNIST                         | Train Loss: 0.1104 | Train Acc: 0.9566
+ Site-MNIST                         | Train Loss: 0.0741 | Train Acc: 0.9737
+ Site-MNIST                         | Train Loss: 0.0586 | Train Acc: 0.9851
+ Site-USPS                          | Train Loss: 0.1283 | Train Acc: 0.9568
+ Site-USPS                          | Train Loss: 0.0750 | Train Acc: 0.9840
+ Site-USPS                          | Train Loss: 0.0909 | Train Acc: 0.9755
+ Site-SynthDigits                   | Train Loss: 0.6401 | Train Acc: 0.7841
+ Site-SynthDigits                   | Train Loss: 0.5091 | Train Acc: 0.8434
+ Site-MNIST_M                       | Train Loss: 1.1118 | Train Acc: 0.6364
+ Site-MNIST_M                       | Train Loss: 1.0677 | Train Acc: 0.6477
+ Site-SVHN                          | Train Loss: 1.4900 | Train Acc: 0.4940
+Average Train Accuracy: 0.8591
+ Site-MNIST                         | Val  Loss: 0.0692 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0608 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.0886 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1200 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1267 | Val  Acc: 0.9614
+ Site-USPS                          | Val  Loss: 0.0616 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1177 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1348 | Val  Acc: 0.9573
+ Site-SynthDigits                   | Val  Loss: 0.6917 | Val  Acc: 0.7955
+ Site-SynthDigits                   | Val  Loss: 0.5048 | Val  Acc: 0.7626
+ Site-MNIST_M                       | Val  Loss: 1.0556 | Val  Acc: 0.6932
+ Site-MNIST_M                       | Val  Loss: 0.9593 | Val  Acc: 0.5833
+ Site-SVHN                          | Val  Loss: 1.5636 | Val  Acc: 0.4110
+Average Valid Accuracy: 0.8461
+ Best site-MNIST                     | Epoch:43 | Val Acc: 0.9821
+ Best site-MNIST                     | Epoch:43 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:43 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:43 | Val Acc: 0.9579
+ Best site-MNIST                     | Epoch:43 | Val Acc: 0.9614
+ Best site-USPS                      | Epoch:43 | Val Acc: 0.9808
+ Best site-USPS                      | Epoch:43 | Val Acc: 0.9615
+ Best site-USPS                      | Epoch:43 | Val Acc: 0.9573
+ Best site-SynthDigits               | Epoch:43 | Val Acc: 0.7955
+ Best site-SynthDigits               | Epoch:43 | Val Acc: 0.7626
+ Best site-MNIST_M                   | Epoch:43 | Val Acc: 0.6932
+ Best site-MNIST_M                   | Epoch:43 | Val Acc: 0.5833
+ Best site-SVHN                      | Epoch:43 | Val Acc: 0.4110
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 44 ============
+ Site-MNIST                         | Train Loss: 0.1049 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.1189 | Train Acc: 0.9675
+ Site-MNIST                         | Train Loss: 0.1047 | Train Acc: 0.9625
+ Site-MNIST                         | Train Loss: 0.0711 | Train Acc: 0.9763
+ Site-MNIST                         | Train Loss: 0.0586 | Train Acc: 0.9860
+ Site-USPS                          | Train Loss: 0.1265 | Train Acc: 0.9520
+ Site-USPS                          | Train Loss: 0.0725 | Train Acc: 0.9824
+ Site-USPS                          | Train Loss: 0.0925 | Train Acc: 0.9776
+ Site-SynthDigits                   | Train Loss: 0.6484 | Train Acc: 0.7917
+ Site-SynthDigits                   | Train Loss: 0.4930 | Train Acc: 0.8510
+ Site-MNIST_M                       | Train Loss: 1.1328 | Train Acc: 0.6278
+ Site-MNIST_M                       | Train Loss: 1.0241 | Train Acc: 0.6345
+ Site-SVHN                          | Train Loss: 1.4614 | Train Acc: 0.5060
+Average Train Accuracy: 0.8607
+ Site-MNIST                         | Val  Loss: 0.0631 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0563 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.0819 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1185 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1223 | Val  Acc: 0.9649
+ Site-USPS                          | Val  Loss: 0.0651 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1134 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1296 | Val  Acc: 0.9530
+ Site-SynthDigits                   | Val  Loss: 0.6704 | Val  Acc: 0.8106
+ Site-SynthDigits                   | Val  Loss: 0.4920 | Val  Acc: 0.7778
+ Site-MNIST_M                       | Val  Loss: 1.0612 | Val  Acc: 0.6705
+ Site-MNIST_M                       | Val  Loss: 0.9406 | Val  Acc: 0.5530
+ Site-SVHN                          | Val  Loss: 1.5602 | Val  Acc: 0.4315
+Average Valid Accuracy: 0.8458
+============ Train epoch 45 ============
+ Site-MNIST                         | Train Loss: 0.1047 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.1286 | Train Acc: 0.9645
+ Site-MNIST                         | Train Loss: 0.1034 | Train Acc: 0.9586
+ Site-MNIST                         | Train Loss: 0.0675 | Train Acc: 0.9816
+ Site-MNIST                         | Train Loss: 0.0547 | Train Acc: 0.9860
+ Site-USPS                          | Train Loss: 0.1315 | Train Acc: 0.9520
+ Site-USPS                          | Train Loss: 0.0736 | Train Acc: 0.9824
+ Site-USPS                          | Train Loss: 0.0957 | Train Acc: 0.9755
+ Site-SynthDigits                   | Train Loss: 0.6615 | Train Acc: 0.7973
+ Site-SynthDigits                   | Train Loss: 0.4977 | Train Acc: 0.8598
+ Site-MNIST_M                       | Train Loss: 1.1055 | Train Acc: 0.6392
+ Site-MNIST_M                       | Train Loss: 1.0231 | Train Acc: 0.6515
+ Site-SVHN                          | Train Loss: 1.4955 | Train Acc: 0.4889
+Average Train Accuracy: 0.8624
+ Site-MNIST                         | Val  Loss: 0.0571 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0544 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.0829 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1176 | Val  Acc: 0.9579
+ Site-MNIST                         | Val  Loss: 0.1188 | Val  Acc: 0.9614
+ Site-USPS                          | Val  Loss: 0.0644 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1180 | Val  Acc: 0.9551
+ Site-USPS                          | Val  Loss: 0.1360 | Val  Acc: 0.9487
+ Site-SynthDigits                   | Val  Loss: 0.6758 | Val  Acc: 0.8106
+ Site-SynthDigits                   | Val  Loss: 0.5093 | Val  Acc: 0.7778
+ Site-MNIST_M                       | Val  Loss: 1.0632 | Val  Acc: 0.6705
+ Site-MNIST_M                       | Val  Loss: 0.9485 | Val  Acc: 0.5833
+ Site-SVHN                          | Val  Loss: 1.5647 | Val  Acc: 0.4247
+Average Valid Accuracy: 0.8466
+ Best site-MNIST                     | Epoch:45 | Val Acc: 0.9821
+ Best site-MNIST                     | Epoch:45 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:45 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:45 | Val Acc: 0.9579
+ Best site-MNIST                     | Epoch:45 | Val Acc: 0.9614
+ Best site-USPS                      | Epoch:45 | Val Acc: 0.9808
+ Best site-USPS                      | Epoch:45 | Val Acc: 0.9551
+ Best site-USPS                      | Epoch:45 | Val Acc: 0.9487
+ Best site-SynthDigits               | Epoch:45 | Val Acc: 0.8106
+ Best site-SynthDigits               | Epoch:45 | Val Acc: 0.7778
+ Best site-MNIST_M                   | Epoch:45 | Val Acc: 0.6705
+ Best site-MNIST_M                   | Epoch:45 | Val Acc: 0.5833
+ Best site-SVHN                      | Epoch:45 | Val Acc: 0.4247
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 46 ============
+ Site-MNIST                         | Train Loss: 0.1074 | Train Acc: 0.9689
+ Site-MNIST                         | Train Loss: 0.1193 | Train Acc: 0.9615
+ Site-MNIST                         | Train Loss: 0.1016 | Train Acc: 0.9645
+ Site-MNIST                         | Train Loss: 0.0665 | Train Acc: 0.9855
+ Site-MNIST                         | Train Loss: 0.0558 | Train Acc: 0.9860
+ Site-USPS                          | Train Loss: 0.1234 | Train Acc: 0.9568
+ Site-USPS                          | Train Loss: 0.0725 | Train Acc: 0.9872
+ Site-USPS                          | Train Loss: 0.0869 | Train Acc: 0.9787
+ Site-SynthDigits                   | Train Loss: 0.6192 | Train Acc: 0.7973
+ Site-SynthDigits                   | Train Loss: 0.5083 | Train Acc: 0.8674
+ Site-MNIST_M                       | Train Loss: 1.1067 | Train Acc: 0.6307
+ Site-MNIST_M                       | Train Loss: 1.0603 | Train Acc: 0.6534
+ Site-SVHN                          | Train Loss: 1.4236 | Train Acc: 0.5111
+Average Train Accuracy: 0.8653
+ Site-MNIST                         | Val  Loss: 0.0625 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0559 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.0847 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1167 | Val  Acc: 0.9632
+ Site-MNIST                         | Val  Loss: 0.1217 | Val  Acc: 0.9579
+ Site-USPS                          | Val  Loss: 0.0632 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1128 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1288 | Val  Acc: 0.9573
+ Site-SynthDigits                   | Val  Loss: 0.6582 | Val  Acc: 0.8182
+ Site-SynthDigits                   | Val  Loss: 0.4916 | Val  Acc: 0.7828
+ Site-MNIST_M                       | Val  Loss: 1.0713 | Val  Acc: 0.6705
+ Site-MNIST_M                       | Val  Loss: 0.9359 | Val  Acc: 0.5758
+ Site-SVHN                          | Val  Loss: 1.5533 | Val  Acc: 0.4247
+Average Valid Accuracy: 0.8482
+ Best site-MNIST                     | Epoch:46 | Val Acc: 0.9821
+ Best site-MNIST                     | Epoch:46 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:46 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:46 | Val Acc: 0.9632
+ Best site-MNIST                     | Epoch:46 | Val Acc: 0.9579
+ Best site-USPS                      | Epoch:46 | Val Acc: 0.9808
+ Best site-USPS                      | Epoch:46 | Val Acc: 0.9615
+ Best site-USPS                      | Epoch:46 | Val Acc: 0.9573
+ Best site-SynthDigits               | Epoch:46 | Val Acc: 0.8182
+ Best site-SynthDigits               | Epoch:46 | Val Acc: 0.7828
+ Best site-MNIST_M                   | Epoch:46 | Val Acc: 0.6705
+ Best site-MNIST_M                   | Epoch:46 | Val Acc: 0.5758
+ Best site-SVHN                      | Epoch:46 | Val Acc: 0.4247
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 47 ============
+ Site-MNIST                         | Train Loss: 0.1143 | Train Acc: 0.9689
+ Site-MNIST                         | Train Loss: 0.0982 | Train Acc: 0.9586
+ Site-MNIST                         | Train Loss: 0.1070 | Train Acc: 0.9606
+ Site-MNIST                         | Train Loss: 0.0721 | Train Acc: 0.9763
+ Site-MNIST                         | Train Loss: 0.0551 | Train Acc: 0.9851
+ Site-USPS                          | Train Loss: 0.1264 | Train Acc: 0.9592
+ Site-USPS                          | Train Loss: 0.0713 | Train Acc: 0.9840
+ Site-USPS                          | Train Loss: 0.0836 | Train Acc: 0.9766
+ Site-SynthDigits                   | Train Loss: 0.6574 | Train Acc: 0.7898
+ Site-SynthDigits                   | Train Loss: 0.4843 | Train Acc: 0.8636
+ Site-MNIST_M                       | Train Loss: 1.1261 | Train Acc: 0.6449
+ Site-MNIST_M                       | Train Loss: 1.0338 | Train Acc: 0.6458
+ Site-SVHN                          | Train Loss: 1.3930 | Train Acc: 0.5077
+Average Train Accuracy: 0.8632
+ Site-MNIST                         | Val  Loss: 0.0725 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0607 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.0914 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1168 | Val  Acc: 0.9632
+ Site-MNIST                         | Val  Loss: 0.1261 | Val  Acc: 0.9544
+ Site-USPS                          | Val  Loss: 0.0554 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1129 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1318 | Val  Acc: 0.9573
+ Site-SynthDigits                   | Val  Loss: 0.6579 | Val  Acc: 0.7879
+ Site-SynthDigits                   | Val  Loss: 0.4875 | Val  Acc: 0.7778
+ Site-MNIST_M                       | Val  Loss: 1.0668 | Val  Acc: 0.6818
+ Site-MNIST_M                       | Val  Loss: 0.9394 | Val  Acc: 0.5909
+ Site-SVHN                          | Val  Loss: 1.5496 | Val  Acc: 0.4384
+Average Valid Accuracy: 0.8483
+ Best site-MNIST                     | Epoch:47 | Val Acc: 0.9821
+ Best site-MNIST                     | Epoch:47 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:47 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:47 | Val Acc: 0.9632
+ Best site-MNIST                     | Epoch:47 | Val Acc: 0.9544
+ Best site-USPS                      | Epoch:47 | Val Acc: 0.9808
+ Best site-USPS                      | Epoch:47 | Val Acc: 0.9615
+ Best site-USPS                      | Epoch:47 | Val Acc: 0.9573
+ Best site-SynthDigits               | Epoch:47 | Val Acc: 0.7879
+ Best site-SynthDigits               | Epoch:47 | Val Acc: 0.7778
+ Best site-MNIST_M                   | Epoch:47 | Val Acc: 0.6818
+ Best site-MNIST_M                   | Epoch:47 | Val Acc: 0.5909
+ Best site-SVHN                      | Epoch:47 | Val Acc: 0.4384
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 48 ============
+ Site-MNIST                         | Train Loss: 0.1066 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.0956 | Train Acc: 0.9615
+ Site-MNIST                         | Train Loss: 0.0999 | Train Acc: 0.9665
+ Site-MNIST                         | Train Loss: 0.0621 | Train Acc: 0.9842
+ Site-MNIST                         | Train Loss: 0.0509 | Train Acc: 0.9860
+ Site-USPS                          | Train Loss: 0.1365 | Train Acc: 0.9592
+ Site-USPS                          | Train Loss: 0.0686 | Train Acc: 0.9856
+ Site-USPS                          | Train Loss: 0.0871 | Train Acc: 0.9787
+ Site-SynthDigits                   | Train Loss: 0.6160 | Train Acc: 0.8011
+ Site-SynthDigits                   | Train Loss: 0.4758 | Train Acc: 0.8674
+ Site-MNIST_M                       | Train Loss: 1.1487 | Train Acc: 0.6477
+ Site-MNIST_M                       | Train Loss: 1.0237 | Train Acc: 0.6458
+ Site-SVHN                          | Train Loss: 1.4558 | Train Acc: 0.5077
+Average Train Accuracy: 0.8665
+ Site-MNIST                         | Val  Loss: 0.0582 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0501 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.0853 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1121 | Val  Acc: 0.9632
+ Site-MNIST                         | Val  Loss: 0.1144 | Val  Acc: 0.9579
+ Site-USPS                          | Val  Loss: 0.0586 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1072 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1266 | Val  Acc: 0.9573
+ Site-SynthDigits                   | Val  Loss: 0.6564 | Val  Acc: 0.7955
+ Site-SynthDigits                   | Val  Loss: 0.4805 | Val  Acc: 0.7980
+ Site-MNIST_M                       | Val  Loss: 1.0716 | Val  Acc: 0.6818
+ Site-MNIST_M                       | Val  Loss: 0.9302 | Val  Acc: 0.6061
+ Site-SVHN                          | Val  Loss: 1.5339 | Val  Acc: 0.4452
+Average Valid Accuracy: 0.8534
+ Best site-MNIST                     | Epoch:48 | Val Acc: 0.9821
+ Best site-MNIST                     | Epoch:48 | Val Acc: 0.9881
+ Best site-MNIST                     | Epoch:48 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:48 | Val Acc: 0.9632
+ Best site-MNIST                     | Epoch:48 | Val Acc: 0.9579
+ Best site-USPS                      | Epoch:48 | Val Acc: 0.9808
+ Best site-USPS                      | Epoch:48 | Val Acc: 0.9615
+ Best site-USPS                      | Epoch:48 | Val Acc: 0.9573
+ Best site-SynthDigits               | Epoch:48 | Val Acc: 0.7955
+ Best site-SynthDigits               | Epoch:48 | Val Acc: 0.7980
+ Best site-MNIST_M                   | Epoch:48 | Val Acc: 0.6818
+ Best site-MNIST_M                   | Epoch:48 | Val Acc: 0.6061
+ Best site-SVHN                      | Epoch:48 | Val Acc: 0.4452
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+============ Train epoch 49 ============
+ Site-MNIST                         | Train Loss: 0.1274 | Train Acc: 0.9733
+ Site-MNIST                         | Train Loss: 0.1016 | Train Acc: 0.9615
+ Site-MNIST                         | Train Loss: 0.1005 | Train Acc: 0.9665
+ Site-MNIST                         | Train Loss: 0.0611 | Train Acc: 0.9842
+ Site-MNIST                         | Train Loss: 0.0500 | Train Acc: 0.9851
+ Site-USPS                          | Train Loss: 0.1283 | Train Acc: 0.9592
+ Site-USPS                          | Train Loss: 0.0681 | Train Acc: 0.9856
+ Site-USPS                          | Train Loss: 0.0876 | Train Acc: 0.9776
+ Site-SynthDigits                   | Train Loss: 0.6116 | Train Acc: 0.8011
+ Site-SynthDigits                   | Train Loss: 0.4697 | Train Acc: 0.8662
+ Site-MNIST_M                       | Train Loss: 1.0855 | Train Acc: 0.6534
+ Site-MNIST_M                       | Train Loss: 1.0411 | Train Acc: 0.6553
+ Site-SVHN                          | Train Loss: 1.4169 | Train Acc: 0.5026
+Average Train Accuracy: 0.8671
+ Site-MNIST                         | Val  Loss: 0.0552 | Val  Acc: 0.9821
+ Site-MNIST                         | Val  Loss: 0.0497 | Val  Acc: 0.9881
+ Site-MNIST                         | Val  Loss: 0.0822 | Val  Acc: 0.9762
+ Site-MNIST                         | Val  Loss: 0.1158 | Val  Acc: 0.9526
+ Site-MNIST                         | Val  Loss: 0.1136 | Val  Acc: 0.9544
+ Site-USPS                          | Val  Loss: 0.0575 | Val  Acc: 0.9808
+ Site-USPS                          | Val  Loss: 0.1030 | Val  Acc: 0.9615
+ Site-USPS                          | Val  Loss: 0.1256 | Val  Acc: 0.9573
+ Site-SynthDigits                   | Val  Loss: 0.6328 | Val  Acc: 0.8182
+ Site-SynthDigits                   | Val  Loss: 0.4797 | Val  Acc: 0.7929
+ Site-MNIST_M                       | Val  Loss: 1.0688 | Val  Acc: 0.6818
+ Site-MNIST_M                       | Val  Loss: 0.9263 | Val  Acc: 0.6061
+ Site-SVHN                          | Val  Loss: 1.5372 | Val  Acc: 0.4521
+Average Valid Accuracy: 0.8542
+ Best site-MNIST                     | Epoch:49 | Val Acc: 0.9821
+ Best site-MNIST                     | Epoch:49 | Val Acc: 0.9881
+ Best site-MNIST                     | Epoch:49 | Val Acc: 0.9762
+ Best site-MNIST                     | Epoch:49 | Val Acc: 0.9526
+ Best site-MNIST                     | Epoch:49 | Val Acc: 0.9544
+ Best site-USPS                      | Epoch:49 | Val Acc: 0.9808
+ Best site-USPS                      | Epoch:49 | Val Acc: 0.9615
+ Best site-USPS                      | Epoch:49 | Val Acc: 0.9573
+ Best site-SynthDigits               | Epoch:49 | Val Acc: 0.8182
+ Best site-SynthDigits               | Epoch:49 | Val Acc: 0.7929
+ Best site-MNIST_M                   | Epoch:49 | Val Acc: 0.6818
+ Best site-MNIST_M                   | Epoch:49 | Val Acc: 0.6061
+ Best site-SVHN                      | Epoch:49 | Val Acc: 0.4521
+ Saving the local and server checkpoint to ../checkpoint/fed_digit_uneven_1.5_1/fedsam...
+===2023-07-01 10:59:12===
+===2023-07-01 10:59:28===
+===Setting===
+    dataset: digit
+    lr: 0.01
+    batch: 64
+    iters: 10
+    wk_iters: 1
+    si: False
+    domain_num: 5
+    quantile: 0
+    power_cs: 1
+    std_rw: False
+    gender_label: False
+    binary_race: False
+    save_iter: -1
+    mix5: False
+    power_relu: 1
+    Ea_val: False
+data_number=[225,338,507,761,1142,417,626,939,528,792,352,528,587,
+client_nums=[5,3,2,2,1,]
+len_dataset=[3719,2479,1652,1101,734,]
+domain number = 5
+Loading snapshots...
+ Test site-MNIST                     | Epoch:49 | Test Acc: 0.9464
+ Test site-USPS                      | Epoch:49 | Test Acc: 0.9430
+ Test site-SynthDigits               | Epoch:49 | Test Acc: 0.7570
+ Test site-MNIST_M                   | Epoch:49 | Test Acc: 0.4949
+ Test site-SVHN                      | Epoch:49 | Test Acc: 0.3497
+MNIST: 0.9464, USPS: 0.9430, SynthDigits: 0.7570, MNIST_M: 0.4949, SVHN: 0.3497, 
+Average Test Accuracy(group): 0.6982, Average Test Accuracy(individual): 0.8011,
+domain std=0.2399, cluster std=-1.0000, individual std=0.2078, 
