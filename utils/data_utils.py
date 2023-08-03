@@ -54,17 +54,16 @@ class DigitsDataset(Dataset):
         return image, label
 
 
-class OfficeDataset(Dataset):
+class PACSDataset(Dataset):
     def __init__(self, base_path, site, train=True, transform=None):
         if train:
-            self.paths, self.text_labels = np.load('../../data/office_caltech_10/{}_train.pkl'.format(site), allow_pickle=True)
+            self.paths, self.text_labels = np.load('../../data/PACS/pkls/{}_train.pkl'.format(site), allow_pickle=True)
         else:
-            self.paths, self.text_labels = np.load('../../data/office_caltech_10/{}_test.pkl'.format(site), allow_pickle=True)
+            self.paths, self.text_labels = np.load('../../data/PACS/pkls/{}_test.pkl'.format(site), allow_pickle=True)
             
-        label_dict={'back_pack':0, 'bike':1, 'calculator':2, 'headphones':3, 'keyboard':4, 'laptop_computer':5, 'monitor':6, 'mouse':7, 'mug':8, 'projector':9}
-        self.labels = [label_dict[text] for text in self.text_labels]
+        self.labels = np.asarray(self.text_labels).astype(np.longlong).squeeze()
         self.transform = transform
-        self.base_path = base_path if base_path is not None else '../../data'
+        self.base_path = base_path if base_path is not None else '../data'
 
     def __len__(self):
         return len(self.labels)
@@ -82,7 +81,6 @@ class OfficeDataset(Dataset):
 
         return image, label
 
-
 class DomainNetDataset(Dataset):
     def __init__(self, base_path, site, train=True, transform=None):
         if train:
@@ -91,6 +89,36 @@ class DomainNetDataset(Dataset):
             self.paths, self.text_labels = np.load('../../data/DomainNet/{}_test.pkl'.format(site), allow_pickle=True)
             
         label_dict = {'bird':0, 'feather':1, 'headphones':2, 'ice_cream':3, 'teapot':4, 'tiger':5, 'whale':6, 'windmill':7, 'wine_glass':8, 'zebra':9}     
+        
+        self.labels = [label_dict[text] for text in self.text_labels]
+        self.transform = transform
+        self.base_path = base_path if base_path is not None else '../../data'
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        img_path = os.path.join(self.base_path, self.paths[idx])
+        label = self.labels[idx]
+        image = Image.open(img_path)
+        
+        if len(image.split()) != 3:
+            image = transforms.Grayscale(num_output_channels=3)(image)
+
+        if self.transform is not None:
+            image = self.transform(image)
+
+        return image, label
+
+class GeoNetDataset(Dataset):
+    def __init__(self, base_path, site, train=True, transform=None):
+        if train:
+            self.paths, self.text_labels = np.load(f'{base_path}/{site}_train.pkl', allow_pickle=True)
+        else:
+            self.paths, self.text_labels = np.load(f'{base_path}/{site}_test.pkl'.format(site), allow_pickle=True)
+            
+        label_dict = {'alley':0, 'ballroom':1, 'bridge':2, 'cafeteria':3, 'castle':4, 'coast':5, 'highway':6, 'living_room':7, 'market_outdoor':8, 'shopfront':9}
+        # label_dict = {'assembly_hall':0, 'beblack_rhinocerosacon':1, 'food_court':2, 'cab':3, 'banquet':4, 'sidewalk':5, 'bakery':6, 'billboard':7, 'buffet':8, 'bungalow':9}
         
         self.labels = [label_dict[text] for text in self.text_labels]
         self.transform = transform

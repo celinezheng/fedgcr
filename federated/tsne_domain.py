@@ -32,11 +32,13 @@ if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
-    parser.add_argument('--pcon', action='store_true', help='whether to pcon for superquantile')
-    parser.add_argument('--relu', action='store_true', help='whether to relu for superquantile')
-    parser.add_argument('--dc', action='store_true', help='whether to use balanced weight for meta-net')
-    parser.add_argument('--super_quan', action='store_true', help='whether to super_quan')
+    parser.add_argument('--pcon', action='store_true', help='whether to pcon')
+    parser.add_argument('--clscon', action='store_true', help='whether to pcon')
+    parser.add_argument('--moon', action='store_true', help='whether to moon')
+    parser.add_argument('--shuffle', action='store_true', help='whether to shuffle the order of majority/minority')
+    parser.add_argument('--distinct', action='store_true', help='whether to distinct domain')
     parser.add_argument('--Ea_val', action='store_true', help='whether to Ea_val')
+    parser.add_argument('--w_con', type=float, default=0.1, help='threshold std')
     parser.add_argument('--power_relu', type=float, default=1, help='threshold std')
     parser.add_argument('--power_cs', type=float, default=1, help='threshold std')
     parser.add_argument('--save_mean', type=float, default=-1, help='threshold std')
@@ -77,7 +79,7 @@ if __name__ == '__main__':
     parser.add_argument('--batch', type = int, default=32, help ='batch size')
     parser.add_argument('--iters', type = int, default=10, help = 'iterations for communication')
     parser.add_argument('--wk_iters', type = int, default=1, help = 'optimization iters in local worker between communication')
-    parser.add_argument('--mode', type = str, default='ccop', help='[ccop | ablation | DoPrompt]')
+    parser.add_argument('--mode', type = str, default='DoPrompt', help='[FedBN | FedAvg | DoPrompt]')
     parser.add_argument('--mu', type=float, default=1e-3, help='The hyper parameter for fedprox')
     parser.add_argument('--save_path', type = str, default='../checkpoint', help='path to save the checkpoint')
     parser.add_argument('--resume', action='store_true', help ='resume training from the save path checkpoint')
@@ -115,6 +117,13 @@ if __name__ == '__main__':
     if args.dataset.lower()[:6] == 'domain':
         # name of each datasets
         domain_num = 6
+    elif args.dataset.lower()[:6] == 'geo':
+        # name of each datasets
+        domain_num = 2
+    elif args.dataset.lower()[:4] == 'pacs':
+        # name of each datasets
+        domain_num = 4
+        args.num_classes = 5
     elif args.dataset.lower()[:5] == 'digit':
         domain_num = 5
     elif args.dataset.lower()[:9] == 'fairface':
@@ -126,7 +135,7 @@ if __name__ == '__main__':
         warnings.warn("invalid args.dataset")
         exit(0)
 
-    client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader = prepare_data(args)
+    client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets = prepare_data(args)
     print(datasets)
     client_num = len(train_loaders)
 
@@ -152,7 +161,6 @@ if __name__ == '__main__':
     if args.cb:  exp_folder += f"_cb"
     if args.cq:  exp_folder += f"_cq"
     if args.cs:  exp_folder += f"_cs"
-    if args.relu:  exp_folder += f"_relu"
     print(exp_folder)
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
@@ -259,7 +267,7 @@ if __name__ == '__main__':
                     palette=sns.color_palette("hls", domain_idx),
                     data=df)
     sns_plot.set(xlabel=None, ylabel=None, xticks=[], xticklabels=[], yticks=[], yticklabels=[])
-    plt.title(label="DC-Net ouput for Digit-Five",
+    plt.title(label=f"DC-Net ouput for {args.dataset}",
           fontsize=16)
     # plt.xticks([])
     # plt.yticks([])

@@ -1,0 +1,1757 @@
+===2023-07-28 14:54:01===
+===Setting===
+    dataset: office
+    lr: 0.01
+    batch: 64
+    iters: 50
+    wk_iters: 1
+    si: False
+    domain_num: 4
+    quantile: 0
+    power_cs: 1
+    std_rw: False
+    gender_label: False
+    binary_race: False
+    save_iter: -1
+    mix5: False
+    power_relu: 1
+    Ea_val: False
+data_number=[21,36,61,104,177,11,19,32,13,23,21,
+client_nums=[5,3,2,1,]
+len_dataset=[667,106,62,36,]
+domain number = 4
+multiply 100 for Ea!
+use train loss for Ea
+============ Train epoch 0 ============
+cnt=[4, 2, 3, 2, ]
+cnt=[3, 2, 2, 4, ]
+power_decay: 0.9, powerI: 0.9500, powerC: 0.0500
+ Site-amazon                    (1) | Train Loss: 2.6193 | Train Acc: 0.0000
+ Site-amazon                    (1) | Train Loss: 2.6587 | Train Acc: 0.0000
+ Site-amazon                    (0) | Train Loss: 2.4003 | Train Acc: 0.0000
+ Site-amazon                    (2) | Train Loss: 2.1878 | Train Acc: 0.0865
+ Site-amazon                    (2) | Train Loss: 1.7684 | Train Acc: 0.6610
+ Site-dslr                      (0) | Train Loss: 2.5648 | Train Acc: 0.0000
+ Site-dslr                      (0) | Train Loss: 2.2148 | Train Acc: 0.1053
+ Site-dslr                      (2) | Train Loss: 1.7487 | Train Acc: 0.7188
+ Site-synthetic                 (3) | Train Loss: 2.3874 | Train Acc: 0.0000
+ Site-synthetic                 (3) | Train Loss: 2.3273 | Train Acc: 0.1304
+ Site-webcam                    (0) | Train Loss: 2.4425 | Train Acc: 0.0000
+Average Train Accuracy: 0.1547
+ Site-amazon                    (1) | Val  Loss: 1.9204 | Val  Acc: 0.3571
+ Site-amazon                    (1) | Val  Loss: 1.8910 | Val  Acc: 0.6087
+ Site-amazon                    (0) | Val  Loss: 1.9570 | Val  Acc: 0.3250
+ Site-amazon                    (2) | Val  Loss: 2.0171 | Val  Acc: 0.1449
+ Site-amazon                    (2) | Val  Loss: 2.1322 | Val  Acc: 0.0940
+ Site-dslr                      (0) | Val  Loss: 1.7539 | Val  Acc: 0.8571
+ Site-dslr                      (0) | Val  Loss: 1.7568 | Val  Acc: 0.6667
+ Site-dslr                      (2) | Val  Loss: 1.9492 | Val  Acc: 0.2857
+ Site-synthetic                 (3) | Val  Loss: 2.3188 | Val  Acc: 0.1250
+ Site-synthetic                 (3) | Val  Loss: 2.2622 | Val  Acc: 0.2000
+ Site-webcam                    (0) | Val  Loss: 2.3993 | Val  Acc: 0.0000
+Average Valid Accuracy: 0.3331
+ Best site-amazon                   (1)  | Epoch:0 | Val Acc: 0.3571
+ Best site-amazon                   (1)  | Epoch:0 | Val Acc: 0.6087
+ Best site-amazon                   (0)  | Epoch:0 | Val Acc: 0.3250
+ Best site-amazon                   (2)  | Epoch:0 | Val Acc: 0.1449
+ Best site-amazon                   (2)  | Epoch:0 | Val Acc: 0.0940
+ Best site-dslr                     (0)  | Epoch:0 | Val Acc: 0.8571
+ Best site-dslr                     (0)  | Epoch:0 | Val Acc: 0.6667
+ Best site-dslr                     (2)  | Epoch:0 | Val Acc: 0.2857
+ Best site-synthetic                (3)  | Epoch:0 | Val Acc: 0.1250
+ Best site-synthetic                (3)  | Epoch:0 | Val Acc: 0.2000
+ Best site-webcam                   (0)  | Epoch:0 | Val Acc: 0.0000
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 1 ============
+cnt=[3, 2, 4, 2, ]
+cnt=[2, 2, 2, 5, ]
+power_decay: 0.9, powerI: 0.9050, powerC: 0.0950
+ Site-amazon                    (0) | Train Loss: 2.3560 | Train Acc: 0.0000
+ Site-amazon                    (0) | Train Loss: 2.3528 | Train Acc: 0.0000
+ Site-amazon                    (0) | Train Loss: 2.3567 | Train Acc: 0.0000
+ Site-amazon                    (2) | Train Loss: 1.9896 | Train Acc: 0.0192
+ Site-amazon                    (3) | Train Loss: 1.3743 | Train Acc: 0.6723
+ Site-dslr                      (2) | Train Loss: 2.4530 | Train Acc: 0.0000
+ Site-dslr                      (2) | Train Loss: 2.2325 | Train Acc: 0.0000
+ Site-dslr                      (3) | Train Loss: 1.3639 | Train Acc: 0.6875
+ Site-synthetic                 (1) | Train Loss: 2.1611 | Train Acc: 0.0769
+ Site-synthetic                 (1) | Train Loss: 2.2344 | Train Acc: 0.0435
+ Site-webcam                    (2) | Train Loss: 2.3046 | Train Acc: 0.0000
+Average Train Accuracy: 0.1363
+ Site-amazon                    (0) | Val  Loss: 1.3499 | Val  Acc: 0.8571
+ Site-amazon                    (0) | Val  Loss: 1.4468 | Val  Acc: 0.6087
+ Site-amazon                    (0) | Val  Loss: 1.6775 | Val  Acc: 0.2750
+ Site-amazon                    (2) | Val  Loss: 1.7137 | Val  Acc: 0.0725
+ Site-amazon                    (3) | Val  Loss: 1.9209 | Val  Acc: 0.0171
+ Site-dslr                      (2) | Val  Loss: 1.3017 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 1.4423 | Val  Acc: 0.6667
+ Site-dslr                      (3) | Val  Loss: 1.7056 | Val  Acc: 0.2857
+ Site-synthetic                 (1) | Val  Loss: 2.2662 | Val  Acc: 0.0000
+ Site-synthetic                 (1) | Val  Loss: 2.2743 | Val  Acc: 0.0667
+ Site-webcam                    (2) | Val  Loss: 2.3472 | Val  Acc: 0.0000
+Average Valid Accuracy: 0.3499
+ Best site-amazon                   (0)  | Epoch:1 | Val Acc: 0.8571
+ Best site-amazon                   (0)  | Epoch:1 | Val Acc: 0.6087
+ Best site-amazon                   (0)  | Epoch:1 | Val Acc: 0.2750
+ Best site-amazon                   (2)  | Epoch:1 | Val Acc: 0.0725
+ Best site-amazon                   (3)  | Epoch:1 | Val Acc: 0.0171
+ Best site-dslr                     (2)  | Epoch:1 | Val Acc: 1.0000
+ Best site-dslr                     (2)  | Epoch:1 | Val Acc: 0.6667
+ Best site-dslr                     (3)  | Epoch:1 | Val Acc: 0.2857
+ Best site-synthetic                (1)  | Epoch:1 | Val Acc: 0.0000
+ Best site-synthetic                (1)  | Epoch:1 | Val Acc: 0.0667
+ Best site-webcam                   (2)  | Epoch:1 | Val Acc: 0.0000
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 2 ============
+cnt=[5, 2, 2, 2, ]
+cnt=[2, 5, 2, 2, ]
+power_decay: 0.9, powerI: 0.8645, powerC: 0.1355
+ Site-amazon                    (3) | Train Loss: 1.9637 | Train Acc: 0.0000
+ Site-amazon                    (3) | Train Loss: 1.9447 | Train Acc: 0.0000
+ Site-amazon                    (0) | Train Loss: 2.0577 | Train Acc: 0.0000
+ Site-amazon                    (0) | Train Loss: 1.6430 | Train Acc: 0.3365
+ Site-amazon                    (2) | Train Loss: 1.3028 | Train Acc: 0.8927
+ Site-dslr                      (0) | Train Loss: 2.0937 | Train Acc: 0.0000
+ Site-dslr                      (0) | Train Loss: 1.9375 | Train Acc: 0.2105
+ Site-dslr                      (2) | Train Loss: 1.3407 | Train Acc: 0.8750
+ Site-synthetic                 (1) | Train Loss: 1.8850 | Train Acc: 0.0000
+ Site-synthetic                 (1) | Train Loss: 1.9366 | Train Acc: 0.1304
+ Site-webcam                    (0) | Train Loss: 1.9524 | Train Acc: 0.0000
+Average Train Accuracy: 0.2223
+ Site-amazon                    (3) | Val  Loss: 1.2902 | Val  Acc: 0.8571
+ Site-amazon                    (3) | Val  Loss: 1.3096 | Val  Acc: 0.8696
+ Site-amazon                    (0) | Val  Loss: 1.3716 | Val  Acc: 0.8250
+ Site-amazon                    (0) | Val  Loss: 1.3726 | Val  Acc: 0.8116
+ Site-amazon                    (2) | Val  Loss: 1.5525 | Val  Acc: 0.4701
+ Site-dslr                      (0) | Val  Loss: 1.4205 | Val  Acc: 0.7143
+ Site-dslr                      (0) | Val  Loss: 1.3490 | Val  Acc: 0.7500
+ Site-dslr                      (2) | Val  Loss: 1.4764 | Val  Acc: 0.6667
+ Site-synthetic                 (1) | Val  Loss: 1.9315 | Val  Acc: 0.0000
+ Site-synthetic                 (1) | Val  Loss: 1.9247 | Val  Acc: 0.0667
+ Site-webcam                    (0) | Val  Loss: 2.0487 | Val  Acc: 0.0000
+Average Valid Accuracy: 0.5483
+ Best site-amazon                   (3)  | Epoch:2 | Val Acc: 0.8571
+ Best site-amazon                   (3)  | Epoch:2 | Val Acc: 0.8696
+ Best site-amazon                   (0)  | Epoch:2 | Val Acc: 0.8250
+ Best site-amazon                   (0)  | Epoch:2 | Val Acc: 0.8116
+ Best site-amazon                   (2)  | Epoch:2 | Val Acc: 0.4701
+ Best site-dslr                     (0)  | Epoch:2 | Val Acc: 0.7143
+ Best site-dslr                     (0)  | Epoch:2 | Val Acc: 0.7500
+ Best site-dslr                     (2)  | Epoch:2 | Val Acc: 0.6667
+ Best site-synthetic                (1)  | Epoch:2 | Val Acc: 0.0000
+ Best site-synthetic                (1)  | Epoch:2 | Val Acc: 0.0667
+ Best site-webcam                   (0)  | Epoch:2 | Val Acc: 0.0000
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 3 ============
+cnt=[2, 5, 2, 2, ]
+cnt=[5, 2, 2, 2, ]
+power_decay: 0.9, powerI: 0.8280, powerC: 0.1720
+ Site-amazon                    (3) | Train Loss: 1.6395 | Train Acc: 0.1905
+ Site-amazon                    (3) | Train Loss: 1.6381 | Train Acc: 0.2500
+ Site-amazon                    (0) | Train Loss: 1.7846 | Train Acc: 0.1311
+ Site-amazon                    (1) | Train Loss: 1.5112 | Train Acc: 0.4038
+ Site-amazon                    (1) | Train Loss: 1.1879 | Train Acc: 0.9096
+ Site-dslr                      (1) | Train Loss: 1.8114 | Train Acc: 0.0909
+ Site-dslr                      (1) | Train Loss: 1.8760 | Train Acc: 0.1579
+ Site-dslr                      (1) | Train Loss: 1.2350 | Train Acc: 0.9062
+ Site-synthetic                 (2) | Train Loss: 1.6978 | Train Acc: 0.1538
+ Site-synthetic                 (2) | Train Loss: 1.6859 | Train Acc: 0.1304
+ Site-webcam                    (0) | Train Loss: 1.6202 | Train Acc: 0.2381
+Average Train Accuracy: 0.3239
+ Site-amazon                    (3) | Val  Loss: 1.1234 | Val  Acc: 0.9286
+ Site-amazon                    (3) | Val  Loss: 1.1336 | Val  Acc: 0.8696
+ Site-amazon                    (0) | Val  Loss: 1.1351 | Val  Acc: 0.9250
+ Site-amazon                    (1) | Val  Loss: 1.1515 | Val  Acc: 0.9565
+ Site-amazon                    (1) | Val  Loss: 1.4012 | Val  Acc: 0.4701
+ Site-dslr                      (1) | Val  Loss: 1.2580 | Val  Acc: 0.7143
+ Site-dslr                      (1) | Val  Loss: 1.2184 | Val  Acc: 0.9167
+ Site-dslr                      (1) | Val  Loss: 1.3262 | Val  Acc: 0.7143
+ Site-synthetic                 (2) | Val  Loss: 1.6317 | Val  Acc: 0.3750
+ Site-synthetic                 (2) | Val  Loss: 1.6922 | Val  Acc: 0.2000
+ Site-webcam                    (0) | Val  Loss: 1.9340 | Val  Acc: 0.0000
+Average Valid Accuracy: 0.6427
+ Best site-amazon                   (3)  | Epoch:3 | Val Acc: 0.9286
+ Best site-amazon                   (3)  | Epoch:3 | Val Acc: 0.8696
+ Best site-amazon                   (0)  | Epoch:3 | Val Acc: 0.9250
+ Best site-amazon                   (1)  | Epoch:3 | Val Acc: 0.9565
+ Best site-amazon                   (1)  | Epoch:3 | Val Acc: 0.4701
+ Best site-dslr                     (1)  | Epoch:3 | Val Acc: 0.7143
+ Best site-dslr                     (1)  | Epoch:3 | Val Acc: 0.9167
+ Best site-dslr                     (1)  | Epoch:3 | Val Acc: 0.7143
+ Best site-synthetic                (2)  | Epoch:3 | Val Acc: 0.3750
+ Best site-synthetic                (2)  | Epoch:3 | Val Acc: 0.2000
+ Best site-webcam                   (0)  | Epoch:3 | Val Acc: 0.0000
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 4 ============
+cnt=[4, 3, 2, 2, ]
+cnt=[2, 2, 5, 2, ]
+power_decay: 0.9, powerI: 0.7952, powerC: 0.2048
+ Site-amazon                    (0) | Train Loss: 1.3833 | Train Acc: 0.6190
+ Site-amazon                    (0) | Train Loss: 1.3920 | Train Acc: 0.6389
+ Site-amazon                    (0) | Train Loss: 1.5702 | Train Acc: 0.7869
+ Site-amazon                    (1) | Train Loss: 1.3580 | Train Acc: 0.5962
+ Site-amazon                    (3) | Train Loss: 1.0779 | Train Acc: 0.9322
+ Site-dslr                      (1) | Train Loss: 1.6010 | Train Acc: 0.4545
+ Site-dslr                      (1) | Train Loss: 1.6778 | Train Acc: 0.1579
+ Site-dslr                      (3) | Train Loss: 1.1650 | Train Acc: 0.9062
+ Site-synthetic                 (2) | Train Loss: 1.4551 | Train Acc: 0.3077
+ Site-synthetic                 (2) | Train Loss: 1.4148 | Train Acc: 0.5217
+ Site-webcam                    (0) | Train Loss: 1.4244 | Train Acc: 0.4286
+Average Train Accuracy: 0.5773
+ Site-amazon                    (0) | Val  Loss: 1.0723 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 1.0740 | Val  Acc: 0.8696
+ Site-amazon                    (0) | Val  Loss: 1.0284 | Val  Acc: 0.9500
+ Site-amazon                    (1) | Val  Loss: 1.0585 | Val  Acc: 0.9710
+ Site-amazon                    (3) | Val  Loss: 1.2398 | Val  Acc: 0.6838
+ Site-dslr                      (1) | Val  Loss: 1.2353 | Val  Acc: 0.8571
+ Site-dslr                      (1) | Val  Loss: 1.0931 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 1.2276 | Val  Acc: 0.9048
+ Site-synthetic                 (2) | Val  Loss: 1.4749 | Val  Acc: 0.5000
+ Site-synthetic                 (2) | Val  Loss: 1.5223 | Val  Acc: 0.4667
+ Site-webcam                    (0) | Val  Loss: 1.5786 | Val  Acc: 0.5714
+Average Valid Accuracy: 0.7912
+ Best site-amazon                   (0)  | Epoch:4 | Val Acc: 0.9286
+ Best site-amazon                   (0)  | Epoch:4 | Val Acc: 0.8696
+ Best site-amazon                   (0)  | Epoch:4 | Val Acc: 0.9500
+ Best site-amazon                   (1)  | Epoch:4 | Val Acc: 0.9710
+ Best site-amazon                   (3)  | Epoch:4 | Val Acc: 0.6838
+ Best site-dslr                     (1)  | Epoch:4 | Val Acc: 0.8571
+ Best site-dslr                     (1)  | Epoch:4 | Val Acc: 1.0000
+ Best site-dslr                     (3)  | Epoch:4 | Val Acc: 0.9048
+ Best site-synthetic                (2)  | Epoch:4 | Val Acc: 0.5000
+ Best site-synthetic                (2)  | Epoch:4 | Val Acc: 0.4667
+ Best site-webcam                   (0)  | Epoch:4 | Val Acc: 0.5714
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 5 ============
+cnt=[2, 3, 4, 2, ]
+cnt=[2, 4, 2, 3, ]
+power_decay: 0.9, powerI: 0.7657, powerC: 0.2343
+ Site-amazon                    (2) | Train Loss: 1.1896 | Train Acc: 0.9524
+ Site-amazon                    (2) | Train Loss: 1.2197 | Train Acc: 0.8333
+ Site-amazon                    (2) | Train Loss: 1.3542 | Train Acc: 0.9508
+ Site-amazon                    (1) | Train Loss: 1.1869 | Train Acc: 0.7885
+ Site-amazon                    (0) | Train Loss: 0.9951 | Train Acc: 0.9379
+ Site-dslr                      (1) | Train Loss: 1.4113 | Train Acc: 0.9091
+ Site-dslr                      (1) | Train Loss: 1.5195 | Train Acc: 0.7895
+ Site-dslr                      (0) | Train Loss: 1.0633 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 1.3077 | Train Acc: 0.6154
+ Site-synthetic                 (3) | Train Loss: 1.3474 | Train Acc: 0.6087
+ Site-webcam                    (2) | Train Loss: 1.2907 | Train Acc: 0.7143
+Average Train Accuracy: 0.8273
+ Site-amazon                    (2) | Val  Loss: 1.0239 | Val  Acc: 0.8571
+ Site-amazon                    (2) | Val  Loss: 0.9652 | Val  Acc: 0.9565
+ Site-amazon                    (2) | Val  Loss: 0.9568 | Val  Acc: 0.9000
+ Site-amazon                    (1) | Val  Loss: 0.9804 | Val  Acc: 0.9710
+ Site-amazon                    (0) | Val  Loss: 1.1148 | Val  Acc: 0.8547
+ Site-dslr                      (1) | Val  Loss: 1.2156 | Val  Acc: 0.7143
+ Site-dslr                      (1) | Val  Loss: 1.0606 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 1.1531 | Val  Acc: 0.8571
+ Site-synthetic                 (3) | Val  Loss: 1.2912 | Val  Acc: 0.8750
+ Site-synthetic                 (3) | Val  Loss: 1.3161 | Val  Acc: 0.6667
+ Site-webcam                    (2) | Val  Loss: 1.4439 | Val  Acc: 0.7857
+Average Valid Accuracy: 0.8580
+ Best site-amazon                   (2)  | Epoch:5 | Val Acc: 0.8571
+ Best site-amazon                   (2)  | Epoch:5 | Val Acc: 0.9565
+ Best site-amazon                   (2)  | Epoch:5 | Val Acc: 0.9000
+ Best site-amazon                   (1)  | Epoch:5 | Val Acc: 0.9710
+ Best site-amazon                   (0)  | Epoch:5 | Val Acc: 0.8547
+ Best site-dslr                     (1)  | Epoch:5 | Val Acc: 0.7143
+ Best site-dslr                     (1)  | Epoch:5 | Val Acc: 1.0000
+ Best site-dslr                     (0)  | Epoch:5 | Val Acc: 0.8571
+ Best site-synthetic                (3)  | Epoch:5 | Val Acc: 0.8750
+ Best site-synthetic                (3)  | Epoch:5 | Val Acc: 0.6667
+ Best site-webcam                   (2)  | Epoch:5 | Val Acc: 0.7857
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 6 ============
+cnt=[2, 2, 4, 3, ]
+cnt=[2, 5, 2, 2, ]
+power_decay: 0.9, powerI: 0.7391, powerC: 0.2609
+ Site-amazon                    (2) | Train Loss: 1.0847 | Train Acc: 0.9048
+ Site-amazon                    (2) | Train Loss: 1.0967 | Train Acc: 0.9444
+ Site-amazon                    (2) | Train Loss: 1.2090 | Train Acc: 0.9836
+ Site-amazon                    (3) | Train Loss: 1.1080 | Train Acc: 0.8462
+ Site-amazon                    (1) | Train Loss: 0.8610 | Train Acc: 0.9379
+ Site-dslr                      (3) | Train Loss: 1.2925 | Train Acc: 0.9091
+ Site-dslr                      (3) | Train Loss: 1.4583 | Train Acc: 0.7368
+ Site-dslr                      (1) | Train Loss: 0.9538 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 1.3440 | Train Acc: 0.4615
+ Site-synthetic                 (0) | Train Loss: 1.2237 | Train Acc: 0.7826
+ Site-webcam                    (2) | Train Loss: 1.1727 | Train Acc: 0.9048
+Average Train Accuracy: 0.8556
+ Site-amazon                    (2) | Val  Loss: 0.8862 | Val  Acc: 0.9286
+ Site-amazon                    (2) | Val  Loss: 0.9074 | Val  Acc: 0.9130
+ Site-amazon                    (2) | Val  Loss: 0.8439 | Val  Acc: 0.9000
+ Site-amazon                    (3) | Val  Loss: 0.8666 | Val  Acc: 0.9565
+ Site-amazon                    (1) | Val  Loss: 0.9984 | Val  Acc: 0.8632
+ Site-dslr                      (3) | Val  Loss: 1.0547 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.9606 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 1.0407 | Val  Acc: 0.9048
+ Site-synthetic                 (0) | Val  Loss: 1.2359 | Val  Acc: 0.7500
+ Site-synthetic                 (0) | Val  Loss: 1.3454 | Val  Acc: 0.6000
+ Site-webcam                    (2) | Val  Loss: 1.2916 | Val  Acc: 0.8571
+Average Valid Accuracy: 0.8794
+ Best site-amazon                   (2)  | Epoch:6 | Val Acc: 0.9286
+ Best site-amazon                   (2)  | Epoch:6 | Val Acc: 0.9130
+ Best site-amazon                   (2)  | Epoch:6 | Val Acc: 0.9000
+ Best site-amazon                   (3)  | Epoch:6 | Val Acc: 0.9565
+ Best site-amazon                   (1)  | Epoch:6 | Val Acc: 0.8632
+ Best site-dslr                     (3)  | Epoch:6 | Val Acc: 1.0000
+ Best site-dslr                     (3)  | Epoch:6 | Val Acc: 1.0000
+ Best site-dslr                     (1)  | Epoch:6 | Val Acc: 0.9048
+ Best site-synthetic                (0)  | Epoch:6 | Val Acc: 0.7500
+ Best site-synthetic                (0)  | Epoch:6 | Val Acc: 0.6000
+ Best site-webcam                   (2)  | Epoch:6 | Val Acc: 0.8571
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 7 ============
+cnt=[3, 2, 4, 2, ]
+cnt=[2, 4, 2, 3, ]
+power_decay: 0.9, powerI: 0.7152, powerC: 0.2848
+ Site-amazon                    (0) | Train Loss: 0.9554 | Train Acc: 0.9048
+ Site-amazon                    (0) | Train Loss: 0.9760 | Train Acc: 0.9722
+ Site-amazon                    (0) | Train Loss: 1.0249 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.9635 | Train Acc: 0.9423
+ Site-amazon                    (1) | Train Loss: 0.8073 | Train Acc: 0.9661
+ Site-dslr                      (2) | Train Loss: 1.1548 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 1.2961 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.9264 | Train Acc: 0.9688
+ Site-synthetic                 (3) | Train Loss: 1.0640 | Train Acc: 0.9231
+ Site-synthetic                 (3) | Train Loss: 1.2112 | Train Acc: 0.6957
+ Site-webcam                    (2) | Train Loss: 1.0460 | Train Acc: 0.9524
+Average Train Accuracy: 0.9387
+ Site-amazon                    (0) | Val  Loss: 0.8046 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 0.7991 | Val  Acc: 0.9130
+ Site-amazon                    (0) | Val  Loss: 0.7485 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.7835 | Val  Acc: 0.9710
+ Site-amazon                    (1) | Val  Loss: 0.8713 | Val  Acc: 0.9231
+ Site-dslr                      (2) | Val  Loss: 1.0572 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.9139 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.9865 | Val  Acc: 0.9524
+ Site-synthetic                 (3) | Val  Loss: 1.0507 | Val  Acc: 0.8750
+ Site-synthetic                 (3) | Val  Loss: 1.3635 | Val  Acc: 0.6000
+ Site-webcam                    (2) | Val  Loss: 1.1061 | Val  Acc: 0.9286
+Average Valid Accuracy: 0.9129
+ Best site-amazon                   (0)  | Epoch:7 | Val Acc: 0.9286
+ Best site-amazon                   (0)  | Epoch:7 | Val Acc: 0.9130
+ Best site-amazon                   (0)  | Epoch:7 | Val Acc: 0.9500
+ Best site-amazon                   (2)  | Epoch:7 | Val Acc: 0.9710
+ Best site-amazon                   (1)  | Epoch:7 | Val Acc: 0.9231
+ Best site-dslr                     (2)  | Epoch:7 | Val Acc: 1.0000
+ Best site-dslr                     (2)  | Epoch:7 | Val Acc: 1.0000
+ Best site-dslr                     (1)  | Epoch:7 | Val Acc: 0.9524
+ Best site-synthetic                (3)  | Epoch:7 | Val Acc: 0.8750
+ Best site-synthetic                (3)  | Epoch:7 | Val Acc: 0.6000
+ Best site-webcam                   (2)  | Epoch:7 | Val Acc: 0.9286
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 8 ============
+cnt=[4, 3, 2, 2, ]
+cnt=[2, 5, 2, 2, ]
+power_decay: 0.9, powerI: 0.6937, powerC: 0.3063
+ Site-amazon                    (1) | Train Loss: 0.8762 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.8696 | Train Acc: 0.9722
+ Site-amazon                    (3) | Train Loss: 0.9020 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.8649 | Train Acc: 0.9519
+ Site-amazon                    (2) | Train Loss: 0.6845 | Train Acc: 0.9548
+ Site-dslr                      (0) | Train Loss: 1.1356 | Train Acc: 0.9091
+ Site-dslr                      (0) | Train Loss: 1.1788 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.8115 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 1.1628 | Train Acc: 0.7692
+ Site-synthetic                 (1) | Train Loss: 1.1032 | Train Acc: 0.8696
+ Site-webcam                    (3) | Train Loss: 1.0459 | Train Acc: 0.9524
+Average Train Accuracy: 0.9436
+ Site-amazon                    (1) | Val  Loss: 0.6601 | Val  Acc: 0.9286
+ Site-amazon                    (1) | Val  Loss: 0.7180 | Val  Acc: 0.9130
+ Site-amazon                    (3) | Val  Loss: 0.6763 | Val  Acc: 0.9500
+ Site-amazon                    (0) | Val  Loss: 0.6929 | Val  Acc: 0.9855
+ Site-amazon                    (2) | Val  Loss: 0.8086 | Val  Acc: 0.9316
+ Site-dslr                      (0) | Val  Loss: 0.9832 | Val  Acc: 0.8571
+ Site-dslr                      (0) | Val  Loss: 0.8490 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.9770 | Val  Acc: 0.8571
+ Site-synthetic                 (0) | Val  Loss: 1.1061 | Val  Acc: 0.7500
+ Site-synthetic                 (1) | Val  Loss: 1.1444 | Val  Acc: 0.7333
+ Site-webcam                    (3) | Val  Loss: 1.1005 | Val  Acc: 0.9286
+Average Valid Accuracy: 0.8941
+============ Train epoch 9 ============
+cnt=[2, 2, 5, 2, ]
+cnt=[2, 4, 2, 3, ]
+power_decay: 0.9, powerI: 0.6743, powerC: 0.3257
+ Site-amazon                    (3) | Train Loss: 0.7974 | Train Acc: 0.9524
+ Site-amazon                    (3) | Train Loss: 0.7421 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.7656 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.7515 | Train Acc: 0.9615
+ Site-amazon                    (0) | Train Loss: 0.6397 | Train Acc: 0.9605
+ Site-dslr                      (2) | Train Loss: 0.8658 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 1.0942 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.7404 | Train Acc: 1.0000
+ Site-synthetic                 (2) | Train Loss: 1.0060 | Train Acc: 0.8462
+ Site-synthetic                 (2) | Train Loss: 1.0148 | Train Acc: 0.8261
+ Site-webcam                    (1) | Train Loss: 0.8838 | Train Acc: 1.0000
+Average Train Accuracy: 0.9588
+ Site-amazon                    (3) | Val  Loss: 0.6927 | Val  Acc: 0.8571
+ Site-amazon                    (3) | Val  Loss: 0.6874 | Val  Acc: 0.9130
+ Site-amazon                    (1) | Val  Loss: 0.6263 | Val  Acc: 0.9750
+ Site-amazon                    (2) | Val  Loss: 0.6915 | Val  Acc: 0.9855
+ Site-amazon                    (0) | Val  Loss: 0.6954 | Val  Acc: 0.9744
+ Site-dslr                      (2) | Val  Loss: 0.8895 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.8422 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.8286 | Val  Acc: 1.0000
+ Site-synthetic                 (2) | Val  Loss: 1.0137 | Val  Acc: 0.8750
+ Site-synthetic                 (2) | Val  Loss: 0.9526 | Val  Acc: 0.9333
+ Site-webcam                    (1) | Val  Loss: 0.9450 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9558
+ Best site-amazon                   (3)  | Epoch:9 | Val Acc: 0.8571
+ Best site-amazon                   (3)  | Epoch:9 | Val Acc: 0.9130
+ Best site-amazon                   (1)  | Epoch:9 | Val Acc: 0.9750
+ Best site-amazon                   (2)  | Epoch:9 | Val Acc: 0.9855
+ Best site-amazon                   (0)  | Epoch:9 | Val Acc: 0.9744
+ Best site-dslr                     (2)  | Epoch:9 | Val Acc: 1.0000
+ Best site-dslr                     (2)  | Epoch:9 | Val Acc: 1.0000
+ Best site-dslr                     (0)  | Epoch:9 | Val Acc: 1.0000
+ Best site-synthetic                (2)  | Epoch:9 | Val Acc: 0.8750
+ Best site-synthetic                (2)  | Epoch:9 | Val Acc: 0.9333
+ Best site-webcam                   (1)  | Epoch:9 | Val Acc: 1.0000
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 10 ============
+cnt=[2, 5, 2, 2, ]
+cnt=[3, 3, 2, 3, ]
+power_decay: 0.9, powerI: 0.6569, powerC: 0.3431
+ Site-amazon                    (1) | Train Loss: 0.6509 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.5998 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.6613 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.7149 | Train Acc: 0.9423
+ Site-amazon                    (0) | Train Loss: 0.5312 | Train Acc: 0.9548
+ Site-dslr                      (1) | Train Loss: 0.8669 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 1.0529 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.7549 | Train Acc: 0.9688
+ Site-synthetic                 (1) | Train Loss: 0.8769 | Train Acc: 0.9231
+ Site-synthetic                 (1) | Train Loss: 0.8600 | Train Acc: 0.8696
+ Site-webcam                    (3) | Train Loss: 0.7608 | Train Acc: 0.9524
+Average Train Accuracy: 0.9646
+ Site-amazon                    (1) | Val  Loss: 0.5809 | Val  Acc: 0.8571
+ Site-amazon                    (1) | Val  Loss: 0.5865 | Val  Acc: 0.9565
+ Site-amazon                    (3) | Val  Loss: 0.5647 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.5826 | Val  Acc: 0.9710
+ Site-amazon                    (0) | Val  Loss: 0.6574 | Val  Acc: 0.9829
+ Site-dslr                      (1) | Val  Loss: 0.7978 | Val  Acc: 0.8571
+ Site-dslr                      (2) | Val  Loss: 0.7861 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.8300 | Val  Acc: 0.8571
+ Site-synthetic                 (1) | Val  Loss: 0.9018 | Val  Acc: 0.8750
+ Site-synthetic                 (1) | Val  Loss: 0.9498 | Val  Acc: 0.8000
+ Site-webcam                    (3) | Val  Loss: 0.8042 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9188
+============ Train epoch 11 ============
+cnt=[2, 3, 4, 2, ]
+cnt=[2, 5, 2, 2, ]
+power_decay: 0.9, powerI: 0.6412, powerC: 0.3588
+ Site-amazon                    (1) | Train Loss: 0.6080 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.5608 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.5795 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.5680 | Train Acc: 0.9808
+ Site-amazon                    (0) | Train Loss: 0.4773 | Train Acc: 0.9605
+ Site-dslr                      (2) | Train Loss: 0.8285 | Train Acc: 1.0000
+ Site-dslr                      (3) | Train Loss: 0.9362 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.5835 | Train Acc: 1.0000
+ Site-synthetic                 (1) | Train Loss: 0.8505 | Train Acc: 0.9231
+ Site-synthetic                 (1) | Train Loss: 0.8273 | Train Acc: 0.9130
+ Site-webcam                    (2) | Train Loss: 0.7015 | Train Acc: 1.0000
+Average Train Accuracy: 0.9798
+ Site-amazon                    (1) | Val  Loss: 0.4932 | Val  Acc: 1.0000
+ Site-amazon                    (2) | Val  Loss: 0.5641 | Val  Acc: 0.9130
+ Site-amazon                    (2) | Val  Loss: 0.5692 | Val  Acc: 0.9500
+ Site-amazon                    (3) | Val  Loss: 0.5609 | Val  Acc: 0.9710
+ Site-amazon                    (0) | Val  Loss: 0.5250 | Val  Acc: 0.9915
+ Site-dslr                      (2) | Val  Loss: 0.7775 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.7758 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.7844 | Val  Acc: 0.9524
+ Site-synthetic                 (1) | Val  Loss: 0.7725 | Val  Acc: 0.8750
+ Site-synthetic                 (1) | Val  Loss: 0.8764 | Val  Acc: 0.8667
+ Site-webcam                    (2) | Val  Loss: 0.8090 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9563
+ Best site-amazon                   (1)  | Epoch:11 | Val Acc: 1.0000
+ Best site-amazon                   (2)  | Epoch:11 | Val Acc: 0.9130
+ Best site-amazon                   (2)  | Epoch:11 | Val Acc: 0.9500
+ Best site-amazon                   (3)  | Epoch:11 | Val Acc: 0.9710
+ Best site-amazon                   (0)  | Epoch:11 | Val Acc: 0.9915
+ Best site-dslr                     (2)  | Epoch:11 | Val Acc: 1.0000
+ Best site-dslr                     (3)  | Epoch:11 | Val Acc: 1.0000
+ Best site-dslr                     (0)  | Epoch:11 | Val Acc: 0.9524
+ Best site-synthetic                (1)  | Epoch:11 | Val Acc: 0.8750
+ Best site-synthetic                (1)  | Epoch:11 | Val Acc: 0.8667
+ Best site-webcam                   (2)  | Epoch:11 | Val Acc: 1.0000
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 12 ============
+cnt=[2, 4, 3, 2, ]
+cnt=[2, 3, 4, 2, ]
+power_decay: 0.9, powerI: 0.6271, powerC: 0.3729
+ Site-amazon                    (1) | Train Loss: 0.4342 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.4441 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.4615 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.5219 | Train Acc: 0.9904
+ Site-amazon                    (0) | Train Loss: 0.4239 | Train Acc: 0.9718
+ Site-dslr                      (2) | Train Loss: 0.7037 | Train Acc: 1.0000
+ Site-dslr                      (3) | Train Loss: 0.8508 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.6156 | Train Acc: 0.9688
+ Site-synthetic                 (1) | Train Loss: 0.7997 | Train Acc: 0.9231
+ Site-synthetic                 (1) | Train Loss: 0.6290 | Train Acc: 1.0000
+ Site-webcam                    (2) | Train Loss: 0.5423 | Train Acc: 0.9524
+Average Train Accuracy: 0.9824
+ Site-amazon                    (1) | Val  Loss: 0.4234 | Val  Acc: 0.9286
+ Site-amazon                    (1) | Val  Loss: 0.4654 | Val  Acc: 0.9130
+ Site-amazon                    (2) | Val  Loss: 0.5181 | Val  Acc: 0.9250
+ Site-amazon                    (3) | Val  Loss: 0.5456 | Val  Acc: 0.9855
+ Site-amazon                    (0) | Val  Loss: 0.5139 | Val  Acc: 0.9915
+ Site-dslr                      (2) | Val  Loss: 0.6962 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.7105 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.7553 | Val  Acc: 0.9048
+ Site-synthetic                 (1) | Val  Loss: 0.6171 | Val  Acc: 1.0000
+ Site-synthetic                 (1) | Val  Loss: 0.6727 | Val  Acc: 0.9333
+ Site-webcam                    (2) | Val  Loss: 0.6265 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9620
+ Best site-amazon                   (1)  | Epoch:12 | Val Acc: 0.9286
+ Best site-amazon                   (1)  | Epoch:12 | Val Acc: 0.9130
+ Best site-amazon                   (2)  | Epoch:12 | Val Acc: 0.9250
+ Best site-amazon                   (3)  | Epoch:12 | Val Acc: 0.9855
+ Best site-amazon                   (0)  | Epoch:12 | Val Acc: 0.9915
+ Best site-dslr                     (2)  | Epoch:12 | Val Acc: 1.0000
+ Best site-dslr                     (3)  | Epoch:12 | Val Acc: 1.0000
+ Best site-dslr                     (0)  | Epoch:12 | Val Acc: 0.9048
+ Best site-synthetic                (1)  | Epoch:12 | Val Acc: 1.0000
+ Best site-synthetic                (1)  | Epoch:12 | Val Acc: 0.9333
+ Best site-webcam                   (2)  | Epoch:12 | Val Acc: 1.0000
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 13 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[3, 2, 4, 2, ]
+power_decay: 0.9, powerI: 0.6144, powerC: 0.3856
+ Site-amazon                    (0) | Train Loss: 0.4239 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.3905 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.3924 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.4524 | Train Acc: 0.9808
+ Site-amazon                    (1) | Train Loss: 0.3748 | Train Acc: 0.9661
+ Site-dslr                      (3) | Train Loss: 0.5833 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.7876 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.4819 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.7440 | Train Acc: 0.9231
+ Site-synthetic                 (0) | Train Loss: 0.6281 | Train Acc: 0.9565
+ Site-webcam                    (3) | Train Loss: 0.5506 | Train Acc: 1.0000
+Average Train Accuracy: 0.9842
+ Site-amazon                    (0) | Val  Loss: 0.3837 | Val  Acc: 0.8571
+ Site-amazon                    (0) | Val  Loss: 0.4006 | Val  Acc: 0.9565
+ Site-amazon                    (3) | Val  Loss: 0.4456 | Val  Acc: 0.9250
+ Site-amazon                    (2) | Val  Loss: 0.4622 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.4340 | Val  Acc: 0.9915
+ Site-dslr                      (3) | Val  Loss: 0.6473 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.6564 | Val  Acc: 0.9167
+ Site-dslr                      (1) | Val  Loss: 0.6518 | Val  Acc: 0.9048
+ Site-synthetic                 (0) | Val  Loss: 0.5459 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.6562 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.6307 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9579
+============ Train epoch 14 ============
+cnt=[3, 2, 2, 4, ]
+cnt=[3, 4, 2, 2, ]
+power_decay: 0.9, powerI: 0.6029, powerC: 0.3971
+ Site-amazon                    (3) | Train Loss: 0.3321 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.3172 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.3441 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.3920 | Train Acc: 0.9904
+ Site-amazon                    (1) | Train Loss: 0.3432 | Train Acc: 0.9548
+ Site-dslr                      (0) | Train Loss: 0.4943 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.7296 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.4979 | Train Acc: 0.9688
+ Site-synthetic                 (3) | Train Loss: 0.5048 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.5198 | Train Acc: 1.0000
+ Site-webcam                    (0) | Train Loss: 0.4656 | Train Acc: 1.0000
+Average Train Accuracy: 0.9922
+ Site-amazon                    (3) | Val  Loss: 0.3539 | Val  Acc: 0.9286
+ Site-amazon                    (3) | Val  Loss: 0.3674 | Val  Acc: 0.9130
+ Site-amazon                    (0) | Val  Loss: 0.4142 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.4416 | Val  Acc: 0.9710
+ Site-amazon                    (1) | Val  Loss: 0.3657 | Val  Acc: 0.9915
+ Site-dslr                      (0) | Val  Loss: 0.5215 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.5833 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.6857 | Val  Acc: 0.7619
+ Site-synthetic                 (3) | Val  Loss: 0.5651 | Val  Acc: 1.0000
+ Site-synthetic                 (3) | Val  Loss: 0.5052 | Val  Acc: 1.0000
+ Site-webcam                    (0) | Val  Loss: 0.5623 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9560
+============ Train epoch 15 ============
+cnt=[3, 2, 2, 4, ]
+cnt=[2, 3, 4, 2, ]
+power_decay: 0.9, powerI: 0.5927, powerC: 0.4073
+ Site-amazon                    (3) | Train Loss: 0.2905 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.3005 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.3015 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.3361 | Train Acc: 0.9808
+ Site-amazon                    (1) | Train Loss: 0.2777 | Train Acc: 0.9605
+ Site-dslr                      (0) | Train Loss: 0.4625 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.5812 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.3853 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.5164 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.5242 | Train Acc: 0.9565
+ Site-webcam                    (0) | Train Loss: 0.4101 | Train Acc: 1.0000
+Average Train Accuracy: 0.9907
+ Site-amazon                    (3) | Val  Loss: 0.3161 | Val  Acc: 0.8571
+ Site-amazon                    (3) | Val  Loss: 0.3320 | Val  Acc: 0.9130
+ Site-amazon                    (0) | Val  Loss: 0.4195 | Val  Acc: 0.9250
+ Site-amazon                    (2) | Val  Loss: 0.4177 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.3488 | Val  Acc: 0.9829
+ Site-dslr                      (0) | Val  Loss: 0.4574 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.5516 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.6364 | Val  Acc: 0.9048
+ Site-synthetic                 (3) | Val  Loss: 0.4562 | Val  Acc: 1.0000
+ Site-synthetic                 (3) | Val  Loss: 0.5403 | Val  Acc: 1.0000
+ Site-webcam                    (0) | Val  Loss: 0.5080 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9608
+============ Train epoch 16 ============
+cnt=[3, 2, 2, 4, ]
+cnt=[2, 2, 5, 2, ]
+power_decay: 0.9, powerI: 0.5834, powerC: 0.4166
+ Site-amazon                    (3) | Train Loss: 0.2321 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.2314 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.2614 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.3045 | Train Acc: 0.9904
+ Site-amazon                    (1) | Train Loss: 0.2692 | Train Acc: 0.9661
+ Site-dslr                      (0) | Train Loss: 0.3980 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.5589 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.4562 | Train Acc: 0.9375
+ Site-synthetic                 (3) | Train Loss: 0.4130 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.3715 | Train Acc: 1.0000
+ Site-webcam                    (0) | Train Loss: 0.2775 | Train Acc: 1.0000
+Average Train Accuracy: 0.9904
+ Site-amazon                    (3) | Val  Loss: 0.2620 | Val  Acc: 0.9286
+ Site-amazon                    (3) | Val  Loss: 0.3296 | Val  Acc: 0.9130
+ Site-amazon                    (0) | Val  Loss: 0.4247 | Val  Acc: 0.9000
+ Site-amazon                    (2) | Val  Loss: 0.3944 | Val  Acc: 0.9710
+ Site-amazon                    (1) | Val  Loss: 0.2972 | Val  Acc: 0.9915
+ Site-dslr                      (0) | Val  Loss: 0.4442 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.5875 | Val  Acc: 0.9167
+ Site-dslr                      (1) | Val  Loss: 0.5966 | Val  Acc: 0.8571
+ Site-synthetic                 (3) | Val  Loss: 0.3386 | Val  Acc: 1.0000
+ Site-synthetic                 (3) | Val  Loss: 0.4158 | Val  Acc: 1.0000
+ Site-webcam                    (0) | Val  Loss: 0.4466 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9525
+============ Train epoch 17 ============
+cnt=[3, 2, 4, 2, ]
+cnt=[2, 4, 3, 2, ]
+power_decay: 0.9, powerI: 0.5750, powerC: 0.4250
+ Site-amazon                    (2) | Train Loss: 0.2188 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.2136 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.2442 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.2354 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.2495 | Train Acc: 0.9605
+ Site-dslr                      (0) | Train Loss: 0.3867 | Train Acc: 1.0000
+ Site-dslr                      (3) | Train Loss: 0.5651 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.3546 | Train Acc: 1.0000
+ Site-synthetic                 (2) | Train Loss: 0.3640 | Train Acc: 1.0000
+ Site-synthetic                 (2) | Train Loss: 0.3285 | Train Acc: 1.0000
+ Site-webcam                    (0) | Train Loss: 0.3181 | Train Acc: 1.0000
+Average Train Accuracy: 0.9964
+ Site-amazon                    (2) | Val  Loss: 0.2759 | Val  Acc: 0.9286
+ Site-amazon                    (2) | Val  Loss: 0.3222 | Val  Acc: 0.9130
+ Site-amazon                    (0) | Val  Loss: 0.3892 | Val  Acc: 0.9250
+ Site-amazon                    (3) | Val  Loss: 0.3408 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.2318 | Val  Acc: 0.9915
+ Site-dslr                      (0) | Val  Loss: 0.5027 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.5162 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.5517 | Val  Acc: 0.8571
+ Site-synthetic                 (2) | Val  Loss: 0.2768 | Val  Acc: 1.0000
+ Site-synthetic                 (2) | Val  Loss: 0.3334 | Val  Acc: 1.0000
+ Site-webcam                    (0) | Val  Loss: 0.4657 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9637
+ Best site-amazon                   (2)  | Epoch:17 | Val Acc: 0.9286
+ Best site-amazon                   (2)  | Epoch:17 | Val Acc: 0.9130
+ Best site-amazon                   (0)  | Epoch:17 | Val Acc: 0.9250
+ Best site-amazon                   (3)  | Epoch:17 | Val Acc: 0.9855
+ Best site-amazon                   (1)  | Epoch:17 | Val Acc: 0.9915
+ Best site-dslr                     (0)  | Epoch:17 | Val Acc: 1.0000
+ Best site-dslr                     (3)  | Epoch:17 | Val Acc: 1.0000
+ Best site-dslr                     (1)  | Epoch:17 | Val Acc: 0.8571
+ Best site-synthetic                (2)  | Epoch:17 | Val Acc: 1.0000
+ Best site-synthetic                (2)  | Epoch:17 | Val Acc: 1.0000
+ Best site-webcam                   (0)  | Epoch:17 | Val Acc: 1.0000
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 18 ============
+cnt=[2, 2, 3, 4, ]
+cnt=[2, 3, 4, 2, ]
+power_decay: 0.9, powerI: 0.5675, powerC: 0.4325
+ Site-amazon                    (3) | Train Loss: 0.1634 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.1636 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.1994 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.2412 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.2099 | Train Acc: 0.9661
+ Site-dslr                      (2) | Train Loss: 0.2994 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.4984 | Train Acc: 0.9474
+ Site-dslr                      (1) | Train Loss: 0.3858 | Train Acc: 0.9688
+ Site-synthetic                 (3) | Train Loss: 0.3010 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.2884 | Train Acc: 1.0000
+ Site-webcam                    (2) | Train Loss: 0.2864 | Train Acc: 1.0000
+Average Train Accuracy: 0.9893
+ Site-amazon                    (3) | Val  Loss: 0.1559 | Val  Acc: 1.0000
+ Site-amazon                    (3) | Val  Loss: 0.2720 | Val  Acc: 0.9130
+ Site-amazon                    (2) | Val  Loss: 0.3686 | Val  Acc: 0.9000
+ Site-amazon                    (0) | Val  Loss: 0.3416 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.2146 | Val  Acc: 0.9915
+ Site-dslr                      (2) | Val  Loss: 0.4094 | Val  Acc: 0.8571
+ Site-dslr                      (0) | Val  Loss: 0.4997 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.5730 | Val  Acc: 0.9048
+ Site-synthetic                 (3) | Val  Loss: 0.2396 | Val  Acc: 1.0000
+ Site-synthetic                 (3) | Val  Loss: 0.3665 | Val  Acc: 1.0000
+ Site-webcam                    (2) | Val  Loss: 0.3880 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9593
+============ Train epoch 19 ============
+cnt=[2, 3, 4, 2, ]
+cnt=[5, 2, 2, 2, ]
+power_decay: 0.9, powerI: 0.5608, powerC: 0.4392
+ Site-amazon                    (2) | Train Loss: 0.1718 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.1654 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.1801 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.1992 | Train Acc: 0.9904
+ Site-amazon                    (0) | Train Loss: 0.1891 | Train Acc: 0.9718
+ Site-dslr                      (1) | Train Loss: 0.3591 | Train Acc: 1.0000
+ Site-dslr                      (3) | Train Loss: 0.4348 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.2620 | Train Acc: 1.0000
+ Site-synthetic                 (2) | Train Loss: 0.2689 | Train Acc: 1.0000
+ Site-synthetic                 (2) | Train Loss: 0.3313 | Train Acc: 1.0000
+ Site-webcam                    (1) | Train Loss: 0.2671 | Train Acc: 1.0000
+Average Train Accuracy: 0.9966
+ Site-amazon                    (2) | Val  Loss: 0.2277 | Val  Acc: 0.9286
+ Site-amazon                    (2) | Val  Loss: 0.2370 | Val  Acc: 0.9130
+ Site-amazon                    (1) | Val  Loss: 0.3545 | Val  Acc: 0.9000
+ Site-amazon                    (3) | Val  Loss: 0.2829 | Val  Acc: 0.9855
+ Site-amazon                    (0) | Val  Loss: 0.1701 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.3750 | Val  Acc: 0.8571
+ Site-dslr                      (3) | Val  Loss: 0.4729 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.5723 | Val  Acc: 0.8571
+ Site-synthetic                 (2) | Val  Loss: 0.1961 | Val  Acc: 1.0000
+ Site-synthetic                 (2) | Val  Loss: 0.3018 | Val  Acc: 1.0000
+ Site-webcam                    (1) | Val  Loss: 0.3703 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9492
+============ Train epoch 20 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[2, 3, 2, 4, ]
+power_decay: 0.9, powerI: 0.5547, powerC: 0.4453
+ Site-amazon                    (0) | Train Loss: 0.1181 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.1096 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.1553 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.1808 | Train Acc: 0.9904
+ Site-amazon                    (1) | Train Loss: 0.1896 | Train Acc: 0.9661
+ Site-dslr                      (3) | Train Loss: 0.3142 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.3294 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.3086 | Train Acc: 0.9375
+ Site-synthetic                 (0) | Train Loss: 0.2117 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.2118 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.2055 | Train Acc: 0.9524
+Average Train Accuracy: 0.9860
+ Site-amazon                    (0) | Val  Loss: 0.1829 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 0.2072 | Val  Acc: 0.9565
+ Site-amazon                    (3) | Val  Loss: 0.3511 | Val  Acc: 0.9000
+ Site-amazon                    (2) | Val  Loss: 0.3088 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.1729 | Val  Acc: 0.9915
+ Site-dslr                      (3) | Val  Loss: 0.3129 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.4554 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.5991 | Val  Acc: 0.7619
+ Site-synthetic                 (0) | Val  Loss: 0.2426 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.2285 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.3252 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9567
+============ Train epoch 21 ============
+cnt=[2, 4, 2, 3, ]
+cnt=[4, 2, 3, 2, ]
+power_decay: 0.9, powerI: 0.5492, powerC: 0.4508
+ Site-amazon                    (1) | Train Loss: 0.0984 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.1039 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.1715 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.1808 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.1531 | Train Acc: 0.9718
+ Site-dslr                      (3) | Train Loss: 0.2683 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.4111 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.2013 | Train Acc: 1.0000
+ Site-synthetic                 (1) | Train Loss: 0.2227 | Train Acc: 1.0000
+ Site-synthetic                 (1) | Train Loss: 0.2577 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.1780 | Train Acc: 1.0000
+Average Train Accuracy: 0.9974
+ Site-amazon                    (1) | Val  Loss: 0.1832 | Val  Acc: 0.9286
+ Site-amazon                    (1) | Val  Loss: 0.2492 | Val  Acc: 0.9130
+ Site-amazon                    (3) | Val  Loss: 0.2771 | Val  Acc: 0.9250
+ Site-amazon                    (0) | Val  Loss: 0.2896 | Val  Acc: 0.9855
+ Site-amazon                    (2) | Val  Loss: 0.1456 | Val  Acc: 0.9915
+ Site-dslr                      (3) | Val  Loss: 0.3084 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.3457 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.5144 | Val  Acc: 0.8571
+ Site-synthetic                 (1) | Val  Loss: 0.2927 | Val  Acc: 1.0000
+ Site-synthetic                 (1) | Val  Loss: 0.2697 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.3531 | Val  Acc: 0.9286
+Average Valid Accuracy: 0.9572
+============ Train epoch 22 ============
+cnt=[2, 3, 2, 4, ]
+cnt=[4, 3, 2, 2, ]
+power_decay: 0.9, powerI: 0.5443, powerC: 0.4557
+ Site-amazon                    (3) | Train Loss: 0.1004 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0918 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.1302 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.1310 | Train Acc: 0.9808
+ Site-amazon                    (2) | Train Loss: 0.1509 | Train Acc: 0.9661
+ Site-dslr                      (1) | Train Loss: 0.2384 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.3241 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.2208 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.1754 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.1950 | Train Acc: 1.0000
+ Site-webcam                    (1) | Train Loss: 0.1710 | Train Acc: 1.0000
+Average Train Accuracy: 0.9952
+ Site-amazon                    (3) | Val  Loss: 0.2101 | Val  Acc: 0.9286
+ Site-amazon                    (3) | Val  Loss: 0.2639 | Val  Acc: 0.9130
+ Site-amazon                    (1) | Val  Loss: 0.3629 | Val  Acc: 0.8750
+ Site-amazon                    (0) | Val  Loss: 0.2679 | Val  Acc: 0.9855
+ Site-amazon                    (2) | Val  Loss: 0.1208 | Val  Acc: 0.9915
+ Site-dslr                      (1) | Val  Loss: 0.3158 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.4290 | Val  Acc: 0.9167
+ Site-dslr                      (2) | Val  Loss: 0.5434 | Val  Acc: 0.9048
+ Site-synthetic                 (3) | Val  Loss: 0.1654 | Val  Acc: 1.0000
+ Site-synthetic                 (3) | Val  Loss: 0.1733 | Val  Acc: 1.0000
+ Site-webcam                    (1) | Val  Loss: 0.2929 | Val  Acc: 0.9286
+Average Valid Accuracy: 0.9494
+============ Train epoch 23 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[2, 5, 2, 2, ]
+power_decay: 0.9, powerI: 0.5399, powerC: 0.4601
+ Site-amazon                    (0) | Train Loss: 0.0799 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0757 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.1251 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.1269 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.1417 | Train Acc: 0.9718
+ Site-dslr                      (3) | Train Loss: 0.2231 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.2589 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.2401 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.1624 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.1588 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.1717 | Train Acc: 0.9524
+Average Train Accuracy: 0.9931
+ Site-amazon                    (0) | Val  Loss: 0.1714 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 0.1593 | Val  Acc: 0.9565
+ Site-amazon                    (3) | Val  Loss: 0.3025 | Val  Acc: 0.9250
+ Site-amazon                    (2) | Val  Loss: 0.3316 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.1430 | Val  Acc: 0.9829
+ Site-dslr                      (3) | Val  Loss: 0.3201 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.3032 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.4882 | Val  Acc: 0.9048
+ Site-synthetic                 (0) | Val  Loss: 0.1723 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.1770 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.2920 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9712
+ Best site-amazon                   (0)  | Epoch:23 | Val Acc: 0.9286
+ Best site-amazon                   (0)  | Epoch:23 | Val Acc: 0.9565
+ Best site-amazon                   (3)  | Epoch:23 | Val Acc: 0.9250
+ Best site-amazon                   (2)  | Epoch:23 | Val Acc: 0.9855
+ Best site-amazon                   (1)  | Epoch:23 | Val Acc: 0.9829
+ Best site-dslr                     (3)  | Epoch:23 | Val Acc: 1.0000
+ Best site-dslr                     (2)  | Epoch:23 | Val Acc: 1.0000
+ Best site-dslr                     (1)  | Epoch:23 | Val Acc: 0.9048
+ Best site-synthetic                (0)  | Epoch:23 | Val Acc: 1.0000
+ Best site-synthetic                (0)  | Epoch:23 | Val Acc: 1.0000
+ Best site-webcam                   (3)  | Epoch:23 | Val Acc: 1.0000
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 24 ============
+cnt=[4, 2, 3, 2, ]
+cnt=[2, 2, 5, 2, ]
+power_decay: 0.9, powerI: 0.5359, powerC: 0.4641
+ Site-amazon                    (0) | Train Loss: 0.0783 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0695 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.1154 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.1291 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.1470 | Train Acc: 0.9661
+ Site-dslr                      (2) | Train Loss: 0.2330 | Train Acc: 1.0000
+ Site-dslr                      (3) | Train Loss: 0.3205 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.1891 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.1460 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.1455 | Train Acc: 1.0000
+ Site-webcam                    (2) | Train Loss: 0.1846 | Train Acc: 0.9524
+Average Train Accuracy: 0.9926
+ Site-amazon                    (0) | Val  Loss: 0.1771 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 0.2608 | Val  Acc: 0.9130
+ Site-amazon                    (2) | Val  Loss: 0.2194 | Val  Acc: 0.9750
+ Site-amazon                    (3) | Val  Loss: 0.2901 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.1255 | Val  Acc: 0.9915
+ Site-dslr                      (2) | Val  Loss: 0.1955 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.2575 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.5481 | Val  Acc: 0.8571
+ Site-synthetic                 (0) | Val  Loss: 0.1291 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.1641 | Val  Acc: 1.0000
+ Site-webcam                    (2) | Val  Loss: 0.2595 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9682
+============ Train epoch 25 ============
+cnt=[3, 2, 2, 4, ]
+cnt=[3, 2, 2, 4, ]
+power_decay: 0.9, powerI: 0.5323, powerC: 0.4677
+ Site-amazon                    (3) | Train Loss: 0.0722 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0554 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0961 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.1138 | Train Acc: 0.9904
+ Site-amazon                    (1) | Train Loss: 0.1245 | Train Acc: 0.9661
+ Site-dslr                      (0) | Train Loss: 0.2039 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.2949 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.1694 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.1462 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.1824 | Train Acc: 1.0000
+ Site-webcam                    (0) | Train Loss: 0.1469 | Train Acc: 0.9524
+Average Train Accuracy: 0.9917
+ Site-amazon                    (3) | Val  Loss: 0.1120 | Val  Acc: 1.0000
+ Site-amazon                    (3) | Val  Loss: 0.2236 | Val  Acc: 0.9130
+ Site-amazon                    (0) | Val  Loss: 0.2071 | Val  Acc: 0.9750
+ Site-amazon                    (2) | Val  Loss: 0.2046 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.1027 | Val  Acc: 0.9915
+ Site-dslr                      (0) | Val  Loss: 0.2480 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.2707 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.5119 | Val  Acc: 0.9048
+ Site-synthetic                 (3) | Val  Loss: 0.1554 | Val  Acc: 1.0000
+ Site-synthetic                 (3) | Val  Loss: 0.1998 | Val  Acc: 1.0000
+ Site-webcam                    (0) | Val  Loss: 0.2597 | Val  Acc: 0.9286
+Average Valid Accuracy: 0.9726
+ Best site-amazon                   (3)  | Epoch:25 | Val Acc: 1.0000
+ Best site-amazon                   (3)  | Epoch:25 | Val Acc: 0.9130
+ Best site-amazon                   (0)  | Epoch:25 | Val Acc: 0.9750
+ Best site-amazon                   (2)  | Epoch:25 | Val Acc: 0.9855
+ Best site-amazon                   (1)  | Epoch:25 | Val Acc: 0.9915
+ Best site-dslr                     (0)  | Epoch:25 | Val Acc: 1.0000
+ Best site-dslr                     (2)  | Epoch:25 | Val Acc: 1.0000
+ Best site-dslr                     (1)  | Epoch:25 | Val Acc: 0.9048
+ Best site-synthetic                (3)  | Epoch:25 | Val Acc: 1.0000
+ Best site-synthetic                (3)  | Epoch:25 | Val Acc: 1.0000
+ Best site-webcam                   (0)  | Epoch:25 | Val Acc: 0.9286
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 26 ============
+cnt=[2, 4, 2, 3, ]
+cnt=[2, 5, 2, 2, ]
+power_decay: 0.9, powerI: 0.5291, powerC: 0.4709
+ Site-amazon                    (1) | Train Loss: 0.0586 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0514 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.1041 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.1068 | Train Acc: 0.9904
+ Site-amazon                    (0) | Train Loss: 0.1096 | Train Acc: 0.9831
+ Site-dslr                      (3) | Train Loss: 0.1868 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.1771 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.1436 | Train Acc: 1.0000
+ Site-synthetic                 (1) | Train Loss: 0.1310 | Train Acc: 1.0000
+ Site-synthetic                 (1) | Train Loss: 0.1459 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.1407 | Train Acc: 0.9524
+Average Train Accuracy: 0.9933
+ Site-amazon                    (1) | Val  Loss: 0.2100 | Val  Acc: 0.9286
+ Site-amazon                    (1) | Val  Loss: 0.1495 | Val  Acc: 0.9565
+ Site-amazon                    (3) | Val  Loss: 0.2157 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.2528 | Val  Acc: 0.9855
+ Site-amazon                    (0) | Val  Loss: 0.0860 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.2031 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.2732 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.5427 | Val  Acc: 0.9524
+ Site-synthetic                 (1) | Val  Loss: 0.1084 | Val  Acc: 1.0000
+ Site-synthetic                 (1) | Val  Loss: 0.1507 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.2512 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9794
+ Best site-amazon                   (1)  | Epoch:26 | Val Acc: 0.9286
+ Best site-amazon                   (1)  | Epoch:26 | Val Acc: 0.9565
+ Best site-amazon                   (3)  | Epoch:26 | Val Acc: 0.9500
+ Best site-amazon                   (2)  | Epoch:26 | Val Acc: 0.9855
+ Best site-amazon                   (0)  | Epoch:26 | Val Acc: 1.0000
+ Best site-dslr                     (3)  | Epoch:26 | Val Acc: 1.0000
+ Best site-dslr                     (2)  | Epoch:26 | Val Acc: 1.0000
+ Best site-dslr                     (0)  | Epoch:26 | Val Acc: 0.9524
+ Best site-synthetic                (1)  | Epoch:26 | Val Acc: 1.0000
+ Best site-synthetic                (1)  | Epoch:26 | Val Acc: 1.0000
+ Best site-webcam                   (3)  | Epoch:26 | Val Acc: 1.0000
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 27 ============
+cnt=[3, 2, 2, 4, ]
+cnt=[5, 2, 2, 2, ]
+power_decay: 0.9, powerI: 0.5262, powerC: 0.4738
+ Site-amazon                    (3) | Train Loss: 0.0529 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0454 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.1024 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0909 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.1079 | Train Acc: 0.9718
+ Site-dslr                      (0) | Train Loss: 0.1793 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.2479 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.1784 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.1538 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.1193 | Train Acc: 1.0000
+ Site-webcam                    (0) | Train Loss: 0.1241 | Train Acc: 0.9524
+Average Train Accuracy: 0.9931
+ Site-amazon                    (3) | Val  Loss: 0.1249 | Val  Acc: 0.9286
+ Site-amazon                    (3) | Val  Loss: 0.1822 | Val  Acc: 0.9130
+ Site-amazon                    (0) | Val  Loss: 0.2279 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.2569 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0820 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.1547 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.2868 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.4890 | Val  Acc: 0.9048
+ Site-synthetic                 (3) | Val  Loss: 0.0983 | Val  Acc: 1.0000
+ Site-synthetic                 (3) | Val  Loss: 0.1163 | Val  Acc: 1.0000
+ Site-webcam                    (0) | Val  Loss: 0.2296 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9711
+============ Train epoch 28 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[3, 2, 3, 3, ]
+power_decay: 0.9, powerI: 0.5236, powerC: 0.4764
+ Site-amazon                    (0) | Train Loss: 0.0529 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0439 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0900 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0931 | Train Acc: 0.9904
+ Site-amazon                    (1) | Train Loss: 0.0983 | Train Acc: 0.9831
+ Site-dslr                      (3) | Train Loss: 0.1309 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.2498 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.1548 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.1595 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.1262 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.1000 | Train Acc: 1.0000
+Average Train Accuracy: 0.9976
+ Site-amazon                    (0) | Val  Loss: 0.1578 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 0.1473 | Val  Acc: 0.9565
+ Site-amazon                    (3) | Val  Loss: 0.1960 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.1811 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0779 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.2174 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.2247 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.4151 | Val  Acc: 0.8571
+ Site-synthetic                 (0) | Val  Loss: 0.1030 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.1662 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.2723 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9707
+============ Train epoch 29 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[3, 2, 2, 4, ]
+power_decay: 0.9, powerI: 0.5212, powerC: 0.4788
+ Site-amazon                    (0) | Train Loss: 0.0532 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0510 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0943 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0804 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0967 | Train Acc: 0.9831
+ Site-dslr                      (3) | Train Loss: 0.1893 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.1616 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.1327 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.1238 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.1453 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.1158 | Train Acc: 1.0000
+Average Train Accuracy: 0.9985
+ Site-amazon                    (0) | Val  Loss: 0.0981 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 0.1803 | Val  Acc: 0.9130
+ Site-amazon                    (3) | Val  Loss: 0.2147 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.2119 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0788 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.1817 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.1994 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.3585 | Val  Acc: 0.9048
+ Site-synthetic                 (0) | Val  Loss: 0.0974 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.1095 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.2405 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9711
+============ Train epoch 30 ============
+cnt=[2, 3, 2, 4, ]
+cnt=[1, 2, 6, 2, ]
+power_decay: 0.9, powerI: 0.5191, powerC: 0.4809
+ Site-amazon                    (3) | Train Loss: 0.0380 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0368 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0803 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0713 | Train Acc: 0.9904
+ Site-amazon                    (0) | Train Loss: 0.0970 | Train Acc: 0.9831
+ Site-dslr                      (1) | Train Loss: 0.1388 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.2083 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.1401 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.1551 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.0963 | Train Acc: 1.0000
+ Site-webcam                    (1) | Train Loss: 0.0858 | Train Acc: 0.9524
+Average Train Accuracy: 0.9933
+ Site-amazon                    (3) | Val  Loss: 0.0998 | Val  Acc: 0.9286
+ Site-amazon                    (3) | Val  Loss: 0.1644 | Val  Acc: 0.9130
+ Site-amazon                    (1) | Val  Loss: 0.1893 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.1959 | Val  Acc: 0.9855
+ Site-amazon                    (0) | Val  Loss: 0.0799 | Val  Acc: 0.9915
+ Site-dslr                      (1) | Val  Loss: 0.1941 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.2131 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.4934 | Val  Acc: 0.8571
+ Site-synthetic                 (3) | Val  Loss: 0.0887 | Val  Acc: 1.0000
+ Site-synthetic                 (3) | Val  Loss: 0.0991 | Val  Acc: 1.0000
+ Site-webcam                    (1) | Val  Loss: 0.2173 | Val  Acc: 0.9286
+Average Valid Accuracy: 0.9595
+============ Train epoch 31 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[1, 2, 6, 2, ]
+power_decay: 0.9, powerI: 0.5172, powerC: 0.4828
+ Site-amazon                    (0) | Train Loss: 0.0442 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0362 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0902 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0662 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0705 | Train Acc: 0.9944
+ Site-dslr                      (3) | Train Loss: 0.1732 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.1456 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.1291 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.1184 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0928 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.1089 | Train Acc: 0.9524
+Average Train Accuracy: 0.9952
+ Site-amazon                    (0) | Val  Loss: 0.1366 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 0.2033 | Val  Acc: 0.9130
+ Site-amazon                    (3) | Val  Loss: 0.1822 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.1348 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0621 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.1862 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.2569 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.4628 | Val  Acc: 0.9048
+ Site-synthetic                 (0) | Val  Loss: 0.0586 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.1189 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.2344 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9711
+============ Train epoch 32 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[5, 2, 2, 2, ]
+power_decay: 0.9, powerI: 0.5155, powerC: 0.4845
+ Site-amazon                    (0) | Train Loss: 0.0374 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0328 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0672 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0904 | Train Acc: 0.9904
+ Site-amazon                    (1) | Train Loss: 0.0806 | Train Acc: 0.9887
+ Site-dslr                      (3) | Train Loss: 0.1080 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.1737 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.1203 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0817 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0692 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.1137 | Train Acc: 0.9524
+Average Train Accuracy: 0.9938
+ Site-amazon                    (0) | Val  Loss: 0.1471 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 0.1791 | Val  Acc: 0.9130
+ Site-amazon                    (3) | Val  Loss: 0.2245 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.2610 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0708 | Val  Acc: 0.9915
+ Site-dslr                      (3) | Val  Loss: 0.2038 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.1984 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.5252 | Val  Acc: 0.8095
+ Site-synthetic                 (0) | Val  Loss: 0.0852 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.0745 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.2084 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9616
+============ Train epoch 33 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[3, 2, 4, 2, ]
+power_decay: 0.9, powerI: 0.5139, powerC: 0.4861
+ Site-amazon                    (0) | Train Loss: 0.0358 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0356 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0732 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0660 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0903 | Train Acc: 0.9887
+ Site-dslr                      (3) | Train Loss: 0.1220 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.1435 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.0904 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.1230 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.1103 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.1116 | Train Acc: 0.9524
+Average Train Accuracy: 0.9946
+ Site-amazon                    (0) | Val  Loss: 0.1152 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 0.1836 | Val  Acc: 0.9130
+ Site-amazon                    (3) | Val  Loss: 0.2025 | Val  Acc: 0.9250
+ Site-amazon                    (2) | Val  Loss: 0.1769 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0545 | Val  Acc: 0.9915
+ Site-dslr                      (3) | Val  Loss: 0.1948 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.2010 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.3751 | Val  Acc: 0.9048
+ Site-synthetic                 (0) | Val  Loss: 0.0756 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.1086 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.2098 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9680
+============ Train epoch 34 ============
+cnt=[3, 2, 2, 4, ]
+cnt=[3, 2, 4, 2, ]
+power_decay: 0.9, powerI: 0.5125, powerC: 0.4875
+ Site-amazon                    (3) | Train Loss: 0.0312 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0288 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0633 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0645 | Train Acc: 0.9904
+ Site-amazon                    (1) | Train Loss: 0.0777 | Train Acc: 0.9831
+ Site-dslr                      (0) | Train Loss: 0.1295 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.1315 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.0985 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.0780 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.0689 | Train Acc: 1.0000
+ Site-webcam                    (0) | Train Loss: 0.0941 | Train Acc: 0.9524
+Average Train Accuracy: 0.9933
+ Site-amazon                    (3) | Val  Loss: 0.1415 | Val  Acc: 0.9286
+ Site-amazon                    (3) | Val  Loss: 0.1690 | Val  Acc: 0.9130
+ Site-amazon                    (0) | Val  Loss: 0.1480 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.2273 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0550 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.2169 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.1944 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.4877 | Val  Acc: 0.9048
+ Site-synthetic                 (3) | Val  Loss: 0.0615 | Val  Acc: 1.0000
+ Site-synthetic                 (3) | Val  Loss: 0.0718 | Val  Acc: 1.0000
+ Site-webcam                    (0) | Val  Loss: 0.1717 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9711
+============ Train epoch 35 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[4, 2, 3, 2, ]
+power_decay: 0.9, powerI: 0.5113, powerC: 0.4887
+ Site-amazon                    (0) | Train Loss: 0.0292 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0286 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0595 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0774 | Train Acc: 0.9904
+ Site-amazon                    (1) | Train Loss: 0.0630 | Train Acc: 1.0000
+ Site-dslr                      (3) | Train Loss: 0.1554 | Train Acc: 0.9091
+ Site-dslr                      (2) | Train Loss: 0.1508 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.1046 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0899 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0970 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.0836 | Train Acc: 1.0000
+Average Train Accuracy: 0.9909
+ Site-amazon                    (0) | Val  Loss: 0.1575 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 0.0804 | Val  Acc: 0.9565
+ Site-amazon                    (3) | Val  Loss: 0.1105 | Val  Acc: 1.0000
+ Site-amazon                    (2) | Val  Loss: 0.1349 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0502 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.1763 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.1370 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.3674 | Val  Acc: 0.8571
+ Site-synthetic                 (0) | Val  Loss: 0.0809 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.1071 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.1755 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9752
+============ Train epoch 36 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[2, 3, 2, 4, ]
+power_decay: 0.9, powerI: 0.5101, powerC: 0.4899
+ Site-amazon                    (0) | Train Loss: 0.0352 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0301 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0649 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0484 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0743 | Train Acc: 0.9774
+ Site-dslr                      (3) | Train Loss: 0.1512 | Train Acc: 0.9091
+ Site-dslr                      (2) | Train Loss: 0.1256 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.1103 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.1020 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0798 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.0821 | Train Acc: 1.0000
+Average Train Accuracy: 0.9897
+ Site-amazon                    (0) | Val  Loss: 0.1217 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 0.1168 | Val  Acc: 0.9130
+ Site-amazon                    (3) | Val  Loss: 0.1271 | Val  Acc: 0.9750
+ Site-amazon                    (2) | Val  Loss: 0.1144 | Val  Acc: 1.0000
+ Site-amazon                    (1) | Val  Loss: 0.0511 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.1837 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.1758 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.4329 | Val  Acc: 0.8571
+ Site-synthetic                 (0) | Val  Loss: 0.0562 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.0754 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.1942 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9703
+============ Train epoch 37 ============
+cnt=[3, 2, 2, 4, ]
+cnt=[2, 5, 2, 2, ]
+power_decay: 0.9, powerI: 0.5091, powerC: 0.4909
+ Site-amazon                    (3) | Train Loss: 0.0320 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0279 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0573 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0671 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0560 | Train Acc: 0.9887
+ Site-dslr                      (0) | Train Loss: 0.0988 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.1490 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.1084 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.0606 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.0883 | Train Acc: 1.0000
+ Site-webcam                    (0) | Train Loss: 0.1009 | Train Acc: 0.9524
+Average Train Accuracy: 0.9946
+ Site-amazon                    (3) | Val  Loss: 0.1030 | Val  Acc: 0.9286
+ Site-amazon                    (3) | Val  Loss: 0.0756 | Val  Acc: 0.9565
+ Site-amazon                    (0) | Val  Loss: 0.1339 | Val  Acc: 0.9750
+ Site-amazon                    (2) | Val  Loss: 0.1194 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0542 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.3082 | Val  Acc: 0.8571
+ Site-dslr                      (2) | Val  Loss: 0.1715 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.4114 | Val  Acc: 0.9048
+ Site-synthetic                 (3) | Val  Loss: 0.0583 | Val  Acc: 1.0000
+ Site-synthetic                 (3) | Val  Loss: 0.0902 | Val  Acc: 1.0000
+ Site-webcam                    (0) | Val  Loss: 0.1988 | Val  Acc: 0.9286
+Average Valid Accuracy: 0.9578
+============ Train epoch 38 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[3, 2, 3, 3, ]
+power_decay: 0.9, powerI: 0.5082, powerC: 0.4918
+ Site-amazon                    (0) | Train Loss: 0.0362 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0282 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0591 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0435 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0603 | Train Acc: 0.9887
+ Site-dslr                      (3) | Train Loss: 0.0983 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.0999 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.1128 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0590 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0763 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.0493 | Train Acc: 1.0000
+Average Train Accuracy: 0.9990
+ Site-amazon                    (0) | Val  Loss: 0.0669 | Val  Acc: 1.0000
+ Site-amazon                    (0) | Val  Loss: 0.1045 | Val  Acc: 0.9565
+ Site-amazon                    (3) | Val  Loss: 0.1660 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.1399 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0424 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.2849 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.1623 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.4062 | Val  Acc: 0.8571
+ Site-synthetic                 (0) | Val  Loss: 0.0632 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.0628 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.1600 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9772
+============ Train epoch 39 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[4, 2, 2, 3, ]
+power_decay: 0.9, powerI: 0.5074, powerC: 0.4926
+ Site-amazon                    (0) | Train Loss: 0.0321 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0274 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0522 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0636 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0552 | Train Acc: 0.9887
+ Site-dslr                      (3) | Train Loss: 0.1801 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.1276 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.0996 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0817 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0549 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.0822 | Train Acc: 1.0000
+Average Train Accuracy: 0.9990
+ Site-amazon                    (0) | Val  Loss: 0.1156 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 0.1385 | Val  Acc: 0.9130
+ Site-amazon                    (3) | Val  Loss: 0.1622 | Val  Acc: 0.9750
+ Site-amazon                    (2) | Val  Loss: 0.0867 | Val  Acc: 1.0000
+ Site-amazon                    (1) | Val  Loss: 0.0472 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.1388 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.1540 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.4592 | Val  Acc: 0.9048
+ Site-synthetic                 (0) | Val  Loss: 0.0484 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.0658 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.1278 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9747
+============ Train epoch 40 ============
+cnt=[3, 2, 2, 4, ]
+cnt=[5, 2, 2, 2, ]
+power_decay: 0.9, powerI: 0.5067, powerC: 0.4933
+ Site-amazon                    (3) | Train Loss: 0.0334 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0256 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0485 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0428 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0702 | Train Acc: 0.9887
+ Site-dslr                      (0) | Train Loss: 0.1105 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.0916 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.0853 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.0941 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.0497 | Train Acc: 1.0000
+ Site-webcam                    (0) | Train Loss: 0.0629 | Train Acc: 1.0000
+Average Train Accuracy: 0.9990
+ Site-amazon                    (3) | Val  Loss: 0.0400 | Val  Acc: 1.0000
+ Site-amazon                    (3) | Val  Loss: 0.1133 | Val  Acc: 0.9565
+ Site-amazon                    (0) | Val  Loss: 0.1663 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.1079 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0417 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.1341 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.1537 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.3687 | Val  Acc: 0.9048
+ Site-synthetic                 (3) | Val  Loss: 0.0701 | Val  Acc: 1.0000
+ Site-synthetic                 (3) | Val  Loss: 0.0743 | Val  Acc: 1.0000
+ Site-webcam                    (0) | Val  Loss: 0.1216 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9815
+ Best site-amazon                   (3)  | Epoch:40 | Val Acc: 1.0000
+ Best site-amazon                   (3)  | Epoch:40 | Val Acc: 0.9565
+ Best site-amazon                   (0)  | Epoch:40 | Val Acc: 0.9500
+ Best site-amazon                   (2)  | Epoch:40 | Val Acc: 0.9855
+ Best site-amazon                   (1)  | Epoch:40 | Val Acc: 1.0000
+ Best site-dslr                     (0)  | Epoch:40 | Val Acc: 1.0000
+ Best site-dslr                     (2)  | Epoch:40 | Val Acc: 1.0000
+ Best site-dslr                     (1)  | Epoch:40 | Val Acc: 0.9048
+ Best site-synthetic                (3)  | Epoch:40 | Val Acc: 1.0000
+ Best site-synthetic                (3)  | Epoch:40 | Val Acc: 1.0000
+ Best site-webcam                   (0)  | Epoch:40 | Val Acc: 1.0000
+ Test site-amazon                    (3)| Epoch:40 | Test Acc: 0.6907
+ Test site-dslr                      (0)| Epoch:40 | Test Acc: 0.6275
+ Test site-synthetic                 (3)| Epoch:40 | Test Acc: 0.3933
+ Test site-webcam                    (0)| Epoch:40 | Test Acc: 0.5806
+amazon: 0.6907, dslr: 0.6275, synthetic: 0.3933, webcam: 0.5806, 
+Average Test Accuracy(group): 0.5730, Average Test Accuracy(individual): 0.6094,
+domain std=0.1109, cluster std=0.0481, individual std=0.1080, 
+Average Test Accuracy: 0.5730
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 41 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[3, 2, 4, 2, ]
+power_decay: 0.9, powerI: 0.5060, powerC: 0.4940
+ Site-amazon                    (0) | Train Loss: 0.0272 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0313 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0449 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0566 | Train Acc: 0.9904
+ Site-amazon                    (1) | Train Loss: 0.0464 | Train Acc: 0.9944
+ Site-dslr                      (3) | Train Loss: 0.1189 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.0879 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.0956 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0987 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0775 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.0718 | Train Acc: 1.0000
+Average Train Accuracy: 0.9986
+ Site-amazon                    (0) | Val  Loss: 0.0744 | Val  Acc: 1.0000
+ Site-amazon                    (0) | Val  Loss: 0.0733 | Val  Acc: 1.0000
+ Site-amazon                    (3) | Val  Loss: 0.1128 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.1309 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0508 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.1276 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.1333 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.3914 | Val  Acc: 0.7619
+ Site-synthetic                 (0) | Val  Loss: 0.0560 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.0545 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.1128 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9725
+ Test site-amazon                    (0)| Epoch:40 | Test Acc: 0.6942
+ Test site-dslr                      (3)| Epoch:40 | Test Acc: 0.6275
+ Test site-synthetic                 (0)| Epoch:40 | Test Acc: 0.4067
+ Test site-webcam                    (3)| Epoch:40 | Test Acc: 0.5806
+amazon: 0.6942, dslr: 0.6275, synthetic: 0.4067, webcam: 0.5806, 
+Average Test Accuracy(group): 0.5772, Average Test Accuracy(individual): 0.6134,
+domain std=0.1064, cluster std=0.0453, individual std=0.1043, 
+Average Test Accuracy: 0.5772
+ Saving the gmap checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_office_uneven_1.7_1/ccop_q=1...
+============ Train epoch 42 ============
+cnt=[2, 2, 4, 3, ]
+cnt=[2, 4, 2, 3, ]
+power_decay: 0.9, powerI: 0.5054, powerC: 0.4946
+ Site-amazon                    (2) | Train Loss: 0.0259 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0236 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0484 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0489 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0496 | Train Acc: 1.0000
+ Site-dslr                      (3) | Train Loss: 0.0810 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.0749 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.0802 | Train Acc: 1.0000
+ Site-synthetic                 (2) | Train Loss: 0.0631 | Train Acc: 1.0000
+ Site-synthetic                 (2) | Train Loss: 0.0451 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.0703 | Train Acc: 1.0000
+Average Train Accuracy: 1.0000
+ Site-amazon                    (2) | Val  Loss: 0.0765 | Val  Acc: 0.9286
+ Site-amazon                    (2) | Val  Loss: 0.0967 | Val  Acc: 0.9565
+ Site-amazon                    (3) | Val  Loss: 0.0938 | Val  Acc: 0.9750
+ Site-amazon                    (0) | Val  Loss: 0.1223 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0419 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.1344 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.1019 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.5624 | Val  Acc: 0.8095
+ Site-synthetic                 (2) | Val  Loss: 0.0454 | Val  Acc: 1.0000
+ Site-synthetic                 (2) | Val  Loss: 0.0578 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.1606 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9686
+ Test site-amazon                    (2)| Epoch:41 | Test Acc: 0.6942
+ Test site-dslr                      (3)| Epoch:41 | Test Acc: 0.6078
+ Test site-synthetic                 (2)| Epoch:41 | Test Acc: 0.3833
+ Test site-webcam                    (3)| Epoch:41 | Test Acc: 0.5806
+amazon: 0.6942, dslr: 0.6078, synthetic: 0.3833, webcam: 0.5806, 
+Average Test Accuracy(group): 0.5665, Average Test Accuracy(individual): 0.6038,
+domain std=0.1137, cluster std=0.0462, individual std=0.1123, 
+Average Test Accuracy: 0.5665
+============ Train epoch 43 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[2, 3, 2, 4, ]
+power_decay: 0.9, powerI: 0.5048, powerC: 0.4952
+ Site-amazon                    (0) | Train Loss: 0.0233 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0210 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0457 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0407 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0536 | Train Acc: 0.9887
+ Site-dslr                      (3) | Train Loss: 0.1010 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.0878 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.0867 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0482 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0380 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.0630 | Train Acc: 1.0000
+Average Train Accuracy: 0.9990
+ Site-amazon                    (0) | Val  Loss: 0.0550 | Val  Acc: 1.0000
+ Site-amazon                    (0) | Val  Loss: 0.0698 | Val  Acc: 1.0000
+ Site-amazon                    (3) | Val  Loss: 0.1369 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.1780 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0328 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.2402 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.1109 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.5035 | Val  Acc: 0.7619
+ Site-synthetic                 (0) | Val  Loss: 0.0330 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.0504 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.1349 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9725
+ Test site-amazon                    (0)| Epoch:41 | Test Acc: 0.6907
+ Test site-dslr                      (3)| Epoch:41 | Test Acc: 0.6078
+ Test site-synthetic                 (0)| Epoch:41 | Test Acc: 0.3933
+ Test site-webcam                    (3)| Epoch:41 | Test Acc: 0.5699
+amazon: 0.6907, dslr: 0.6078, synthetic: 0.3933, webcam: 0.5699, 
+Average Test Accuracy(group): 0.5654, Average Test Accuracy(individual): 0.6031,
+domain std=0.1086, cluster std=0.0440, individual std=0.1077, 
+Average Test Accuracy: 0.5654
+============ Train epoch 44 ============
+cnt=[2, 3, 2, 4, ]
+cnt=[3, 2, 4, 2, ]
+power_decay: 0.9, powerI: 0.5044, powerC: 0.4956
+ Site-amazon                    (3) | Train Loss: 0.0214 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0307 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0500 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0610 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0484 | Train Acc: 0.9944
+ Site-dslr                      (1) | Train Loss: 0.0927 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.0873 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.0816 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.0566 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.0553 | Train Acc: 1.0000
+ Site-webcam                    (1) | Train Loss: 0.0487 | Train Acc: 1.0000
+Average Train Accuracy: 0.9995
+ Site-amazon                    (3) | Val  Loss: 0.1321 | Val  Acc: 0.9286
+ Site-amazon                    (3) | Val  Loss: 0.0669 | Val  Acc: 0.9565
+ Site-amazon                    (1) | Val  Loss: 0.1158 | Val  Acc: 0.9500
+ Site-amazon                    (2) | Val  Loss: 0.1238 | Val  Acc: 0.9855
+ Site-amazon                    (0) | Val  Loss: 0.0355 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.1384 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.0947 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.4344 | Val  Acc: 0.7619
+ Site-synthetic                 (3) | Val  Loss: 0.0417 | Val  Acc: 1.0000
+ Site-synthetic                 (3) | Val  Loss: 0.0612 | Val  Acc: 1.0000
+ Site-webcam                    (1) | Val  Loss: 0.1129 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9620
+ Test site-amazon                    (3)| Epoch:41 | Test Acc: 0.6907
+ Test site-dslr                      (1)| Epoch:41 | Test Acc: 0.6078
+ Test site-synthetic                 (3)| Epoch:41 | Test Acc: 0.4067
+ Test site-webcam                    (1)| Epoch:41 | Test Acc: 0.5699
+amazon: 0.6907, dslr: 0.6078, synthetic: 0.4067, webcam: 0.5699, 
+Average Test Accuracy(group): 0.5688, Average Test Accuracy(individual): 0.6055,
+domain std=0.1033, cluster std=0.0412, individual std=0.1030, 
+Average Test Accuracy: 0.5688
+============ Train epoch 45 ============
+cnt=[2, 4, 2, 3, ]
+cnt=[3, 2, 3, 3, ]
+power_decay: 0.9, powerI: 0.5039, powerC: 0.4961
+ Site-amazon                    (1) | Train Loss: 0.0258 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0242 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0500 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0363 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0520 | Train Acc: 0.9944
+ Site-dslr                      (3) | Train Loss: 0.0751 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.0982 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.0639 | Train Acc: 1.0000
+ Site-synthetic                 (1) | Train Loss: 0.0763 | Train Acc: 1.0000
+ Site-synthetic                 (1) | Train Loss: 0.0442 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.0512 | Train Acc: 1.0000
+Average Train Accuracy: 0.9995
+ Site-amazon                    (1) | Val  Loss: 0.0742 | Val  Acc: 1.0000
+ Site-amazon                    (1) | Val  Loss: 0.0921 | Val  Acc: 0.9565
+ Site-amazon                    (3) | Val  Loss: 0.1500 | Val  Acc: 0.9500
+ Site-amazon                    (0) | Val  Loss: 0.1091 | Val  Acc: 0.9855
+ Site-amazon                    (2) | Val  Loss: 0.0265 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.1941 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.1337 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.4942 | Val  Acc: 0.9048
+ Site-synthetic                 (1) | Val  Loss: 0.0430 | Val  Acc: 1.0000
+ Site-synthetic                 (1) | Val  Loss: 0.0538 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.1086 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9815
+ Test site-amazon                    (1)| Epoch:41 | Test Acc: 0.6907
+ Test site-dslr                      (3)| Epoch:41 | Test Acc: 0.6078
+ Test site-synthetic                 (1)| Epoch:41 | Test Acc: 0.4067
+ Test site-webcam                    (3)| Epoch:41 | Test Acc: 0.5806
+amazon: 0.6907, dslr: 0.6078, synthetic: 0.4067, webcam: 0.5806, 
+Average Test Accuracy(group): 0.5715, Average Test Accuracy(individual): 0.6065,
+domain std=0.1034, cluster std=0.0413, individual std=0.1027, 
+Average Test Accuracy: 0.5715
+============ Train epoch 46 ============
+cnt=[2, 4, 2, 3, ]
+cnt=[4, 2, 3, 2, ]
+power_decay: 0.9, powerI: 0.5035, powerC: 0.4965
+ Site-amazon                    (1) | Train Loss: 0.0252 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0219 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0417 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0328 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0537 | Train Acc: 0.9944
+ Site-dslr                      (3) | Train Loss: 0.0455 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.1008 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.1129 | Train Acc: 0.9688
+ Site-synthetic                 (1) | Train Loss: 0.0437 | Train Acc: 1.0000
+ Site-synthetic                 (1) | Train Loss: 0.0384 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.0496 | Train Acc: 1.0000
+Average Train Accuracy: 0.9966
+ Site-amazon                    (1) | Val  Loss: 0.0365 | Val  Acc: 1.0000
+ Site-amazon                    (1) | Val  Loss: 0.1963 | Val  Acc: 0.9130
+ Site-amazon                    (3) | Val  Loss: 0.1107 | Val  Acc: 0.9750
+ Site-amazon                    (2) | Val  Loss: 0.1379 | Val  Acc: 0.9855
+ Site-amazon                    (0) | Val  Loss: 0.0308 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.2056 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.1041 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.4581 | Val  Acc: 0.8571
+ Site-synthetic                 (1) | Val  Loss: 0.0377 | Val  Acc: 1.0000
+ Site-synthetic                 (1) | Val  Loss: 0.0461 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.1301 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9755
+ Test site-amazon                    (1)| Epoch:41 | Test Acc: 0.6942
+ Test site-dslr                      (3)| Epoch:41 | Test Acc: 0.6275
+ Test site-synthetic                 (1)| Epoch:41 | Test Acc: 0.4067
+ Test site-webcam                    (3)| Epoch:41 | Test Acc: 0.5806
+amazon: 0.6942, dslr: 0.6275, synthetic: 0.4067, webcam: 0.5806, 
+Average Test Accuracy(group): 0.5772, Average Test Accuracy(individual): 0.6134,
+domain std=0.1064, cluster std=0.0453, individual std=0.1043, 
+Average Test Accuracy: 0.5772
+============ Train epoch 47 ============
+cnt=[2, 4, 2, 3, ]
+cnt=[4, 2, 2, 3, ]
+power_decay: 0.9, powerI: 0.5032, powerC: 0.4968
+ Site-amazon                    (1) | Train Loss: 0.0209 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0239 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0484 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0336 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0437 | Train Acc: 0.9887
+ Site-dslr                      (3) | Train Loss: 0.0624 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.0668 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.0622 | Train Acc: 1.0000
+ Site-synthetic                 (1) | Train Loss: 0.0597 | Train Acc: 1.0000
+ Site-synthetic                 (1) | Train Loss: 0.0456 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.0682 | Train Acc: 1.0000
+Average Train Accuracy: 0.9990
+ Site-amazon                    (1) | Val  Loss: 0.1380 | Val  Acc: 0.9286
+ Site-amazon                    (1) | Val  Loss: 0.0958 | Val  Acc: 0.9565
+ Site-amazon                    (3) | Val  Loss: 0.1763 | Val  Acc: 0.9000
+ Site-amazon                    (2) | Val  Loss: 0.0662 | Val  Acc: 1.0000
+ Site-amazon                    (0) | Val  Loss: 0.0407 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.1648 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.0993 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.5128 | Val  Acc: 0.7619
+ Site-synthetic                 (1) | Val  Loss: 0.0502 | Val  Acc: 1.0000
+ Site-synthetic                 (1) | Val  Loss: 0.0554 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.1467 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9588
+ Test site-amazon                    (1)| Epoch:41 | Test Acc: 0.6942
+ Test site-dslr                      (3)| Epoch:41 | Test Acc: 0.6078
+ Test site-synthetic                 (1)| Epoch:41 | Test Acc: 0.4133
+ Test site-webcam                    (3)| Epoch:41 | Test Acc: 0.5806
+amazon: 0.6942, dslr: 0.6078, synthetic: 0.4133, webcam: 0.5806, 
+Average Test Accuracy(group): 0.5740, Average Test Accuracy(individual): 0.6092,
+domain std=0.1018, cluster std=0.0399, individual std=0.1016, 
+Average Test Accuracy: 0.5740
+============ Train epoch 48 ============
+cnt=[2, 3, 2, 4, ]
+cnt=[6, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5029, powerC: 0.4971
+ Site-amazon                    (3) | Train Loss: 0.0275 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0213 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0412 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0577 | Train Acc: 0.9904
+ Site-amazon                    (0) | Train Loss: 0.0414 | Train Acc: 0.9944
+ Site-dslr                      (1) | Train Loss: 0.0931 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.0711 | Train Acc: 1.0000
+ Site-dslr                      (0) | Train Loss: 0.0663 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.0466 | Train Acc: 1.0000
+ Site-synthetic                 (3) | Train Loss: 0.0317 | Train Acc: 1.0000
+ Site-webcam                    (1) | Train Loss: 0.0418 | Train Acc: 1.0000
+Average Train Accuracy: 0.9986
+ Site-amazon                    (3) | Val  Loss: 0.1085 | Val  Acc: 0.9286
+ Site-amazon                    (3) | Val  Loss: 0.0824 | Val  Acc: 0.9565
+ Site-amazon                    (1) | Val  Loss: 0.1053 | Val  Acc: 0.9750
+ Site-amazon                    (2) | Val  Loss: 0.0833 | Val  Acc: 1.0000
+ Site-amazon                    (0) | Val  Loss: 0.0551 | Val  Acc: 0.9915
+ Site-dslr                      (1) | Val  Loss: 0.1504 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.0825 | Val  Acc: 1.0000
+ Site-dslr                      (0) | Val  Loss: 0.5438 | Val  Acc: 0.8571
+ Site-synthetic                 (3) | Val  Loss: 0.0277 | Val  Acc: 1.0000
+ Site-synthetic                 (3) | Val  Loss: 0.0469 | Val  Acc: 1.0000
+ Site-webcam                    (1) | Val  Loss: 0.1268 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9735
+ Test site-amazon                    (3)| Epoch:41 | Test Acc: 0.6942
+ Test site-dslr                      (1)| Epoch:41 | Test Acc: 0.6078
+ Test site-synthetic                 (3)| Epoch:41 | Test Acc: 0.4200
+ Test site-webcam                    (1)| Epoch:41 | Test Acc: 0.5806
+amazon: 0.6942, dslr: 0.6078, synthetic: 0.4200, webcam: 0.5806, 
+Average Test Accuracy(group): 0.5757, Average Test Accuracy(individual): 0.6105,
+domain std=0.0992, cluster std=0.0385, individual std=0.0993, 
+Average Test Accuracy: 0.5757
+============ Train epoch 49 ============
+cnt=[4, 2, 2, 3, ]
+cnt=[5, 2, 2, 2, ]
+power_decay: 0.9, powerI: 0.5026, powerC: 0.4974
+ Site-amazon                    (0) | Train Loss: 0.0173 | Train Acc: 1.0000
+ Site-amazon                    (0) | Train Loss: 0.0197 | Train Acc: 1.0000
+ Site-amazon                    (3) | Train Loss: 0.0382 | Train Acc: 1.0000
+ Site-amazon                    (2) | Train Loss: 0.0329 | Train Acc: 1.0000
+ Site-amazon                    (1) | Train Loss: 0.0391 | Train Acc: 0.9944
+ Site-dslr                      (3) | Train Loss: 0.0979 | Train Acc: 1.0000
+ Site-dslr                      (2) | Train Loss: 0.0853 | Train Acc: 1.0000
+ Site-dslr                      (1) | Train Loss: 0.0546 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0481 | Train Acc: 1.0000
+ Site-synthetic                 (0) | Train Loss: 0.0355 | Train Acc: 1.0000
+ Site-webcam                    (3) | Train Loss: 0.0443 | Train Acc: 1.0000
+Average Train Accuracy: 0.9995
+ Site-amazon                    (0) | Val  Loss: 0.1166 | Val  Acc: 0.9286
+ Site-amazon                    (0) | Val  Loss: 0.0650 | Val  Acc: 0.9565
+ Site-amazon                    (3) | Val  Loss: 0.0991 | Val  Acc: 1.0000
+ Site-amazon                    (2) | Val  Loss: 0.1638 | Val  Acc: 0.9855
+ Site-amazon                    (1) | Val  Loss: 0.0307 | Val  Acc: 1.0000
+ Site-dslr                      (3) | Val  Loss: 0.1640 | Val  Acc: 1.0000
+ Site-dslr                      (2) | Val  Loss: 0.1105 | Val  Acc: 1.0000
+ Site-dslr                      (1) | Val  Loss: 0.4760 | Val  Acc: 0.8095
+ Site-synthetic                 (0) | Val  Loss: 0.0231 | Val  Acc: 1.0000
+ Site-synthetic                 (0) | Val  Loss: 0.0415 | Val  Acc: 1.0000
+ Site-webcam                    (3) | Val  Loss: 0.0873 | Val  Acc: 1.0000
+Average Valid Accuracy: 0.9709
+ Test site-amazon                    (0)| Epoch:41 | Test Acc: 0.6942
+ Test site-dslr                      (3)| Epoch:41 | Test Acc: 0.6275
+ Test site-synthetic                 (0)| Epoch:41 | Test Acc: 0.4033
+ Test site-webcam                    (3)| Epoch:41 | Test Acc: 0.5806
+amazon: 0.6942, dslr: 0.6275, synthetic: 0.4033, webcam: 0.5806, 
+Average Test Accuracy(group): 0.5764, Average Test Accuracy(individual): 0.6128,
+domain std=0.1078, cluster std=0.0460, individual std=0.1055, 
+Average Test Accuracy: 0.5764
+===2023-07-28 15:44:47===
+===2023-07-28 15:45:00===
+===Setting===
+    dataset: office
+    lr: 0.01
+    batch: 64
+    iters: 10
+    wk_iters: 1
+    si: False
+    domain_num: 4
+    quantile: 0
+    power_cs: 1
+    std_rw: False
+    gender_label: False
+    binary_race: False
+    save_iter: -1
+    mix5: False
+    power_relu: 1
+    Ea_val: False
+data_number=[21,36,61,104,177,11,19,32,13,23,21,
+client_nums=[5,3,2,1,]
+len_dataset=[667,106,62,36,]
+domain number = 4
+Loading snapshots...
+ Test site-amazon                    (0)| Epoch:41 | Test Acc: 0.6942
+ Test site-dslr                      (3)| Epoch:41 | Test Acc: 0.6275
+ Test site-synthetic                 (0)| Epoch:41 | Test Acc: 0.4067
+ Test site-webcam                    (3)| Epoch:41 | Test Acc: 0.5806
+amazon: 0.6942, dslr: 0.6275, synthetic: 0.4067, webcam: 0.5806, 
+Average Test Accuracy(group): 0.5772, Average Test Accuracy(individual): 0.6134,
+domain std=0.1064, cluster std=0.0453, individual std=0.1043, 
+data_number=[11,19,33,56,96,22,38,66,27,47,43,
+client_nums=[5,3,2,1,]
+len_dataset=[364,214,125,73,]
+data_number=[53,90,154,262,445,105,179,305,128,219,204,
+client_nums=[5,3,2,1,]
+len_dataset=[1677,986,580,341,]
+data_number=[35,52,78,117,175,32,73,163,23,117,75,
+client_nums=[5,3,2,1,]
+len_dataset=[766,450,236,125,]
+data_number=[35,52,78,117,175,32,73,163,23,117,75,
+client_nums=[5,3,2,1,]
+len_dataset=[766,450,236,125,]

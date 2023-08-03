@@ -79,17 +79,7 @@ def test_score(args, server_model, test_loaders, datasets, best_epoch, gmap):
         + f"individual std={std_individual:.4f}, " 
     write_log(args, f'{msg}\n')
 
-    # todo: remove
-    done = False
-    if args.mode.lower() in ["ablation", 'ccop']:
-        if args.save_std > 0 and std_domain < args.save_std:
-            done = True
-            if args.save_mean > 0 and mean_domain < args.save_mean:
-                done = False
-        elif args.save_mean > 0 and mean_domain > args.save_mean:
-            done = True
-    # todo individual std
-    return domain_test_accs, done
+    return domain_test_accs
 
 if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -172,6 +162,13 @@ if __name__ == '__main__':
     if args.dataset.lower()[:6] == 'domain':
         # name of each datasets
         domain_num = 6
+    elif args.dataset.lower()[:3] == 'geo':
+        # name of each datasets
+        domain_num = 2
+    elif args.dataset.lower()[:4] == 'pacs':
+        # name of each datasets
+        domain_num = 4
+        args.num_classes = 7
     elif args.dataset.lower()[:5] == 'digit':
         domain_num = 5
     elif args.dataset.lower()[:9] == 'fairface':
@@ -183,6 +180,12 @@ if __name__ == '__main__':
         warnings.warn("invalid args.dataset")
         exit(0)
     exp_folder = f'fed_{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
+    if args.cluster_num != -1:
+        cluster_num = args.cluster_num if args.mode.lower() in ['ccop', 'ablation'] else -1
+        domain_num = args.cluster_num
+        exp_folder += f"_cluster_{cluster_num}"
+    else:
+        args.cluster_num = domain_num
     if args.dataset.lower()[:8]=='fairface':
         cluster_num = args.cluster_num if args.mode.lower() in ['ccop', 'ablation'] else -1
         if args.gender_dis != 'iid':
@@ -330,7 +333,7 @@ if __name__ == '__main__':
             test_accs = list(test_accs.values())
             write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
         else:
-            test_accs, done = test_score(args, server_model, test_loaders, datasets, best_epoch, gmap)
+            test_accs = test_score(args, server_model, test_loaders, datasets, best_epoch, gmap)
         exit(0)
 
     if args.resume:
@@ -354,8 +357,6 @@ if __name__ == '__main__':
         start_iter = 0
 
     # Start training
-    #todo: remove
-    done = False
     gmap = {}
     multi = 100
     Eas = [multi for _ in range(client_num)]
@@ -379,7 +380,6 @@ if __name__ == '__main__':
     all_pi = None
     # average along clusters
     cluster_pis = None
-    mean_feat = None
     for a_iter in range(start_iter, args.iters):
         print(best_test)
         if args.mode.lower() in ['doprompt', 'fedprompt', 'cocoop', 'nova']:
@@ -417,13 +417,12 @@ if __name__ == '__main__':
                             gidx = -1
                             pre_feat = None
                             pre_pi = None
-                            mean_feat = None
                         else:
                             gidx = gmap[client_idx]
                             pre_pi = pre_pis[client_idx]
                             pre_feat = pre_feats[client_idx]
                         train_CoCoOP(args, model, train_loaders[client_idx], loss_fun, device, 
-                        gidx, mean_feat, pre_feat, cluster_pis, pre_pi,
+                        gidx, pre_feat, cluster_pis, pre_pi,
                         pre_glob=pre_glob, pre_local=pre_locals[client_idx],
                         a_iter=a_iter)
                     feat_i = agg_rep(args, server_model, train_loaders[client_idx], device).unsqueeze(0)
@@ -458,7 +457,7 @@ if __name__ == '__main__':
                 else:
                     train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                     train_losses[client_idx] = train_loss
-        if args.clscon or args.mode.lower()=='only_dcnet':
+        if args.mode.lower() in ['only_dcnet', 'ccop']:
             for key in server_model.state_dict().keys():
                 if 'prompt' in key or 'meta_net' in key:
                     pre_glob.state_dict()[key].data.copy_(server_model.state_dict()[key])
@@ -478,8 +477,8 @@ if __name__ == '__main__':
             if args.mode.lower() != 'solo':
                 if args.mode.lower() in ['nova', 'ccop', 'ablation']:
                     print(Eas)
-                # server_model, models, prompt_bank, gmap, cluster_pis, mean_feat = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, pre_clusters, all_feat, all_pi, prompt_bank)
-                server_model, models, prompt_bank, gmap, cluster_pis, mean_feat = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, all_feat, all_pi, prompt_bank)
+                # server_model, models, prompt_bank, gmap, cluster_pis = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, pre_clusters, all_feat, all_pi, prompt_bank)
+                server_model, models, prompt_bank, gmap, cluster_pis = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, all_feat, all_pi, prompt_bank)
                 
             # Report loss after aggregation
             train_acc_list = [None for j in range(client_num)]
@@ -523,7 +522,7 @@ if __name__ == '__main__':
                         group_info = f"({gmap[client_idx]})" if args.mode.lower() in ['ccop', 'ablation'] else ""
                         write_log(args, ' Best site-{:<25s}{:<4s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], group_info, best_epoch, best_acc[client_idx]))
                 if ((a_iter+1)*(wi+1)) > threshold:
-                    test_accs, done = test_score(args, server_model, test_loaders, datasets, best_epoch, gmap)
+                    test_accs = test_score(args, server_model, test_loaders, datasets, best_epoch, gmap)
                     if np.mean(test_accs) > np.mean(best_test):
                         best_changed = True
                         best_epoch = a_iter
@@ -546,8 +545,8 @@ if __name__ == '__main__':
                 }, GMAP_SAVE_PATH)
             best_changed = a_iter==args.save_iter or (best_changed and not args.freeze_ckpt)
             if ((a_iter+1)*(wi+1)) % test_freq == 0:
-                test_accs, done = test_score(args, server_model, test_loaders, datasets, best_epoch, gmap)
-                best_changed = best_changed or done
+                test_accs = test_score(args, server_model, test_loaders, datasets, best_epoch, gmap)
+                best_changed = best_changed
             if best_changed:  
                 best_changed = False
                 # print(' Saving the local and server checkpoint to {}...'.format(SAVE_PATH))
@@ -604,8 +603,6 @@ if __name__ == '__main__':
                     }, SAVE_PATH)
                 
                  
-                if done: exit(0)
-                # print(f'Average Test Accuracy: {np.mean(test_accs):.4f}')
     
     write_log(args, '==={}===\n'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 

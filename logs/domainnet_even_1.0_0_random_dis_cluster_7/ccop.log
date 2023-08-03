@@ -1,0 +1,2053 @@
+===2023-08-02 11:56:09===
+===Setting===
+    dataset: domainnet
+    lr: 0.01
+    batch: 64
+    iters: 50
+    wk_iters: 1
+    si: False
+    domain_num: 7
+    quantile: 0
+    power_cs: 1
+    std_rw: False
+    gender_label: False
+    binary_race: False
+    save_iter: -1
+    mix5: False
+    power_relu: 1
+    Ea_val: False
+data_number=[315,945,315,945,315,945,315,945,315,945,315,945,
+client_nums=[2,2,2,2,2,2,]
+len_dataset=[2103,2103,2103,2103,2103,2103,]
+domain number = 7
+multiply 100 for Ea!
+use train loss for Ea
+============ Train epoch 0 ============
+cnt=[2, 2, 2, 1, 2, 2, 1, ]
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+power_decay: 0.9, powerI: 0.9500, powerC: 0.0500
+ Site-Clipart                   (4) | Train Loss: 1.7342 | Train Acc: 0.5556
+ Site-Clipart                   (4) | Train Loss: 1.7783 | Train Acc: 0.5185
+ Site-Real                      (5) | Train Loss: 1.6064 | Train Acc: 0.6762
+ Site-Real                      (5) | Train Loss: 1.6546 | Train Acc: 0.6624
+ Site-Painting                  (0) | Train Loss: 1.7193 | Train Acc: 0.6095
+ Site-Painting                  (0) | Train Loss: 1.6727 | Train Acc: 0.6148
+ Site-Sketch                    (2) | Train Loss: 1.7067 | Train Acc: 0.5841
+ Site-Sketch                    (2) | Train Loss: 1.7728 | Train Acc: 0.5640
+ Site-QuickDraw                 (1) | Train Loss: 2.1533 | Train Acc: 0.2571
+ Site-QuickDraw                 (1) | Train Loss: 2.1306 | Train Acc: 0.2825
+ Site-Infograph                 (3) | Train Loss: 2.1014 | Train Acc: 0.3048
+ Site-Infograph                 (6) | Train Loss: 2.0970 | Train Acc: 0.2974
+Average Train Accuracy: 0.4939
+ Site-Clipart                   (4) | Val  Loss: 1.7958 | Val  Acc: 0.5333
+ Site-Clipart                   (4) | Val  Loss: 1.7605 | Val  Acc: 0.5540
+ Site-Real                      (5) | Val  Loss: 1.7321 | Val  Acc: 0.6381
+ Site-Real                      (5) | Val  Loss: 1.6668 | Val  Acc: 0.6524
+ Site-Painting                  (0) | Val  Loss: 1.6943 | Val  Acc: 0.6000
+ Site-Painting                  (0) | Val  Loss: 1.6963 | Val  Acc: 0.5921
+ Site-Sketch                    (2) | Val  Loss: 1.8195 | Val  Acc: 0.5619
+ Site-Sketch                    (2) | Val  Loss: 1.7777 | Val  Acc: 0.5762
+ Site-QuickDraw                 (1) | Val  Loss: 2.1524 | Val  Acc: 0.2571
+ Site-QuickDraw                 (1) | Val  Loss: 2.1369 | Val  Acc: 0.2810
+ Site-Infograph                 (3) | Val  Loss: 2.0877 | Val  Acc: 0.2952
+ Site-Infograph                 (6) | Val  Loss: 2.1103 | Val  Acc: 0.2952
+Average Valid Accuracy: 0.4864
+ Best site-Clipart                  (4)  | Epoch:0 | Val Acc: 0.5333
+ Best site-Clipart                  (4)  | Epoch:0 | Val Acc: 0.5540
+ Best site-Real                     (5)  | Epoch:0 | Val Acc: 0.6381
+ Best site-Real                     (5)  | Epoch:0 | Val Acc: 0.6524
+ Best site-Painting                 (0)  | Epoch:0 | Val Acc: 0.6000
+ Best site-Painting                 (0)  | Epoch:0 | Val Acc: 0.5921
+ Best site-Sketch                   (2)  | Epoch:0 | Val Acc: 0.5619
+ Best site-Sketch                   (2)  | Epoch:0 | Val Acc: 0.5762
+ Best site-QuickDraw                (1)  | Epoch:0 | Val Acc: 0.2571
+ Best site-QuickDraw                (1)  | Epoch:0 | Val Acc: 0.2810
+ Best site-Infograph                (3)  | Epoch:0 | Val Acc: 0.2952
+ Best site-Infograph                (6)  | Epoch:0 | Val Acc: 0.2952
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 1 ============
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+power_decay: 0.9, powerI: 0.9050, powerC: 0.0950
+ Site-Clipart                   (2) | Train Loss: 1.2201 | Train Acc: 0.7365
+ Site-Clipart                   (6) | Train Loss: 1.2820 | Train Acc: 0.6952
+ Site-Real                      (4) | Train Loss: 0.9802 | Train Acc: 0.8349
+ Site-Real                      (4) | Train Loss: 1.0262 | Train Acc: 0.8296
+ Site-Painting                  (0) | Train Loss: 1.1282 | Train Acc: 0.7683
+ Site-Painting                  (0) | Train Loss: 1.0807 | Train Acc: 0.7947
+ Site-Sketch                    (5) | Train Loss: 1.1693 | Train Acc: 0.7333
+ Site-Sketch                    (5) | Train Loss: 1.2468 | Train Acc: 0.7238
+ Site-QuickDraw                 (1) | Train Loss: 2.0507 | Train Acc: 0.2381
+ Site-QuickDraw                 (1) | Train Loss: 2.0047 | Train Acc: 0.3206
+ Site-Infograph                 (3) | Train Loss: 1.7895 | Train Acc: 0.4857
+ Site-Infograph                 (3) | Train Loss: 1.8218 | Train Acc: 0.4169
+Average Train Accuracy: 0.6315
+ Site-Clipart                   (2) | Val  Loss: 1.3458 | Val  Acc: 0.6905
+ Site-Clipart                   (6) | Val  Loss: 1.2764 | Val  Acc: 0.7095
+ Site-Real                      (4) | Val  Loss: 1.1358 | Val  Acc: 0.8095
+ Site-Real                      (4) | Val  Loss: 1.0397 | Val  Acc: 0.8190
+ Site-Painting                  (0) | Val  Loss: 1.1131 | Val  Acc: 0.7476
+ Site-Painting                  (0) | Val  Loss: 1.1011 | Val  Acc: 0.7683
+ Site-Sketch                    (5) | Val  Loss: 1.2876 | Val  Acc: 0.7143
+ Site-Sketch                    (5) | Val  Loss: 1.2360 | Val  Acc: 0.7286
+ Site-QuickDraw                 (1) | Val  Loss: 2.0555 | Val  Acc: 0.3048
+ Site-QuickDraw                 (1) | Val  Loss: 2.0163 | Val  Acc: 0.3032
+ Site-Infograph                 (3) | Val  Loss: 1.7708 | Val  Acc: 0.4476
+ Site-Infograph                 (3) | Val  Loss: 1.8471 | Val  Acc: 0.4079
+Average Valid Accuracy: 0.6209
+ Best site-Clipart                  (2)  | Epoch:1 | Val Acc: 0.6905
+ Best site-Clipart                  (6)  | Epoch:1 | Val Acc: 0.7095
+ Best site-Real                     (4)  | Epoch:1 | Val Acc: 0.8095
+ Best site-Real                     (4)  | Epoch:1 | Val Acc: 0.8190
+ Best site-Painting                 (0)  | Epoch:1 | Val Acc: 0.7476
+ Best site-Painting                 (0)  | Epoch:1 | Val Acc: 0.7683
+ Best site-Sketch                   (5)  | Epoch:1 | Val Acc: 0.7143
+ Best site-Sketch                   (5)  | Epoch:1 | Val Acc: 0.7286
+ Best site-QuickDraw                (1)  | Epoch:1 | Val Acc: 0.3048
+ Best site-QuickDraw                (1)  | Epoch:1 | Val Acc: 0.3032
+ Best site-Infograph                (3)  | Epoch:1 | Val Acc: 0.4476
+ Best site-Infograph                (3)  | Epoch:1 | Val Acc: 0.4079
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 2 ============
+cnt=[2, 2, 2, 2, 2, 1, 1, ]
+cnt=[2, 2, 2, 1, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.8645, powerC: 0.1355
+ Site-Clipart                   (4) | Train Loss: 0.9474 | Train Acc: 0.7968
+ Site-Clipart                   (4) | Train Loss: 1.0183 | Train Acc: 0.7640
+ Site-Real                      (2) | Train Loss: 0.7479 | Train Acc: 0.8921
+ Site-Real                      (2) | Train Loss: 0.7730 | Train Acc: 0.8899
+ Site-Painting                  (6) | Train Loss: 0.8938 | Train Acc: 0.8000
+ Site-Painting                  (5) | Train Loss: 0.8479 | Train Acc: 0.8423
+ Site-Sketch                    (1) | Train Loss: 0.9265 | Train Acc: 0.7778
+ Site-Sketch                    (1) | Train Loss: 0.9900 | Train Acc: 0.7598
+ Site-QuickDraw                 (3) | Train Loss: 1.7772 | Train Acc: 0.3968
+ Site-QuickDraw                 (3) | Train Loss: 1.7507 | Train Acc: 0.4561
+ Site-Infograph                 (0) | Train Loss: 1.6349 | Train Acc: 0.4762
+ Site-Infograph                 (0) | Train Loss: 1.6553 | Train Acc: 0.4847
+Average Train Accuracy: 0.6947
+ Site-Clipart                   (4) | Val  Loss: 1.0690 | Val  Acc: 0.7810
+ Site-Clipart                   (4) | Val  Loss: 1.0025 | Val  Acc: 0.7635
+ Site-Real                      (2) | Val  Loss: 0.8720 | Val  Acc: 0.8905
+ Site-Real                      (2) | Val  Loss: 0.7991 | Val  Acc: 0.8889
+ Site-Painting                  (6) | Val  Loss: 0.9136 | Val  Acc: 0.7762
+ Site-Painting                  (5) | Val  Loss: 0.8678 | Val  Acc: 0.8349
+ Site-Sketch                    (1) | Val  Loss: 1.0282 | Val  Acc: 0.7905
+ Site-Sketch                    (1) | Val  Loss: 0.9706 | Val  Acc: 0.7810
+ Site-QuickDraw                 (3) | Val  Loss: 1.7908 | Val  Acc: 0.4810
+ Site-QuickDraw                 (3) | Val  Loss: 1.7550 | Val  Acc: 0.4397
+ Site-Infograph                 (0) | Val  Loss: 1.5844 | Val  Acc: 0.5048
+ Site-Infograph                 (0) | Val  Loss: 1.6519 | Val  Acc: 0.4857
+Average Valid Accuracy: 0.7015
+ Best site-Clipart                  (4)  | Epoch:2 | Val Acc: 0.7810
+ Best site-Clipart                  (4)  | Epoch:2 | Val Acc: 0.7635
+ Best site-Real                     (2)  | Epoch:2 | Val Acc: 0.8905
+ Best site-Real                     (2)  | Epoch:2 | Val Acc: 0.8889
+ Best site-Painting                 (6)  | Epoch:2 | Val Acc: 0.7762
+ Best site-Painting                 (5)  | Epoch:2 | Val Acc: 0.8349
+ Best site-Sketch                   (1)  | Epoch:2 | Val Acc: 0.7905
+ Best site-Sketch                   (1)  | Epoch:2 | Val Acc: 0.7810
+ Best site-QuickDraw                (3)  | Epoch:2 | Val Acc: 0.4810
+ Best site-QuickDraw                (3)  | Epoch:2 | Val Acc: 0.4397
+ Best site-Infograph                (0)  | Epoch:2 | Val Acc: 0.5048
+ Best site-Infograph                (0)  | Epoch:2 | Val Acc: 0.4857
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 3 ============
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+power_decay: 0.9, powerI: 0.8280, powerC: 0.1720
+ Site-Clipart                   (5) | Train Loss: 0.8195 | Train Acc: 0.8127
+ Site-Clipart                   (5) | Train Loss: 0.8841 | Train Acc: 0.7894
+ Site-Real                      (4) | Train Loss: 0.6270 | Train Acc: 0.9016
+ Site-Real                      (4) | Train Loss: 0.6520 | Train Acc: 0.8995
+ Site-Painting                  (2) | Train Loss: 0.7685 | Train Acc: 0.8222
+ Site-Painting                  (2) | Train Loss: 0.7381 | Train Acc: 0.8423
+ Site-Sketch                    (3) | Train Loss: 0.7760 | Train Acc: 0.8095
+ Site-Sketch                    (3) | Train Loss: 0.8546 | Train Acc: 0.7788
+ Site-QuickDraw                 (1) | Train Loss: 1.6252 | Train Acc: 0.4667
+ Site-QuickDraw                 (1) | Train Loss: 1.5652 | Train Acc: 0.5206
+ Site-Infograph                 (6) | Train Loss: 1.4762 | Train Acc: 0.5683
+ Site-Infograph                 (0) | Train Loss: 1.5087 | Train Acc: 0.5111
+Average Train Accuracy: 0.7269
+ Site-Clipart                   (5) | Val  Loss: 0.8990 | Val  Acc: 0.7857
+ Site-Clipart                   (5) | Val  Loss: 0.8626 | Val  Acc: 0.7825
+ Site-Real                      (4) | Val  Loss: 0.7614 | Val  Acc: 0.8857
+ Site-Real                      (4) | Val  Loss: 0.6708 | Val  Acc: 0.9016
+ Site-Painting                  (2) | Val  Loss: 0.8368 | Val  Acc: 0.7810
+ Site-Painting                  (2) | Val  Loss: 0.7424 | Val  Acc: 0.8381
+ Site-Sketch                    (3) | Val  Loss: 0.9150 | Val  Acc: 0.7667
+ Site-Sketch                    (3) | Val  Loss: 0.8573 | Val  Acc: 0.7857
+ Site-QuickDraw                 (1) | Val  Loss: 1.6357 | Val  Acc: 0.4857
+ Site-QuickDraw                 (1) | Val  Loss: 1.5412 | Val  Acc: 0.5381
+ Site-Infograph                 (6) | Val  Loss: 1.4179 | Val  Acc: 0.5619
+ Site-Infograph                 (0) | Val  Loss: 1.5046 | Val  Acc: 0.5143
+Average Valid Accuracy: 0.7189
+ Best site-Clipart                  (5)  | Epoch:3 | Val Acc: 0.7857
+ Best site-Clipart                  (5)  | Epoch:3 | Val Acc: 0.7825
+ Best site-Real                     (4)  | Epoch:3 | Val Acc: 0.8857
+ Best site-Real                     (4)  | Epoch:3 | Val Acc: 0.9016
+ Best site-Painting                 (2)  | Epoch:3 | Val Acc: 0.7810
+ Best site-Painting                 (2)  | Epoch:3 | Val Acc: 0.8381
+ Best site-Sketch                   (3)  | Epoch:3 | Val Acc: 0.7667
+ Best site-Sketch                   (3)  | Epoch:3 | Val Acc: 0.7857
+ Best site-QuickDraw                (1)  | Epoch:3 | Val Acc: 0.4857
+ Best site-QuickDraw                (1)  | Epoch:3 | Val Acc: 0.5381
+ Best site-Infograph                (6)  | Epoch:3 | Val Acc: 0.5619
+ Best site-Infograph                (0)  | Epoch:3 | Val Acc: 0.5143
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 4 ============
+cnt=[2, 2, 2, 2, 2, 1, 1, ]
+cnt=[2, 2, 2, 1, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.7952, powerC: 0.2048
+ Site-Clipart                   (4) | Train Loss: 0.7296 | Train Acc: 0.8286
+ Site-Clipart                   (4) | Train Loss: 0.8098 | Train Acc: 0.7905
+ Site-Real                      (3) | Train Loss: 0.5552 | Train Acc: 0.8889
+ Site-Real                      (3) | Train Loss: 0.5702 | Train Acc: 0.9005
+ Site-Painting                  (0) | Train Loss: 0.7039 | Train Acc: 0.8349
+ Site-Painting                  (0) | Train Loss: 0.6665 | Train Acc: 0.8487
+ Site-Sketch                    (2) | Train Loss: 0.7143 | Train Acc: 0.8032
+ Site-Sketch                    (2) | Train Loss: 0.7890 | Train Acc: 0.7958
+ Site-QuickDraw                 (1) | Train Loss: 1.3950 | Train Acc: 0.5651
+ Site-QuickDraw                 (1) | Train Loss: 1.3820 | Train Acc: 0.5746
+ Site-Infograph                 (6) | Train Loss: 1.4083 | Train Acc: 0.5714
+ Site-Infograph                 (5) | Train Loss: 1.4519 | Train Acc: 0.5397
+Average Train Accuracy: 0.7451
+ Site-Clipart                   (4) | Val  Loss: 0.8494 | Val  Acc: 0.8095
+ Site-Clipart                   (4) | Val  Loss: 0.7549 | Val  Acc: 0.8143
+ Site-Real                      (3) | Val  Loss: 0.6655 | Val  Acc: 0.8952
+ Site-Real                      (3) | Val  Loss: 0.5914 | Val  Acc: 0.9000
+ Site-Painting                  (0) | Val  Loss: 0.7245 | Val  Acc: 0.8286
+ Site-Painting                  (0) | Val  Loss: 0.6816 | Val  Acc: 0.8349
+ Site-Sketch                    (2) | Val  Loss: 0.8485 | Val  Acc: 0.7857
+ Site-Sketch                    (2) | Val  Loss: 0.7861 | Val  Acc: 0.7873
+ Site-QuickDraw                 (1) | Val  Loss: 1.3490 | Val  Acc: 0.6381
+ Site-QuickDraw                 (1) | Val  Loss: 1.3732 | Val  Acc: 0.5651
+ Site-Infograph                 (6) | Val  Loss: 1.3166 | Val  Acc: 0.5857
+ Site-Infograph                 (5) | Val  Loss: 1.4438 | Val  Acc: 0.5381
+Average Valid Accuracy: 0.7485
+ Best site-Clipart                  (4)  | Epoch:4 | Val Acc: 0.8095
+ Best site-Clipart                  (4)  | Epoch:4 | Val Acc: 0.8143
+ Best site-Real                     (3)  | Epoch:4 | Val Acc: 0.8952
+ Best site-Real                     (3)  | Epoch:4 | Val Acc: 0.9000
+ Best site-Painting                 (0)  | Epoch:4 | Val Acc: 0.8286
+ Best site-Painting                 (0)  | Epoch:4 | Val Acc: 0.8349
+ Best site-Sketch                   (2)  | Epoch:4 | Val Acc: 0.7857
+ Best site-Sketch                   (2)  | Epoch:4 | Val Acc: 0.7873
+ Best site-QuickDraw                (1)  | Epoch:4 | Val Acc: 0.6381
+ Best site-QuickDraw                (1)  | Epoch:4 | Val Acc: 0.5651
+ Best site-Infograph                (6)  | Epoch:4 | Val Acc: 0.5857
+ Best site-Infograph                (5)  | Epoch:4 | Val Acc: 0.5381
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 5 ============
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+cnt=[2, 2, 2, 2, 2, 1, 1, ]
+power_decay: 0.9, powerI: 0.7657, powerC: 0.2343
+ Site-Clipart                   (4) | Train Loss: 0.6616 | Train Acc: 0.8317
+ Site-Clipart                   (4) | Train Loss: 0.7305 | Train Acc: 0.8053
+ Site-Real                      (0) | Train Loss: 0.4813 | Train Acc: 0.9016
+ Site-Real                      (6) | Train Loss: 0.4957 | Train Acc: 0.8995
+ Site-Painting                  (5) | Train Loss: 0.6176 | Train Acc: 0.8444
+ Site-Painting                  (5) | Train Loss: 0.5835 | Train Acc: 0.8688
+ Site-Sketch                    (1) | Train Loss: 0.6478 | Train Acc: 0.8222
+ Site-Sketch                    (1) | Train Loss: 0.7042 | Train Acc: 0.8011
+ Site-QuickDraw                 (2) | Train Loss: 1.2965 | Train Acc: 0.6159
+ Site-QuickDraw                 (2) | Train Loss: 1.2948 | Train Acc: 0.6148
+ Site-Infograph                 (3) | Train Loss: 1.3509 | Train Acc: 0.5556
+ Site-Infograph                 (3) | Train Loss: 1.3473 | Train Acc: 0.5683
+Average Train Accuracy: 0.7608
+ Site-Clipart                   (4) | Val  Loss: 0.7846 | Val  Acc: 0.7857
+ Site-Clipart                   (4) | Val  Loss: 0.7515 | Val  Acc: 0.7952
+ Site-Real                      (0) | Val  Loss: 0.5814 | Val  Acc: 0.9143
+ Site-Real                      (6) | Val  Loss: 0.5130 | Val  Acc: 0.9111
+ Site-Painting                  (5) | Val  Loss: 0.6671 | Val  Acc: 0.8238
+ Site-Painting                  (5) | Val  Loss: 0.5979 | Val  Acc: 0.8603
+ Site-Sketch                    (1) | Val  Loss: 0.7221 | Val  Acc: 0.8048
+ Site-Sketch                    (1) | Val  Loss: 0.7022 | Val  Acc: 0.8095
+ Site-QuickDraw                 (2) | Val  Loss: 1.2929 | Val  Acc: 0.6762
+ Site-QuickDraw                 (2) | Val  Loss: 1.2886 | Val  Acc: 0.6349
+ Site-Infograph                 (3) | Val  Loss: 1.2552 | Val  Acc: 0.6000
+ Site-Infograph                 (3) | Val  Loss: 1.3511 | Val  Acc: 0.5730
+Average Valid Accuracy: 0.7657
+ Best site-Clipart                  (4)  | Epoch:5 | Val Acc: 0.7857
+ Best site-Clipart                  (4)  | Epoch:5 | Val Acc: 0.7952
+ Best site-Real                     (0)  | Epoch:5 | Val Acc: 0.9143
+ Best site-Real                     (6)  | Epoch:5 | Val Acc: 0.9111
+ Best site-Painting                 (5)  | Epoch:5 | Val Acc: 0.8238
+ Best site-Painting                 (5)  | Epoch:5 | Val Acc: 0.8603
+ Best site-Sketch                   (1)  | Epoch:5 | Val Acc: 0.8048
+ Best site-Sketch                   (1)  | Epoch:5 | Val Acc: 0.8095
+ Best site-QuickDraw                (2)  | Epoch:5 | Val Acc: 0.6762
+ Best site-QuickDraw                (2)  | Epoch:5 | Val Acc: 0.6349
+ Best site-Infograph                (3)  | Epoch:5 | Val Acc: 0.6000
+ Best site-Infograph                (3)  | Epoch:5 | Val Acc: 0.5730
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 6 ============
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+cnt=[2, 2, 2, 1, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.7391, powerC: 0.2609
+ Site-Clipart                   (3) | Train Loss: 0.6310 | Train Acc: 0.8222
+ Site-Clipart                   (3) | Train Loss: 0.6952 | Train Acc: 0.8032
+ Site-Real                      (4) | Train Loss: 0.4456 | Train Acc: 0.9143
+ Site-Real                      (6) | Train Loss: 0.4527 | Train Acc: 0.9143
+ Site-Painting                  (2) | Train Loss: 0.6183 | Train Acc: 0.8127
+ Site-Painting                  (2) | Train Loss: 0.5706 | Train Acc: 0.8455
+ Site-Sketch                    (5) | Train Loss: 0.6415 | Train Acc: 0.8222
+ Site-Sketch                    (5) | Train Loss: 0.6863 | Train Acc: 0.7947
+ Site-QuickDraw                 (1) | Train Loss: 1.1730 | Train Acc: 0.6508
+ Site-QuickDraw                 (1) | Train Loss: 1.1093 | Train Acc: 0.6931
+ Site-Infograph                 (0) | Train Loss: 1.2858 | Train Acc: 0.6127
+ Site-Infograph                 (0) | Train Loss: 1.2988 | Train Acc: 0.5831
+Average Train Accuracy: 0.7724
+ Site-Clipart                   (3) | Val  Loss: 0.7851 | Val  Acc: 0.8238
+ Site-Clipart                   (3) | Val  Loss: 0.6822 | Val  Acc: 0.8079
+ Site-Real                      (4) | Val  Loss: 0.5653 | Val  Acc: 0.8905
+ Site-Real                      (6) | Val  Loss: 0.4717 | Val  Acc: 0.9127
+ Site-Painting                  (2) | Val  Loss: 0.6053 | Val  Acc: 0.8333
+ Site-Painting                  (2) | Val  Loss: 0.5611 | Val  Acc: 0.8603
+ Site-Sketch                    (5) | Val  Loss: 0.7436 | Val  Acc: 0.8143
+ Site-Sketch                    (5) | Val  Loss: 0.6732 | Val  Acc: 0.8016
+ Site-QuickDraw                 (1) | Val  Loss: 1.1087 | Val  Acc: 0.6952
+ Site-QuickDraw                 (1) | Val  Loss: 1.1284 | Val  Acc: 0.6651
+ Site-Infograph                 (0) | Val  Loss: 1.1934 | Val  Acc: 0.6095
+ Site-Infograph                 (0) | Val  Loss: 1.3016 | Val  Acc: 0.5889
+Average Valid Accuracy: 0.7753
+ Best site-Clipart                  (3)  | Epoch:6 | Val Acc: 0.8238
+ Best site-Clipart                  (3)  | Epoch:6 | Val Acc: 0.8079
+ Best site-Real                     (4)  | Epoch:6 | Val Acc: 0.8905
+ Best site-Real                     (6)  | Epoch:6 | Val Acc: 0.9127
+ Best site-Painting                 (2)  | Epoch:6 | Val Acc: 0.8333
+ Best site-Painting                 (2)  | Epoch:6 | Val Acc: 0.8603
+ Best site-Sketch                   (5)  | Epoch:6 | Val Acc: 0.8143
+ Best site-Sketch                   (5)  | Epoch:6 | Val Acc: 0.8016
+ Best site-QuickDraw                (1)  | Epoch:6 | Val Acc: 0.6952
+ Best site-QuickDraw                (1)  | Epoch:6 | Val Acc: 0.6651
+ Best site-Infograph                (0)  | Epoch:6 | Val Acc: 0.6095
+ Best site-Infograph                (0)  | Epoch:6 | Val Acc: 0.5889
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 7 ============
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+cnt=[2, 2, 2, 1, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.7152, powerC: 0.2848
+ Site-Clipart                   (1) | Train Loss: 0.5837 | Train Acc: 0.8540
+ Site-Clipart                   (1) | Train Loss: 0.6335 | Train Acc: 0.8201
+ Site-Real                      (2) | Train Loss: 0.3880 | Train Acc: 0.9302
+ Site-Real                      (4) | Train Loss: 0.4020 | Train Acc: 0.9164
+ Site-Painting                  (6) | Train Loss: 0.5424 | Train Acc: 0.8508
+ Site-Painting                  (2) | Train Loss: 0.5288 | Train Acc: 0.8635
+ Site-Sketch                    (3) | Train Loss: 0.5807 | Train Acc: 0.8413
+ Site-Sketch                    (3) | Train Loss: 0.6576 | Train Acc: 0.7937
+ Site-QuickDraw                 (0) | Train Loss: 1.1324 | Train Acc: 0.6413
+ Site-QuickDraw                 (0) | Train Loss: 1.0733 | Train Acc: 0.6984
+ Site-Infograph                 (5) | Train Loss: 1.2577 | Train Acc: 0.6254
+ Site-Infograph                 (5) | Train Loss: 1.2793 | Train Acc: 0.5831
+Average Train Accuracy: 0.7848
+ Site-Clipart                   (1) | Val  Loss: 0.6630 | Val  Acc: 0.8286
+ Site-Clipart                   (1) | Val  Loss: 0.6751 | Val  Acc: 0.8063
+ Site-Real                      (2) | Val  Loss: 0.5388 | Val  Acc: 0.9000
+ Site-Real                      (4) | Val  Loss: 0.4217 | Val  Acc: 0.9111
+ Site-Painting                  (6) | Val  Loss: 0.6168 | Val  Acc: 0.8286
+ Site-Painting                  (2) | Val  Loss: 0.5017 | Val  Acc: 0.8746
+ Site-Sketch                    (3) | Val  Loss: 0.7465 | Val  Acc: 0.7857
+ Site-Sketch                    (3) | Val  Loss: 0.6591 | Val  Acc: 0.7952
+ Site-QuickDraw                 (0) | Val  Loss: 1.0473 | Val  Acc: 0.7238
+ Site-QuickDraw                 (0) | Val  Loss: 1.0675 | Val  Acc: 0.6730
+ Site-Infograph                 (5) | Val  Loss: 1.1121 | Val  Acc: 0.6333
+ Site-Infograph                 (5) | Val  Loss: 1.2522 | Val  Acc: 0.6048
+Average Valid Accuracy: 0.7804
+ Best site-Clipart                  (1)  | Epoch:7 | Val Acc: 0.8286
+ Best site-Clipart                  (1)  | Epoch:7 | Val Acc: 0.8063
+ Best site-Real                     (2)  | Epoch:7 | Val Acc: 0.9000
+ Best site-Real                     (4)  | Epoch:7 | Val Acc: 0.9111
+ Best site-Painting                 (6)  | Epoch:7 | Val Acc: 0.8286
+ Best site-Painting                 (2)  | Epoch:7 | Val Acc: 0.8746
+ Best site-Sketch                   (3)  | Epoch:7 | Val Acc: 0.7857
+ Best site-Sketch                   (3)  | Epoch:7 | Val Acc: 0.7952
+ Best site-QuickDraw                (0)  | Epoch:7 | Val Acc: 0.7238
+ Best site-QuickDraw                (0)  | Epoch:7 | Val Acc: 0.6730
+ Best site-Infograph                (5)  | Epoch:7 | Val Acc: 0.6333
+ Best site-Infograph                (5)  | Epoch:7 | Val Acc: 0.6048
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 8 ============
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+cnt=[2, 1, 2, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.6937, powerC: 0.3063
+ Site-Clipart                   (0) | Train Loss: 0.5503 | Train Acc: 0.8540
+ Site-Clipart                   (0) | Train Loss: 0.6149 | Train Acc: 0.8201
+ Site-Real                      (6) | Train Loss: 0.3708 | Train Acc: 0.9333
+ Site-Real                      (2) | Train Loss: 0.3922 | Train Acc: 0.9206
+ Site-Painting                  (5) | Train Loss: 0.5477 | Train Acc: 0.8254
+ Site-Painting                  (5) | Train Loss: 0.5155 | Train Acc: 0.8614
+ Site-Sketch                    (3) | Train Loss: 0.5954 | Train Acc: 0.8032
+ Site-Sketch                    (3) | Train Loss: 0.6088 | Train Acc: 0.8222
+ Site-QuickDraw                 (1) | Train Loss: 1.0396 | Train Acc: 0.6508
+ Site-QuickDraw                 (1) | Train Loss: 0.9841 | Train Acc: 0.7153
+ Site-Infograph                 (4) | Train Loss: 1.2349 | Train Acc: 0.6317
+ Site-Infograph                 (4) | Train Loss: 1.2495 | Train Acc: 0.5767
+Average Train Accuracy: 0.7846
+ Site-Clipart                   (0) | Val  Loss: 0.6444 | Val  Acc: 0.8476
+ Site-Clipart                   (0) | Val  Loss: 0.6099 | Val  Acc: 0.8222
+ Site-Real                      (6) | Val  Loss: 0.4832 | Val  Acc: 0.9190
+ Site-Real                      (2) | Val  Loss: 0.4113 | Val  Acc: 0.9175
+ Site-Painting                  (5) | Val  Loss: 0.5983 | Val  Acc: 0.8190
+ Site-Painting                  (5) | Val  Loss: 0.5019 | Val  Acc: 0.8683
+ Site-Sketch                    (3) | Val  Loss: 0.6816 | Val  Acc: 0.8000
+ Site-Sketch                    (3) | Val  Loss: 0.6254 | Val  Acc: 0.8190
+ Site-QuickDraw                 (1) | Val  Loss: 0.9998 | Val  Acc: 0.7190
+ Site-QuickDraw                 (1) | Val  Loss: 0.9564 | Val  Acc: 0.7317
+ Site-Infograph                 (4) | Val  Loss: 1.1415 | Val  Acc: 0.6000
+ Site-Infograph                 (4) | Val  Loss: 1.2078 | Val  Acc: 0.6016
+Average Valid Accuracy: 0.7888
+ Best site-Clipart                  (0)  | Epoch:8 | Val Acc: 0.8476
+ Best site-Clipart                  (0)  | Epoch:8 | Val Acc: 0.8222
+ Best site-Real                     (6)  | Epoch:8 | Val Acc: 0.9190
+ Best site-Real                     (2)  | Epoch:8 | Val Acc: 0.9175
+ Best site-Painting                 (5)  | Epoch:8 | Val Acc: 0.8190
+ Best site-Painting                 (5)  | Epoch:8 | Val Acc: 0.8683
+ Best site-Sketch                   (3)  | Epoch:8 | Val Acc: 0.8000
+ Best site-Sketch                   (3)  | Epoch:8 | Val Acc: 0.8190
+ Best site-QuickDraw                (1)  | Epoch:8 | Val Acc: 0.7190
+ Best site-QuickDraw                (1)  | Epoch:8 | Val Acc: 0.7317
+ Best site-Infograph                (4)  | Epoch:8 | Val Acc: 0.6000
+ Best site-Infograph                (4)  | Epoch:8 | Val Acc: 0.6016
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 9 ============
+cnt=[2, 2, 2, 2, 2, 1, 1, ]
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.6743, powerC: 0.3257
+ Site-Clipart                   (5) | Train Loss: 0.5339 | Train Acc: 0.8667
+ Site-Clipart                   (2) | Train Loss: 0.6011 | Train Acc: 0.8296
+ Site-Real                      (4) | Train Loss: 0.3492 | Train Acc: 0.9270
+ Site-Real                      (4) | Train Loss: 0.3701 | Train Acc: 0.9238
+ Site-Painting                  (0) | Train Loss: 0.4909 | Train Acc: 0.8667
+ Site-Painting                  (0) | Train Loss: 0.4976 | Train Acc: 0.8635
+ Site-Sketch                    (6) | Train Loss: 0.5419 | Train Acc: 0.8381
+ Site-Sketch                    (2) | Train Loss: 0.5949 | Train Acc: 0.8254
+ Site-QuickDraw                 (1) | Train Loss: 0.9979 | Train Acc: 0.6952
+ Site-QuickDraw                 (1) | Train Loss: 0.9466 | Train Acc: 0.7302
+ Site-Infograph                 (3) | Train Loss: 1.1912 | Train Acc: 0.6349
+ Site-Infograph                 (3) | Train Loss: 1.1840 | Train Acc: 0.6307
+Average Train Accuracy: 0.8026
+ Site-Clipart                   (5) | Val  Loss: 0.6589 | Val  Acc: 0.8190
+ Site-Clipart                   (2) | Val  Loss: 0.5772 | Val  Acc: 0.8429
+ Site-Real                      (4) | Val  Loss: 0.4730 | Val  Acc: 0.9095
+ Site-Real                      (4) | Val  Loss: 0.3714 | Val  Acc: 0.9254
+ Site-Painting                  (0) | Val  Loss: 0.5386 | Val  Acc: 0.8381
+ Site-Painting                  (0) | Val  Loss: 0.4752 | Val  Acc: 0.8635
+ Site-Sketch                    (6) | Val  Loss: 0.6969 | Val  Acc: 0.8143
+ Site-Sketch                    (2) | Val  Loss: 0.6078 | Val  Acc: 0.8159
+ Site-QuickDraw                 (1) | Val  Loss: 0.8921 | Val  Acc: 0.7810
+ Site-QuickDraw                 (1) | Val  Loss: 0.9075 | Val  Acc: 0.7365
+ Site-Infograph                 (3) | Val  Loss: 1.0377 | Val  Acc: 0.6381
+ Site-Infograph                 (3) | Val  Loss: 1.1769 | Val  Acc: 0.6111
+Average Valid Accuracy: 0.7996
+ Best site-Clipart                  (5)  | Epoch:9 | Val Acc: 0.8190
+ Best site-Clipart                  (2)  | Epoch:9 | Val Acc: 0.8429
+ Best site-Real                     (4)  | Epoch:9 | Val Acc: 0.9095
+ Best site-Real                     (4)  | Epoch:9 | Val Acc: 0.9254
+ Best site-Painting                 (0)  | Epoch:9 | Val Acc: 0.8381
+ Best site-Painting                 (0)  | Epoch:9 | Val Acc: 0.8635
+ Best site-Sketch                   (6)  | Epoch:9 | Val Acc: 0.8143
+ Best site-Sketch                   (2)  | Epoch:9 | Val Acc: 0.8159
+ Best site-QuickDraw                (1)  | Epoch:9 | Val Acc: 0.7810
+ Best site-QuickDraw                (1)  | Epoch:9 | Val Acc: 0.7365
+ Best site-Infograph                (3)  | Epoch:9 | Val Acc: 0.6381
+ Best site-Infograph                (3)  | Epoch:9 | Val Acc: 0.6111
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 10 ============
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+cnt=[1, 2, 2, 2, 2, 1, 2, ]
+power_decay: 0.9, powerI: 0.6569, powerC: 0.3431
+ Site-Clipart                   (0) | Train Loss: 0.4943 | Train Acc: 0.8984
+ Site-Clipart                   (0) | Train Loss: 0.5861 | Train Acc: 0.8275
+ Site-Real                      (6) | Train Loss: 0.3156 | Train Acc: 0.9365
+ Site-Real                      (2) | Train Loss: 0.3584 | Train Acc: 0.9132
+ Site-Painting                  (4) | Train Loss: 0.4672 | Train Acc: 0.8603
+ Site-Painting                  (4) | Train Loss: 0.4464 | Train Acc: 0.8794
+ Site-Sketch                    (5) | Train Loss: 0.5627 | Train Acc: 0.8381
+ Site-Sketch                    (5) | Train Loss: 0.5913 | Train Acc: 0.8148
+ Site-QuickDraw                 (1) | Train Loss: 0.9669 | Train Acc: 0.6984
+ Site-QuickDraw                 (1) | Train Loss: 0.9005 | Train Acc: 0.7333
+ Site-Infograph                 (3) | Train Loss: 1.2134 | Train Acc: 0.6127
+ Site-Infograph                 (3) | Train Loss: 1.1517 | Train Acc: 0.6275
+Average Train Accuracy: 0.8034
+ Site-Clipart                   (0) | Val  Loss: 0.5822 | Val  Acc: 0.8476
+ Site-Clipart                   (0) | Val  Loss: 0.5579 | Val  Acc: 0.8429
+ Site-Real                      (6) | Val  Loss: 0.4184 | Val  Acc: 0.9333
+ Site-Real                      (2) | Val  Loss: 0.3515 | Val  Acc: 0.9190
+ Site-Painting                  (4) | Val  Loss: 0.5180 | Val  Acc: 0.8524
+ Site-Painting                  (4) | Val  Loss: 0.4358 | Val  Acc: 0.9016
+ Site-Sketch                    (5) | Val  Loss: 0.6390 | Val  Acc: 0.8095
+ Site-Sketch                    (5) | Val  Loss: 0.5955 | Val  Acc: 0.8159
+ Site-QuickDraw                 (1) | Val  Loss: 0.8454 | Val  Acc: 0.7667
+ Site-QuickDraw                 (1) | Val  Loss: 0.8953 | Val  Acc: 0.7476
+ Site-Infograph                 (3) | Val  Loss: 1.0167 | Val  Acc: 0.6524
+ Site-Infograph                 (3) | Val  Loss: 1.1407 | Val  Acc: 0.6333
+Average Valid Accuracy: 0.8102
+ Best site-Clipart                  (0)  | Epoch:10 | Val Acc: 0.8476
+ Best site-Clipart                  (0)  | Epoch:10 | Val Acc: 0.8429
+ Best site-Real                     (6)  | Epoch:10 | Val Acc: 0.9333
+ Best site-Real                     (2)  | Epoch:10 | Val Acc: 0.9190
+ Best site-Painting                 (4)  | Epoch:10 | Val Acc: 0.8524
+ Best site-Painting                 (4)  | Epoch:10 | Val Acc: 0.9016
+ Best site-Sketch                   (5)  | Epoch:10 | Val Acc: 0.8095
+ Best site-Sketch                   (5)  | Epoch:10 | Val Acc: 0.8159
+ Best site-QuickDraw                (1)  | Epoch:10 | Val Acc: 0.7667
+ Best site-QuickDraw                (1)  | Epoch:10 | Val Acc: 0.7476
+ Best site-Infograph                (3)  | Epoch:10 | Val Acc: 0.6524
+ Best site-Infograph                (3)  | Epoch:10 | Val Acc: 0.6333
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 11 ============
+cnt=[1, 2, 2, 2, 2, 1, 2, ]
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.6412, powerC: 0.3588
+ Site-Clipart                   (6) | Train Loss: 0.4944 | Train Acc: 0.8635
+ Site-Clipart                   (6) | Train Loss: 0.5679 | Train Acc: 0.8349
+ Site-Real                      (4) | Train Loss: 0.3173 | Train Acc: 0.9302
+ Site-Real                      (4) | Train Loss: 0.3313 | Train Acc: 0.9259
+ Site-Painting                  (2) | Train Loss: 0.4680 | Train Acc: 0.8794
+ Site-Painting                  (2) | Train Loss: 0.4276 | Train Acc: 0.8857
+ Site-Sketch                    (0) | Train Loss: 0.5131 | Train Acc: 0.8317
+ Site-Sketch                    (5) | Train Loss: 0.5681 | Train Acc: 0.8254
+ Site-QuickDraw                 (1) | Train Loss: 0.9482 | Train Acc: 0.6921
+ Site-QuickDraw                 (1) | Train Loss: 0.8958 | Train Acc: 0.7228
+ Site-Infograph                 (3) | Train Loss: 1.1647 | Train Acc: 0.6381
+ Site-Infograph                 (3) | Train Loss: 1.1208 | Train Acc: 0.6476
+Average Train Accuracy: 0.8064
+ Site-Clipart                   (6) | Val  Loss: 0.5745 | Val  Acc: 0.8429
+ Site-Clipart                   (6) | Val  Loss: 0.5261 | Val  Acc: 0.8508
+ Site-Real                      (4) | Val  Loss: 0.4185 | Val  Acc: 0.9429
+ Site-Real                      (4) | Val  Loss: 0.3365 | Val  Acc: 0.9333
+ Site-Painting                  (2) | Val  Loss: 0.5483 | Val  Acc: 0.8476
+ Site-Painting                  (2) | Val  Loss: 0.4241 | Val  Acc: 0.8873
+ Site-Sketch                    (0) | Val  Loss: 0.6678 | Val  Acc: 0.7952
+ Site-Sketch                    (5) | Val  Loss: 0.5721 | Val  Acc: 0.8270
+ Site-QuickDraw                 (1) | Val  Loss: 0.8520 | Val  Acc: 0.7857
+ Site-QuickDraw                 (1) | Val  Loss: 0.8529 | Val  Acc: 0.7429
+ Site-Infograph                 (3) | Val  Loss: 1.0535 | Val  Acc: 0.6476
+ Site-Infograph                 (3) | Val  Loss: 1.1159 | Val  Acc: 0.6444
+Average Valid Accuracy: 0.8123
+ Best site-Clipart                  (6)  | Epoch:11 | Val Acc: 0.8429
+ Best site-Clipart                  (6)  | Epoch:11 | Val Acc: 0.8508
+ Best site-Real                     (4)  | Epoch:11 | Val Acc: 0.9429
+ Best site-Real                     (4)  | Epoch:11 | Val Acc: 0.9333
+ Best site-Painting                 (2)  | Epoch:11 | Val Acc: 0.8476
+ Best site-Painting                 (2)  | Epoch:11 | Val Acc: 0.8873
+ Best site-Sketch                   (0)  | Epoch:11 | Val Acc: 0.7952
+ Best site-Sketch                   (5)  | Epoch:11 | Val Acc: 0.8270
+ Best site-QuickDraw                (1)  | Epoch:11 | Val Acc: 0.7857
+ Best site-QuickDraw                (1)  | Epoch:11 | Val Acc: 0.7429
+ Best site-Infograph                (3)  | Epoch:11 | Val Acc: 0.6476
+ Best site-Infograph                (3)  | Epoch:11 | Val Acc: 0.6444
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 12 ============
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+power_decay: 0.9, powerI: 0.6271, powerC: 0.3729
+ Site-Clipart                   (5) | Train Loss: 0.4766 | Train Acc: 0.8857
+ Site-Clipart                   (5) | Train Loss: 0.5575 | Train Acc: 0.8317
+ Site-Real                      (0) | Train Loss: 0.3101 | Train Acc: 0.9270
+ Site-Real                      (6) | Train Loss: 0.3332 | Train Acc: 0.9206
+ Site-Painting                  (4) | Train Loss: 0.4681 | Train Acc: 0.8667
+ Site-Painting                  (4) | Train Loss: 0.4304 | Train Acc: 0.8868
+ Site-Sketch                    (2) | Train Loss: 0.5063 | Train Acc: 0.8413
+ Site-Sketch                    (2) | Train Loss: 0.5756 | Train Acc: 0.8296
+ Site-QuickDraw                 (1) | Train Loss: 0.9321 | Train Acc: 0.6889
+ Site-QuickDraw                 (1) | Train Loss: 0.8298 | Train Acc: 0.7460
+ Site-Infograph                 (3) | Train Loss: 1.1470 | Train Acc: 0.6444
+ Site-Infograph                 (3) | Train Loss: 1.1217 | Train Acc: 0.6307
+Average Train Accuracy: 0.8083
+ Site-Clipart                   (5) | Val  Loss: 0.5630 | Val  Acc: 0.8762
+ Site-Clipart                   (5) | Val  Loss: 0.5495 | Val  Acc: 0.8365
+ Site-Real                      (0) | Val  Loss: 0.4418 | Val  Acc: 0.9190
+ Site-Real                      (6) | Val  Loss: 0.3363 | Val  Acc: 0.9190
+ Site-Painting                  (4) | Val  Loss: 0.4895 | Val  Acc: 0.8714
+ Site-Painting                  (4) | Val  Loss: 0.4180 | Val  Acc: 0.8937
+ Site-Sketch                    (2) | Val  Loss: 0.6598 | Val  Acc: 0.8000
+ Site-Sketch                    (2) | Val  Loss: 0.5597 | Val  Acc: 0.8254
+ Site-QuickDraw                 (1) | Val  Loss: 0.7706 | Val  Acc: 0.7762
+ Site-QuickDraw                 (1) | Val  Loss: 0.8022 | Val  Acc: 0.7587
+ Site-Infograph                 (3) | Val  Loss: 0.9998 | Val  Acc: 0.6429
+ Site-Infograph                 (3) | Val  Loss: 1.1083 | Val  Acc: 0.6254
+Average Valid Accuracy: 0.8120
+============ Train epoch 13 ============
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.6144, powerC: 0.3856
+ Site-Clipart                   (1) | Train Loss: 0.4763 | Train Acc: 0.8762
+ Site-Clipart                   (1) | Train Loss: 0.5063 | Train Acc: 0.8487
+ Site-Real                      (3) | Train Loss: 0.2806 | Train Acc: 0.9333
+ Site-Real                      (3) | Train Loss: 0.3080 | Train Acc: 0.9312
+ Site-Painting                  (4) | Train Loss: 0.4510 | Train Acc: 0.8794
+ Site-Painting                  (4) | Train Loss: 0.4094 | Train Acc: 0.8921
+ Site-Sketch                    (5) | Train Loss: 0.5333 | Train Acc: 0.8159
+ Site-Sketch                    (5) | Train Loss: 0.5569 | Train Acc: 0.8254
+ Site-QuickDraw                 (0) | Train Loss: 0.8612 | Train Acc: 0.7143
+ Site-QuickDraw                 (0) | Train Loss: 0.7780 | Train Acc: 0.7704
+ Site-Infograph                 (6) | Train Loss: 1.1465 | Train Acc: 0.6317
+ Site-Infograph                 (2) | Train Loss: 1.0954 | Train Acc: 0.6497
+Average Train Accuracy: 0.8140
+ Site-Clipart                   (1) | Val  Loss: 0.5494 | Val  Acc: 0.8381
+ Site-Clipart                   (1) | Val  Loss: 0.5224 | Val  Acc: 0.8381
+ Site-Real                      (3) | Val  Loss: 0.3940 | Val  Acc: 0.9238
+ Site-Real                      (3) | Val  Loss: 0.3086 | Val  Acc: 0.9349
+ Site-Painting                  (4) | Val  Loss: 0.4395 | Val  Acc: 0.8762
+ Site-Painting                  (4) | Val  Loss: 0.4148 | Val  Acc: 0.9032
+ Site-Sketch                    (5) | Val  Loss: 0.6765 | Val  Acc: 0.8048
+ Site-Sketch                    (5) | Val  Loss: 0.5317 | Val  Acc: 0.8444
+ Site-QuickDraw                 (0) | Val  Loss: 0.7414 | Val  Acc: 0.8238
+ Site-QuickDraw                 (0) | Val  Loss: 0.7702 | Val  Acc: 0.7667
+ Site-Infograph                 (6) | Val  Loss: 1.0137 | Val  Acc: 0.6571
+ Site-Infograph                 (2) | Val  Loss: 1.0896 | Val  Acc: 0.6603
+Average Valid Accuracy: 0.8226
+ Best site-Clipart                  (1)  | Epoch:13 | Val Acc: 0.8381
+ Best site-Clipart                  (1)  | Epoch:13 | Val Acc: 0.8381
+ Best site-Real                     (3)  | Epoch:13 | Val Acc: 0.9238
+ Best site-Real                     (3)  | Epoch:13 | Val Acc: 0.9349
+ Best site-Painting                 (4)  | Epoch:13 | Val Acc: 0.8762
+ Best site-Painting                 (4)  | Epoch:13 | Val Acc: 0.9032
+ Best site-Sketch                   (5)  | Epoch:13 | Val Acc: 0.8048
+ Best site-Sketch                   (5)  | Epoch:13 | Val Acc: 0.8444
+ Best site-QuickDraw                (0)  | Epoch:13 | Val Acc: 0.8238
+ Best site-QuickDraw                (0)  | Epoch:13 | Val Acc: 0.7667
+ Best site-Infograph                (6)  | Epoch:13 | Val Acc: 0.6571
+ Best site-Infograph                (2)  | Epoch:13 | Val Acc: 0.6603
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 14 ============
+cnt=[2, 2, 2, 2, 2, 1, 1, ]
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.6029, powerC: 0.3971
+ Site-Clipart                   (5) | Train Loss: 0.4691 | Train Acc: 0.8762
+ Site-Clipart                   (6) | Train Loss: 0.5186 | Train Acc: 0.8529
+ Site-Real                      (4) | Train Loss: 0.2920 | Train Acc: 0.9302
+ Site-Real                      (4) | Train Loss: 0.3082 | Train Acc: 0.9291
+ Site-Painting                  (2) | Train Loss: 0.4431 | Train Acc: 0.8571
+ Site-Painting                  (2) | Train Loss: 0.4055 | Train Acc: 0.8857
+ Site-Sketch                    (0) | Train Loss: 0.5129 | Train Acc: 0.8413
+ Site-Sketch                    (0) | Train Loss: 0.5380 | Train Acc: 0.8317
+ Site-QuickDraw                 (1) | Train Loss: 0.8800 | Train Acc: 0.7079
+ Site-QuickDraw                 (1) | Train Loss: 0.7729 | Train Acc: 0.7683
+ Site-Infograph                 (3) | Train Loss: 1.0757 | Train Acc: 0.6667
+ Site-Infograph                 (3) | Train Loss: 1.0754 | Train Acc: 0.6561
+Average Train Accuracy: 0.8169
+ Site-Clipart                   (5) | Val  Loss: 0.5189 | Val  Acc: 0.8810
+ Site-Clipart                   (6) | Val  Loss: 0.4898 | Val  Acc: 0.8571
+ Site-Real                      (4) | Val  Loss: 0.4014 | Val  Acc: 0.9381
+ Site-Real                      (4) | Val  Loss: 0.3175 | Val  Acc: 0.9206
+ Site-Painting                  (2) | Val  Loss: 0.5202 | Val  Acc: 0.8619
+ Site-Painting                  (2) | Val  Loss: 0.3974 | Val  Acc: 0.8921
+ Site-Sketch                    (0) | Val  Loss: 0.6649 | Val  Acc: 0.7857
+ Site-Sketch                    (0) | Val  Loss: 0.5325 | Val  Acc: 0.8254
+ Site-QuickDraw                 (1) | Val  Loss: 0.6877 | Val  Acc: 0.8238
+ Site-QuickDraw                 (1) | Val  Loss: 0.7258 | Val  Acc: 0.7952
+ Site-Infograph                 (3) | Val  Loss: 0.9559 | Val  Acc: 0.6762
+ Site-Infograph                 (3) | Val  Loss: 1.0645 | Val  Acc: 0.6635
+Average Valid Accuracy: 0.8267
+ Best site-Clipart                  (5)  | Epoch:14 | Val Acc: 0.8810
+ Best site-Clipart                  (6)  | Epoch:14 | Val Acc: 0.8571
+ Best site-Real                     (4)  | Epoch:14 | Val Acc: 0.9381
+ Best site-Real                     (4)  | Epoch:14 | Val Acc: 0.9206
+ Best site-Painting                 (2)  | Epoch:14 | Val Acc: 0.8619
+ Best site-Painting                 (2)  | Epoch:14 | Val Acc: 0.8921
+ Best site-Sketch                   (0)  | Epoch:14 | Val Acc: 0.7857
+ Best site-Sketch                   (0)  | Epoch:14 | Val Acc: 0.8254
+ Best site-QuickDraw                (1)  | Epoch:14 | Val Acc: 0.8238
+ Best site-QuickDraw                (1)  | Epoch:14 | Val Acc: 0.7952
+ Best site-Infograph                (3)  | Epoch:14 | Val Acc: 0.6762
+ Best site-Infograph                (3)  | Epoch:14 | Val Acc: 0.6635
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 15 ============
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5927, powerC: 0.4073
+ Site-Clipart                   (6) | Train Loss: 0.4794 | Train Acc: 0.8635
+ Site-Clipart                   (0) | Train Loss: 0.4906 | Train Acc: 0.8677
+ Site-Real                      (4) | Train Loss: 0.2805 | Train Acc: 0.9302
+ Site-Real                      (4) | Train Loss: 0.3075 | Train Acc: 0.9164
+ Site-Painting                  (3) | Train Loss: 0.4153 | Train Acc: 0.8762
+ Site-Painting                  (3) | Train Loss: 0.4137 | Train Acc: 0.8878
+ Site-Sketch                    (5) | Train Loss: 0.5190 | Train Acc: 0.8381
+ Site-Sketch                    (5) | Train Loss: 0.5475 | Train Acc: 0.8127
+ Site-QuickDraw                 (1) | Train Loss: 0.8538 | Train Acc: 0.7429
+ Site-QuickDraw                 (1) | Train Loss: 0.7635 | Train Acc: 0.7619
+ Site-Infograph                 (2) | Train Loss: 1.1080 | Train Acc: 0.6508
+ Site-Infograph                 (2) | Train Loss: 1.0402 | Train Acc: 0.6730
+Average Train Accuracy: 0.8184
+ Site-Clipart                   (6) | Val  Loss: 0.4968 | Val  Acc: 0.8714
+ Site-Clipart                   (0) | Val  Loss: 0.4852 | Val  Acc: 0.8587
+ Site-Real                      (4) | Val  Loss: 0.4058 | Val  Acc: 0.9238
+ Site-Real                      (4) | Val  Loss: 0.3039 | Val  Acc: 0.9254
+ Site-Painting                  (3) | Val  Loss: 0.4925 | Val  Acc: 0.8429
+ Site-Painting                  (3) | Val  Loss: 0.4168 | Val  Acc: 0.8810
+ Site-Sketch                    (5) | Val  Loss: 0.6499 | Val  Acc: 0.7905
+ Site-Sketch                    (5) | Val  Loss: 0.5305 | Val  Acc: 0.8349
+ Site-QuickDraw                 (1) | Val  Loss: 0.7004 | Val  Acc: 0.7857
+ Site-QuickDraw                 (1) | Val  Loss: 0.7314 | Val  Acc: 0.7810
+ Site-Infograph                 (2) | Val  Loss: 0.9523 | Val  Acc: 0.6952
+ Site-Infograph                 (2) | Val  Loss: 1.0510 | Val  Acc: 0.6603
+Average Valid Accuracy: 0.8209
+============ Train epoch 16 ============
+cnt=[2, 2, 2, 2, 2, 1, 1, ]
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+power_decay: 0.9, powerI: 0.5834, powerC: 0.4166
+ Site-Clipart                   (5) | Train Loss: 0.4661 | Train Acc: 0.8825
+ Site-Clipart                   (6) | Train Loss: 0.5048 | Train Acc: 0.8540
+ Site-Real                      (4) | Train Loss: 0.2691 | Train Acc: 0.9365
+ Site-Real                      (4) | Train Loss: 0.2811 | Train Acc: 0.9280
+ Site-Painting                  (0) | Train Loss: 0.3863 | Train Acc: 0.8730
+ Site-Painting                  (0) | Train Loss: 0.3710 | Train Acc: 0.9122
+ Site-Sketch                    (2) | Train Loss: 0.5083 | Train Acc: 0.8286
+ Site-Sketch                    (2) | Train Loss: 0.5305 | Train Acc: 0.8381
+ Site-QuickDraw                 (1) | Train Loss: 0.8647 | Train Acc: 0.7111
+ Site-QuickDraw                 (1) | Train Loss: 0.7546 | Train Acc: 0.7672
+ Site-Infograph                 (3) | Train Loss: 1.1085 | Train Acc: 0.6698
+ Site-Infograph                 (3) | Train Loss: 1.0218 | Train Acc: 0.6709
+Average Train Accuracy: 0.8227
+ Site-Clipart                   (5) | Val  Loss: 0.5217 | Val  Acc: 0.8571
+ Site-Clipart                   (6) | Val  Loss: 0.5000 | Val  Acc: 0.8508
+ Site-Real                      (4) | Val  Loss: 0.3947 | Val  Acc: 0.9238
+ Site-Real                      (4) | Val  Loss: 0.2813 | Val  Acc: 0.9381
+ Site-Painting                  (0) | Val  Loss: 0.4476 | Val  Acc: 0.8952
+ Site-Painting                  (0) | Val  Loss: 0.3795 | Val  Acc: 0.8952
+ Site-Sketch                    (2) | Val  Loss: 0.6264 | Val  Acc: 0.8286
+ Site-Sketch                    (2) | Val  Loss: 0.5431 | Val  Acc: 0.8270
+ Site-QuickDraw                 (1) | Val  Loss: 0.7169 | Val  Acc: 0.7714
+ Site-QuickDraw                 (1) | Val  Loss: 0.7431 | Val  Acc: 0.7810
+ Site-Infograph                 (3) | Val  Loss: 0.9416 | Val  Acc: 0.6667
+ Site-Infograph                 (3) | Val  Loss: 1.0286 | Val  Acc: 0.6714
+Average Valid Accuracy: 0.8255
+============ Train epoch 17 ============
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+power_decay: 0.9, powerI: 0.5750, powerC: 0.4250
+ Site-Clipart                   (5) | Train Loss: 0.4230 | Train Acc: 0.8889
+ Site-Clipart                   (5) | Train Loss: 0.4906 | Train Acc: 0.8508
+ Site-Real                      (4) | Train Loss: 0.2766 | Train Acc: 0.9365
+ Site-Real                      (4) | Train Loss: 0.2822 | Train Acc: 0.9333
+ Site-Painting                  (0) | Train Loss: 0.4256 | Train Acc: 0.8730
+ Site-Painting                  (0) | Train Loss: 0.3938 | Train Acc: 0.8931
+ Site-Sketch                    (2) | Train Loss: 0.4832 | Train Acc: 0.8508
+ Site-Sketch                    (6) | Train Loss: 0.5274 | Train Acc: 0.8339
+ Site-QuickDraw                 (1) | Train Loss: 0.8304 | Train Acc: 0.7365
+ Site-QuickDraw                 (1) | Train Loss: 0.7578 | Train Acc: 0.7619
+ Site-Infograph                 (3) | Train Loss: 1.1116 | Train Acc: 0.6635
+ Site-Infograph                 (3) | Train Loss: 1.0164 | Train Acc: 0.6646
+Average Train Accuracy: 0.8239
+ Site-Clipart                   (5) | Val  Loss: 0.5296 | Val  Acc: 0.8476
+ Site-Clipart                   (5) | Val  Loss: 0.4719 | Val  Acc: 0.8460
+ Site-Real                      (4) | Val  Loss: 0.3798 | Val  Acc: 0.9429
+ Site-Real                      (4) | Val  Loss: 0.3006 | Val  Acc: 0.9238
+ Site-Painting                  (0) | Val  Loss: 0.4276 | Val  Acc: 0.8905
+ Site-Painting                  (0) | Val  Loss: 0.3849 | Val  Acc: 0.8984
+ Site-Sketch                    (2) | Val  Loss: 0.6075 | Val  Acc: 0.8286
+ Site-Sketch                    (6) | Val  Loss: 0.5256 | Val  Acc: 0.8397
+ Site-QuickDraw                 (1) | Val  Loss: 0.7525 | Val  Acc: 0.7905
+ Site-QuickDraw                 (1) | Val  Loss: 0.7172 | Val  Acc: 0.7841
+ Site-Infograph                 (3) | Val  Loss: 0.9392 | Val  Acc: 0.7000
+ Site-Infograph                 (3) | Val  Loss: 1.0179 | Val  Acc: 0.6921
+Average Valid Accuracy: 0.8320
+ Best site-Clipart                  (5)  | Epoch:17 | Val Acc: 0.8476
+ Best site-Clipart                  (5)  | Epoch:17 | Val Acc: 0.8460
+ Best site-Real                     (4)  | Epoch:17 | Val Acc: 0.9429
+ Best site-Real                     (4)  | Epoch:17 | Val Acc: 0.9238
+ Best site-Painting                 (0)  | Epoch:17 | Val Acc: 0.8905
+ Best site-Painting                 (0)  | Epoch:17 | Val Acc: 0.8984
+ Best site-Sketch                   (2)  | Epoch:17 | Val Acc: 0.8286
+ Best site-Sketch                   (6)  | Epoch:17 | Val Acc: 0.8397
+ Best site-QuickDraw                (1)  | Epoch:17 | Val Acc: 0.7905
+ Best site-QuickDraw                (1)  | Epoch:17 | Val Acc: 0.7841
+ Best site-Infograph                (3)  | Epoch:17 | Val Acc: 0.7000
+ Best site-Infograph                (3)  | Epoch:17 | Val Acc: 0.6921
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 18 ============
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+power_decay: 0.9, powerI: 0.5675, powerC: 0.4325
+ Site-Clipart                   (5) | Train Loss: 0.4270 | Train Acc: 0.8825
+ Site-Clipart                   (5) | Train Loss: 0.4910 | Train Acc: 0.8476
+ Site-Real                      (0) | Train Loss: 0.2713 | Train Acc: 0.9302
+ Site-Real                      (0) | Train Loss: 0.2766 | Train Acc: 0.9291
+ Site-Painting                  (4) | Train Loss: 0.4090 | Train Acc: 0.8571
+ Site-Painting                  (4) | Train Loss: 0.3655 | Train Acc: 0.8952
+ Site-Sketch                    (3) | Train Loss: 0.5191 | Train Acc: 0.8476
+ Site-Sketch                    (3) | Train Loss: 0.5315 | Train Acc: 0.8296
+ Site-QuickDraw                 (1) | Train Loss: 0.8524 | Train Acc: 0.7270
+ Site-QuickDraw                 (1) | Train Loss: 0.7385 | Train Acc: 0.7852
+ Site-Infograph                 (6) | Train Loss: 1.1245 | Train Acc: 0.6571
+ Site-Infograph                 (2) | Train Loss: 0.9946 | Train Acc: 0.6857
+Average Train Accuracy: 0.8228
+ Site-Clipart                   (5) | Val  Loss: 0.4556 | Val  Acc: 0.8857
+ Site-Clipart                   (5) | Val  Loss: 0.4845 | Val  Acc: 0.8333
+ Site-Real                      (0) | Val  Loss: 0.3776 | Val  Acc: 0.9190
+ Site-Real                      (0) | Val  Loss: 0.2919 | Val  Acc: 0.9270
+ Site-Painting                  (4) | Val  Loss: 0.4492 | Val  Acc: 0.8762
+ Site-Painting                  (4) | Val  Loss: 0.3894 | Val  Acc: 0.8952
+ Site-Sketch                    (3) | Val  Loss: 0.6055 | Val  Acc: 0.8286
+ Site-Sketch                    (3) | Val  Loss: 0.5223 | Val  Acc: 0.8381
+ Site-QuickDraw                 (1) | Val  Loss: 0.6975 | Val  Acc: 0.8095
+ Site-QuickDraw                 (1) | Val  Loss: 0.6902 | Val  Acc: 0.7810
+ Site-Infograph                 (6) | Val  Loss: 0.8479 | Val  Acc: 0.6810
+ Site-Infograph                 (2) | Val  Loss: 0.9871 | Val  Acc: 0.6730
+Average Valid Accuracy: 0.8290
+============ Train epoch 19 ============
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+power_decay: 0.9, powerI: 0.5608, powerC: 0.4392
+ Site-Clipart                   (0) | Train Loss: 0.4275 | Train Acc: 0.8730
+ Site-Clipart                   (0) | Train Loss: 0.4743 | Train Acc: 0.8593
+ Site-Real                      (4) | Train Loss: 0.2704 | Train Acc: 0.9460
+ Site-Real                      (4) | Train Loss: 0.2819 | Train Acc: 0.9270
+ Site-Painting                  (3) | Train Loss: 0.4008 | Train Acc: 0.8571
+ Site-Painting                  (3) | Train Loss: 0.3598 | Train Acc: 0.9069
+ Site-Sketch                    (5) | Train Loss: 0.4686 | Train Acc: 0.8540
+ Site-Sketch                    (5) | Train Loss: 0.5004 | Train Acc: 0.8402
+ Site-QuickDraw                 (1) | Train Loss: 0.7912 | Train Acc: 0.7333
+ Site-QuickDraw                 (1) | Train Loss: 0.7130 | Train Acc: 0.7788
+ Site-Infograph                 (6) | Train Loss: 1.0654 | Train Acc: 0.6540
+ Site-Infograph                 (2) | Train Loss: 0.9949 | Train Acc: 0.6794
+Average Train Accuracy: 0.8257
+ Site-Clipart                   (0) | Val  Loss: 0.4607 | Val  Acc: 0.9048
+ Site-Clipart                   (0) | Val  Loss: 0.4742 | Val  Acc: 0.8587
+ Site-Real                      (4) | Val  Loss: 0.3688 | Val  Acc: 0.9190
+ Site-Real                      (4) | Val  Loss: 0.2863 | Val  Acc: 0.9317
+ Site-Painting                  (3) | Val  Loss: 0.4367 | Val  Acc: 0.8857
+ Site-Painting                  (3) | Val  Loss: 0.3527 | Val  Acc: 0.8937
+ Site-Sketch                    (5) | Val  Loss: 0.5525 | Val  Acc: 0.8286
+ Site-Sketch                    (5) | Val  Loss: 0.4836 | Val  Acc: 0.8381
+ Site-QuickDraw                 (1) | Val  Loss: 0.6628 | Val  Acc: 0.7952
+ Site-QuickDraw                 (1) | Val  Loss: 0.6689 | Val  Acc: 0.8016
+ Site-Infograph                 (6) | Val  Loss: 0.8800 | Val  Acc: 0.6905
+ Site-Infograph                 (2) | Val  Loss: 0.9743 | Val  Acc: 0.6857
+Average Valid Accuracy: 0.8361
+ Best site-Clipart                  (0)  | Epoch:19 | Val Acc: 0.9048
+ Best site-Clipart                  (0)  | Epoch:19 | Val Acc: 0.8587
+ Best site-Real                     (4)  | Epoch:19 | Val Acc: 0.9190
+ Best site-Real                     (4)  | Epoch:19 | Val Acc: 0.9317
+ Best site-Painting                 (3)  | Epoch:19 | Val Acc: 0.8857
+ Best site-Painting                 (3)  | Epoch:19 | Val Acc: 0.8937
+ Best site-Sketch                   (5)  | Epoch:19 | Val Acc: 0.8286
+ Best site-Sketch                   (5)  | Epoch:19 | Val Acc: 0.8381
+ Best site-QuickDraw                (1)  | Epoch:19 | Val Acc: 0.7952
+ Best site-QuickDraw                (1)  | Epoch:19 | Val Acc: 0.8016
+ Best site-Infograph                (6)  | Epoch:19 | Val Acc: 0.6905
+ Best site-Infograph                (2)  | Epoch:19 | Val Acc: 0.6857
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 20 ============
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5547, powerC: 0.4453
+ Site-Clipart                   (0) | Train Loss: 0.4168 | Train Acc: 0.8635
+ Site-Clipart                   (6) | Train Loss: 0.4736 | Train Acc: 0.8571
+ Site-Real                      (4) | Train Loss: 0.2622 | Train Acc: 0.9333
+ Site-Real                      (4) | Train Loss: 0.2657 | Train Acc: 0.9344
+ Site-Painting                  (2) | Train Loss: 0.3845 | Train Acc: 0.8698
+ Site-Painting                  (2) | Train Loss: 0.3541 | Train Acc: 0.9037
+ Site-Sketch                    (5) | Train Loss: 0.4516 | Train Acc: 0.8667
+ Site-Sketch                    (5) | Train Loss: 0.5277 | Train Acc: 0.8296
+ Site-QuickDraw                 (1) | Train Loss: 0.7947 | Train Acc: 0.7238
+ Site-QuickDraw                 (1) | Train Loss: 0.6808 | Train Acc: 0.7852
+ Site-Infograph                 (3) | Train Loss: 1.0575 | Train Acc: 0.6762
+ Site-Infograph                 (3) | Train Loss: 0.9736 | Train Acc: 0.6868
+Average Train Accuracy: 0.8275
+ Site-Clipart                   (0) | Val  Loss: 0.5145 | Val  Acc: 0.8714
+ Site-Clipart                   (6) | Val  Loss: 0.4434 | Val  Acc: 0.8667
+ Site-Real                      (4) | Val  Loss: 0.3233 | Val  Acc: 0.9429
+ Site-Real                      (4) | Val  Loss: 0.2807 | Val  Acc: 0.9254
+ Site-Painting                  (2) | Val  Loss: 0.4132 | Val  Acc: 0.8810
+ Site-Painting                  (2) | Val  Loss: 0.3609 | Val  Acc: 0.8968
+ Site-Sketch                    (5) | Val  Loss: 0.6904 | Val  Acc: 0.8238
+ Site-Sketch                    (5) | Val  Loss: 0.4794 | Val  Acc: 0.8540
+ Site-QuickDraw                 (1) | Val  Loss: 0.6776 | Val  Acc: 0.8190
+ Site-QuickDraw                 (1) | Val  Loss: 0.6893 | Val  Acc: 0.7905
+ Site-Infograph                 (3) | Val  Loss: 0.8872 | Val  Acc: 0.6810
+ Site-Infograph                 (3) | Val  Loss: 0.9738 | Val  Acc: 0.6825
+Average Valid Accuracy: 0.8362
+ Best site-Clipart                  (0)  | Epoch:20 | Val Acc: 0.8714
+ Best site-Clipart                  (6)  | Epoch:20 | Val Acc: 0.8667
+ Best site-Real                     (4)  | Epoch:20 | Val Acc: 0.9429
+ Best site-Real                     (4)  | Epoch:20 | Val Acc: 0.9254
+ Best site-Painting                 (2)  | Epoch:20 | Val Acc: 0.8810
+ Best site-Painting                 (2)  | Epoch:20 | Val Acc: 0.8968
+ Best site-Sketch                   (5)  | Epoch:20 | Val Acc: 0.8238
+ Best site-Sketch                   (5)  | Epoch:20 | Val Acc: 0.8540
+ Best site-QuickDraw                (1)  | Epoch:20 | Val Acc: 0.8190
+ Best site-QuickDraw                (1)  | Epoch:20 | Val Acc: 0.7905
+ Best site-Infograph                (3)  | Epoch:20 | Val Acc: 0.6810
+ Best site-Infograph                (3)  | Epoch:20 | Val Acc: 0.6825
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 21 ============
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5492, powerC: 0.4508
+ Site-Clipart                   (0) | Train Loss: 0.4054 | Train Acc: 0.8889
+ Site-Clipart                   (0) | Train Loss: 0.4600 | Train Acc: 0.8635
+ Site-Real                      (3) | Train Loss: 0.2444 | Train Acc: 0.9397
+ Site-Real                      (3) | Train Loss: 0.2578 | Train Acc: 0.9344
+ Site-Painting                  (5) | Train Loss: 0.3948 | Train Acc: 0.8762
+ Site-Painting                  (5) | Train Loss: 0.3461 | Train Acc: 0.9069
+ Site-Sketch                    (4) | Train Loss: 0.4462 | Train Acc: 0.8508
+ Site-Sketch                    (4) | Train Loss: 0.4874 | Train Acc: 0.8508
+ Site-QuickDraw                 (1) | Train Loss: 0.7925 | Train Acc: 0.7270
+ Site-QuickDraw                 (1) | Train Loss: 0.7039 | Train Acc: 0.7810
+ Site-Infograph                 (2) | Train Loss: 1.1076 | Train Acc: 0.6508
+ Site-Infograph                 (6) | Train Loss: 0.9700 | Train Acc: 0.6942
+Average Train Accuracy: 0.8303
+ Site-Clipart                   (0) | Val  Loss: 0.4754 | Val  Acc: 0.8810
+ Site-Clipart                   (0) | Val  Loss: 0.4420 | Val  Acc: 0.8635
+ Site-Real                      (3) | Val  Loss: 0.3446 | Val  Acc: 0.9190
+ Site-Real                      (3) | Val  Loss: 0.2655 | Val  Acc: 0.9381
+ Site-Painting                  (5) | Val  Loss: 0.4113 | Val  Acc: 0.8810
+ Site-Painting                  (5) | Val  Loss: 0.3680 | Val  Acc: 0.9000
+ Site-Sketch                    (4) | Val  Loss: 0.5872 | Val  Acc: 0.8333
+ Site-Sketch                    (4) | Val  Loss: 0.5133 | Val  Acc: 0.8238
+ Site-QuickDraw                 (1) | Val  Loss: 0.6927 | Val  Acc: 0.8238
+ Site-QuickDraw                 (1) | Val  Loss: 0.6760 | Val  Acc: 0.7905
+ Site-Infograph                 (2) | Val  Loss: 0.8132 | Val  Acc: 0.7667
+ Site-Infograph                 (6) | Val  Loss: 0.9325 | Val  Acc: 0.6968
+Average Valid Accuracy: 0.8431
+ Best site-Clipart                  (0)  | Epoch:21 | Val Acc: 0.8810
+ Best site-Clipart                  (0)  | Epoch:21 | Val Acc: 0.8635
+ Best site-Real                     (3)  | Epoch:21 | Val Acc: 0.9190
+ Best site-Real                     (3)  | Epoch:21 | Val Acc: 0.9381
+ Best site-Painting                 (5)  | Epoch:21 | Val Acc: 0.8810
+ Best site-Painting                 (5)  | Epoch:21 | Val Acc: 0.9000
+ Best site-Sketch                   (4)  | Epoch:21 | Val Acc: 0.8333
+ Best site-Sketch                   (4)  | Epoch:21 | Val Acc: 0.8238
+ Best site-QuickDraw                (1)  | Epoch:21 | Val Acc: 0.8238
+ Best site-QuickDraw                (1)  | Epoch:21 | Val Acc: 0.7905
+ Best site-Infograph                (2)  | Epoch:21 | Val Acc: 0.7667
+ Best site-Infograph                (6)  | Epoch:21 | Val Acc: 0.6968
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 22 ============
+cnt=[2, 2, 2, 1, 2, 2, 1, ]
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5443, powerC: 0.4557
+ Site-Clipart                   (4) | Train Loss: 0.4162 | Train Acc: 0.8794
+ Site-Clipart                   (4) | Train Loss: 0.4470 | Train Acc: 0.8635
+ Site-Real                      (0) | Train Loss: 0.2483 | Train Acc: 0.9397
+ Site-Real                      (0) | Train Loss: 0.2566 | Train Acc: 0.9354
+ Site-Painting                  (5) | Train Loss: 0.3962 | Train Acc: 0.8635
+ Site-Painting                  (5) | Train Loss: 0.3452 | Train Acc: 0.9026
+ Site-Sketch                    (6) | Train Loss: 0.4330 | Train Acc: 0.8762
+ Site-Sketch                    (3) | Train Loss: 0.4813 | Train Acc: 0.8593
+ Site-QuickDraw                 (1) | Train Loss: 0.7636 | Train Acc: 0.7683
+ Site-QuickDraw                 (1) | Train Loss: 0.6901 | Train Acc: 0.7905
+ Site-Infograph                 (2) | Train Loss: 1.0962 | Train Acc: 0.6508
+ Site-Infograph                 (2) | Train Loss: 0.9288 | Train Acc: 0.7090
+Average Train Accuracy: 0.8365
+ Site-Clipart                   (4) | Val  Loss: 0.4713 | Val  Acc: 0.8810
+ Site-Clipart                   (4) | Val  Loss: 0.4394 | Val  Acc: 0.8667
+ Site-Real                      (0) | Val  Loss: 0.3795 | Val  Acc: 0.9143
+ Site-Real                      (0) | Val  Loss: 0.2642 | Val  Acc: 0.9349
+ Site-Painting                  (5) | Val  Loss: 0.4422 | Val  Acc: 0.8571
+ Site-Painting                  (5) | Val  Loss: 0.3436 | Val  Acc: 0.9095
+ Site-Sketch                    (6) | Val  Loss: 0.6012 | Val  Acc: 0.8190
+ Site-Sketch                    (3) | Val  Loss: 0.5023 | Val  Acc: 0.8429
+ Site-QuickDraw                 (1) | Val  Loss: 0.6215 | Val  Acc: 0.8333
+ Site-QuickDraw                 (1) | Val  Loss: 0.6540 | Val  Acc: 0.7937
+ Site-Infograph                 (2) | Val  Loss: 0.9111 | Val  Acc: 0.7238
+ Site-Infograph                 (2) | Val  Loss: 0.9286 | Val  Acc: 0.7206
+Average Valid Accuracy: 0.8414
+============ Train epoch 23 ============
+cnt=[2, 2, 2, 1, 2, 2, 1, ]
+cnt=[2, 2, 2, 1, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5399, powerC: 0.4601
+ Site-Clipart                   (5) | Train Loss: 0.4004 | Train Acc: 0.8825
+ Site-Clipart                   (5) | Train Loss: 0.4496 | Train Acc: 0.8698
+ Site-Real                      (1) | Train Loss: 0.2512 | Train Acc: 0.9365
+ Site-Real                      (1) | Train Loss: 0.2558 | Train Acc: 0.9365
+ Site-Painting                  (4) | Train Loss: 0.3631 | Train Acc: 0.8857
+ Site-Painting                  (4) | Train Loss: 0.3479 | Train Acc: 0.9037
+ Site-Sketch                    (6) | Train Loss: 0.4839 | Train Acc: 0.8508
+ Site-Sketch                    (3) | Train Loss: 0.4723 | Train Acc: 0.8593
+ Site-QuickDraw                 (0) | Train Loss: 0.7785 | Train Acc: 0.7365
+ Site-QuickDraw                 (0) | Train Loss: 0.6599 | Train Acc: 0.8042
+ Site-Infograph                 (2) | Train Loss: 1.0452 | Train Acc: 0.6730
+ Site-Infograph                 (2) | Train Loss: 0.9348 | Train Acc: 0.6857
+Average Train Accuracy: 0.8354
+ Site-Clipart                   (5) | Val  Loss: 0.4740 | Val  Acc: 0.8714
+ Site-Clipart                   (5) | Val  Loss: 0.4287 | Val  Acc: 0.8619
+ Site-Real                      (1) | Val  Loss: 0.3596 | Val  Acc: 0.9238
+ Site-Real                      (1) | Val  Loss: 0.2796 | Val  Acc: 0.9222
+ Site-Painting                  (4) | Val  Loss: 0.3553 | Val  Acc: 0.9095
+ Site-Painting                  (4) | Val  Loss: 0.3477 | Val  Acc: 0.9016
+ Site-Sketch                    (6) | Val  Loss: 0.5502 | Val  Acc: 0.8476
+ Site-Sketch                    (3) | Val  Loss: 0.5140 | Val  Acc: 0.8302
+ Site-QuickDraw                 (0) | Val  Loss: 0.6409 | Val  Acc: 0.8143
+ Site-QuickDraw                 (0) | Val  Loss: 0.6383 | Val  Acc: 0.8095
+ Site-Infograph                 (2) | Val  Loss: 0.8587 | Val  Acc: 0.7143
+ Site-Infograph                 (2) | Val  Loss: 0.9155 | Val  Acc: 0.7127
+Average Valid Accuracy: 0.8433
+ Best site-Clipart                  (5)  | Epoch:23 | Val Acc: 0.8714
+ Best site-Clipart                  (5)  | Epoch:23 | Val Acc: 0.8619
+ Best site-Real                     (1)  | Epoch:23 | Val Acc: 0.9238
+ Best site-Real                     (1)  | Epoch:23 | Val Acc: 0.9222
+ Best site-Painting                 (4)  | Epoch:23 | Val Acc: 0.9095
+ Best site-Painting                 (4)  | Epoch:23 | Val Acc: 0.9016
+ Best site-Sketch                   (6)  | Epoch:23 | Val Acc: 0.8476
+ Best site-Sketch                   (3)  | Epoch:23 | Val Acc: 0.8302
+ Best site-QuickDraw                (0)  | Epoch:23 | Val Acc: 0.8143
+ Best site-QuickDraw                (0)  | Epoch:23 | Val Acc: 0.8095
+ Best site-Infograph                (2)  | Epoch:23 | Val Acc: 0.7143
+ Best site-Infograph                (2)  | Epoch:23 | Val Acc: 0.7127
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 24 ============
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+cnt=[2, 2, 2, 2, 2, 1, 1, ]
+power_decay: 0.9, powerI: 0.5359, powerC: 0.4641
+ Site-Clipart                   (6) | Train Loss: 0.4220 | Train Acc: 0.8857
+ Site-Clipart                   (0) | Train Loss: 0.4678 | Train Acc: 0.8571
+ Site-Real                      (5) | Train Loss: 0.2485 | Train Acc: 0.9333
+ Site-Real                      (5) | Train Loss: 0.2633 | Train Acc: 0.9238
+ Site-Painting                  (3) | Train Loss: 0.3798 | Train Acc: 0.8730
+ Site-Painting                  (3) | Train Loss: 0.3458 | Train Acc: 0.8899
+ Site-Sketch                    (4) | Train Loss: 0.4474 | Train Acc: 0.8476
+ Site-Sketch                    (4) | Train Loss: 0.4956 | Train Acc: 0.8413
+ Site-QuickDraw                 (1) | Train Loss: 0.7227 | Train Acc: 0.7905
+ Site-QuickDraw                 (1) | Train Loss: 0.6602 | Train Acc: 0.7905
+ Site-Infograph                 (2) | Train Loss: 1.0334 | Train Acc: 0.6825
+ Site-Infograph                 (2) | Train Loss: 0.8971 | Train Acc: 0.7143
+Average Train Accuracy: 0.8358
+ Site-Clipart                   (6) | Val  Loss: 0.4612 | Val  Acc: 0.8905
+ Site-Clipart                   (0) | Val  Loss: 0.4430 | Val  Acc: 0.8524
+ Site-Real                      (5) | Val  Loss: 0.3565 | Val  Acc: 0.9286
+ Site-Real                      (5) | Val  Loss: 0.2594 | Val  Acc: 0.9317
+ Site-Painting                  (3) | Val  Loss: 0.4099 | Val  Acc: 0.9048
+ Site-Painting                  (3) | Val  Loss: 0.3589 | Val  Acc: 0.8905
+ Site-Sketch                    (4) | Val  Loss: 0.5305 | Val  Acc: 0.8429
+ Site-Sketch                    (4) | Val  Loss: 0.5274 | Val  Acc: 0.8270
+ Site-QuickDraw                 (1) | Val  Loss: 0.6103 | Val  Acc: 0.8286
+ Site-QuickDraw                 (1) | Val  Loss: 0.6588 | Val  Acc: 0.7810
+ Site-Infograph                 (2) | Val  Loss: 0.8450 | Val  Acc: 0.7143
+ Site-Infograph                 (2) | Val  Loss: 0.9221 | Val  Acc: 0.6952
+Average Valid Accuracy: 0.8406
+============ Train epoch 25 ============
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5323, powerC: 0.4677
+ Site-Clipart                   (6) | Train Loss: 0.3815 | Train Acc: 0.8984
+ Site-Clipart                   (0) | Train Loss: 0.4559 | Train Acc: 0.8529
+ Site-Real                      (5) | Train Loss: 0.2344 | Train Acc: 0.9365
+ Site-Real                      (5) | Train Loss: 0.2408 | Train Acc: 0.9376
+ Site-Painting                  (3) | Train Loss: 0.3863 | Train Acc: 0.8889
+ Site-Painting                  (3) | Train Loss: 0.3418 | Train Acc: 0.9026
+ Site-Sketch                    (4) | Train Loss: 0.4361 | Train Acc: 0.8603
+ Site-Sketch                    (4) | Train Loss: 0.4696 | Train Acc: 0.8466
+ Site-QuickDraw                 (1) | Train Loss: 0.7466 | Train Acc: 0.7524
+ Site-QuickDraw                 (1) | Train Loss: 0.6618 | Train Acc: 0.8042
+ Site-Infograph                 (2) | Train Loss: 1.0241 | Train Acc: 0.6984
+ Site-Infograph                 (2) | Train Loss: 0.9104 | Train Acc: 0.7058
+Average Train Accuracy: 0.8404
+ Site-Clipart                   (6) | Val  Loss: 0.4400 | Val  Acc: 0.8857
+ Site-Clipart                   (0) | Val  Loss: 0.4213 | Val  Acc: 0.8730
+ Site-Real                      (5) | Val  Loss: 0.3470 | Val  Acc: 0.9190
+ Site-Real                      (5) | Val  Loss: 0.2429 | Val  Acc: 0.9333
+ Site-Painting                  (3) | Val  Loss: 0.3762 | Val  Acc: 0.8714
+ Site-Painting                  (3) | Val  Loss: 0.3504 | Val  Acc: 0.9000
+ Site-Sketch                    (4) | Val  Loss: 0.5210 | Val  Acc: 0.8571
+ Site-Sketch                    (4) | Val  Loss: 0.4480 | Val  Acc: 0.8508
+ Site-QuickDraw                 (1) | Val  Loss: 0.6635 | Val  Acc: 0.8143
+ Site-QuickDraw                 (1) | Val  Loss: 0.6262 | Val  Acc: 0.8111
+ Site-Infograph                 (2) | Val  Loss: 0.8380 | Val  Acc: 0.7143
+ Site-Infograph                 (2) | Val  Loss: 0.8795 | Val  Acc: 0.7270
+Average Valid Accuracy: 0.8464
+ Best site-Clipart                  (6)  | Epoch:25 | Val Acc: 0.8857
+ Best site-Clipart                  (0)  | Epoch:25 | Val Acc: 0.8730
+ Best site-Real                     (5)  | Epoch:25 | Val Acc: 0.9190
+ Best site-Real                     (5)  | Epoch:25 | Val Acc: 0.9333
+ Best site-Painting                 (3)  | Epoch:25 | Val Acc: 0.8714
+ Best site-Painting                 (3)  | Epoch:25 | Val Acc: 0.9000
+ Best site-Sketch                   (4)  | Epoch:25 | Val Acc: 0.8571
+ Best site-Sketch                   (4)  | Epoch:25 | Val Acc: 0.8508
+ Best site-QuickDraw                (1)  | Epoch:25 | Val Acc: 0.8143
+ Best site-QuickDraw                (1)  | Epoch:25 | Val Acc: 0.8111
+ Best site-Infograph                (2)  | Epoch:25 | Val Acc: 0.7143
+ Best site-Infograph                (2)  | Epoch:25 | Val Acc: 0.7270
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 26 ============
+cnt=[2, 2, 2, 2, 2, 1, 1, ]
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5291, powerC: 0.4709
+ Site-Clipart                   (0) | Train Loss: 0.4059 | Train Acc: 0.8794
+ Site-Clipart                   (0) | Train Loss: 0.4324 | Train Acc: 0.8540
+ Site-Real                      (4) | Train Loss: 0.2397 | Train Acc: 0.9333
+ Site-Real                      (4) | Train Loss: 0.2498 | Train Acc: 0.9407
+ Site-Painting                  (2) | Train Loss: 0.3551 | Train Acc: 0.8984
+ Site-Painting                  (2) | Train Loss: 0.3349 | Train Acc: 0.9132
+ Site-Sketch                    (6) | Train Loss: 0.4687 | Train Acc: 0.8413
+ Site-Sketch                    (5) | Train Loss: 0.4560 | Train Acc: 0.8550
+ Site-QuickDraw                 (1) | Train Loss: 0.7047 | Train Acc: 0.7905
+ Site-QuickDraw                 (1) | Train Loss: 0.6718 | Train Acc: 0.7968
+ Site-Infograph                 (3) | Train Loss: 1.0400 | Train Acc: 0.6698
+ Site-Infograph                 (3) | Train Loss: 0.8990 | Train Acc: 0.7026
+Average Train Accuracy: 0.8396
+ Site-Clipart                   (0) | Val  Loss: 0.4294 | Val  Acc: 0.9000
+ Site-Clipart                   (0) | Val  Loss: 0.4136 | Val  Acc: 0.8825
+ Site-Real                      (4) | Val  Loss: 0.3082 | Val  Acc: 0.9381
+ Site-Real                      (4) | Val  Loss: 0.2420 | Val  Acc: 0.9413
+ Site-Painting                  (2) | Val  Loss: 0.4609 | Val  Acc: 0.8667
+ Site-Painting                  (2) | Val  Loss: 0.3416 | Val  Acc: 0.9048
+ Site-Sketch                    (6) | Val  Loss: 0.4547 | Val  Acc: 0.8714
+ Site-Sketch                    (5) | Val  Loss: 0.4584 | Val  Acc: 0.8524
+ Site-QuickDraw                 (1) | Val  Loss: 0.6034 | Val  Acc: 0.8333
+ Site-QuickDraw                 (1) | Val  Loss: 0.6337 | Val  Acc: 0.8159
+ Site-Infograph                 (3) | Val  Loss: 0.7872 | Val  Acc: 0.7476
+ Site-Infograph                 (3) | Val  Loss: 0.8869 | Val  Acc: 0.7238
+Average Valid Accuracy: 0.8565
+ Best site-Clipart                  (0)  | Epoch:26 | Val Acc: 0.9000
+ Best site-Clipart                  (0)  | Epoch:26 | Val Acc: 0.8825
+ Best site-Real                     (4)  | Epoch:26 | Val Acc: 0.9381
+ Best site-Real                     (4)  | Epoch:26 | Val Acc: 0.9413
+ Best site-Painting                 (2)  | Epoch:26 | Val Acc: 0.8667
+ Best site-Painting                 (2)  | Epoch:26 | Val Acc: 0.9048
+ Best site-Sketch                   (6)  | Epoch:26 | Val Acc: 0.8714
+ Best site-Sketch                   (5)  | Epoch:26 | Val Acc: 0.8524
+ Best site-QuickDraw                (1)  | Epoch:26 | Val Acc: 0.8333
+ Best site-QuickDraw                (1)  | Epoch:26 | Val Acc: 0.8159
+ Best site-Infograph                (3)  | Epoch:26 | Val Acc: 0.7476
+ Best site-Infograph                (3)  | Epoch:26 | Val Acc: 0.7238
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 27 ============
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+power_decay: 0.9, powerI: 0.5262, powerC: 0.4738
+ Site-Clipart                   (2) | Train Loss: 0.4124 | Train Acc: 0.8857
+ Site-Clipart                   (2) | Train Loss: 0.4164 | Train Acc: 0.8656
+ Site-Real                      (5) | Train Loss: 0.2366 | Train Acc: 0.9270
+ Site-Real                      (5) | Train Loss: 0.2490 | Train Acc: 0.9323
+ Site-Painting                  (3) | Train Loss: 0.3498 | Train Acc: 0.8762
+ Site-Painting                  (3) | Train Loss: 0.3356 | Train Acc: 0.9058
+ Site-Sketch                    (4) | Train Loss: 0.4382 | Train Acc: 0.8444
+ Site-Sketch                    (4) | Train Loss: 0.4575 | Train Acc: 0.8497
+ Site-QuickDraw                 (1) | Train Loss: 0.7006 | Train Acc: 0.7841
+ Site-QuickDraw                 (1) | Train Loss: 0.6450 | Train Acc: 0.8159
+ Site-Infograph                 (6) | Train Loss: 1.0336 | Train Acc: 0.6762
+ Site-Infograph                 (0) | Train Loss: 0.8766 | Train Acc: 0.7185
+Average Train Accuracy: 0.8401
+ Site-Clipart                   (2) | Val  Loss: 0.4382 | Val  Acc: 0.8857
+ Site-Clipart                   (2) | Val  Loss: 0.4148 | Val  Acc: 0.8794
+ Site-Real                      (5) | Val  Loss: 0.3089 | Val  Acc: 0.9429
+ Site-Real                      (5) | Val  Loss: 0.2703 | Val  Acc: 0.9317
+ Site-Painting                  (3) | Val  Loss: 0.3922 | Val  Acc: 0.9143
+ Site-Painting                  (3) | Val  Loss: 0.3362 | Val  Acc: 0.9111
+ Site-Sketch                    (4) | Val  Loss: 0.4891 | Val  Acc: 0.8524
+ Site-Sketch                    (4) | Val  Loss: 0.4631 | Val  Acc: 0.8429
+ Site-QuickDraw                 (1) | Val  Loss: 0.6030 | Val  Acc: 0.8429
+ Site-QuickDraw                 (1) | Val  Loss: 0.6195 | Val  Acc: 0.8016
+ Site-Infograph                 (6) | Val  Loss: 0.7807 | Val  Acc: 0.7714
+ Site-Infograph                 (0) | Val  Loss: 0.8653 | Val  Acc: 0.7302
+Average Valid Accuracy: 0.8589
+ Best site-Clipart                  (2)  | Epoch:27 | Val Acc: 0.8857
+ Best site-Clipart                  (2)  | Epoch:27 | Val Acc: 0.8794
+ Best site-Real                     (5)  | Epoch:27 | Val Acc: 0.9429
+ Best site-Real                     (5)  | Epoch:27 | Val Acc: 0.9317
+ Best site-Painting                 (3)  | Epoch:27 | Val Acc: 0.9143
+ Best site-Painting                 (3)  | Epoch:27 | Val Acc: 0.9111
+ Best site-Sketch                   (4)  | Epoch:27 | Val Acc: 0.8524
+ Best site-Sketch                   (4)  | Epoch:27 | Val Acc: 0.8429
+ Best site-QuickDraw                (1)  | Epoch:27 | Val Acc: 0.8429
+ Best site-QuickDraw                (1)  | Epoch:27 | Val Acc: 0.8016
+ Best site-Infograph                (6)  | Epoch:27 | Val Acc: 0.7714
+ Best site-Infograph                (0)  | Epoch:27 | Val Acc: 0.7302
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 28 ============
+cnt=[2, 1, 2, 2, 2, 2, 1, ]
+cnt=[2, 2, 2, 2, 2, 1, 1, ]
+power_decay: 0.9, powerI: 0.5236, powerC: 0.4764
+ Site-Clipart                   (4) | Train Loss: 0.4034 | Train Acc: 0.8984
+ Site-Clipart                   (4) | Train Loss: 0.4358 | Train Acc: 0.8646
+ Site-Real                      (3) | Train Loss: 0.2264 | Train Acc: 0.9333
+ Site-Real                      (3) | Train Loss: 0.2542 | Train Acc: 0.9354
+ Site-Painting                  (5) | Train Loss: 0.3355 | Train Acc: 0.9143
+ Site-Painting                  (5) | Train Loss: 0.3324 | Train Acc: 0.9048
+ Site-Sketch                    (0) | Train Loss: 0.4176 | Train Acc: 0.8667
+ Site-Sketch                    (0) | Train Loss: 0.4641 | Train Acc: 0.8519
+ Site-QuickDraw                 (1) | Train Loss: 0.7191 | Train Acc: 0.7587
+ Site-QuickDraw                 (6) | Train Loss: 0.6320 | Train Acc: 0.8074
+ Site-Infograph                 (2) | Train Loss: 0.9922 | Train Acc: 0.7048
+ Site-Infograph                 (2) | Train Loss: 0.8705 | Train Acc: 0.7217
+Average Train Accuracy: 0.8468
+ Site-Clipart                   (4) | Val  Loss: 0.5102 | Val  Acc: 0.8667
+ Site-Clipart                   (4) | Val  Loss: 0.4274 | Val  Acc: 0.8714
+ Site-Real                      (3) | Val  Loss: 0.3347 | Val  Acc: 0.9381
+ Site-Real                      (3) | Val  Loss: 0.2567 | Val  Acc: 0.9270
+ Site-Painting                  (5) | Val  Loss: 0.3730 | Val  Acc: 0.9048
+ Site-Painting                  (5) | Val  Loss: 0.3387 | Val  Acc: 0.9032
+ Site-Sketch                    (0) | Val  Loss: 0.4688 | Val  Acc: 0.8333
+ Site-Sketch                    (0) | Val  Loss: 0.4838 | Val  Acc: 0.8429
+ Site-QuickDraw                 (1) | Val  Loss: 0.5814 | Val  Acc: 0.8714
+ Site-QuickDraw                 (6) | Val  Loss: 0.6276 | Val  Acc: 0.8206
+ Site-Infograph                 (2) | Val  Loss: 0.7843 | Val  Acc: 0.7524
+ Site-Infograph                 (2) | Val  Loss: 0.8482 | Val  Acc: 0.7349
+Average Valid Accuracy: 0.8556
+============ Train epoch 29 ============
+cnt=[2, 2, 2, 1, 2, 2, 1, ]
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5212, powerC: 0.4788
+ Site-Clipart                   (5) | Train Loss: 0.3586 | Train Acc: 0.9079
+ Site-Clipart                   (5) | Train Loss: 0.4073 | Train Acc: 0.8688
+ Site-Real                      (4) | Train Loss: 0.2206 | Train Acc: 0.9429
+ Site-Real                      (4) | Train Loss: 0.2439 | Train Acc: 0.9397
+ Site-Painting                  (0) | Train Loss: 0.3507 | Train Acc: 0.8730
+ Site-Painting                  (0) | Train Loss: 0.3366 | Train Acc: 0.9026
+ Site-Sketch                    (6) | Train Loss: 0.4094 | Train Acc: 0.8635
+ Site-Sketch                    (3) | Train Loss: 0.4332 | Train Acc: 0.8603
+ Site-QuickDraw                 (1) | Train Loss: 0.7043 | Train Acc: 0.7619
+ Site-QuickDraw                 (1) | Train Loss: 0.6108 | Train Acc: 0.8159
+ Site-Infograph                 (2) | Train Loss: 1.0319 | Train Acc: 0.6762
+ Site-Infograph                 (2) | Train Loss: 0.8630 | Train Acc: 0.7185
+Average Train Accuracy: 0.8443
+ Site-Clipart                   (5) | Val  Loss: 0.3985 | Val  Acc: 0.8714
+ Site-Clipart                   (5) | Val  Loss: 0.3944 | Val  Acc: 0.8778
+ Site-Real                      (4) | Val  Loss: 0.3167 | Val  Acc: 0.9381
+ Site-Real                      (4) | Val  Loss: 0.2420 | Val  Acc: 0.9381
+ Site-Painting                  (0) | Val  Loss: 0.4152 | Val  Acc: 0.8810
+ Site-Painting                  (0) | Val  Loss: 0.3225 | Val  Acc: 0.9111
+ Site-Sketch                    (6) | Val  Loss: 0.5301 | Val  Acc: 0.8524
+ Site-Sketch                    (3) | Val  Loss: 0.4406 | Val  Acc: 0.8683
+ Site-QuickDraw                 (1) | Val  Loss: 0.5738 | Val  Acc: 0.8619
+ Site-QuickDraw                 (1) | Val  Loss: 0.5849 | Val  Acc: 0.8238
+ Site-Infograph                 (2) | Val  Loss: 0.7679 | Val  Acc: 0.7476
+ Site-Infograph                 (2) | Val  Loss: 0.8490 | Val  Acc: 0.7190
+Average Valid Accuracy: 0.8575
+============ Train epoch 30 ============
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+cnt=[2, 1, 2, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5191, powerC: 0.4809
+ Site-Clipart                   (6) | Train Loss: 0.4016 | Train Acc: 0.8794
+ Site-Clipart                   (0) | Train Loss: 0.4225 | Train Acc: 0.8688
+ Site-Real                      (5) | Train Loss: 0.2410 | Train Acc: 0.9333
+ Site-Real                      (5) | Train Loss: 0.2489 | Train Acc: 0.9280
+ Site-Painting                  (3) | Train Loss: 0.3524 | Train Acc: 0.8984
+ Site-Painting                  (3) | Train Loss: 0.3282 | Train Acc: 0.9101
+ Site-Sketch                    (4) | Train Loss: 0.4349 | Train Acc: 0.8571
+ Site-Sketch                    (4) | Train Loss: 0.4737 | Train Acc: 0.8497
+ Site-QuickDraw                 (1) | Train Loss: 0.7082 | Train Acc: 0.7778
+ Site-QuickDraw                 (1) | Train Loss: 0.6307 | Train Acc: 0.7979
+ Site-Infograph                 (2) | Train Loss: 1.0384 | Train Acc: 0.6921
+ Site-Infograph                 (2) | Train Loss: 0.8447 | Train Acc: 0.7312
+Average Train Accuracy: 0.8437
+ Site-Clipart                   (6) | Val  Loss: 0.4192 | Val  Acc: 0.9000
+ Site-Clipart                   (0) | Val  Loss: 0.4198 | Val  Acc: 0.8683
+ Site-Real                      (5) | Val  Loss: 0.3524 | Val  Acc: 0.9286
+ Site-Real                      (5) | Val  Loss: 0.2456 | Val  Acc: 0.9365
+ Site-Painting                  (3) | Val  Loss: 0.3539 | Val  Acc: 0.9000
+ Site-Painting                  (3) | Val  Loss: 0.3302 | Val  Acc: 0.9111
+ Site-Sketch                    (4) | Val  Loss: 0.5910 | Val  Acc: 0.8333
+ Site-Sketch                    (4) | Val  Loss: 0.4770 | Val  Acc: 0.8365
+ Site-QuickDraw                 (1) | Val  Loss: 0.5826 | Val  Acc: 0.8381
+ Site-QuickDraw                 (1) | Val  Loss: 0.5790 | Val  Acc: 0.8190
+ Site-Infograph                 (2) | Val  Loss: 0.7883 | Val  Acc: 0.7429
+ Site-Infograph                 (2) | Val  Loss: 0.8384 | Val  Acc: 0.7317
+Average Valid Accuracy: 0.8538
+============ Train epoch 31 ============
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5172, powerC: 0.4828
+ Site-Clipart                   (1) | Train Loss: 0.3606 | Train Acc: 0.8984
+ Site-Clipart                   (1) | Train Loss: 0.4141 | Train Acc: 0.8804
+ Site-Real                      (3) | Train Loss: 0.2075 | Train Acc: 0.9460
+ Site-Real                      (3) | Train Loss: 0.2452 | Train Acc: 0.9323
+ Site-Painting                  (5) | Train Loss: 0.3552 | Train Acc: 0.8889
+ Site-Painting                  (5) | Train Loss: 0.3097 | Train Acc: 0.9132
+ Site-Sketch                    (4) | Train Loss: 0.4051 | Train Acc: 0.8540
+ Site-Sketch                    (6) | Train Loss: 0.4238 | Train Acc: 0.8709
+ Site-QuickDraw                 (0) | Train Loss: 0.6925 | Train Acc: 0.7841
+ Site-QuickDraw                 (0) | Train Loss: 0.6012 | Train Acc: 0.8286
+ Site-Infograph                 (2) | Train Loss: 1.0052 | Train Acc: 0.6794
+ Site-Infograph                 (2) | Train Loss: 0.8425 | Train Acc: 0.7249
+Average Train Accuracy: 0.8501
+ Site-Clipart                   (1) | Val  Loss: 0.4013 | Val  Acc: 0.9143
+ Site-Clipart                   (1) | Val  Loss: 0.4009 | Val  Acc: 0.8778
+ Site-Real                      (3) | Val  Loss: 0.3192 | Val  Acc: 0.9286
+ Site-Real                      (3) | Val  Loss: 0.2314 | Val  Acc: 0.9429
+ Site-Painting                  (5) | Val  Loss: 0.3524 | Val  Acc: 0.9095
+ Site-Painting                  (5) | Val  Loss: 0.3387 | Val  Acc: 0.8889
+ Site-Sketch                    (4) | Val  Loss: 0.5632 | Val  Acc: 0.8333
+ Site-Sketch                    (6) | Val  Loss: 0.4236 | Val  Acc: 0.8556
+ Site-QuickDraw                 (0) | Val  Loss: 0.5724 | Val  Acc: 0.8476
+ Site-QuickDraw                 (0) | Val  Loss: 0.5824 | Val  Acc: 0.8206
+ Site-Infograph                 (2) | Val  Loss: 0.7983 | Val  Acc: 0.7190
+ Site-Infograph                 (2) | Val  Loss: 0.8472 | Val  Acc: 0.7365
+Average Valid Accuracy: 0.8562
+============ Train epoch 32 ============
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+cnt=[2, 1, 2, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5155, powerC: 0.4845
+ Site-Clipart                   (6) | Train Loss: 0.3455 | Train Acc: 0.9079
+ Site-Clipart                   (4) | Train Loss: 0.4002 | Train Acc: 0.8783
+ Site-Real                      (1) | Train Loss: 0.2365 | Train Acc: 0.9365
+ Site-Real                      (1) | Train Loss: 0.2257 | Train Acc: 0.9397
+ Site-Painting                  (5) | Train Loss: 0.3161 | Train Acc: 0.9048
+ Site-Painting                  (5) | Train Loss: 0.3058 | Train Acc: 0.9206
+ Site-Sketch                    (3) | Train Loss: 0.3971 | Train Acc: 0.8635
+ Site-Sketch                    (3) | Train Loss: 0.4131 | Train Acc: 0.8677
+ Site-QuickDraw                 (0) | Train Loss: 0.7017 | Train Acc: 0.7873
+ Site-QuickDraw                 (0) | Train Loss: 0.6037 | Train Acc: 0.8148
+ Site-Infograph                 (2) | Train Loss: 1.0278 | Train Acc: 0.6698
+ Site-Infograph                 (2) | Train Loss: 0.8387 | Train Acc: 0.7302
+Average Train Accuracy: 0.8518
+ Site-Clipart                   (6) | Val  Loss: 0.4288 | Val  Acc: 0.8952
+ Site-Clipart                   (4) | Val  Loss: 0.3874 | Val  Acc: 0.8619
+ Site-Real                      (1) | Val  Loss: 0.3155 | Val  Acc: 0.9429
+ Site-Real                      (1) | Val  Loss: 0.2395 | Val  Acc: 0.9333
+ Site-Painting                  (5) | Val  Loss: 0.3293 | Val  Acc: 0.9238
+ Site-Painting                  (5) | Val  Loss: 0.3172 | Val  Acc: 0.9111
+ Site-Sketch                    (3) | Val  Loss: 0.4855 | Val  Acc: 0.8571
+ Site-Sketch                    (3) | Val  Loss: 0.4257 | Val  Acc: 0.8571
+ Site-QuickDraw                 (0) | Val  Loss: 0.5537 | Val  Acc: 0.8667
+ Site-QuickDraw                 (0) | Val  Loss: 0.5665 | Val  Acc: 0.8270
+ Site-Infograph                 (2) | Val  Loss: 0.7352 | Val  Acc: 0.7524
+ Site-Infograph                 (2) | Val  Loss: 0.8119 | Val  Acc: 0.7365
+Average Valid Accuracy: 0.8638
+ Best site-Clipart                  (6)  | Epoch:32 | Val Acc: 0.8952
+ Best site-Clipart                  (4)  | Epoch:32 | Val Acc: 0.8619
+ Best site-Real                     (1)  | Epoch:32 | Val Acc: 0.9429
+ Best site-Real                     (1)  | Epoch:32 | Val Acc: 0.9333
+ Best site-Painting                 (5)  | Epoch:32 | Val Acc: 0.9238
+ Best site-Painting                 (5)  | Epoch:32 | Val Acc: 0.9111
+ Best site-Sketch                   (3)  | Epoch:32 | Val Acc: 0.8571
+ Best site-Sketch                   (3)  | Epoch:32 | Val Acc: 0.8571
+ Best site-QuickDraw                (0)  | Epoch:32 | Val Acc: 0.8667
+ Best site-QuickDraw                (0)  | Epoch:32 | Val Acc: 0.8270
+ Best site-Infograph                (2)  | Epoch:32 | Val Acc: 0.7524
+ Best site-Infograph                (2)  | Epoch:32 | Val Acc: 0.7365
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 33 ============
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5139, powerC: 0.4861
+ Site-Clipart                   (3) | Train Loss: 0.3474 | Train Acc: 0.9111
+ Site-Clipart                   (3) | Train Loss: 0.3775 | Train Acc: 0.8910
+ Site-Real                      (0) | Train Loss: 0.2292 | Train Acc: 0.9365
+ Site-Real                      (0) | Train Loss: 0.2344 | Train Acc: 0.9386
+ Site-Painting                  (4) | Train Loss: 0.3681 | Train Acc: 0.8794
+ Site-Painting                  (4) | Train Loss: 0.3163 | Train Acc: 0.9111
+ Site-Sketch                    (5) | Train Loss: 0.4215 | Train Acc: 0.8508
+ Site-Sketch                    (5) | Train Loss: 0.4402 | Train Acc: 0.8593
+ Site-QuickDraw                 (1) | Train Loss: 0.6805 | Train Acc: 0.7937
+ Site-QuickDraw                 (1) | Train Loss: 0.6118 | Train Acc: 0.8243
+ Site-Infograph                 (6) | Train Loss: 0.9978 | Train Acc: 0.6984
+ Site-Infograph                 (2) | Train Loss: 0.8007 | Train Acc: 0.7608
+Average Train Accuracy: 0.8546
+ Site-Clipart                   (3) | Val  Loss: 0.4212 | Val  Acc: 0.8810
+ Site-Clipart                   (3) | Val  Loss: 0.3727 | Val  Acc: 0.8841
+ Site-Real                      (0) | Val  Loss: 0.2690 | Val  Acc: 0.9381
+ Site-Real                      (0) | Val  Loss: 0.2472 | Val  Acc: 0.9333
+ Site-Painting                  (4) | Val  Loss: 0.3634 | Val  Acc: 0.8952
+ Site-Painting                  (4) | Val  Loss: 0.3212 | Val  Acc: 0.9016
+ Site-Sketch                    (5) | Val  Loss: 0.4975 | Val  Acc: 0.8381
+ Site-Sketch                    (5) | Val  Loss: 0.4435 | Val  Acc: 0.8556
+ Site-QuickDraw                 (1) | Val  Loss: 0.5427 | Val  Acc: 0.8381
+ Site-QuickDraw                 (1) | Val  Loss: 0.5761 | Val  Acc: 0.8127
+ Site-Infograph                 (6) | Val  Loss: 0.7044 | Val  Acc: 0.7524
+ Site-Infograph                 (2) | Val  Loss: 0.8154 | Val  Acc: 0.7349
+Average Valid Accuracy: 0.8554
+============ Train epoch 34 ============
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+cnt=[2, 2, 2, 2, 2, 1, 1, ]
+power_decay: 0.9, powerI: 0.5125, powerC: 0.4875
+ Site-Clipart                   (6) | Train Loss: 0.3714 | Train Acc: 0.9048
+ Site-Clipart                   (4) | Train Loss: 0.3975 | Train Acc: 0.8847
+ Site-Real                      (5) | Train Loss: 0.2405 | Train Acc: 0.9333
+ Site-Real                      (5) | Train Loss: 0.2453 | Train Acc: 0.9270
+ Site-Painting                  (2) | Train Loss: 0.3148 | Train Acc: 0.8921
+ Site-Painting                  (2) | Train Loss: 0.3081 | Train Acc: 0.9175
+ Site-Sketch                    (3) | Train Loss: 0.4231 | Train Acc: 0.8476
+ Site-Sketch                    (3) | Train Loss: 0.4309 | Train Acc: 0.8667
+ Site-QuickDraw                 (1) | Train Loss: 0.6824 | Train Acc: 0.7841
+ Site-QuickDraw                 (1) | Train Loss: 0.5781 | Train Acc: 0.8296
+ Site-Infograph                 (0) | Train Loss: 1.0232 | Train Acc: 0.6825
+ Site-Infograph                 (0) | Train Loss: 0.8394 | Train Acc: 0.7291
+Average Train Accuracy: 0.8499
+ Site-Clipart                   (6) | Val  Loss: 0.4548 | Val  Acc: 0.8762
+ Site-Clipart                   (4) | Val  Loss: 0.3852 | Val  Acc: 0.8873
+ Site-Real                      (5) | Val  Loss: 0.3136 | Val  Acc: 0.9381
+ Site-Real                      (5) | Val  Loss: 0.2534 | Val  Acc: 0.9254
+ Site-Painting                  (2) | Val  Loss: 0.3792 | Val  Acc: 0.8952
+ Site-Painting                  (2) | Val  Loss: 0.3142 | Val  Acc: 0.8984
+ Site-Sketch                    (3) | Val  Loss: 0.5254 | Val  Acc: 0.8810
+ Site-Sketch                    (3) | Val  Loss: 0.4272 | Val  Acc: 0.8587
+ Site-QuickDraw                 (1) | Val  Loss: 0.5849 | Val  Acc: 0.8333
+ Site-QuickDraw                 (1) | Val  Loss: 0.5794 | Val  Acc: 0.8127
+ Site-Infograph                 (0) | Val  Loss: 0.7716 | Val  Acc: 0.7714
+ Site-Infograph                 (0) | Val  Loss: 0.7858 | Val  Acc: 0.7492
+Average Valid Accuracy: 0.8606
+============ Train epoch 35 ============
+cnt=[2, 2, 2, 1, 2, 2, 1, ]
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+power_decay: 0.9, powerI: 0.5113, powerC: 0.4887
+ Site-Clipart                   (2) | Train Loss: 0.3371 | Train Acc: 0.9206
+ Site-Clipart                   (2) | Train Loss: 0.3923 | Train Acc: 0.8751
+ Site-Real                      (5) | Train Loss: 0.2248 | Train Acc: 0.9365
+ Site-Real                      (5) | Train Loss: 0.2406 | Train Acc: 0.9397
+ Site-Painting                  (3) | Train Loss: 0.3570 | Train Acc: 0.8857
+ Site-Painting                  (6) | Train Loss: 0.2899 | Train Acc: 0.9249
+ Site-Sketch                    (4) | Train Loss: 0.3979 | Train Acc: 0.8762
+ Site-Sketch                    (4) | Train Loss: 0.4095 | Train Acc: 0.8635
+ Site-QuickDraw                 (1) | Train Loss: 0.6674 | Train Acc: 0.7714
+ Site-QuickDraw                 (1) | Train Loss: 0.5616 | Train Acc: 0.8275
+ Site-Infograph                 (0) | Train Loss: 1.0439 | Train Acc: 0.6762
+ Site-Infograph                 (0) | Train Loss: 0.8067 | Train Acc: 0.7471
+Average Train Accuracy: 0.8537
+ Site-Clipart                   (2) | Val  Loss: 0.4109 | Val  Acc: 0.9143
+ Site-Clipart                   (2) | Val  Loss: 0.3860 | Val  Acc: 0.8730
+ Site-Real                      (5) | Val  Loss: 0.3077 | Val  Acc: 0.9476
+ Site-Real                      (5) | Val  Loss: 0.2417 | Val  Acc: 0.9349
+ Site-Painting                  (3) | Val  Loss: 0.3840 | Val  Acc: 0.9000
+ Site-Painting                  (6) | Val  Loss: 0.3256 | Val  Acc: 0.8984
+ Site-Sketch                    (4) | Val  Loss: 0.6091 | Val  Acc: 0.8571
+ Site-Sketch                    (4) | Val  Loss: 0.4376 | Val  Acc: 0.8524
+ Site-QuickDraw                 (1) | Val  Loss: 0.5417 | Val  Acc: 0.8381
+ Site-QuickDraw                 (1) | Val  Loss: 0.5845 | Val  Acc: 0.8127
+ Site-Infograph                 (0) | Val  Loss: 0.7308 | Val  Acc: 0.7619
+ Site-Infograph                 (0) | Val  Loss: 0.8117 | Val  Acc: 0.7349
+Average Valid Accuracy: 0.8604
+============ Train epoch 36 ============
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+cnt=[2, 2, 2, 1, 2, 1, 2, ]
+power_decay: 0.9, powerI: 0.5101, powerC: 0.4899
+ Site-Clipart                   (2) | Train Loss: 0.3554 | Train Acc: 0.9048
+ Site-Clipart                   (2) | Train Loss: 0.3811 | Train Acc: 0.8836
+ Site-Real                      (5) | Train Loss: 0.2297 | Train Acc: 0.9365
+ Site-Real                      (5) | Train Loss: 0.2224 | Train Acc: 0.9386
+ Site-Painting                  (3) | Train Loss: 0.2951 | Train Acc: 0.9143
+ Site-Painting                  (3) | Train Loss: 0.2946 | Train Acc: 0.9185
+ Site-Sketch                    (4) | Train Loss: 0.4201 | Train Acc: 0.8635
+ Site-Sketch                    (4) | Train Loss: 0.4080 | Train Acc: 0.8677
+ Site-QuickDraw                 (1) | Train Loss: 0.6977 | Train Acc: 0.7619
+ Site-QuickDraw                 (1) | Train Loss: 0.5950 | Train Acc: 0.8148
+ Site-Infograph                 (6) | Train Loss: 0.9847 | Train Acc: 0.6921
+ Site-Infograph                 (0) | Train Loss: 0.8027 | Train Acc: 0.7429
+Average Train Accuracy: 0.8533
+ Site-Clipart                   (2) | Val  Loss: 0.3634 | Val  Acc: 0.9095
+ Site-Clipart                   (2) | Val  Loss: 0.3670 | Val  Acc: 0.8857
+ Site-Real                      (5) | Val  Loss: 0.3092 | Val  Acc: 0.9524
+ Site-Real                      (5) | Val  Loss: 0.2302 | Val  Acc: 0.9397
+ Site-Painting                  (3) | Val  Loss: 0.3804 | Val  Acc: 0.8762
+ Site-Painting                  (3) | Val  Loss: 0.3148 | Val  Acc: 0.9063
+ Site-Sketch                    (4) | Val  Loss: 0.4697 | Val  Acc: 0.8667
+ Site-Sketch                    (4) | Val  Loss: 0.4241 | Val  Acc: 0.8619
+ Site-QuickDraw                 (1) | Val  Loss: 0.5314 | Val  Acc: 0.8619
+ Site-QuickDraw                 (1) | Val  Loss: 0.5480 | Val  Acc: 0.8270
+ Site-Infograph                 (6) | Val  Loss: 0.7334 | Val  Acc: 0.7619
+ Site-Infograph                 (0) | Val  Loss: 0.7998 | Val  Acc: 0.7444
+Average Valid Accuracy: 0.8661
+ Best site-Clipart                  (2)  | Epoch:36 | Val Acc: 0.9095
+ Best site-Clipart                  (2)  | Epoch:36 | Val Acc: 0.8857
+ Best site-Real                     (5)  | Epoch:36 | Val Acc: 0.9524
+ Best site-Real                     (5)  | Epoch:36 | Val Acc: 0.9397
+ Best site-Painting                 (3)  | Epoch:36 | Val Acc: 0.8762
+ Best site-Painting                 (3)  | Epoch:36 | Val Acc: 0.9063
+ Best site-Sketch                   (4)  | Epoch:36 | Val Acc: 0.8667
+ Best site-Sketch                   (4)  | Epoch:36 | Val Acc: 0.8619
+ Best site-QuickDraw                (1)  | Epoch:36 | Val Acc: 0.8619
+ Best site-QuickDraw                (1)  | Epoch:36 | Val Acc: 0.8270
+ Best site-Infograph                (6)  | Epoch:36 | Val Acc: 0.7619
+ Best site-Infograph                (0)  | Epoch:36 | Val Acc: 0.7444
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 37 ============
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5091, powerC: 0.4909
+ Site-Clipart                   (4) | Train Loss: 0.3446 | Train Acc: 0.9079
+ Site-Clipart                   (4) | Train Loss: 0.3783 | Train Acc: 0.8783
+ Site-Real                      (2) | Train Loss: 0.2385 | Train Acc: 0.9333
+ Site-Real                      (2) | Train Loss: 0.2276 | Train Acc: 0.9376
+ Site-Painting                  (5) | Train Loss: 0.3096 | Train Acc: 0.9111
+ Site-Painting                  (5) | Train Loss: 0.2852 | Train Acc: 0.9122
+ Site-Sketch                    (3) | Train Loss: 0.3907 | Train Acc: 0.8667
+ Site-Sketch                    (3) | Train Loss: 0.4065 | Train Acc: 0.8688
+ Site-QuickDraw                 (1) | Train Loss: 0.6206 | Train Acc: 0.8254
+ Site-QuickDraw                 (1) | Train Loss: 0.5637 | Train Acc: 0.8328
+ Site-Infograph                 (0) | Train Loss: 0.9682 | Train Acc: 0.7016
+ Site-Infograph                 (6) | Train Loss: 0.7948 | Train Acc: 0.7450
+Average Train Accuracy: 0.8601
+ Site-Clipart                   (4) | Val  Loss: 0.3615 | Val  Acc: 0.9000
+ Site-Clipart                   (4) | Val  Loss: 0.3514 | Val  Acc: 0.8873
+ Site-Real                      (2) | Val  Loss: 0.3475 | Val  Acc: 0.9333
+ Site-Real                      (2) | Val  Loss: 0.2361 | Val  Acc: 0.9349
+ Site-Painting                  (5) | Val  Loss: 0.3615 | Val  Acc: 0.8952
+ Site-Painting                  (5) | Val  Loss: 0.3093 | Val  Acc: 0.9159
+ Site-Sketch                    (3) | Val  Loss: 0.4630 | Val  Acc: 0.8286
+ Site-Sketch                    (3) | Val  Loss: 0.4058 | Val  Acc: 0.8635
+ Site-QuickDraw                 (1) | Val  Loss: 0.4940 | Val  Acc: 0.8714
+ Site-QuickDraw                 (1) | Val  Loss: 0.5385 | Val  Acc: 0.8429
+ Site-Infograph                 (0) | Val  Loss: 0.6912 | Val  Acc: 0.7952
+ Site-Infograph                 (6) | Val  Loss: 0.7989 | Val  Acc: 0.7413
+Average Valid Accuracy: 0.8675
+ Best site-Clipart                  (4)  | Epoch:37 | Val Acc: 0.9000
+ Best site-Clipart                  (4)  | Epoch:37 | Val Acc: 0.8873
+ Best site-Real                     (2)  | Epoch:37 | Val Acc: 0.9333
+ Best site-Real                     (2)  | Epoch:37 | Val Acc: 0.9349
+ Best site-Painting                 (5)  | Epoch:37 | Val Acc: 0.8952
+ Best site-Painting                 (5)  | Epoch:37 | Val Acc: 0.9159
+ Best site-Sketch                   (3)  | Epoch:37 | Val Acc: 0.8286
+ Best site-Sketch                   (3)  | Epoch:37 | Val Acc: 0.8635
+ Best site-QuickDraw                (1)  | Epoch:37 | Val Acc: 0.8714
+ Best site-QuickDraw                (1)  | Epoch:37 | Val Acc: 0.8429
+ Best site-Infograph                (0)  | Epoch:37 | Val Acc: 0.7952
+ Best site-Infograph                (6)  | Epoch:37 | Val Acc: 0.7413
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 38 ============
+cnt=[2, 1, 2, 2, 2, 2, 1, ]
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5082, powerC: 0.4918
+ Site-Clipart                   (0) | Train Loss: 0.3532 | Train Acc: 0.8984
+ Site-Clipart                   (0) | Train Loss: 0.3807 | Train Acc: 0.8878
+ Site-Real                      (5) | Train Loss: 0.2440 | Train Acc: 0.9365
+ Site-Real                      (5) | Train Loss: 0.2210 | Train Acc: 0.9407
+ Site-Painting                  (3) | Train Loss: 0.3243 | Train Acc: 0.8952
+ Site-Painting                  (3) | Train Loss: 0.2818 | Train Acc: 0.9228
+ Site-Sketch                    (4) | Train Loss: 0.3986 | Train Acc: 0.8540
+ Site-Sketch                    (4) | Train Loss: 0.4095 | Train Acc: 0.8741
+ Site-QuickDraw                 (6) | Train Loss: 0.6328 | Train Acc: 0.7873
+ Site-QuickDraw                 (1) | Train Loss: 0.5724 | Train Acc: 0.8201
+ Site-Infograph                 (2) | Train Loss: 0.9784 | Train Acc: 0.7079
+ Site-Infograph                 (2) | Train Loss: 0.7918 | Train Acc: 0.7608
+Average Train Accuracy: 0.8571
+ Site-Clipart                   (0) | Val  Loss: 0.3548 | Val  Acc: 0.9238
+ Site-Clipart                   (0) | Val  Loss: 0.3513 | Val  Acc: 0.8921
+ Site-Real                      (5) | Val  Loss: 0.3286 | Val  Acc: 0.9381
+ Site-Real                      (5) | Val  Loss: 0.2436 | Val  Acc: 0.9254
+ Site-Painting                  (3) | Val  Loss: 0.3616 | Val  Acc: 0.8810
+ Site-Painting                  (3) | Val  Loss: 0.3135 | Val  Acc: 0.9143
+ Site-Sketch                    (4) | Val  Loss: 0.4852 | Val  Acc: 0.8667
+ Site-Sketch                    (4) | Val  Loss: 0.3915 | Val  Acc: 0.8683
+ Site-QuickDraw                 (6) | Val  Loss: 0.4709 | Val  Acc: 0.8905
+ Site-QuickDraw                 (1) | Val  Loss: 0.5438 | Val  Acc: 0.8270
+ Site-Infograph                 (2) | Val  Loss: 0.7208 | Val  Acc: 0.7810
+ Site-Infograph                 (2) | Val  Loss: 0.7471 | Val  Acc: 0.7778
+Average Valid Accuracy: 0.8738
+ Best site-Clipart                  (0)  | Epoch:38 | Val Acc: 0.9238
+ Best site-Clipart                  (0)  | Epoch:38 | Val Acc: 0.8921
+ Best site-Real                     (5)  | Epoch:38 | Val Acc: 0.9381
+ Best site-Real                     (5)  | Epoch:38 | Val Acc: 0.9254
+ Best site-Painting                 (3)  | Epoch:38 | Val Acc: 0.8810
+ Best site-Painting                 (3)  | Epoch:38 | Val Acc: 0.9143
+ Best site-Sketch                   (4)  | Epoch:38 | Val Acc: 0.8667
+ Best site-Sketch                   (4)  | Epoch:38 | Val Acc: 0.8683
+ Best site-QuickDraw                (6)  | Epoch:38 | Val Acc: 0.8905
+ Best site-QuickDraw                (1)  | Epoch:38 | Val Acc: 0.8270
+ Best site-Infograph                (2)  | Epoch:38 | Val Acc: 0.7810
+ Best site-Infograph                (2)  | Epoch:38 | Val Acc: 0.7778
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 39 ============
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5074, powerC: 0.4926
+ Site-Clipart                   (4) | Train Loss: 0.3626 | Train Acc: 0.9079
+ Site-Clipart                   (4) | Train Loss: 0.3764 | Train Acc: 0.8899
+ Site-Real                      (5) | Train Loss: 0.2363 | Train Acc: 0.9365
+ Site-Real                      (5) | Train Loss: 0.2357 | Train Acc: 0.9429
+ Site-Painting                  (0) | Train Loss: 0.3140 | Train Acc: 0.8984
+ Site-Painting                  (0) | Train Loss: 0.3010 | Train Acc: 0.9122
+ Site-Sketch                    (3) | Train Loss: 0.3820 | Train Acc: 0.8952
+ Site-Sketch                    (3) | Train Loss: 0.4235 | Train Acc: 0.8635
+ Site-QuickDraw                 (1) | Train Loss: 0.6400 | Train Acc: 0.8000
+ Site-QuickDraw                 (1) | Train Loss: 0.5393 | Train Acc: 0.8423
+ Site-Infograph                 (6) | Train Loss: 0.9792 | Train Acc: 0.7111
+ Site-Infograph                 (2) | Train Loss: 0.7758 | Train Acc: 0.7619
+Average Train Accuracy: 0.8635
+ Site-Clipart                   (4) | Val  Loss: 0.3828 | Val  Acc: 0.9000
+ Site-Clipart                   (4) | Val  Loss: 0.3376 | Val  Acc: 0.8952
+ Site-Real                      (5) | Val  Loss: 0.3039 | Val  Acc: 0.9286
+ Site-Real                      (5) | Val  Loss: 0.2270 | Val  Acc: 0.9397
+ Site-Painting                  (0) | Val  Loss: 0.3552 | Val  Acc: 0.8905
+ Site-Painting                  (0) | Val  Loss: 0.3071 | Val  Acc: 0.9095
+ Site-Sketch                    (3) | Val  Loss: 0.4878 | Val  Acc: 0.8476
+ Site-Sketch                    (3) | Val  Loss: 0.3878 | Val  Acc: 0.8841
+ Site-QuickDraw                 (1) | Val  Loss: 0.5217 | Val  Acc: 0.8524
+ Site-QuickDraw                 (1) | Val  Loss: 0.5152 | Val  Acc: 0.8508
+ Site-Infograph                 (6) | Val  Loss: 0.6762 | Val  Acc: 0.8000
+ Site-Infograph                 (2) | Val  Loss: 0.7668 | Val  Acc: 0.7619
+Average Valid Accuracy: 0.8717
+============ Train epoch 40 ============
+cnt=[2, 1, 2, 2, 2, 1, 2, ]
+cnt=[2, 2, 2, 2, 2, 1, 1, ]
+power_decay: 0.9, powerI: 0.5067, powerC: 0.4933
+ Site-Clipart                   (4) | Train Loss: 0.3313 | Train Acc: 0.9111
+ Site-Clipart                   (4) | Train Loss: 0.4057 | Train Acc: 0.8762
+ Site-Real                      (6) | Train Loss: 0.2255 | Train Acc: 0.9365
+ Site-Real                      (6) | Train Loss: 0.2410 | Train Acc: 0.9407
+ Site-Painting                  (2) | Train Loss: 0.3088 | Train Acc: 0.8889
+ Site-Painting                  (2) | Train Loss: 0.2947 | Train Acc: 0.9217
+ Site-Sketch                    (0) | Train Loss: 0.4009 | Train Acc: 0.8762
+ Site-Sketch                    (0) | Train Loss: 0.4217 | Train Acc: 0.8582
+ Site-QuickDraw                 (1) | Train Loss: 0.6438 | Train Acc: 0.7810
+ Site-QuickDraw                 (5) | Train Loss: 0.5433 | Train Acc: 0.8370
+ Site-Infograph                 (3) | Train Loss: 0.9479 | Train Acc: 0.6921
+ Site-Infograph                 (3) | Train Loss: 0.7769 | Train Acc: 0.7492
+Average Train Accuracy: 0.8557
+ Site-Clipart                   (4) | Val  Loss: 0.3791 | Val  Acc: 0.9143
+ Site-Clipart                   (4) | Val  Loss: 0.3641 | Val  Acc: 0.8905
+ Site-Real                      (6) | Val  Loss: 0.3320 | Val  Acc: 0.9333
+ Site-Real                      (6) | Val  Loss: 0.2239 | Val  Acc: 0.9397
+ Site-Painting                  (2) | Val  Loss: 0.3359 | Val  Acc: 0.8905
+ Site-Painting                  (2) | Val  Loss: 0.3011 | Val  Acc: 0.9095
+ Site-Sketch                    (0) | Val  Loss: 0.5656 | Val  Acc: 0.8381
+ Site-Sketch                    (0) | Val  Loss: 0.4098 | Val  Acc: 0.8698
+ Site-QuickDraw                 (1) | Val  Loss: 0.5362 | Val  Acc: 0.8667
+ Site-QuickDraw                 (5) | Val  Loss: 0.5283 | Val  Acc: 0.8508
+ Site-Infograph                 (3) | Val  Loss: 0.7157 | Val  Acc: 0.7571
+ Site-Infograph                 (3) | Val  Loss: 0.7497 | Val  Acc: 0.7778
+Average Valid Accuracy: 0.8698
+ Test site-Clipart                   (4)| Epoch:38 | Test Acc: 0.8783
+ Test site-Real                      (6)| Epoch:38 | Test Acc: 0.9392
+ Test site-Painting                  (2)| Epoch:38 | Test Acc: 0.9305
+ Test site-Sketch                    (0)| Epoch:38 | Test Acc: 0.8935
+ Test site-QuickDraw                 (1)| Epoch:38 | Test Acc: 0.8080
+ Test site-Infograph                 (3)| Epoch:38 | Test Acc: 0.6438
+Clipart: 0.8783, Real: 0.9392, Painting: 0.9305, Sketch: 0.8935, QuickDraw: 0.8080, Infograph: 0.6438, 
+Average Test Accuracy(group): 0.8489, Average Test Accuracy(individual): 0.8489,
+domain std=0.1012, cluster std=0.0947, individual std=0.1012, 
+Average Test Accuracy: 0.8489
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 41 ============
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+power_decay: 0.9, powerI: 0.5060, powerC: 0.4940
+ Site-Clipart                   (6) | Train Loss: 0.3478 | Train Acc: 0.8921
+ Site-Clipart                   (4) | Train Loss: 0.3553 | Train Acc: 0.8910
+ Site-Real                      (5) | Train Loss: 0.2098 | Train Acc: 0.9365
+ Site-Real                      (5) | Train Loss: 0.2172 | Train Acc: 0.9407
+ Site-Painting                  (3) | Train Loss: 0.3161 | Train Acc: 0.8984
+ Site-Painting                  (3) | Train Loss: 0.2880 | Train Acc: 0.9185
+ Site-Sketch                    (2) | Train Loss: 0.3820 | Train Acc: 0.8762
+ Site-Sketch                    (2) | Train Loss: 0.4035 | Train Acc: 0.8667
+ Site-QuickDraw                 (1) | Train Loss: 0.6521 | Train Acc: 0.7937
+ Site-QuickDraw                 (1) | Train Loss: 0.5531 | Train Acc: 0.8138
+ Site-Infograph                 (0) | Train Loss: 0.9642 | Train Acc: 0.7048
+ Site-Infograph                 (0) | Train Loss: 0.7551 | Train Acc: 0.7661
+Average Train Accuracy: 0.8582
+ Site-Clipart                   (6) | Val  Loss: 0.3611 | Val  Acc: 0.9095
+ Site-Clipart                   (4) | Val  Loss: 0.3583 | Val  Acc: 0.9016
+ Site-Real                      (5) | Val  Loss: 0.3255 | Val  Acc: 0.9476
+ Site-Real                      (5) | Val  Loss: 0.2174 | Val  Acc: 0.9397
+ Site-Painting                  (3) | Val  Loss: 0.3395 | Val  Acc: 0.8905
+ Site-Painting                  (3) | Val  Loss: 0.3094 | Val  Acc: 0.9063
+ Site-Sketch                    (2) | Val  Loss: 0.5629 | Val  Acc: 0.8381
+ Site-Sketch                    (2) | Val  Loss: 0.4136 | Val  Acc: 0.8571
+ Site-QuickDraw                 (1) | Val  Loss: 0.4855 | Val  Acc: 0.8762
+ Site-QuickDraw                 (1) | Val  Loss: 0.5334 | Val  Acc: 0.8254
+ Site-Infograph                 (0) | Val  Loss: 0.6831 | Val  Acc: 0.7905
+ Site-Infograph                 (0) | Val  Loss: 0.7529 | Val  Acc: 0.7540
+Average Valid Accuracy: 0.8697
+ Test site-Clipart                   (6)| Epoch:40 | Test Acc: 0.8821
+ Test site-Real                      (5)| Epoch:40 | Test Acc: 0.9417
+ Test site-Painting                  (3)| Epoch:40 | Test Acc: 0.9273
+ Test site-Sketch                    (2)| Epoch:40 | Test Acc: 0.8953
+ Test site-QuickDraw                 (1)| Epoch:40 | Test Acc: 0.8130
+ Test site-Infograph                 (0)| Epoch:40 | Test Acc: 0.6393
+Clipart: 0.8821, Real: 0.9417, Painting: 0.9273, Sketch: 0.8953, QuickDraw: 0.8130, Infograph: 0.6393, 
+Average Test Accuracy(group): 0.8498, Average Test Accuracy(individual): 0.8498,
+domain std=0.1027, cluster std=0.0957, individual std=0.1027, 
+Average Test Accuracy: 0.8498
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 42 ============
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5054, powerC: 0.4946
+ Site-Clipart                   (4) | Train Loss: 0.3264 | Train Acc: 0.9016
+ Site-Clipart                   (6) | Train Loss: 0.3469 | Train Acc: 0.8963
+ Site-Real                      (1) | Train Loss: 0.2344 | Train Acc: 0.9333
+ Site-Real                      (1) | Train Loss: 0.2393 | Train Acc: 0.9333
+ Site-Painting                  (5) | Train Loss: 0.2921 | Train Acc: 0.9079
+ Site-Painting                  (5) | Train Loss: 0.2887 | Train Acc: 0.9185
+ Site-Sketch                    (3) | Train Loss: 0.3673 | Train Acc: 0.8952
+ Site-Sketch                    (3) | Train Loss: 0.3799 | Train Acc: 0.8815
+ Site-QuickDraw                 (0) | Train Loss: 0.6355 | Train Acc: 0.8063
+ Site-QuickDraw                 (0) | Train Loss: 0.5431 | Train Acc: 0.8381
+ Site-Infograph                 (2) | Train Loss: 1.0076 | Train Acc: 0.6889
+ Site-Infograph                 (2) | Train Loss: 0.7456 | Train Acc: 0.7683
+Average Train Accuracy: 0.8641
+ Site-Clipart                   (4) | Val  Loss: 0.3461 | Val  Acc: 0.9333
+ Site-Clipart                   (6) | Val  Loss: 0.3414 | Val  Acc: 0.8984
+ Site-Real                      (1) | Val  Loss: 0.3021 | Val  Acc: 0.9333
+ Site-Real                      (1) | Val  Loss: 0.2196 | Val  Acc: 0.9429
+ Site-Painting                  (5) | Val  Loss: 0.3600 | Val  Acc: 0.9000
+ Site-Painting                  (5) | Val  Loss: 0.2984 | Val  Acc: 0.9095
+ Site-Sketch                    (3) | Val  Loss: 0.5070 | Val  Acc: 0.8810
+ Site-Sketch                    (3) | Val  Loss: 0.3969 | Val  Acc: 0.8635
+ Site-QuickDraw                 (0) | Val  Loss: 0.4920 | Val  Acc: 0.8810
+ Site-QuickDraw                 (0) | Val  Loss: 0.5165 | Val  Acc: 0.8460
+ Site-Infograph                 (2) | Val  Loss: 0.6912 | Val  Acc: 0.7952
+ Site-Infograph                 (2) | Val  Loss: 0.7401 | Val  Acc: 0.7698
+Average Valid Accuracy: 0.8795
+ Best site-Clipart                  (4)  | Epoch:42 | Val Acc: 0.9333
+ Best site-Clipart                  (6)  | Epoch:42 | Val Acc: 0.8984
+ Best site-Real                     (1)  | Epoch:42 | Val Acc: 0.9333
+ Best site-Real                     (1)  | Epoch:42 | Val Acc: 0.9429
+ Best site-Painting                 (5)  | Epoch:42 | Val Acc: 0.9000
+ Best site-Painting                 (5)  | Epoch:42 | Val Acc: 0.9095
+ Best site-Sketch                   (3)  | Epoch:42 | Val Acc: 0.8810
+ Best site-Sketch                   (3)  | Epoch:42 | Val Acc: 0.8635
+ Best site-QuickDraw                (0)  | Epoch:42 | Val Acc: 0.8810
+ Best site-QuickDraw                (0)  | Epoch:42 | Val Acc: 0.8460
+ Best site-Infograph                (2)  | Epoch:42 | Val Acc: 0.7952
+ Best site-Infograph                (2)  | Epoch:42 | Val Acc: 0.7698
+ Test site-Clipart                   (4)| Epoch:42 | Test Acc: 0.8821
+ Test site-Real                      (1)| Epoch:42 | Test Acc: 0.9400
+ Test site-Painting                  (5)| Epoch:42 | Test Acc: 0.9257
+ Test site-Sketch                    (3)| Epoch:42 | Test Acc: 0.8917
+ Test site-QuickDraw                 (0)| Epoch:42 | Test Acc: 0.8070
+ Test site-Infograph                 (2)| Epoch:42 | Test Acc: 0.6347
+Clipart: 0.8821, Real: 0.9400, Painting: 0.9257, Sketch: 0.8917, QuickDraw: 0.8070, Infograph: 0.6347, 
+Average Test Accuracy(group): 0.8469, Average Test Accuracy(individual): 0.8469,
+domain std=0.1039, cluster std=0.0970, individual std=0.1039, 
+Average Test Accuracy: 0.8469
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 43 ============
+cnt=[2, 2, 2, 2, 2, 1, 1, ]
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5048, powerC: 0.4952
+ Site-Clipart                   (2) | Train Loss: 0.3397 | Train Acc: 0.9048
+ Site-Clipart                   (2) | Train Loss: 0.3659 | Train Acc: 0.8804
+ Site-Real                      (3) | Train Loss: 0.2285 | Train Acc: 0.9333
+ Site-Real                      (3) | Train Loss: 0.2151 | Train Acc: 0.9386
+ Site-Painting                  (6) | Train Loss: 0.2996 | Train Acc: 0.8889
+ Site-Painting                  (5) | Train Loss: 0.2891 | Train Acc: 0.9196
+ Site-Sketch                    (4) | Train Loss: 0.3990 | Train Acc: 0.8667
+ Site-Sketch                    (4) | Train Loss: 0.4025 | Train Acc: 0.8646
+ Site-QuickDraw                 (1) | Train Loss: 0.6216 | Train Acc: 0.8286
+ Site-QuickDraw                 (1) | Train Loss: 0.5595 | Train Acc: 0.8180
+ Site-Infograph                 (0) | Train Loss: 0.9777 | Train Acc: 0.6921
+ Site-Infograph                 (0) | Train Loss: 0.7633 | Train Acc: 0.7556
+Average Train Accuracy: 0.8576
+ Site-Clipart                   (2) | Val  Loss: 0.3836 | Val  Acc: 0.8905
+ Site-Clipart                   (2) | Val  Loss: 0.3524 | Val  Acc: 0.8937
+ Site-Real                      (3) | Val  Loss: 0.2842 | Val  Acc: 0.9429
+ Site-Real                      (3) | Val  Loss: 0.2213 | Val  Acc: 0.9349
+ Site-Painting                  (6) | Val  Loss: 0.3937 | Val  Acc: 0.8905
+ Site-Painting                  (5) | Val  Loss: 0.3054 | Val  Acc: 0.9111
+ Site-Sketch                    (4) | Val  Loss: 0.4485 | Val  Acc: 0.8810
+ Site-Sketch                    (4) | Val  Loss: 0.4020 | Val  Acc: 0.8603
+ Site-QuickDraw                 (1) | Val  Loss: 0.5201 | Val  Acc: 0.8524
+ Site-QuickDraw                 (1) | Val  Loss: 0.5196 | Val  Acc: 0.8397
+ Site-Infograph                 (0) | Val  Loss: 0.6635 | Val  Acc: 0.8000
+ Site-Infograph                 (0) | Val  Loss: 0.7370 | Val  Acc: 0.7746
+Average Valid Accuracy: 0.8726
+ Test site-Clipart                   (2)| Epoch:42 | Test Acc: 0.8840
+ Test site-Real                      (3)| Epoch:42 | Test Acc: 0.9417
+ Test site-Painting                  (6)| Epoch:42 | Test Acc: 0.9289
+ Test site-Sketch                    (4)| Epoch:42 | Test Acc: 0.8953
+ Test site-QuickDraw                 (1)| Epoch:42 | Test Acc: 0.7970
+ Test site-Infograph                 (0)| Epoch:42 | Test Acc: 0.6408
+Clipart: 0.8840, Real: 0.9417, Painting: 0.9289, Sketch: 0.8953, QuickDraw: 0.7970, Infograph: 0.6408, 
+Average Test Accuracy(group): 0.8480, Average Test Accuracy(individual): 0.8480,
+domain std=0.1036, cluster std=0.1000, individual std=0.1036, 
+Average Test Accuracy: 0.8480
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 44 ============
+cnt=[2, 2, 2, 1, 2, 2, 1, ]
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5044, powerC: 0.4956
+ Site-Clipart                   (4) | Train Loss: 0.3051 | Train Acc: 0.9206
+ Site-Clipart                   (4) | Train Loss: 0.3510 | Train Acc: 0.8910
+ Site-Real                      (0) | Train Loss: 0.2161 | Train Acc: 0.9302
+ Site-Real                      (0) | Train Loss: 0.2008 | Train Acc: 0.9450
+ Site-Painting                  (5) | Train Loss: 0.3420 | Train Acc: 0.8825
+ Site-Painting                  (5) | Train Loss: 0.2970 | Train Acc: 0.9132
+ Site-Sketch                    (6) | Train Loss: 0.3864 | Train Acc: 0.8698
+ Site-Sketch                    (3) | Train Loss: 0.3713 | Train Acc: 0.8878
+ Site-QuickDraw                 (1) | Train Loss: 0.6324 | Train Acc: 0.8032
+ Site-QuickDraw                 (1) | Train Loss: 0.5254 | Train Acc: 0.8434
+ Site-Infograph                 (2) | Train Loss: 0.9824 | Train Acc: 0.6857
+ Site-Infograph                 (2) | Train Loss: 0.7473 | Train Acc: 0.7757
+Average Train Accuracy: 0.8623
+ Site-Clipart                   (4) | Val  Loss: 0.4183 | Val  Acc: 0.8714
+ Site-Clipart                   (4) | Val  Loss: 0.3444 | Val  Acc: 0.8794
+ Site-Real                      (0) | Val  Loss: 0.3331 | Val  Acc: 0.9381
+ Site-Real                      (0) | Val  Loss: 0.2313 | Val  Acc: 0.9365
+ Site-Painting                  (5) | Val  Loss: 0.3917 | Val  Acc: 0.8952
+ Site-Painting                  (5) | Val  Loss: 0.2968 | Val  Acc: 0.9190
+ Site-Sketch                    (6) | Val  Loss: 0.4335 | Val  Acc: 0.8857
+ Site-Sketch                    (3) | Val  Loss: 0.3944 | Val  Acc: 0.8810
+ Site-QuickDraw                 (1) | Val  Loss: 0.4839 | Val  Acc: 0.8667
+ Site-QuickDraw                 (1) | Val  Loss: 0.5553 | Val  Acc: 0.8111
+ Site-Infograph                 (2) | Val  Loss: 0.6294 | Val  Acc: 0.8238
+ Site-Infograph                 (2) | Val  Loss: 0.7065 | Val  Acc: 0.7952
+Average Valid Accuracy: 0.8753
+ Test site-Clipart                   (4)| Epoch:43 | Test Acc: 0.8840
+ Test site-Real                      (0)| Epoch:43 | Test Acc: 0.9408
+ Test site-Painting                  (5)| Epoch:43 | Test Acc: 0.9257
+ Test site-Sketch                    (6)| Epoch:43 | Test Acc: 0.8935
+ Test site-QuickDraw                 (1)| Epoch:43 | Test Acc: 0.8000
+ Test site-Infograph                 (2)| Epoch:43 | Test Acc: 0.6438
+Clipart: 0.8840, Real: 0.9408, Painting: 0.9257, Sketch: 0.8935, QuickDraw: 0.8000, Infograph: 0.6438, 
+Average Test Accuracy(group): 0.8480, Average Test Accuracy(individual): 0.8480,
+domain std=0.1017, cluster std=0.0955, individual std=0.1017, 
+Average Test Accuracy: 0.8480
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 45 ============
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5039, powerC: 0.4961
+ Site-Clipart                   (2) | Train Loss: 0.3369 | Train Acc: 0.8984
+ Site-Clipart                   (6) | Train Loss: 0.3459 | Train Acc: 0.8963
+ Site-Real                      (5) | Train Loss: 0.2310 | Train Acc: 0.9333
+ Site-Real                      (5) | Train Loss: 0.2429 | Train Acc: 0.9386
+ Site-Painting                  (3) | Train Loss: 0.3306 | Train Acc: 0.8794
+ Site-Painting                  (3) | Train Loss: 0.2915 | Train Acc: 0.9090
+ Site-Sketch                    (4) | Train Loss: 0.4146 | Train Acc: 0.8571
+ Site-Sketch                    (4) | Train Loss: 0.3798 | Train Acc: 0.8783
+ Site-QuickDraw                 (1) | Train Loss: 0.6098 | Train Acc: 0.7937
+ Site-QuickDraw                 (1) | Train Loss: 0.5438 | Train Acc: 0.8180
+ Site-Infograph                 (0) | Train Loss: 0.9933 | Train Acc: 0.6952
+ Site-Infograph                 (0) | Train Loss: 0.7356 | Train Acc: 0.7767
+Average Train Accuracy: 0.8562
+ Site-Clipart                   (2) | Val  Loss: 0.3919 | Val  Acc: 0.9143
+ Site-Clipart                   (6) | Val  Loss: 0.3492 | Val  Acc: 0.9000
+ Site-Real                      (5) | Val  Loss: 0.3289 | Val  Acc: 0.9381
+ Site-Real                      (5) | Val  Loss: 0.2241 | Val  Acc: 0.9333
+ Site-Painting                  (3) | Val  Loss: 0.3595 | Val  Acc: 0.8857
+ Site-Painting                  (3) | Val  Loss: 0.3075 | Val  Acc: 0.9111
+ Site-Sketch                    (4) | Val  Loss: 0.4537 | Val  Acc: 0.8524
+ Site-Sketch                    (4) | Val  Loss: 0.3972 | Val  Acc: 0.8762
+ Site-QuickDraw                 (1) | Val  Loss: 0.4832 | Val  Acc: 0.8714
+ Site-QuickDraw                 (1) | Val  Loss: 0.5176 | Val  Acc: 0.8460
+ Site-Infograph                 (0) | Val  Loss: 0.6413 | Val  Acc: 0.8095
+ Site-Infograph                 (0) | Val  Loss: 0.7161 | Val  Acc: 0.7714
+Average Valid Accuracy: 0.8758
+ Test site-Clipart                   (2)| Epoch:44 | Test Acc: 0.8859
+ Test site-Real                      (5)| Epoch:44 | Test Acc: 0.9384
+ Test site-Painting                  (3)| Epoch:44 | Test Acc: 0.9257
+ Test site-Sketch                    (4)| Epoch:44 | Test Acc: 0.8899
+ Test site-QuickDraw                 (1)| Epoch:44 | Test Acc: 0.8070
+ Test site-Infograph                 (0)| Epoch:44 | Test Acc: 0.6393
+Clipart: 0.8859, Real: 0.9384, Painting: 0.9257, Sketch: 0.8899, QuickDraw: 0.8070, Infograph: 0.6393, 
+Average Test Accuracy(group): 0.8477, Average Test Accuracy(individual): 0.8477,
+domain std=0.1022, cluster std=0.0955, individual std=0.1022, 
+Average Test Accuracy: 0.8477
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 46 ============
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+power_decay: 0.9, powerI: 0.5035, powerC: 0.4965
+ Site-Clipart                   (4) | Train Loss: 0.3450 | Train Acc: 0.8984
+ Site-Clipart                   (4) | Train Loss: 0.3456 | Train Acc: 0.8963
+ Site-Real                      (1) | Train Loss: 0.2062 | Train Acc: 0.9460
+ Site-Real                      (1) | Train Loss: 0.2253 | Train Acc: 0.9386
+ Site-Painting                  (5) | Train Loss: 0.2797 | Train Acc: 0.9079
+ Site-Painting                  (5) | Train Loss: 0.2701 | Train Acc: 0.9175
+ Site-Sketch                    (3) | Train Loss: 0.3617 | Train Acc: 0.8794
+ Site-Sketch                    (3) | Train Loss: 0.3939 | Train Acc: 0.8730
+ Site-QuickDraw                 (6) | Train Loss: 0.6318 | Train Acc: 0.7905
+ Site-QuickDraw                 (0) | Train Loss: 0.5230 | Train Acc: 0.8402
+ Site-Infograph                 (2) | Train Loss: 0.9490 | Train Acc: 0.7016
+ Site-Infograph                 (2) | Train Loss: 0.7419 | Train Acc: 0.7524
+Average Train Accuracy: 0.8618
+ Site-Clipart                   (4) | Val  Loss: 0.3659 | Val  Acc: 0.9095
+ Site-Clipart                   (4) | Val  Loss: 0.3721 | Val  Acc: 0.8810
+ Site-Real                      (1) | Val  Loss: 0.3199 | Val  Acc: 0.9381
+ Site-Real                      (1) | Val  Loss: 0.2214 | Val  Acc: 0.9397
+ Site-Painting                  (5) | Val  Loss: 0.3271 | Val  Acc: 0.9000
+ Site-Painting                  (5) | Val  Loss: 0.2950 | Val  Acc: 0.9143
+ Site-Sketch                    (3) | Val  Loss: 0.4243 | Val  Acc: 0.8619
+ Site-Sketch                    (3) | Val  Loss: 0.3933 | Val  Acc: 0.8667
+ Site-QuickDraw                 (6) | Val  Loss: 0.5466 | Val  Acc: 0.8381
+ Site-QuickDraw                 (0) | Val  Loss: 0.5134 | Val  Acc: 0.8397
+ Site-Infograph                 (2) | Val  Loss: 0.6490 | Val  Acc: 0.7619
+ Site-Infograph                 (2) | Val  Loss: 0.7262 | Val  Acc: 0.7952
+Average Valid Accuracy: 0.8705
+ Test site-Clipart                   (4)| Epoch:45 | Test Acc: 0.8802
+ Test site-Real                      (1)| Epoch:45 | Test Acc: 0.9400
+ Test site-Painting                  (5)| Epoch:45 | Test Acc: 0.9241
+ Test site-Sketch                    (3)| Epoch:45 | Test Acc: 0.8935
+ Test site-QuickDraw                 (6)| Epoch:45 | Test Acc: 0.8130
+ Test site-Infograph                 (2)| Epoch:45 | Test Acc: 0.6454
+Clipart: 0.8802, Real: 0.9400, Painting: 0.9241, Sketch: 0.8935, QuickDraw: 0.8130, Infograph: 0.6454, 
+Average Test Accuracy(group): 0.8494, Average Test Accuracy(individual): 0.8494,
+domain std=0.0997, cluster std=0.0932, individual std=0.0997, 
+Average Test Accuracy: 0.8494
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 47 ============
+cnt=[2, 1, 2, 2, 2, 1, 2, ]
+cnt=[2, 2, 2, 2, 1, 2, 1, ]
+power_decay: 0.9, powerI: 0.5032, powerC: 0.4968
+ Site-Clipart                   (3) | Train Loss: 0.3681 | Train Acc: 0.8921
+ Site-Clipart                   (3) | Train Loss: 0.3721 | Train Acc: 0.8878
+ Site-Real                      (0) | Train Loss: 0.2322 | Train Acc: 0.9302
+ Site-Real                      (0) | Train Loss: 0.2210 | Train Acc: 0.9397
+ Site-Painting                  (6) | Train Loss: 0.3167 | Train Acc: 0.8921
+ Site-Painting                  (6) | Train Loss: 0.2611 | Train Acc: 0.9323
+ Site-Sketch                    (4) | Train Loss: 0.3810 | Train Acc: 0.8730
+ Site-Sketch                    (4) | Train Loss: 0.4113 | Train Acc: 0.8656
+ Site-QuickDraw                 (1) | Train Loss: 0.5905 | Train Acc: 0.8000
+ Site-QuickDraw                 (5) | Train Loss: 0.5351 | Train Acc: 0.8296
+ Site-Infograph                 (2) | Train Loss: 0.9619 | Train Acc: 0.7111
+ Site-Infograph                 (2) | Train Loss: 0.7344 | Train Acc: 0.7746
+Average Train Accuracy: 0.8607
+ Site-Clipart                   (3) | Val  Loss: 0.3612 | Val  Acc: 0.9048
+ Site-Clipart                   (3) | Val  Loss: 0.3599 | Val  Acc: 0.8889
+ Site-Real                      (0) | Val  Loss: 0.4016 | Val  Acc: 0.9143
+ Site-Real                      (0) | Val  Loss: 0.2218 | Val  Acc: 0.9333
+ Site-Painting                  (6) | Val  Loss: 0.3522 | Val  Acc: 0.8952
+ Site-Painting                  (6) | Val  Loss: 0.2852 | Val  Acc: 0.9143
+ Site-Sketch                    (4) | Val  Loss: 0.4658 | Val  Acc: 0.8762
+ Site-Sketch                    (4) | Val  Loss: 0.3704 | Val  Acc: 0.8841
+ Site-QuickDraw                 (1) | Val  Loss: 0.5078 | Val  Acc: 0.8619
+ Site-QuickDraw                 (5) | Val  Loss: 0.5046 | Val  Acc: 0.8397
+ Site-Infograph                 (2) | Val  Loss: 0.6790 | Val  Acc: 0.7857
+ Site-Infograph                 (2) | Val  Loss: 0.7131 | Val  Acc: 0.7778
+Average Valid Accuracy: 0.8730
+ Test site-Clipart                   (3)| Epoch:46 | Test Acc: 0.8802
+ Test site-Real                      (0)| Epoch:46 | Test Acc: 0.9384
+ Test site-Painting                  (6)| Epoch:46 | Test Acc: 0.9273
+ Test site-Sketch                    (4)| Epoch:46 | Test Acc: 0.8917
+ Test site-QuickDraw                 (1)| Epoch:46 | Test Acc: 0.8090
+ Test site-Infograph                 (2)| Epoch:46 | Test Acc: 0.6469
+Clipart: 0.8802, Real: 0.9384, Painting: 0.9273, Sketch: 0.8917, QuickDraw: 0.8090, Infograph: 0.6469, 
+Average Test Accuracy(group): 0.8489, Average Test Accuracy(individual): 0.8489,
+domain std=0.0995, cluster std=0.0931, individual std=0.0995, 
+Average Test Accuracy: 0.8489
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 48 ============
+cnt=[2, 2, 2, 2, 2, 1, 1, ]
+cnt=[1, 2, 2, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5029, powerC: 0.4971
+ Site-Clipart                   (0) | Train Loss: 0.3061 | Train Acc: 0.9206
+ Site-Clipart                   (0) | Train Loss: 0.3500 | Train Acc: 0.8889
+ Site-Real                      (3) | Train Loss: 0.2004 | Train Acc: 0.9429
+ Site-Real                      (3) | Train Loss: 0.2019 | Train Acc: 0.9556
+ Site-Painting                  (6) | Train Loss: 0.3099 | Train Acc: 0.9079
+ Site-Painting                  (5) | Train Loss: 0.2956 | Train Acc: 0.9132
+ Site-Sketch                    (4) | Train Loss: 0.3871 | Train Acc: 0.8794
+ Site-Sketch                    (4) | Train Loss: 0.3821 | Train Acc: 0.8847
+ Site-QuickDraw                 (1) | Train Loss: 0.6085 | Train Acc: 0.7968
+ Site-QuickDraw                 (1) | Train Loss: 0.4975 | Train Acc: 0.8487
+ Site-Infograph                 (2) | Train Loss: 0.9138 | Train Acc: 0.7048
+ Site-Infograph                 (2) | Train Loss: 0.7323 | Train Acc: 0.7608
+Average Train Accuracy: 0.8670
+ Site-Clipart                   (0) | Val  Loss: 0.3377 | Val  Acc: 0.9143
+ Site-Clipart                   (0) | Val  Loss: 0.3300 | Val  Acc: 0.9016
+ Site-Real                      (3) | Val  Loss: 0.2759 | Val  Acc: 0.9333
+ Site-Real                      (3) | Val  Loss: 0.1984 | Val  Acc: 0.9413
+ Site-Painting                  (6) | Val  Loss: 0.3286 | Val  Acc: 0.9048
+ Site-Painting                  (5) | Val  Loss: 0.3110 | Val  Acc: 0.9063
+ Site-Sketch                    (4) | Val  Loss: 0.4322 | Val  Acc: 0.8810
+ Site-Sketch                    (4) | Val  Loss: 0.3766 | Val  Acc: 0.8683
+ Site-QuickDraw                 (1) | Val  Loss: 0.4720 | Val  Acc: 0.8667
+ Site-QuickDraw                 (1) | Val  Loss: 0.5382 | Val  Acc: 0.8175
+ Site-Infograph                 (2) | Val  Loss: 0.6673 | Val  Acc: 0.7952
+ Site-Infograph                 (2) | Val  Loss: 0.7397 | Val  Acc: 0.7635
+Average Valid Accuracy: 0.8745
+ Test site-Clipart                   (0)| Epoch:47 | Test Acc: 0.8802
+ Test site-Real                      (3)| Epoch:47 | Test Acc: 0.9400
+ Test site-Painting                  (6)| Epoch:47 | Test Acc: 0.9338
+ Test site-Sketch                    (4)| Epoch:47 | Test Acc: 0.8935
+ Test site-QuickDraw                 (1)| Epoch:47 | Test Acc: 0.8100
+ Test site-Infograph                 (2)| Epoch:47 | Test Acc: 0.6454
+Clipart: 0.8802, Real: 0.9400, Painting: 0.9338, Sketch: 0.8935, QuickDraw: 0.8100, Infograph: 0.6454, 
+Average Test Accuracy(group): 0.8505, Average Test Accuracy(individual): 0.8505,
+domain std=0.1012, cluster std=0.0981, individual std=0.1012, 
+Average Test Accuracy: 0.8505
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+============ Train epoch 49 ============
+cnt=[2, 1, 2, 2, 2, 2, 1, ]
+cnt=[2, 2, 1, 2, 2, 2, 1, ]
+power_decay: 0.9, powerI: 0.5026, powerC: 0.4974
+ Site-Clipart                   (4) | Train Loss: 0.3188 | Train Acc: 0.9079
+ Site-Clipart                   (4) | Train Loss: 0.3541 | Train Acc: 0.9005
+ Site-Real                      (0) | Train Loss: 0.2341 | Train Acc: 0.9397
+ Site-Real                      (0) | Train Loss: 0.2382 | Train Acc: 0.9291
+ Site-Painting                  (5) | Train Loss: 0.3067 | Train Acc: 0.8857
+ Site-Painting                  (5) | Train Loss: 0.2992 | Train Acc: 0.9153
+ Site-Sketch                    (3) | Train Loss: 0.3893 | Train Acc: 0.8730
+ Site-Sketch                    (3) | Train Loss: 0.4058 | Train Acc: 0.8741
+ Site-QuickDraw                 (6) | Train Loss: 0.6067 | Train Acc: 0.7968
+ Site-QuickDraw                 (1) | Train Loss: 0.5345 | Train Acc: 0.8275
+ Site-Infograph                 (2) | Train Loss: 0.9331 | Train Acc: 0.7143
+ Site-Infograph                 (2) | Train Loss: 0.6988 | Train Acc: 0.7661
+Average Train Accuracy: 0.8608
+ Site-Clipart                   (4) | Val  Loss: 0.3610 | Val  Acc: 0.8952
+ Site-Clipart                   (4) | Val  Loss: 0.3465 | Val  Acc: 0.8905
+ Site-Real                      (0) | Val  Loss: 0.3997 | Val  Acc: 0.9143
+ Site-Real                      (0) | Val  Loss: 0.2362 | Val  Acc: 0.9349
+ Site-Painting                  (5) | Val  Loss: 0.3763 | Val  Acc: 0.8857
+ Site-Painting                  (5) | Val  Loss: 0.3175 | Val  Acc: 0.8984
+ Site-Sketch                    (3) | Val  Loss: 0.4528 | Val  Acc: 0.8667
+ Site-Sketch                    (3) | Val  Loss: 0.3898 | Val  Acc: 0.8619
+ Site-QuickDraw                 (6) | Val  Loss: 0.4944 | Val  Acc: 0.8810
+ Site-QuickDraw                 (1) | Val  Loss: 0.5022 | Val  Acc: 0.8413
+ Site-Infograph                 (2) | Val  Loss: 0.6781 | Val  Acc: 0.7762
+ Site-Infograph                 (2) | Val  Loss: 0.7216 | Val  Acc: 0.7667
+Average Valid Accuracy: 0.8677
+ Test site-Clipart                   (4)| Epoch:48 | Test Acc: 0.8783
+ Test site-Real                      (0)| Epoch:48 | Test Acc: 0.9400
+ Test site-Painting                  (5)| Epoch:48 | Test Acc: 0.9289
+ Test site-Sketch                    (3)| Epoch:48 | Test Acc: 0.8917
+ Test site-QuickDraw                 (6)| Epoch:48 | Test Acc: 0.8140
+ Test site-Infograph                 (2)| Epoch:48 | Test Acc: 0.6347
+Clipart: 0.8783, Real: 0.9400, Painting: 0.9289, Sketch: 0.8917, QuickDraw: 0.8140, Infograph: 0.6347, 
+Average Test Accuracy(group): 0.8479, Average Test Accuracy(individual): 0.8479,
+domain std=0.1037, cluster std=0.0967, individual std=0.1037, 
+Average Test Accuracy: 0.8479
+ Saving the gmap checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1_gmap...
+ Saving the local and server checkpoint to ../checkpoint/fed_domainnet_even_1.0_0_cluster_7/ccop_q=1...
+===2023-08-02 18:24:59===
+===2023-08-02 18:25:09===
+===Setting===
+    dataset: domainnet
+    lr: 0.01
+    batch: 64
+    iters: 10
+    wk_iters: 1
+    si: False
+    domain_num: 7
+    quantile: 0
+    power_cs: 1
+    std_rw: False
+    gender_label: False
+    binary_race: False
+    save_iter: -1
+    mix5: False
+    power_relu: 1
+    Ea_val: False
+data_number=[315,945,315,945,315,945,315,945,315,945,315,945,
+client_nums=[2,2,2,2,2,2,]
+len_dataset=[2103,2103,2103,2103,2103,2103,]
+domain number = 7
+Loading snapshots...
+ Test site-Clipart                   (4)| Epoch:49 | Test Acc: 0.8783
+ Test site-Real                      (0)| Epoch:49 | Test Acc: 0.9400
+ Test site-Painting                  (5)| Epoch:49 | Test Acc: 0.9289
+ Test site-Sketch                    (3)| Epoch:49 | Test Acc: 0.8917
+ Test site-QuickDraw                 (6)| Epoch:49 | Test Acc: 0.8140
+ Test site-Infograph                 (2)| Epoch:49 | Test Acc: 0.6347
+Clipart: 0.8783, Real: 0.9400, Painting: 0.9289, Sketch: 0.8917, QuickDraw: 0.8140, Infograph: 0.6347, 
+Average Test Accuracy(group): 0.8479, Average Test Accuracy(individual): 0.8479,
+domain std=0.1037, cluster std=0.0967, individual std=0.1037, 
