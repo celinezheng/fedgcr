@@ -3,7 +3,7 @@ import sys, os
 import torch
 import torchvision.transforms as transforms
 import torch.utils.data as data
-from utils.data_utils import DomainNetDataset, DigitsDataset, GeoNetDataset, PACSDataset, FairFaceIIDDataset, FairFaceGenderDataset, FairFaceBinaryDataset
+from utils.data_utils import DomainNetDataset, DigitsDataset, PACSDataset, FairFaceIIDDataset, FairFaceGenderDataset, FairFaceBinaryDataset
 import math
 import torch.nn.functional as tf
 import numpy as np
@@ -17,28 +17,17 @@ import torch.nn.functional as F
 def write_log(args, msg):
     log_path = f'../logs/{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
     log_fname = f'{args.mode}'
-    if args.dg:
-        log_path = f'../logs/{args.dataset}_{args.expname}_{args.target_domain}'
-    if args.gender_dis != 'iid':
-        log_path += f"_{args.gender_dis}_cluster_{args.cluster_num}"
-    else:
-        log_path += f"_{args.cluster_num}"
-    if args.weak_white: log_path += "_weak_white"
-    if args.split_test:  log_path += f"_split"
-    if args.small_test: log_path += "_small_test"
-    if args.gender_label: log_path += "_gender_label"
-    if args.binary_race: log_path += "_binary_race"
-    if args.sam: log_path += f"_sam"
-    if args.color_jitter: log_path += f"_color_jitter"
+    
+    log_path += f"_{args.cluster_num}"
     if args.shuffle:  log_path += f"_shuffle"
-    if args.cs: log_path += f"_cs"
     if args.moon:  log_path += f"_moon"
     if args.distinct:  log_path += f"_distinct"
     
     if args.q!=1: log_fname += f'_q={args.q}'
+    if args.split_test:  log_fname += f"_split"
     if args.w_con!=0.1: log_fname += f'_w_con={args.w_con}'
     if args.clscon:  log_fname += f"_clscon"
-    if args.pcon:  log_fname += f"_pcon"
+    if 'gmm' not in args.cluster: log_fname += f"_{args.cluster}"
     if not os.path.exists(log_path):
         os.makedirs(log_path)
     with open(os.path.join(log_path, f'{log_fname}.log'), 'a') as logfile:
@@ -81,31 +70,31 @@ def prepare_digit_uneven(args):
     base_path = "../../data/digit"
     # MNIST
     mnist_trainset     = DigitsDataset(data_path=os.path.join(base_path, "MNIST"), channels=1, percent=args.percent, train=True,  transform=transform_mnist)
-    mnist_testset      = DigitsDataset(data_path=os.path.join(base_path, "MNIST"), channels=1, percent=args.percent, train=False, transform=transform_mnist)
+    mnist_testset      = DigitsDataset(split_test=args.split_test, data_path=os.path.join(base_path, "MNIST"), channels=1, percent=args.percent, train=False, transform=transform_mnist)
     test_len = int(args.percent * len(mnist_testset))
     mnist_testset = torch.utils.data.Subset(mnist_testset, list(range(len(mnist_testset)))[:test_len])
 
     # SVHN
     svhn_trainset      = DigitsDataset(data_path=os.path.join(base_path, "SVHN"), channels=3, percent=args.percent,  train=True,  transform=transform_svhn)
-    svhn_testset       = DigitsDataset(data_path=os.path.join(base_path, "SVHN"), channels=3, percent=args.percent,  train=False, transform=transform_svhn)
+    svhn_testset       = DigitsDataset(split_test=args.split_test, data_path=os.path.join(base_path, "SVHN"), channels=3, percent=args.percent,  train=False, transform=transform_svhn)
     test_len = int(args.percent * len(svhn_testset))
     svhn_testset = torch.utils.data.Subset(svhn_testset, list(range(len(svhn_testset)))[:test_len])
 
     # USPS
     usps_trainset      = DigitsDataset(data_path=os.path.join(base_path, "USPS"), channels=1, percent=args.percent,  train=True,  transform=transform_usps)
-    usps_testset       = DigitsDataset(data_path=os.path.join(base_path, "USPS"), channels=1, percent=args.percent,  train=False, transform=transform_usps)
+    usps_testset       = DigitsDataset(split_test=args.split_test, data_path=os.path.join(base_path, "USPS"), channels=1, percent=args.percent,  train=False, transform=transform_usps)
     test_len = int(args.percent * len(usps_testset))
     usps_testset = torch.utils.data.Subset(usps_testset, list(range(len(usps_testset)))[:test_len])
 
     # Synth Digits
     synth_trainset     = DigitsDataset(data_path=os.path.join(base_path, "SynthDigits"), channels=3, percent=args.percent,  train=True,  transform=transform_synth)
-    synth_testset      = DigitsDataset(data_path=os.path.join(base_path, "SynthDigits"), channels=3, percent=args.percent,  train=False, transform=transform_synth)
+    synth_testset      = DigitsDataset(split_test=args.split_test, data_path=os.path.join(base_path, "SynthDigits"), channels=3, percent=args.percent,  train=False, transform=transform_synth)
     test_len = int(args.percent * len(synth_testset))
     synth_testset = torch.utils.data.Subset(synth_testset, list(range(len(synth_testset)))[:test_len])
 
     # MNIST-M
     mnistm_trainset     = DigitsDataset(data_path=os.path.join(base_path, "MNIST_M"), channels=3, percent=args.percent,  train=True,  transform=transform_mnistm)
-    mnistm_testset      = DigitsDataset(data_path=os.path.join(base_path, "MNIST_M"), channels=3, percent=args.percent,  train=False, transform=transform_mnistm)
+    mnistm_testset      = DigitsDataset(split_test=args.split_test, data_path=os.path.join(base_path, "MNIST_M"), channels=3, percent=args.percent,  train=False, transform=transform_mnistm)
     test_len = int(args.percent * len(mnistm_testset))
     mnistm_testset = torch.utils.data.Subset(mnistm_testset, list(range(len(mnistm_testset)))[:test_len])
 
@@ -161,33 +150,44 @@ def prepare_digit_uneven(args):
             client_nums[name] = 1
 
     for key, value in client_nums.items():
-        all_len = len_dataset[key]
-        all_train_len = int(all_len * train_ratio)
-        all_val_len = int(all_len * (1 - train_ratio))
+        all_len = len_dataset[key] * args.percent
+        all_train_len = int(all_len * 0.6)
+        all_val_len = int(all_len * 0.4)
+        all_test_len = len(test_sets[key])
         cur_dataset_len = len_dataset[key]
         train_begin = 0
+        test_begin = 0
         valid_begin = -all_val_len
         if args.distinct:
             partition_num = 1
         else:
             partition_num = (np.float_power(decay_speed, value)-1) / (decay_speed - 1)
-
-        test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
+        
+        if not args.split_test:
+            test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
         for j in range(value):
             train_len = int(all_train_len * np.float_power(decay_speed, j) / partition_num)
             val_len = int(all_val_len * np.float_power(decay_speed, j) / partition_num)
-            datasets.append(key.replace('-', '_'))
+            if args.split_test:
+                datasets.append(f'{key}-{j}')
+                test_len = int(all_test_len * np.float_power(decay_speed, j) / partition_num)
+                cur_testset = torch.utils.data.Subset(test_sets[key], list(range(all_test_len))[test_begin : test_begin+test_len])
+                test_loader = torch.utils.data.DataLoader(cur_testset, batch_size=1, shuffle=False)
+                test_begin += test_len
+            else:
+                datasets.append(key)
+            test_loaders.append(test_loader)
             cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
             cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
+            
             train_loader = torch.utils.data.DataLoader(cur_trainset, batch_size=args.batch, shuffle=True)
             val_loader = torch.utils.data.DataLoader(cur_valset, batch_size=args.batch, shuffle=False)
             train_loaders.append(train_loader)
             val_loaders.append(val_loader)
-            test_loaders.append(test_loader)
-            client_weights.append(len(cur_trainset))
-            sum_len += len(cur_trainset)
             train_begin += train_len
             valid_begin += val_len
+            client_weights.append(len(cur_trainset))
+            sum_len += len(cur_trainset)
             # print(len(cur_trainset), len(cur_valset))
     print(client_weights)
     write_log(args, f"data_number=[")
@@ -220,22 +220,22 @@ def prepare_domainnet_uneven(args):
 
     # clipart
     clipart_trainset = DomainNetDataset(data_base_path, 'clipart', transform=transform_train)
-    clipart_testset = DomainNetDataset(data_base_path, 'clipart', transform=transform_test, train=False)
+    clipart_testset = DomainNetDataset(split_test=args.split_test, base_path=data_base_path, site='clipart', transform=transform_test, train=False)
     # infograph
     infograph_trainset = DomainNetDataset(data_base_path, 'infograph', transform=transform_train)
-    infograph_testset = DomainNetDataset(data_base_path, 'infograph', transform=transform_test, train=False)
+    infograph_testset = DomainNetDataset(split_test=args.split_test, base_path=data_base_path, site='infograph', transform=transform_test, train=False)
     # painting
     painting_trainset = DomainNetDataset(data_base_path, 'painting', transform=transform_train)
-    painting_testset = DomainNetDataset(data_base_path, 'painting', transform=transform_test, train=False)
+    painting_testset = DomainNetDataset(split_test=args.split_test, base_path=data_base_path, site='painting', transform=transform_test, train=False)
     # quickdraw
     quickdraw_trainset = DomainNetDataset(data_base_path, 'quickdraw', transform=transform_train)
-    quickdraw_testset = DomainNetDataset(data_base_path, 'quickdraw', transform=transform_test, train=False)
+    quickdraw_testset = DomainNetDataset(split_test=args.split_test, base_path=data_base_path, site='quickdraw', transform=transform_test, train=False)
     # real
     real_trainset = DomainNetDataset(data_base_path, 'real', transform=transform_train)
-    real_testset = DomainNetDataset(data_base_path, 'real', transform=transform_test, train=False)
+    real_testset = DomainNetDataset(split_test=args.split_test, base_path=data_base_path, site='real', transform=transform_test, train=False)
     # sketch
     sketch_trainset = DomainNetDataset(data_base_path, 'sketch', transform=transform_train)
-    sketch_testset = DomainNetDataset(data_base_path, 'sketch', transform=transform_test, train=False)
+    sketch_testset = DomainNetDataset(split_test=args.split_test, base_path=data_base_path, site='sketch', transform=transform_test, train=False)
 
     # min_data_len = int(min(len(clipart_trainset), len(infograph_trainset), len(painting_trainset), len(quickdraw_trainset), len(real_trainset), len(sketch_trainset)))
     test_sets = {
@@ -302,26 +302,37 @@ def prepare_domainnet_uneven(args):
         all_len = len_dataset[key] * args.percent
         all_train_len = int(all_len * 0.6)
         all_val_len = int(all_len * 0.4)
+        all_test_len = len(test_sets[key])
         cur_dataset_len = len_dataset[key]
         train_begin = 0
+        test_begin = 0
         valid_begin = -all_val_len
         if args.distinct:
             partition_num = 1
         else:
             partition_num = (np.float_power(decay_speed, value)-1) / (decay_speed - 1)
         
-        test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
+        if not args.split_test:
+            test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
         for j in range(value):
             train_len = int(all_train_len * np.float_power(decay_speed, j) / partition_num)
             val_len = int(all_val_len * np.float_power(decay_speed, j) / partition_num)
-            datasets.append(key)
+            if args.split_test:
+                datasets.append(f'{key}-{j}')
+                test_len = int(all_test_len * np.float_power(decay_speed, j) / partition_num)
+                cur_testset = torch.utils.data.Subset(test_sets[key], list(range(all_test_len))[test_begin : test_begin+test_len])
+                test_loader = torch.utils.data.DataLoader(cur_testset, batch_size=1, shuffle=False)
+                test_begin += test_len
+            else:
+                datasets.append(key)
+            test_loaders.append(test_loader)
             cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
             cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
+            
             train_loader = torch.utils.data.DataLoader(cur_trainset, batch_size=args.batch, shuffle=True)
             val_loader = torch.utils.data.DataLoader(cur_valset, batch_size=args.batch, shuffle=False)
             train_loaders.append(train_loader)
             val_loaders.append(val_loader)
-            test_loaders.append(test_loader)
             train_begin += train_len
             valid_begin += val_len
             client_weights.append(len(cur_trainset))
@@ -356,46 +367,46 @@ def prepare_pacs_uneven(args):
             transforms.ToTensor(),
     ])
 
+    # photo
+    photo_trainset = PACSDataset(data_base_path, 'photo', transform=transform_train)
+    photo_testset = PACSDataset(data_base_path, 'photo', transform=transform_test, train=False)
     # art_painting
     art_painting_trainset = PACSDataset(data_base_path, 'art_painting', transform=transform_train)
     art_painting_testset = PACSDataset(data_base_path, 'art_painting', transform=transform_test, train=False)
     # cartoon
     cartoon_trainset = PACSDataset(data_base_path, 'cartoon', transform=transform_train)
     cartoon_testset = PACSDataset(data_base_path, 'cartoon', transform=transform_test, train=False)
-    # photo
-    photo_trainset = PACSDataset(data_base_path, 'photo', transform=transform_train)
-    photo_testset = PACSDataset(data_base_path, 'photo', transform=transform_test, train=False)
     # sketch
     sketch_trainset = PACSDataset(data_base_path, 'sketch', transform=transform_train)
     sketch_testset = PACSDataset(data_base_path, 'sketch', transform=transform_test, train=False)
     
     # min_data_len = int(min(len(clipart_trainset), len(infograph_trainset), len(painting_trainset), len(quickdraw_trainset), len(real_trainset), len(sketch_trainset)))
     test_sets = {
+        'photo': photo_testset,
         'art_painting': art_painting_testset,
         'cartoon': cartoon_testset,
-        'photo': photo_testset,
         'sketch': sketch_testset
         }
     train_sets = {
+        'photo': photo_trainset,
         'art_painting': art_painting_trainset,
         'cartoon': cartoon_trainset,
-        'photo': photo_trainset,
         'sketch': sketch_trainset
         }
     len_dataset = {}
     client_nums = {}
     if args.shuffle:
         decay_order = [
+        'photo',
         'art_painting',
         'cartoon',
-        'photo',
         'sketch'
         ]
     else:
         decay_order = [
+        'photo',
         'art_painting',
         'cartoon',
-        'photo',
         'sketch'
         ]
 
@@ -445,7 +456,7 @@ def prepare_pacs_uneven(args):
         cur_dataset_len = len_dataset[key]
         train_begin = 0
         valid_begin = -all_val_len
-        if value==1: 
+        if value==1 or 'uneven' not in args.expname: 
             client_decay = decay_speed
         else:
             client_decay = np.float_power(DIF, 1/(value-1))
@@ -486,475 +497,13 @@ def prepare_pacs_uneven(args):
     # check_labels(args, train_loaders)
     return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets
 
-
-def prepare_geonet_uneven(args):
-    data_base_path = '../../data/GeoNet'
-    # transform_train = transforms.Compose([
-    #         transforms.Resize([224, 224]),
-    #         transforms.RandomHorizontalFlip(),
-    #         transforms.RandomRotation((-30,30)),
-    #         transforms.ToTensor(),
-    # ])
-    s = 1
-    color_jitter = transforms.ColorJitter(0.8 * s, 0.8 * s, 0.8 * s, 0.2 * s)
-    transform_train = transforms.Compose([
-            transforms.Resize([224, 224]),
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomApply([color_jitter], p=0.8),
-            transforms.RandomRotation((-30,30)),
-            transforms.ToTensor(),
-        ])
-    transform_test = transforms.Compose([
-            transforms.Resize([224, 224]),
-            transforms.ToTensor(),
-    ])
-
-    # usa
-    usa_trainset = GeoNetDataset(data_base_path, 'usa', transform=transform_train)
-    usa_testset = GeoNetDataset(data_base_path, 'usa', transform=transform_test, train=False)
-    # asia
-    asia_trainset = GeoNetDataset(data_base_path, 'asia', transform=transform_train)
-    asia_testset = GeoNetDataset(data_base_path, 'asia', transform=transform_test, train=False)
-   
-    # min_data_len = int(min(len(clipart_trainset), len(infograph_trainset), len(painting_trainset), len(quickdraw_trainset), len(real_trainset), len(sketch_trainset)))
-    test_sets = {
-        'usa': usa_testset,
-        'asia': asia_testset
-        }
-    train_sets = {
-        'usa': usa_trainset,
-        'asia': asia_trainset
-        }
-    len_dataset = {}
-    client_nums = {}
-    if args.shuffle:
-        decay_order = ['asia', 'usa']
-    else:
-        decay_order = ['usa', 'asia']
-
-    if 'uneven' in args.expname.lower():
-        # client number = 1.4^k, k=0~5
-        # data_len = {5, 4, 3, 2, 1, 1}
-        decay_speed = args.ratio
-        for i, name in enumerate(decay_order):
-            client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i))
-            if i==0:
-                len_dataset[name] = len(train_sets[name])
-            else:
-                len_dataset[name] = int(len_dataset[decay_order[i-1]]/decay_speed)
-    else:
-        decay_speed = 3
-        # data_len = [2, 2, 2, 2, 2, 2]
-        min_len = -1
-        for _, train_set in train_sets.items():
-            if min_len==-1:
-                min_len = len(train_set)
-            else:
-                min_len = min(min_len, len(train_set))
-        for i, name in enumerate(decay_order):
-            client_nums[name] = 2
-            len_dataset[name] = min_len
-            
-    print(client_nums)
-    for name, val in len_dataset.items():
-        print(f"{name}: {val * args.percent * 0.6}")
-
-    client_weights = []
-    
-    train_loaders, val_loaders, test_loaders = [], [], []
-    datasets = []
-    sum_len = 0
-
-    if args.distinct:
-        for i, name in enumerate(decay_order):
-            client_nums[name] = 1
-
-    for key, value in client_nums.items():
-        all_len = len_dataset[key] * args.percent
-        all_train_len = int(all_len * 0.6)
-        all_val_len = int(all_len * 0.4)
-        cur_dataset_len = len_dataset[key]
-        train_begin = 0
-        valid_begin = -all_val_len
-        if args.distinct:
-            partition_num = 1
-        else:
-            partition_num = (np.float_power(decay_speed, value)-1) / (decay_speed - 1)
-        
-        test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
-        for j in range(value):
-            train_len = int(all_train_len * np.float_power(decay_speed, j) / partition_num)
-            val_len = int(all_val_len * np.float_power(decay_speed, j) / partition_num)
-            datasets.append(key)
-            cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
-            cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
-            train_loader = torch.utils.data.DataLoader(cur_trainset, batch_size=args.batch, shuffle=True)
-            val_loader = torch.utils.data.DataLoader(cur_valset, batch_size=args.batch, shuffle=False)
-            train_loaders.append(train_loader)
-            val_loaders.append(val_loader)
-            test_loaders.append(test_loader)
-            train_begin += train_len
-            valid_begin += val_len
-            client_weights.append(len(cur_trainset))
-            sum_len += len(cur_trainset)
-            # print(len(cur_trainset), len(cur_valset))
-    print(client_weights)
-    write_log(args, f"data_number=[")
-    for ni in client_weights:
-        write_log(args, f"{ni},")
-    write_log(args, f"\nclient_nums=[")
-    for name in decay_order:
-        write_log(args, f"{client_nums[name]},")
-    write_log(args, f"]\nlen_dataset=[")
-    for name in decay_order:
-        write_log(args, f"{len_dataset[name]},")
-    write_log(args, f"]\n")
-    client_weights = [ci/sum_len for ci in client_weights]
-    # check_labels(args, train_loaders)
-    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets
-
-def prepare_fairface_iid_uneven(args):
-    data_base_path = '../../data/FairFace'
-    if args.netdb:
-        data_base_path = '../../data/fairface-preprocess/FairFace'
-    print(data_base_path)
-    s = 1
-    color_jitter = transforms.ColorJitter(0.8 * s, 0.8 * s, 0.8 * s, 0.2 * s)
-    transform_train = transforms.Compose([
-            transforms.Resize([224, 224]),
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomRotation((-30,30)),
-            transforms.ToTensor(),
-    ])
-    if args.color_jitter:
-        transform_train = transforms.Compose([
-            transforms.Resize([224, 224]),
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomApply([color_jitter], p=0.8),
-            transforms.RandomRotation((-30,30)),
-            transforms.ToTensor(),
-        ])
-    transform_test = transforms.Compose([
-            transforms.Resize([224, 224]),
-            transforms.ToTensor(),
-    ])
-    len_dataset = {}
-    client_nums = {}
-    train_sets = {}
-    test_sets = {}
-    decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
-    if args.mix:
-        decay_order = ['White_utk', 'Latino_Hispanic', 'Black_utk', 'East_Asian', 'Indian_utk', 'Southeast_Asian', 'Middle_Eastern']
-    elif args.mix2:
-        decay_order = ['White_utk', 'White', 'Black_utk', 'Latino_Hispanic', 'Indian_utk', 'Southeast_Asian', 'Middle_Eastern']
-    elif args.mix3:
-        decay_order = ['White_utk', 'White', 'Black_utk', 'Indian_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern']
-    elif args.mix4:
-        # decay_order = ['White_utk', 'White', 'Black_utk', 'Indian_utk', 'Latino_Hispanic_ffhq', 'Southeast_Asian', 'Middle_Eastern_ffhq']
-        # decay_order = ['White_utk', 'White', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_ffhq']
-        # decay_order = ['White_utk', 'East_Asian', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_ffhq']
-        decay_order = ['White_utk', 'White', 'Indian_utk', 'Black_utk', 'Others_utk', 'Southeast_Asian', 'Middle_Eastern_ffhq']
-    elif args.mix5:
-        # decay_order = ['White_utk', 'Latino_Hispanic_ffhq', 'Black_utk' , 'East_Asian', 'Indian_utk', 'Southeast_Asian', 'Middle_Eastern_ffhq']
-        decay_order = ['White_utk', 'East_Asian', 'Indian_utk' , 'Black_utk', 'Southeast_Asian', 'Asian_ffhq', 'Latino_Hispanic_ffhq']
-    elif args.weak_white:
-        # decay_order = ['White_utk', 'Latino_Hispanic_ffhq', 'Black_utk' , 'East_Asian', 'Indian_utk', 'Southeast_Asian', 'Middle_Eastern_ffhq']
-        # decay_order = ['White', 'Middle_Eastern', 'Black', 'White_ffhq']
-        decay_order = ['White', 'Indian', 'Middle_Eastern', 'Black_utk']
-
-    for name in decay_order:
-        train_sets[name] = FairFaceIIDDataset(args, data_base_path, name, gender_label=args.gender_label, transform=transform_train)
-        test_sets[name] = FairFaceIIDDataset(args, data_base_path, name, gender_label=args.gender_label, transform=transform_test, train=False)
-                
-    if 'uneven' in args.expname.lower():
-        # client number = 1.4^k, k=0~5
-        # data_len = {5, 4, 3, 2, 1, 1}
-        decay_speed = args.ratio
-        data_decay = 1.47
-        data_decay = decay_speed
-        
-        # if args.binary_race:
-        #     client_nums = {"White": 10, "Black": 2}
-        #     len_dataset[decay_order[0]] = len(train_sets[decay_order[0]])
-        #     len_dataset[decay_order[1]] = int(len(train_sets[decay_order[0]]) * (client_nums[decay_order[1]] / client_nums[decay_order[0]]))
-        # else:
-        for i, name in enumerate(decay_order):
-            client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
-            if i==0: 
-                len_dataset[name] = len(train_sets[name])
-            else:
-                divider = np.float_power(data_decay, i)
-                len_dataset[name] = int(len_dataset[decay_order[0]] / divider)
-                len_dataset[name] = min(len_dataset[name], len(train_sets[name]))
-    else:
-        decay_speed = 3
-        # data_decay = 1.31
-        min_len = -1
-        for _, train_set in train_sets.items():
-            if min_len==-1:
-                min_len = len(train_set)
-            else:
-                min_len = min(min_len, len(train_set))
-        for i, name in enumerate(decay_order):
-            len_dataset[name] = min_len
-            client_nums[name] = 2
-            # if i==0: 
-            #     len_dataset[name] = len(train_sets[name])
-            # else:
-            #     divider = np.float_power(data_decay, i)
-            #     len_dataset[name] = int(len_dataset[decay_order[0]] / divider)
-            #     len_dataset[name] = min(len_dataset[name], len(train_sets[name]))
-            
-    print(client_nums)
-    for name, val in len_dataset.items():
-        print(f"{name}: {val * args.percent * 0.6}")
-
-    target_loader = None
-    client_weights = []
-    if args.dg:
-        print(f"target domain is {args.target_domain}")
-        client_nums[args.target_domain] = 0
-        target_loader = torch.utils.data.DataLoader(test_sets[args.target_domain], batch_size=args.batch, shuffle=False)
-
-    train_loaders, val_loaders, test_loaders = [], [], []
-    datasets = []
-    sum_len = 0
-
-    for key, value in client_nums.items():
-        if args.split_test:
-            ratio = 0.5
-            if args.debug: ratio = 0.2
-            all_len = int(len_dataset[key] * ratio)
-            decay_speed = min(1.47, args.ratio)
-            all_train_len = all_len
-            all_val_len = -1
-        else:
-            all_len = len_dataset[key] * args.percent
-            all_train_len = int(all_len * 0.6)
-            all_val_len = int(all_len * 0.4)
-        cur_dataset_len = len_dataset[key]
-        train_begin = 0
-        valid_begin = -all_val_len
-        test_begin = 0
-        partition_num = (np.float_power(decay_speed, value)-1) / (decay_speed - 1)
-        test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
-        for j in range(value):
-            dataset_name = key
-            client_ratio = np.float_power(decay_speed, j) / partition_num
-            train_len = int(all_train_len * client_ratio)
-            if args.split_test:
-                # test_len = int(all_test_len * client_ratio)
-                all_test_len = len(test_sets[key])
-                test_len = all_test_len // value
-                dataset_name = f"{key}-{j}"
-                # Random split
-                train_set_size, valid_set_size = int(train_len * 0.7), int(train_len * 0.1)
-                test_set_size = train_len - train_set_size - valid_set_size
-                train_set = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
-                cur_trainset, cur_valset, test_set_split = data.random_split(train_set, [train_set_size, valid_set_size, test_set_size])
-                # cur_testset = torch.utils.data.Subset(test_set_all, test_set_split.indices)
-                cur_testset = torch.utils.data.Subset(test_sets[key], list(range(all_train_len))[test_begin : test_begin+test_len])
-                test_loader = torch.utils.data.DataLoader(cur_testset, batch_size=1, shuffle=False)
-                test_begin += test_len
-            else:
-                val_len = int(all_val_len * client_ratio)
-                cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
-                cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
-                valid_begin += val_len
-
-            train_begin += train_len
-            test_loaders.append(test_loader)
-            datasets.append(dataset_name)
-            train_loader = torch.utils.data.DataLoader(cur_trainset, batch_size=args.batch, shuffle=True)
-            val_loader = torch.utils.data.DataLoader(cur_valset, batch_size=args.batch, shuffle=False)
-            train_loaders.append(train_loader)
-            val_loaders.append(val_loader)
-            client_weights.append(len(cur_trainset))
-            sum_len += len(cur_trainset)
-            # print(len(cur_trainset), len(cur_valset))
-    print(client_weights)
-    write_log(args, f"data_number=[")
-    for ni in client_weights:
-        write_log(args, f"{ni},")
-    write_log(args, f"]\nclient_nums=[")
-    for name in decay_order:
-        write_log(args, f"{client_nums[name]},")
-    write_log(args, f"]\nlen_dataset=[")
-    for name in decay_order:
-        write_log(args, f"{len_dataset[name]},")
-    write_log(args, f"]\n")
-    client_weights = [ci/sum_len for ci in client_weights]
-    # check_labels(args, train_loaders)
-    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
-
-def prepare_fairface_gender_uneven(args):
-    data_base_path = '../../data/FairFace'
-    transform_train = transforms.Compose([
-            transforms.Resize([224, 224]),
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomRotation((-30,30)),
-            transforms.ToTensor(),
-    ])
-
-    transform_test = transforms.Compose([
-            transforms.Resize([224, 224]),
-            transforms.ToTensor(),
-    ])
-    client_nums = {}
-    train_sets = {}
-    test_sets = {}
-    decay_order = ['White', 'Latino_Hispanic', 'Black', 'East_Asian', 'Indian', 'Southeast_Asian', 'Middle_Eastern']
-    if args.small_test:
-        decay_order = ['White', 'Black', 'Indian', 'Middle_Eastern']
-    # elif args.binary_race:
-    #     decay_order = ['White', 'Black']
-
-    if 'uneven' in args.expname.lower():
-        # client number = 1.4^k, k=0~5
-        # data_len = {5, 4, 3, 2, 1, 1}
-        decay_speed = args.ratio
-        max_clientnum = round(np.float_power(decay_speed, len(decay_order)-1))
-        distribution_mode = f"imbalance{max_clientnum}_{args.gender_dis}"
-        if args.small_test: distribution_mode += '_small'
-        for i, name in enumerate(decay_order):
-            client_nums[name] = round(np.float_power(decay_speed, len(decay_order)-i-1))
-    else:
-        decay_speed = 3
-        distribution_mode = f"balance_{args.gender_dis}"
-        if args.small_test: distribution_mode += '_small'
-        for i, name in enumerate(decay_order):
-            client_nums[name] = 2
-    print(client_nums)
-    client_weights = []
-    train_loaders, val_loaders, test_loaders = [], [], []
-    datasets = []
-    sum_len = 0
-    genders = ['Male', 'Female']
-    gidx = 0
-    for name, value in client_nums.items():
-        for j in range(value):
-            train_set = FairFaceGenderDataset(distribution_mode, data_base_path, name, j, gender_label=args.gender_label, transform=transform_train)
-            all_len = int(len(train_set) * args.percent)
-            train_len = int(all_len * 0.6)
-            val_len = int(all_len * 0.4)
-            datasets.append(f'{name}_{genders[gidx]}')
-            gidx = int(not gidx)
-            val_set = torch.utils.data.Subset(train_set, list(range(all_len))[-val_len :])
-            train_set = torch.utils.data.Subset(train_set, list(range(all_len))[: train_len])
-            train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch, shuffle=True)
-            val_loader = torch.utils.data.DataLoader(val_set, batch_size=args.batch, shuffle=False)
-            train_loaders.append(train_loader)
-            val_loaders.append(val_loader)
-            test_set = FairFaceGenderDataset(distribution_mode, data_base_path, name, gidx, gender_label=args.gender_label, transform=transform_test, train=False)
-            test_loader = torch.utils.data.DataLoader(test_set, batch_size=1, shuffle=False)
-            test_loaders.append(test_loader)
-            client_weights.append(len(train_set))
-            sum_len += len(train_set)
-            # print(len(cur_trainset), len(cur_valset))
-    print(client_weights)
-    write_log(args, f"data_number=[")
-    for ni in client_weights:
-        write_log(args, f"{ni},")
-    write_log(args, f"]\nclient_nums=[")
-    for name in decay_order:
-        write_log(args, f"{client_nums[name]},")
-    write_log(args, f"]\n")
-    client_weights = [ci/sum_len for ci in client_weights]
-    # check_labels(args, train_loaders)
-    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, None
-
-def prepare_fairface_binary_race(args):
-    base_path = '../../data/FairFace'
-    if args.netdb:
-        base_path = '../../data/fairface-preprocess/FairFace'
-    s = 1
-    color_jitter = transforms.ColorJitter(0.8 * s, 0.8 * s, 0.8 * s, 0.2 * s)
-    transform_train = transforms.Compose([
-            transforms.Resize([224, 224]),
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomRotation((-30,30)),
-            transforms.ToTensor(),
-    ])
-    if args.color_jitter:
-        transform_train = transforms.Compose([
-            transforms.Resize([224, 224]),
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomApply([color_jitter], p=0.8),
-            transforms.RandomRotation((-30,30)),
-            transforms.ToTensor(),
-        ])
-    transform_test = transforms.Compose([
-            transforms.Resize([224, 224]),
-            transforms.ToTensor(),
-    ])
-    client_nums = {}
-    len_dataset = {}
-    decay_order = ['White', 'Black']
-    client_nums = {'White': 10, 'Black': 2}
-    print(client_nums)
-
-    target_loader = None
-    client_weights = []
-    
-    train_loaders, val_loaders, test_loaders = [], [], []
-    datasets = []
-    sum_len = 0
-    for key, value in client_nums.items():
-        len_dataset[key] = 0
-        for j in range(value):
-            dataset_name = f"{key}-{j}"
-            train_set = FairFaceBinaryDataset(base_path=base_path, site=key, client_idx=j, gender_label=args.gender_label, train=True, transform=transform_train)
-            test_set = FairFaceBinaryDataset(base_path=base_path, site=key, client_idx=j, gender_label=args.gender_label, train=False, transform=transform_test)
-            test_loader = torch.utils.data.DataLoader(test_set, batch_size=1, shuffle=False)
-            test_loaders.append(test_loader)
-            # Random split
-            train_set_size = int(len(train_set) * 0.8)
-            valid_set_size = len(train_set) - train_set_size
-            if not args.no_val:
-                train_set, valid_set = data.random_split(train_set, [train_set_size, valid_set_size])
-                val_loader = torch.utils.data.DataLoader(valid_set, batch_size=args.batch, shuffle=False)
-                val_loaders.append(val_loader)
-            train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch, shuffle=True)
-            datasets.append(dataset_name)
-            train_loaders.append(train_loader)
-            client_weights.append(len(train_set))
-            sum_len += len(train_set)
-            len_dataset[key] += len(train_set)
-            # print(len(cur_trainset), len(cur_valset))
-    print(client_weights)
-    write_log(args, f"data_number=[")
-    for ni in client_weights:
-        write_log(args, f"{ni},")
-    write_log(args, f"]\nclient_nums=[")
-    for name in decay_order:
-        write_log(args, f"{client_nums[name]},")
-    write_log(args, f"]\nlen_dataset[")
-    for name in decay_order:
-        write_log(args, f"{len_dataset[name]},")
-    write_log(args, f"]\n")
-    client_weights = [ci/sum_len for ci in client_weights]
-    # check_labels(args, train_loaders)
-    return client_weights, sum_len, train_loaders, val_loaders, test_loaders, datasets, target_loader
-
-
 def prepare_data(args):
     if args.dataset.lower()[:6] == 'domain':
         return prepare_domainnet_uneven(args)
-    elif args.dataset.lower()[:3] == 'geo':
-        return prepare_geonet_uneven(args)
     elif args.dataset.lower()[:4] == 'pacs':
-        # name of each datasets
         return prepare_pacs_uneven(args)
     elif args.dataset.lower()[:5] == 'digit':
         return prepare_digit_uneven(args)
-    elif args.dataset.lower()[:9] == 'fairface':
-        if args.binary_race:
-            return prepare_fairface_binary_race(args)
-        elif args.gender_dis in ['iid', 'random_dis']:
-            return prepare_fairface_iid_uneven(args)
-        else:
-            return prepare_fairface_gender_uneven(args)
-
 
 def check_labels(args, train_loaders):
     client_num = len(train_loaders)
@@ -1120,7 +669,7 @@ def train_fedprompt(gidx, model, train_loader, prompt_bank, device):
 
     return loss_all/len(train_iter), correct/num_data
 
-def train_CoCoOP(args, model, train_loader, loss_fun, device, gidx=-1, pre_feat=None, cluster_pis=None, pre_pi=None, pre_glob=None, pre_local=None, a_iter=-1):
+def train_GCR(args, model, train_loader, loss_fun, device, gidx=-1, pre_feat=None, cluster_pis=None, pre_pi=None, pre_glob=None, pre_local=None, a_iter=-1):
     model.to(device)
     pre_glob.to(device)
     pre_local.to(device)
@@ -1294,10 +843,7 @@ def train_fedmix(model, Xg, Yg, lamb, train_loader, optimizer, loss_fun, device)
         loss.backward()
         loss_all += loss.item()
         optimizer.step()
-        # optimizer.first_step(zero_grad=True)
-        # loss_fun(model(x), y).backward()
-        # optimizer.second_step(zero_grad=True)
-
+        
         pred = output.data.max(1)[1]
         correct += pred.eq(y.view(-1)).sum().item()
     model.to('cpu')
@@ -1418,18 +964,32 @@ from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture as GMM
 from sklearn.cluster import SpectralClustering
 import matplotlib.pyplot as plt
+from utils.finch import FINCH
 def cluster(args, all_pi, domain_num):
     all_pi_reshape = all_pi.cpu().reshape(all_pi.shape[0], -1)
     print(all_pi_reshape.shape)
     cluster_num = domain_num
     if args.distinct:
         cluster_num = domain_num - 1
-    cluster = GMM(n_components=cluster_num)
-    # cluster = KMeans(n_clusters=domain_num, random_state=0)
-    # cluster = SpectralClustering(n_clusters=domain_num,
-    #      assign_labels='discretize',
-    #      random_state=0)
-    labels = cluster.fit_predict(all_pi_reshape)
+    if 'finch' in args.cluster.lower():
+        c, num_clust, req_c = FINCH(all_pi_reshape, initial_rank=None, req_clust=None, distance='cosine',
+                                            ensure_early_exit=False, verbose=True)
+        labels = [g[0] for g in c]
+        print('========= finch =========')
+        print(labels)
+        print(max(labels) + 1)
+        cluster_num = max(labels) + 1
+    elif 'agg' in args.cluster.lower():
+        labels = Agg(n_clusters=domain_num).fit_predict(all_pi_reshape)
+        print(labels)
+    else:
+        cluster = GMM(n_components=cluster_num)
+        # cluster = KMeans(n_clusters=domain_num, random_state=0)
+        # cluster = SpectralClustering(n_clusters=domain_num,
+        #      assign_labels='discretize',
+        #      random_state=0)
+        labels = cluster.fit_predict(all_pi_reshape)
+
     gmap = {}
     cnt = [0 for _ in range(cluster_num)]
     for cidx, gidx in enumerate(labels):
@@ -1479,80 +1039,16 @@ def agg_cluster(all_pi, prompt_bank):
             prompt_bank[gidx].data.copy_(temp[gidx])
     return prompt_bank, gmap, cnt
 
-def remap(all_pi, prompt_bank):
-    # print(prompt_bank[0][0][0])
-    # print(all_pi.shape, prompt_bank.shape)
-    mi, stdi = torch.mean(all_pi, dim=0, keepdim=False), torch.std(all_pi, dim=0, keepdim=False)
-    mb, stdb = torch.mean(prompt_bank, dim=0, keepdim=False), torch.std(prompt_bank, dim=0, keepdim=False)
-    mi, stdi = mi.detach(), stdi.detach()
-    mb, stdb = mb.detach(), stdb.detach()
-    if torch.sum(stdb)==0:
-        print(f"std is zero!! {torch.sum(stdb)}")
-        return random_replace(all_pi, prompt_bank)
-        # prompt_bank, _, _ = agg_cluster(all_pi, prompt_bank)
-        # return prompt_bank
-    else:
-        print(f"std not zero: {torch.sum(stdb)}")
-    prompt_bank = (mi + stdi * (prompt_bank - mb)/stdb)
-    return prompt_bank
-
-def random_replace(all_pi, prompt_bank):
-    perm = torch.randperm(all_pi.size(0))[:prompt_bank.shape[0]]
-    return all_pi[perm].detach().clone()
-
-
 ################# Key Function ########################
 # def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, pre_clusters, all_feat=None, all_pi=None, prompt_bank=None):
 def communication(args, group_cnt, server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, all_feat=None, all_pi=None, prompt_bank=None):
     gmap = {}
     alpha = 0.99
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    if args.mode.lower() != 'fedprompt':
-        prompt_bank = None
     cluster_pis = None
     with torch.no_grad():
         # aggregate params
-        if args.mode.lower() == 'fedbn':
-            for key in server_model.state_dict().keys():
-                if  not is_personalized_param(key):
-                # if 'bn' not in key:
-                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
-                    for client_idx in range(client_num):
-                        temp += client_weights[client_idx] * models[client_idx].state_dict()[key]
-                    server_model.state_dict()[key].data.copy_(temp)
-                    for client_idx in range(client_num):
-                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-        elif args.mode.lower() == 'fedper':
-            for key in server_model.state_dict().keys():
-                if  not is_personalized_param(key):
-                # if 'bn' not in key:
-                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
-                    for client_idx in range(client_num):
-                        temp += client_weights[client_idx] * models[client_idx].state_dict()[key]
-                    server_model.state_dict()[key].data.copy_(temp)
-                    for client_idx in range(client_num):
-                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-        elif args.mode.lower() == 'doprompt':
-            print(client_num, len(models))
-            for key in server_model.state_dict().keys():
-                if  'prompt' not in key and 'featurizer' not in key:
-                # if 'bn' not in key:
-                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
-                    for client_idx in range(client_num):
-                        temp += client_weights[client_idx] * models[client_idx].state_dict()[key]
-                    server_model.state_dict()[key].data.copy_(temp)
-                    for client_idx in range(client_num):
-                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-                elif 'prompt' in key:
-                    # todo: don't avg on the prompt of each domain!
-                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
-                    for client_idx in range(client_num):
-                        temp[client_idx].data.copy_(models[client_idx].state_dict()[key][client_idx])
-                    server_model.state_dict()[key].data.copy_(temp)
-                    for client_idx in range(client_num):
-                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-                    print(key)
-        elif args.mode.lower() == 'harmo-fl':
+        if args.mode.lower() == 'harmo-fl':
             for key in server_model.state_dict().keys():
                 if not ('prompt' in key or 'head' in key or 'running_amp' in key):
                     continue
@@ -1568,16 +1064,6 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.amp_norm.fix_amp = True
                     for model in models:
                         model.amp_norm.fix_amp = True
-        elif args.mode.lower() in ['cocoop']:
-            for key in server_model.state_dict().keys():
-                if  'prompt' in key or 'classifier' in key or 'meta_net' in key:
-                    print(key)
-                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
-                    for client_idx in range(client_num):
-                        temp += client_weights[client_idx] * models[client_idx].state_dict()[key]
-                    server_model.state_dict()[key].data.copy_(temp)
-                    for client_idx in range(client_num):
-                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
         elif args.mode.lower() == 'q-ffl':
             lr = 0.001
             hs = []
@@ -1631,47 +1117,6 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-        elif args.mode.lower() == 'gifair':
-            ranks = np.linspace(-(client_num - 1), client_num - 1, num=client_num)
-            coeff = 0.1 
-            lambda_max = min(np.array(client_weights) / (client_num - 1))
-            weights_gi = np.zeros(client_num)
-            weights_gi[np.argsort(train_losses)] = ranks
-            new_weights = [client_weights[i] + coeff * lambda_max * weights_gi[i] \
-                       for i in range(client_num)]
-            for key in server_model.state_dict().keys():
-                if  'prompt' in key or 'head' in key:
-                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
-                    for client_idx in range(client_num):
-                        weight = new_weights[client_idx]
-                        temp += weight * models[client_idx].state_dict()[key]
-                    server_model.state_dict()[key].data.copy_(temp)
-                    for client_idx in range(client_num):
-                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-            # sort small to big
-            # i: i client with smaller loss, d-i-1 clients with larger loss
-            # rank = -i + (d-i-1) = d-2*i-1
-        elif args.mode.lower() == 'drfl':
-            multi = 100
-            q = args.q
-            all_w = 0
-            new_weights = [0 for _ in range(client_num)]
-            for client_idx in range(client_num):
-                weight = multi / (Eas[client_idx])
-                weight = client_weights[client_idx] * np.float_power(weight+1e-10, (q+1))
-                new_weights[client_idx] = weight
-                all_w += weight
-            new_weights = [w/all_w for w in new_weights]
-            print(new_weights)
-            for key in server_model.state_dict().keys():
-                if  'prompt' in key or 'head' in key:
-                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
-                    for client_idx in range(client_num):
-                        weight = new_weights[client_idx]
-                        temp += weight * models[client_idx].state_dict()[key]
-                    server_model.state_dict()[key].data.copy_(temp)
-                    for client_idx in range(client_num):
-                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
         elif args.mode.lower() in ['ccop', 'ablation', 'only_dcnet']:
             multi = 100
             q = args.q
@@ -1712,13 +1157,8 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     loss_i.append(Li)
                     loss_c.append(Lc)
                     loss_e.append(Lrb)
-                    if args.cb:
-                        Srb = client_weights[client_idx] / gsize[gmap[client_idx]]
-                    else:
-                        Srb = client_weights[client_idx]
+                    Srb = client_weights[client_idx]
                     power = q + 1
-                    if args.cq:
-                        power = Lc * (q+1)
                     weight = Srb * np.float_power(Lrb, power)
                     new_weights[client_idx] = weight
                 all_weight = sum(new_weights) 
@@ -1734,43 +1174,6 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-        elif args.mode.lower() == 'fedprompt':
-            for key in server_model.state_dict().keys():
-                if  'prompt' not in key:
-                # if 'bn' not in key:
-                    temp = torch.zeros_like(server_model.state_dict()[key], dtype=torch.float32)
-                    for client_idx in range(client_num):
-                        temp += client_weights[client_idx] * models[client_idx].state_dict()[key]
-                    server_model.state_dict()[key].data.copy_(temp)
-                    for client_idx in range(client_num):
-                        models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-                else:
-                    print(key)
-                    cnt = [0 for i in range(domain_num)]
-                    all_pi = None
-                    if group_cnt == 0:
-                        for client_idx in range(client_num):
-                            pi = models[client_idx].state_dict()[key].unsqueeze(0)
-                            if client_idx == 0:
-                                all_pi = pi
-                            else:
-                                all_pi = torch.concat((all_pi, pi))
-                        prompt_bank = remap(all_pi, prompt_bank)
-                    temp = torch.zeros_like(prompt_bank, dtype=torch.float32)
-                    for client_idx in range(client_num):
-                        didx = get_domain_idx(models[client_idx].state_dict()[key], prompt_bank)
-                        gmap[client_idx] = didx
-                        cnt[didx] += 1
-                        temp[didx] += models[client_idx].state_dict()[key]
-                    # # todo : EMA replace prompt
-                    print(cnt)
-                    write_log(args, f'clients=[')
-                    for i in range(domain_num):
-                        write_log(args, f'{cnt[i], }')
-                        if cnt[i]>0:
-                            temp[i] /= cnt[i]
-                            prompt_bank[i].data.copy_(prompt_bank[i].data*(1-alpha) + alpha*temp[i])
-                    write_log(args, f']\n')
         else:
             for key in server_model.state_dict().keys():
                 # num_batches_tracked is a non trainable LongTensor and

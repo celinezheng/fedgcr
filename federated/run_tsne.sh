@@ -1,7 +1,7 @@
 
 # python tsne.py --dataset domainnet --percent 0.1 --expname uneven --mix5 --ratio 1.4 --mode ccop
 # python tsne.py --dataset domainnet --percent 1 --ratio 1.4 --expname uneven --mode ccop
-python tsne_domain.py --dataset pacs --percent 1 --ratio 1.7 --expname uneven --mode ccop
+python tsne_domain.py --dataset officecaltechhome --percent 1 --ratio 1.4 --expname uneven --mode ccop
 # python tsne_class.py --dataset digit --percent 0.5 --ratio 1.5 --expname uneven --mode fedavg
 
 

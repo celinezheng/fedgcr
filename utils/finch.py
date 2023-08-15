@@ -139,7 +139,7 @@ def FINCH(data, initial_rank=None, req_clust=None, distance='cosine', ensure_ear
     Karlsruhe Institute of Technology (KIT)
     """
     # Cast input data to float32
-    data = data.astype(np.float32)
+    data = data.detach().numpy().astype(np.float32)
 
     min_sim = None
     adj, orig_dist = clust_rank(data, initial_rank, distance)

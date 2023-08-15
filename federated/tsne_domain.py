@@ -85,6 +85,7 @@ if __name__ == '__main__':
     parser.add_argument('--resume', action='store_true', help ='resume training from the save path checkpoint')
     parser.add_argument('--deep', action='store_true', help ='deep prompt')
     parser.add_argument('--dataset', type=str, default='digit')
+    parser.add_argument('--cluster', type=str, default='gmm')
     parser.add_argument('--percent', type = float, default= 0.2, help ='percentage of dataset to train')
     parser.add_argument('--num_classes', type = int, default=10, help ='number of classes')
     parser.add_argument('--seed', type = int, default=1, help ='random seed')
@@ -120,10 +121,18 @@ if __name__ == '__main__':
     elif args.dataset.lower()[:6] == 'geo':
         # name of each datasets
         domain_num = 2
-    elif args.dataset.lower()[:4] == 'pacs':
+    elif 'officecaltechhome' in args.dataset.lower():
+        # name of each datasets
+        domain_num = 7
+        args.num_classes = 20
+    elif 'officehome' in args.dataset.lower():
         # name of each datasets
         domain_num = 4
-        args.num_classes = 5
+        args.num_classes = 10
+    elif 'modern' in args.dataset.lower():
+        # name of each datasets
+        domain_num = 4
+        args.num_classes = 31
     elif args.dataset.lower()[:5] == 'digit':
         domain_num = 5
     elif args.dataset.lower()[:9] == 'fairface':
@@ -210,11 +219,6 @@ if __name__ == '__main__':
         print(prompt_bank.shape)
     elif args.mode.lower() in ['cocoop', 'nova', 'ccop']:
         server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams)
-        #todo: remove
-        if args.freeze_pi:
-            for name, param in server_model.named_parameters():
-                if 'meta_net' in name:
-                    param.requires_grad = False
     elif args.mode.lower() in ['full']:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args)
@@ -263,7 +267,8 @@ if __name__ == '__main__':
     df["comp-2"] = X_norm[:,1]
 
     plt.figure(figsize=(8, 8))
-    sns_plot = sns.scatterplot(x="comp-1", y="comp-2", hue=df.y.tolist(),
+    sns_plot = sns.scatterplot(x="comp-1", y="comp-2", 
+                    hue=df.y.tolist(),
                     palette=sns.color_palette("hls", domain_idx),
                     data=df)
     sns_plot.set(xlabel=None, ylabel=None, xticks=[], xticklabels=[], yticks=[], yticklabels=[])

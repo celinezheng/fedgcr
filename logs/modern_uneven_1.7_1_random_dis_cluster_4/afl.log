@@ -1,0 +1,1519 @@
+===2023-08-04 14:28:49===
+===Setting===
+    dataset: modern
+    lr: 0.01
+    batch: 64
+    iters: 50
+    wk_iters: 1
+    si: False
+    domain_num: 4
+    quantile: 0
+    power_cs: 1
+    std_rw: False
+    gender_label: False
+    binary_race: False
+    save_iter: -1
+    mix5: False
+    power_relu: 1
+    Ea_val: False
+data_number=[89,134,200,300,449,56,98,170,64,128,112,
+client_nums=[5,3,2,1,]
+len_dataset=[1959,544,320,188,]
+domain number = 4
+============ Train epoch 0 ============
+ Site-amazon                        | Train Loss: 3.2650 | Train Acc: 0.3933
+ Site-amazon                        | Train Loss: 3.2661 | Train Acc: 0.3881
+ Site-amazon                        | Train Loss: 3.2802 | Train Acc: 0.3400
+ Site-amazon                        | Train Loss: 3.2852 | Train Acc: 0.3833
+ Site-amazon                        | Train Loss: 3.2820 | Train Acc: 0.3719
+ Site-webcam                        | Train Loss: 3.3131 | Train Acc: 0.3036
+ Site-webcam                        | Train Loss: 3.2980 | Train Acc: 0.3571
+ Site-webcam                        | Train Loss: 3.3129 | Train Acc: 0.2588
+ Site-dslr                          | Train Loss: 3.3292 | Train Acc: 0.2031
+ Site-dslr                          | Train Loss: 3.3017 | Train Acc: 0.3047
+ Site-synthetic                     | Train Loss: 3.3810 | Train Acc: 0.1429
+Average Train Accuracy: 0.3133
+ Site-amazon                        | Val  Loss: 3.2533 | Val  Acc: 0.4915
+ Site-amazon                        | Val  Loss: 3.2798 | Val  Acc: 0.3820
+ Site-amazon                        | Val  Loss: 3.3060 | Val  Acc: 0.3158
+ Site-amazon                        | Val  Loss: 3.2833 | Val  Acc: 0.4050
+ Site-amazon                        | Val  Loss: 3.2786 | Val  Acc: 0.3579
+ Site-webcam                        | Val  Loss: 3.3217 | Val  Acc: 0.2703
+ Site-webcam                        | Val  Loss: 3.2931 | Val  Acc: 0.2769
+ Site-webcam                        | Val  Loss: 3.2909 | Val  Acc: 0.3717
+ Site-dslr                          | Val  Loss: 3.2890 | Val  Acc: 0.2857
+ Site-dslr                          | Val  Loss: 3.2945 | Val  Acc: 0.3176
+ Site-synthetic                     | Val  Loss: 3.3481 | Val  Acc: 0.1333
+Average Valid Accuracy: 0.3280
+ Best site-amazon                    | Epoch:0 | Val Acc: 0.4915
+ Best site-amazon                    | Epoch:0 | Val Acc: 0.3820
+ Best site-amazon                    | Epoch:0 | Val Acc: 0.3158
+ Best site-amazon                    | Epoch:0 | Val Acc: 0.4050
+ Best site-amazon                    | Epoch:0 | Val Acc: 0.3579
+ Best site-webcam                    | Epoch:0 | Val Acc: 0.2703
+ Best site-webcam                    | Epoch:0 | Val Acc: 0.2769
+ Best site-webcam                    | Epoch:0 | Val Acc: 0.3717
+ Best site-dslr                      | Epoch:0 | Val Acc: 0.2857
+ Best site-dslr                      | Epoch:0 | Val Acc: 0.3176
+ Best site-synthetic                 | Epoch:0 | Val Acc: 0.1333
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 1 ============
+ Site-amazon                        | Train Loss: 3.1248 | Train Acc: 0.7416
+ Site-amazon                        | Train Loss: 3.1039 | Train Acc: 0.7687
+ Site-amazon                        | Train Loss: 3.1033 | Train Acc: 0.7050
+ Site-amazon                        | Train Loss: 3.1277 | Train Acc: 0.7033
+ Site-amazon                        | Train Loss: 3.0964 | Train Acc: 0.7305
+ Site-webcam                        | Train Loss: 3.1793 | Train Acc: 0.5714
+ Site-webcam                        | Train Loss: 3.1393 | Train Acc: 0.6429
+ Site-webcam                        | Train Loss: 3.1728 | Train Acc: 0.6000
+ Site-dslr                          | Train Loss: 3.1770 | Train Acc: 0.6250
+ Site-dslr                          | Train Loss: 3.1609 | Train Acc: 0.6406
+ Site-synthetic                     | Train Loss: 3.2983 | Train Acc: 0.2500
+Average Train Accuracy: 0.6345
+ Site-amazon                        | Val  Loss: 3.0924 | Val  Acc: 0.7288
+ Site-amazon                        | Val  Loss: 3.1246 | Val  Acc: 0.6854
+ Site-amazon                        | Val  Loss: 3.1471 | Val  Acc: 0.6917
+ Site-amazon                        | Val  Loss: 3.1292 | Val  Acc: 0.7700
+ Site-amazon                        | Val  Loss: 3.1172 | Val  Acc: 0.7458
+ Site-webcam                        | Val  Loss: 3.1854 | Val  Acc: 0.5676
+ Site-webcam                        | Val  Loss: 3.1435 | Val  Acc: 0.6462
+ Site-webcam                        | Val  Loss: 3.1533 | Val  Acc: 0.6637
+ Site-dslr                          | Val  Loss: 3.1517 | Val  Acc: 0.6190
+ Site-dslr                          | Val  Loss: 3.1553 | Val  Acc: 0.6235
+ Site-synthetic                     | Val  Loss: 3.2909 | Val  Acc: 0.1867
+Average Valid Accuracy: 0.6299
+ Best site-amazon                    | Epoch:1 | Val Acc: 0.7288
+ Best site-amazon                    | Epoch:1 | Val Acc: 0.6854
+ Best site-amazon                    | Epoch:1 | Val Acc: 0.6917
+ Best site-amazon                    | Epoch:1 | Val Acc: 0.7700
+ Best site-amazon                    | Epoch:1 | Val Acc: 0.7458
+ Best site-webcam                    | Epoch:1 | Val Acc: 0.5676
+ Best site-webcam                    | Epoch:1 | Val Acc: 0.6462
+ Best site-webcam                    | Epoch:1 | Val Acc: 0.6637
+ Best site-dslr                      | Epoch:1 | Val Acc: 0.6190
+ Best site-dslr                      | Epoch:1 | Val Acc: 0.6235
+ Best site-synthetic                 | Epoch:1 | Val Acc: 0.1867
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 2 ============
+ Site-amazon                        | Train Loss: 2.9812 | Train Acc: 0.8427
+ Site-amazon                        | Train Loss: 2.9306 | Train Acc: 0.8507
+ Site-amazon                        | Train Loss: 2.9607 | Train Acc: 0.8600
+ Site-amazon                        | Train Loss: 2.9726 | Train Acc: 0.8400
+ Site-amazon                        | Train Loss: 2.9759 | Train Acc: 0.8441
+ Site-webcam                        | Train Loss: 3.0522 | Train Acc: 0.6786
+ Site-webcam                        | Train Loss: 3.0110 | Train Acc: 0.7653
+ Site-webcam                        | Train Loss: 3.0474 | Train Acc: 0.7588
+ Site-dslr                          | Train Loss: 3.0693 | Train Acc: 0.7812
+ Site-dslr                          | Train Loss: 3.0207 | Train Acc: 0.7812
+ Site-synthetic                     | Train Loss: 3.2169 | Train Acc: 0.3393
+Average Train Accuracy: 0.7584
+ Site-amazon                        | Val  Loss: 2.9190 | Val  Acc: 0.8814
+ Site-amazon                        | Val  Loss: 2.9663 | Val  Acc: 0.8202
+ Site-amazon                        | Val  Loss: 2.9837 | Val  Acc: 0.8271
+ Site-amazon                        | Val  Loss: 2.9765 | Val  Acc: 0.8550
+ Site-amazon                        | Val  Loss: 2.9612 | Val  Acc: 0.8127
+ Site-webcam                        | Val  Loss: 3.0490 | Val  Acc: 0.7297
+ Site-webcam                        | Val  Loss: 2.9868 | Val  Acc: 0.8154
+ Site-webcam                        | Val  Loss: 3.0170 | Val  Acc: 0.8496
+ Site-dslr                          | Val  Loss: 2.9934 | Val  Acc: 0.7619
+ Site-dslr                          | Val  Loss: 3.0057 | Val  Acc: 0.7647
+ Site-synthetic                     | Val  Loss: 3.2121 | Val  Acc: 0.2800
+Average Valid Accuracy: 0.7634
+ Best site-amazon                    | Epoch:2 | Val Acc: 0.8814
+ Best site-amazon                    | Epoch:2 | Val Acc: 0.8202
+ Best site-amazon                    | Epoch:2 | Val Acc: 0.8271
+ Best site-amazon                    | Epoch:2 | Val Acc: 0.8550
+ Best site-amazon                    | Epoch:2 | Val Acc: 0.8127
+ Best site-webcam                    | Epoch:2 | Val Acc: 0.7297
+ Best site-webcam                    | Epoch:2 | Val Acc: 0.8154
+ Best site-webcam                    | Epoch:2 | Val Acc: 0.8496
+ Best site-dslr                      | Epoch:2 | Val Acc: 0.7619
+ Best site-dslr                      | Epoch:2 | Val Acc: 0.7647
+ Best site-synthetic                 | Epoch:2 | Val Acc: 0.2800
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 3 ============
+ Site-amazon                        | Train Loss: 2.8232 | Train Acc: 0.8989
+ Site-amazon                        | Train Loss: 2.8252 | Train Acc: 0.8881
+ Site-amazon                        | Train Loss: 2.7833 | Train Acc: 0.9000
+ Site-amazon                        | Train Loss: 2.8158 | Train Acc: 0.8667
+ Site-amazon                        | Train Loss: 2.7988 | Train Acc: 0.8820
+ Site-webcam                        | Train Loss: 2.9398 | Train Acc: 0.7321
+ Site-webcam                        | Train Loss: 2.8477 | Train Acc: 0.8367
+ Site-webcam                        | Train Loss: 2.9243 | Train Acc: 0.8059
+ Site-dslr                          | Train Loss: 2.9301 | Train Acc: 0.8594
+ Site-dslr                          | Train Loss: 2.8789 | Train Acc: 0.8125
+ Site-synthetic                     | Train Loss: 3.1621 | Train Acc: 0.3571
+Average Train Accuracy: 0.8036
+ Site-amazon                        | Val  Loss: 2.7398 | Val  Acc: 0.9322
+ Site-amazon                        | Val  Loss: 2.8254 | Val  Acc: 0.8652
+ Site-amazon                        | Val  Loss: 2.8806 | Val  Acc: 0.8571
+ Site-amazon                        | Val  Loss: 2.8248 | Val  Acc: 0.9050
+ Site-amazon                        | Val  Loss: 2.8036 | Val  Acc: 0.8796
+ Site-webcam                        | Val  Loss: 2.8888 | Val  Acc: 0.8378
+ Site-webcam                        | Val  Loss: 2.8061 | Val  Acc: 0.8308
+ Site-webcam                        | Val  Loss: 2.8857 | Val  Acc: 0.8850
+ Site-dslr                          | Val  Loss: 2.8658 | Val  Acc: 0.8333
+ Site-dslr                          | Val  Loss: 2.8591 | Val  Acc: 0.8000
+ Site-synthetic                     | Val  Loss: 3.1308 | Val  Acc: 0.2800
+Average Valid Accuracy: 0.8096
+ Best site-amazon                    | Epoch:3 | Val Acc: 0.9322
+ Best site-amazon                    | Epoch:3 | Val Acc: 0.8652
+ Best site-amazon                    | Epoch:3 | Val Acc: 0.8571
+ Best site-amazon                    | Epoch:3 | Val Acc: 0.9050
+ Best site-amazon                    | Epoch:3 | Val Acc: 0.8796
+ Best site-webcam                    | Epoch:3 | Val Acc: 0.8378
+ Best site-webcam                    | Epoch:3 | Val Acc: 0.8308
+ Best site-webcam                    | Epoch:3 | Val Acc: 0.8850
+ Best site-dslr                      | Epoch:3 | Val Acc: 0.8333
+ Best site-dslr                      | Epoch:3 | Val Acc: 0.8000
+ Best site-synthetic                 | Epoch:3 | Val Acc: 0.2800
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 4 ============
+ Site-amazon                        | Train Loss: 2.6697 | Train Acc: 0.9213
+ Site-amazon                        | Train Loss: 2.5897 | Train Acc: 0.9104
+ Site-amazon                        | Train Loss: 2.6754 | Train Acc: 0.9150
+ Site-amazon                        | Train Loss: 2.6646 | Train Acc: 0.9000
+ Site-amazon                        | Train Loss: 2.6766 | Train Acc: 0.8909
+ Site-webcam                        | Train Loss: 2.7754 | Train Acc: 0.8750
+ Site-webcam                        | Train Loss: 2.7205 | Train Acc: 0.8265
+ Site-webcam                        | Train Loss: 2.7955 | Train Acc: 0.8294
+ Site-dslr                          | Train Loss: 2.8091 | Train Acc: 0.8594
+ Site-dslr                          | Train Loss: 2.7576 | Train Acc: 0.8359
+ Site-synthetic                     | Train Loss: 3.0916 | Train Acc: 0.3839
+Average Train Accuracy: 0.8316
+ Site-amazon                        | Val  Loss: 2.5963 | Val  Acc: 0.9153
+ Site-amazon                        | Val  Loss: 2.6811 | Val  Acc: 0.8989
+ Site-amazon                        | Val  Loss: 2.7348 | Val  Acc: 0.9023
+ Site-amazon                        | Val  Loss: 2.6751 | Val  Acc: 0.8750
+ Site-amazon                        | Val  Loss: 2.6557 | Val  Acc: 0.8896
+ Site-webcam                        | Val  Loss: 2.7718 | Val  Acc: 0.7838
+ Site-webcam                        | Val  Loss: 2.6457 | Val  Acc: 0.8923
+ Site-webcam                        | Val  Loss: 2.7395 | Val  Acc: 0.8761
+ Site-dslr                          | Val  Loss: 2.7395 | Val  Acc: 0.8095
+ Site-dslr                          | Val  Loss: 2.7495 | Val  Acc: 0.7882
+ Site-synthetic                     | Val  Loss: 3.0948 | Val  Acc: 0.3200
+Average Valid Accuracy: 0.8137
+ Best site-amazon                    | Epoch:4 | Val Acc: 0.9153
+ Best site-amazon                    | Epoch:4 | Val Acc: 0.8989
+ Best site-amazon                    | Epoch:4 | Val Acc: 0.9023
+ Best site-amazon                    | Epoch:4 | Val Acc: 0.8750
+ Best site-amazon                    | Epoch:4 | Val Acc: 0.8896
+ Best site-webcam                    | Epoch:4 | Val Acc: 0.7838
+ Best site-webcam                    | Epoch:4 | Val Acc: 0.8923
+ Best site-webcam                    | Epoch:4 | Val Acc: 0.8761
+ Best site-dslr                      | Epoch:4 | Val Acc: 0.8095
+ Best site-dslr                      | Epoch:4 | Val Acc: 0.7882
+ Best site-synthetic                 | Epoch:4 | Val Acc: 0.3200
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 5 ============
+ Site-amazon                        | Train Loss: 2.5165 | Train Acc: 0.9101
+ Site-amazon                        | Train Loss: 2.4888 | Train Acc: 0.9179
+ Site-amazon                        | Train Loss: 2.5142 | Train Acc: 0.9350
+ Site-amazon                        | Train Loss: 2.5227 | Train Acc: 0.9133
+ Site-amazon                        | Train Loss: 2.4511 | Train Acc: 0.8998
+ Site-webcam                        | Train Loss: 2.6882 | Train Acc: 0.7500
+ Site-webcam                        | Train Loss: 2.6099 | Train Acc: 0.8673
+ Site-webcam                        | Train Loss: 2.6481 | Train Acc: 0.8647
+ Site-dslr                          | Train Loss: 2.6834 | Train Acc: 0.8594
+ Site-dslr                          | Train Loss: 2.6176 | Train Acc: 0.8438
+ Site-synthetic                     | Train Loss: 3.0424 | Train Acc: 0.4286
+Average Train Accuracy: 0.8354
+ Site-amazon                        | Val  Loss: 2.4749 | Val  Acc: 0.8814
+ Site-amazon                        | Val  Loss: 2.5398 | Val  Acc: 0.8876
+ Site-amazon                        | Val  Loss: 2.6024 | Val  Acc: 0.8797
+ Site-amazon                        | Val  Loss: 2.5412 | Val  Acc: 0.9150
+ Site-amazon                        | Val  Loss: 2.5141 | Val  Acc: 0.8896
+ Site-webcam                        | Val  Loss: 2.6442 | Val  Acc: 0.8108
+ Site-webcam                        | Val  Loss: 2.4866 | Val  Acc: 0.8308
+ Site-webcam                        | Val  Loss: 2.6188 | Val  Acc: 0.8938
+ Site-dslr                          | Val  Loss: 2.5823 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 2.6086 | Val  Acc: 0.8353
+ Site-synthetic                     | Val  Loss: 3.0185 | Val  Acc: 0.3200
+Average Valid Accuracy: 0.8226
+ Best site-amazon                    | Epoch:5 | Val Acc: 0.8814
+ Best site-amazon                    | Epoch:5 | Val Acc: 0.8876
+ Best site-amazon                    | Epoch:5 | Val Acc: 0.8797
+ Best site-amazon                    | Epoch:5 | Val Acc: 0.9150
+ Best site-amazon                    | Epoch:5 | Val Acc: 0.8896
+ Best site-webcam                    | Epoch:5 | Val Acc: 0.8108
+ Best site-webcam                    | Epoch:5 | Val Acc: 0.8308
+ Best site-webcam                    | Epoch:5 | Val Acc: 0.8938
+ Best site-dslr                      | Epoch:5 | Val Acc: 0.9048
+ Best site-dslr                      | Epoch:5 | Val Acc: 0.8353
+ Best site-synthetic                 | Epoch:5 | Val Acc: 0.3200
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 6 ============
+ Site-amazon                        | Train Loss: 2.4025 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 2.3277 | Train Acc: 0.9328
+ Site-amazon                        | Train Loss: 2.3603 | Train Acc: 0.9400
+ Site-amazon                        | Train Loss: 2.3804 | Train Acc: 0.9067
+ Site-amazon                        | Train Loss: 2.4488 | Train Acc: 0.9042
+ Site-webcam                        | Train Loss: 2.5246 | Train Acc: 0.7857
+ Site-webcam                        | Train Loss: 2.4882 | Train Acc: 0.8776
+ Site-webcam                        | Train Loss: 2.5600 | Train Acc: 0.8294
+ Site-dslr                          | Train Loss: 2.5825 | Train Acc: 0.8906
+ Site-dslr                          | Train Loss: 2.5269 | Train Acc: 0.8359
+ Site-synthetic                     | Train Loss: 2.9449 | Train Acc: 0.4554
+Average Train Accuracy: 0.8467
+ Site-amazon                        | Val  Loss: 2.3112 | Val  Acc: 0.9322
+ Site-amazon                        | Val  Loss: 2.3973 | Val  Acc: 0.8876
+ Site-amazon                        | Val  Loss: 2.4870 | Val  Acc: 0.8797
+ Site-amazon                        | Val  Loss: 2.3802 | Val  Acc: 0.9200
+ Site-amazon                        | Val  Loss: 2.3647 | Val  Acc: 0.9097
+ Site-webcam                        | Val  Loss: 2.5208 | Val  Acc: 0.8649
+ Site-webcam                        | Val  Loss: 2.3535 | Val  Acc: 0.8923
+ Site-webcam                        | Val  Loss: 2.5332 | Val  Acc: 0.8230
+ Site-dslr                          | Val  Loss: 2.4548 | Val  Acc: 0.8095
+ Site-dslr                          | Val  Loss: 2.4552 | Val  Acc: 0.8588
+ Site-synthetic                     | Val  Loss: 2.9831 | Val  Acc: 0.3067
+Average Valid Accuracy: 0.8259
+ Best site-amazon                    | Epoch:6 | Val Acc: 0.9322
+ Best site-amazon                    | Epoch:6 | Val Acc: 0.8876
+ Best site-amazon                    | Epoch:6 | Val Acc: 0.8797
+ Best site-amazon                    | Epoch:6 | Val Acc: 0.9200
+ Best site-amazon                    | Epoch:6 | Val Acc: 0.9097
+ Best site-webcam                    | Epoch:6 | Val Acc: 0.8649
+ Best site-webcam                    | Epoch:6 | Val Acc: 0.8923
+ Best site-webcam                    | Epoch:6 | Val Acc: 0.8230
+ Best site-dslr                      | Epoch:6 | Val Acc: 0.8095
+ Best site-dslr                      | Epoch:6 | Val Acc: 0.8588
+ Best site-synthetic                 | Epoch:6 | Val Acc: 0.3067
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 7 ============
+ Site-amazon                        | Train Loss: 2.2386 | Train Acc: 0.9326
+ Site-amazon                        | Train Loss: 2.2232 | Train Acc: 0.9030
+ Site-amazon                        | Train Loss: 2.2671 | Train Acc: 0.9200
+ Site-amazon                        | Train Loss: 2.2582 | Train Acc: 0.9033
+ Site-amazon                        | Train Loss: 2.3033 | Train Acc: 0.9042
+ Site-webcam                        | Train Loss: 2.4353 | Train Acc: 0.7857
+ Site-webcam                        | Train Loss: 2.3285 | Train Acc: 0.8878
+ Site-webcam                        | Train Loss: 2.4358 | Train Acc: 0.9059
+ Site-dslr                          | Train Loss: 2.4374 | Train Acc: 0.8906
+ Site-dslr                          | Train Loss: 2.4239 | Train Acc: 0.8516
+ Site-synthetic                     | Train Loss: 2.9191 | Train Acc: 0.4732
+Average Train Accuracy: 0.8507
+ Site-amazon                        | Val  Loss: 2.1827 | Val  Acc: 0.9153
+ Site-amazon                        | Val  Loss: 2.2627 | Val  Acc: 0.8876
+ Site-amazon                        | Val  Loss: 2.3659 | Val  Acc: 0.9098
+ Site-amazon                        | Val  Loss: 2.2305 | Val  Acc: 0.9300
+ Site-amazon                        | Val  Loss: 2.2405 | Val  Acc: 0.8997
+ Site-webcam                        | Val  Loss: 2.3976 | Val  Acc: 0.8919
+ Site-webcam                        | Val  Loss: 2.2194 | Val  Acc: 0.8615
+ Site-webcam                        | Val  Loss: 2.4101 | Val  Acc: 0.8407
+ Site-dslr                          | Val  Loss: 2.3632 | Val  Acc: 0.8333
+ Site-dslr                          | Val  Loss: 2.3288 | Val  Acc: 0.8706
+ Site-synthetic                     | Val  Loss: 2.9428 | Val  Acc: 0.3200
+Average Valid Accuracy: 0.8328
+ Best site-amazon                    | Epoch:7 | Val Acc: 0.9153
+ Best site-amazon                    | Epoch:7 | Val Acc: 0.8876
+ Best site-amazon                    | Epoch:7 | Val Acc: 0.9098
+ Best site-amazon                    | Epoch:7 | Val Acc: 0.9300
+ Best site-amazon                    | Epoch:7 | Val Acc: 0.8997
+ Best site-webcam                    | Epoch:7 | Val Acc: 0.8919
+ Best site-webcam                    | Epoch:7 | Val Acc: 0.8615
+ Best site-webcam                    | Epoch:7 | Val Acc: 0.8407
+ Best site-dslr                      | Epoch:7 | Val Acc: 0.8333
+ Best site-dslr                      | Epoch:7 | Val Acc: 0.8706
+ Best site-synthetic                 | Epoch:7 | Val Acc: 0.3200
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 8 ============
+ Site-amazon                        | Train Loss: 2.1198 | Train Acc: 0.9213
+ Site-amazon                        | Train Loss: 2.0435 | Train Acc: 0.9403
+ Site-amazon                        | Train Loss: 2.0755 | Train Acc: 0.9250
+ Site-amazon                        | Train Loss: 2.1251 | Train Acc: 0.9100
+ Site-amazon                        | Train Loss: 2.0813 | Train Acc: 0.9220
+ Site-webcam                        | Train Loss: 2.3271 | Train Acc: 0.7679
+ Site-webcam                        | Train Loss: 2.2247 | Train Acc: 0.8571
+ Site-webcam                        | Train Loss: 2.3044 | Train Acc: 0.8706
+ Site-dslr                          | Train Loss: 2.3570 | Train Acc: 0.8750
+ Site-dslr                          | Train Loss: 2.2793 | Train Acc: 0.8828
+ Site-synthetic                     | Train Loss: 2.8400 | Train Acc: 0.4196
+Average Train Accuracy: 0.8447
+ Site-amazon                        | Val  Loss: 2.0486 | Val  Acc: 0.9322
+ Site-amazon                        | Val  Loss: 2.1273 | Val  Acc: 0.8876
+ Site-amazon                        | Val  Loss: 2.2375 | Val  Acc: 0.9098
+ Site-amazon                        | Val  Loss: 2.1038 | Val  Acc: 0.9550
+ Site-amazon                        | Val  Loss: 2.1252 | Val  Acc: 0.9030
+ Site-webcam                        | Val  Loss: 2.2320 | Val  Acc: 0.8378
+ Site-webcam                        | Val  Loss: 2.0840 | Val  Acc: 0.8923
+ Site-webcam                        | Val  Loss: 2.2802 | Val  Acc: 0.8850
+ Site-dslr                          | Val  Loss: 2.2280 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 2.2498 | Val  Acc: 0.9059
+ Site-synthetic                     | Val  Loss: 2.9090 | Val  Acc: 0.3467
+Average Valid Accuracy: 0.8509
+ Best site-amazon                    | Epoch:8 | Val Acc: 0.9322
+ Best site-amazon                    | Epoch:8 | Val Acc: 0.8876
+ Best site-amazon                    | Epoch:8 | Val Acc: 0.9098
+ Best site-amazon                    | Epoch:8 | Val Acc: 0.9550
+ Best site-amazon                    | Epoch:8 | Val Acc: 0.9030
+ Best site-webcam                    | Epoch:8 | Val Acc: 0.8378
+ Best site-webcam                    | Epoch:8 | Val Acc: 0.8923
+ Best site-webcam                    | Epoch:8 | Val Acc: 0.8850
+ Best site-dslr                      | Epoch:8 | Val Acc: 0.9048
+ Best site-dslr                      | Epoch:8 | Val Acc: 0.9059
+ Best site-synthetic                 | Epoch:8 | Val Acc: 0.3467
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 9 ============
+ Site-amazon                        | Train Loss: 1.9805 | Train Acc: 0.9438
+ Site-amazon                        | Train Loss: 1.8898 | Train Acc: 0.9328
+ Site-amazon                        | Train Loss: 1.9984 | Train Acc: 0.9350
+ Site-amazon                        | Train Loss: 1.9861 | Train Acc: 0.9067
+ Site-amazon                        | Train Loss: 1.9847 | Train Acc: 0.9220
+ Site-webcam                        | Train Loss: 2.2258 | Train Acc: 0.7857
+ Site-webcam                        | Train Loss: 2.1024 | Train Acc: 0.9082
+ Site-webcam                        | Train Loss: 2.1840 | Train Acc: 0.8647
+ Site-dslr                          | Train Loss: 2.2308 | Train Acc: 0.9219
+ Site-dslr                          | Train Loss: 2.1601 | Train Acc: 0.8750
+ Site-synthetic                     | Train Loss: 2.7426 | Train Acc: 0.5089
+Average Train Accuracy: 0.8641
+ Site-amazon                        | Val  Loss: 1.8900 | Val  Acc: 0.9322
+ Site-amazon                        | Val  Loss: 2.0388 | Val  Acc: 0.8764
+ Site-amazon                        | Val  Loss: 2.0933 | Val  Acc: 0.9098
+ Site-amazon                        | Val  Loss: 1.9862 | Val  Acc: 0.9400
+ Site-amazon                        | Val  Loss: 1.9787 | Val  Acc: 0.9197
+ Site-webcam                        | Val  Loss: 2.1112 | Val  Acc: 0.8108
+ Site-webcam                        | Val  Loss: 1.9382 | Val  Acc: 0.8615
+ Site-webcam                        | Val  Loss: 2.1625 | Val  Acc: 0.8584
+ Site-dslr                          | Val  Loss: 2.0836 | Val  Acc: 0.8571
+ Site-dslr                          | Val  Loss: 2.1086 | Val  Acc: 0.8588
+ Site-synthetic                     | Val  Loss: 2.8167 | Val  Acc: 0.3733
+Average Valid Accuracy: 0.8362
+============ Train epoch 10 ============
+ Site-amazon                        | Train Loss: 1.8286 | Train Acc: 0.9663
+ Site-amazon                        | Train Loss: 1.8301 | Train Acc: 0.9403
+ Site-amazon                        | Train Loss: 1.8490 | Train Acc: 0.9350
+ Site-amazon                        | Train Loss: 1.9066 | Train Acc: 0.9000
+ Site-amazon                        | Train Loss: 1.8549 | Train Acc: 0.9243
+ Site-webcam                        | Train Loss: 2.1318 | Train Acc: 0.8214
+ Site-webcam                        | Train Loss: 2.0384 | Train Acc: 0.9082
+ Site-webcam                        | Train Loss: 2.0922 | Train Acc: 0.8824
+ Site-dslr                          | Train Loss: 2.1810 | Train Acc: 0.8594
+ Site-dslr                          | Train Loss: 2.0363 | Train Acc: 0.9062
+ Site-synthetic                     | Train Loss: 2.7173 | Train Acc: 0.4732
+Average Train Accuracy: 0.8652
+ Site-amazon                        | Val  Loss: 1.7812 | Val  Acc: 0.9492
+ Site-amazon                        | Val  Loss: 1.9436 | Val  Acc: 0.8427
+ Site-amazon                        | Val  Loss: 2.0929 | Val  Acc: 0.8797
+ Site-amazon                        | Val  Loss: 1.8779 | Val  Acc: 0.9300
+ Site-amazon                        | Val  Loss: 1.8521 | Val  Acc: 0.9164
+ Site-webcam                        | Val  Loss: 2.0602 | Val  Acc: 0.8378
+ Site-webcam                        | Val  Loss: 1.8460 | Val  Acc: 0.9077
+ Site-webcam                        | Val  Loss: 2.0228 | Val  Acc: 0.8938
+ Site-dslr                          | Val  Loss: 1.9467 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 1.9932 | Val  Acc: 0.8588
+ Site-synthetic                     | Val  Loss: 2.8356 | Val  Acc: 0.3200
+Average Valid Accuracy: 0.8401
+============ Train epoch 11 ============
+ Site-amazon                        | Train Loss: 1.7525 | Train Acc: 0.8989
+ Site-amazon                        | Train Loss: 1.6185 | Train Acc: 0.9254
+ Site-amazon                        | Train Loss: 1.7824 | Train Acc: 0.9300
+ Site-amazon                        | Train Loss: 1.7703 | Train Acc: 0.9200
+ Site-amazon                        | Train Loss: 1.8553 | Train Acc: 0.9287
+ Site-webcam                        | Train Loss: 2.0538 | Train Acc: 0.7500
+ Site-webcam                        | Train Loss: 1.8991 | Train Acc: 0.8878
+ Site-webcam                        | Train Loss: 1.9866 | Train Acc: 0.8647
+ Site-dslr                          | Train Loss: 2.0605 | Train Acc: 0.8750
+ Site-dslr                          | Train Loss: 1.9546 | Train Acc: 0.8594
+ Site-synthetic                     | Train Loss: 2.6484 | Train Acc: 0.4821
+Average Train Accuracy: 0.8475
+ Site-amazon                        | Val  Loss: 1.6305 | Val  Acc: 0.9322
+ Site-amazon                        | Val  Loss: 1.7792 | Val  Acc: 0.9101
+ Site-amazon                        | Val  Loss: 1.8940 | Val  Acc: 0.9248
+ Site-amazon                        | Val  Loss: 1.7672 | Val  Acc: 0.9350
+ Site-amazon                        | Val  Loss: 1.7476 | Val  Acc: 0.9197
+ Site-webcam                        | Val  Loss: 1.9393 | Val  Acc: 0.8649
+ Site-webcam                        | Val  Loss: 1.6964 | Val  Acc: 0.8769
+ Site-webcam                        | Val  Loss: 1.9384 | Val  Acc: 0.8938
+ Site-dslr                          | Val  Loss: 1.9146 | Val  Acc: 0.8810
+ Site-dslr                          | Val  Loss: 1.8772 | Val  Acc: 0.8706
+ Site-synthetic                     | Val  Loss: 2.7425 | Val  Acc: 0.3733
+Average Valid Accuracy: 0.8529
+ Best site-amazon                    | Epoch:11 | Val Acc: 0.9322
+ Best site-amazon                    | Epoch:11 | Val Acc: 0.9101
+ Best site-amazon                    | Epoch:11 | Val Acc: 0.9248
+ Best site-amazon                    | Epoch:11 | Val Acc: 0.9350
+ Best site-amazon                    | Epoch:11 | Val Acc: 0.9197
+ Best site-webcam                    | Epoch:11 | Val Acc: 0.8649
+ Best site-webcam                    | Epoch:11 | Val Acc: 0.8769
+ Best site-webcam                    | Epoch:11 | Val Acc: 0.8938
+ Best site-dslr                      | Epoch:11 | Val Acc: 0.8810
+ Best site-dslr                      | Epoch:11 | Val Acc: 0.8706
+ Best site-synthetic                 | Epoch:11 | Val Acc: 0.3733
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 12 ============
+ Site-amazon                        | Train Loss: 1.6098 | Train Acc: 0.9326
+ Site-amazon                        | Train Loss: 1.6317 | Train Acc: 0.9478
+ Site-amazon                        | Train Loss: 1.5923 | Train Acc: 0.9400
+ Site-amazon                        | Train Loss: 1.6537 | Train Acc: 0.9167
+ Site-amazon                        | Train Loss: 1.6685 | Train Acc: 0.9220
+ Site-webcam                        | Train Loss: 1.9689 | Train Acc: 0.8036
+ Site-webcam                        | Train Loss: 1.7210 | Train Acc: 0.9184
+ Site-webcam                        | Train Loss: 1.8848 | Train Acc: 0.8765
+ Site-dslr                          | Train Loss: 1.9456 | Train Acc: 0.9062
+ Site-dslr                          | Train Loss: 1.8141 | Train Acc: 0.8828
+ Site-synthetic                     | Train Loss: 2.6122 | Train Acc: 0.4643
+Average Train Accuracy: 0.8646
+ Site-amazon                        | Val  Loss: 1.5452 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 1.7200 | Val  Acc: 0.8764
+ Site-amazon                        | Val  Loss: 1.8728 | Val  Acc: 0.8797
+ Site-amazon                        | Val  Loss: 1.6563 | Val  Acc: 0.9350
+ Site-amazon                        | Val  Loss: 1.6588 | Val  Acc: 0.9064
+ Site-webcam                        | Val  Loss: 1.8315 | Val  Acc: 0.7838
+ Site-webcam                        | Val  Loss: 1.5987 | Val  Acc: 0.8462
+ Site-webcam                        | Val  Loss: 1.8317 | Val  Acc: 0.8761
+ Site-dslr                          | Val  Loss: 1.6788 | Val  Acc: 0.8810
+ Site-dslr                          | Val  Loss: 1.7529 | Val  Acc: 0.8941
+ Site-synthetic                     | Val  Loss: 2.7334 | Val  Acc: 0.3600
+Average Valid Accuracy: 0.8368
+============ Train epoch 13 ============
+ Site-amazon                        | Train Loss: 1.5626 | Train Acc: 0.9101
+ Site-amazon                        | Train Loss: 1.4569 | Train Acc: 0.9478
+ Site-amazon                        | Train Loss: 1.5591 | Train Acc: 0.9450
+ Site-amazon                        | Train Loss: 1.5618 | Train Acc: 0.9200
+ Site-amazon                        | Train Loss: 1.5411 | Train Acc: 0.9354
+ Site-webcam                        | Train Loss: 1.8026 | Train Acc: 0.8750
+ Site-webcam                        | Train Loss: 1.7039 | Train Acc: 0.9082
+ Site-webcam                        | Train Loss: 1.8188 | Train Acc: 0.9059
+ Site-dslr                          | Train Loss: 1.8593 | Train Acc: 0.9062
+ Site-dslr                          | Train Loss: 1.7474 | Train Acc: 0.8906
+ Site-synthetic                     | Train Loss: 2.5528 | Train Acc: 0.4911
+Average Train Accuracy: 0.8759
+ Site-amazon                        | Val  Loss: 1.4186 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 1.6579 | Val  Acc: 0.8764
+ Site-amazon                        | Val  Loss: 1.6885 | Val  Acc: 0.9023
+ Site-amazon                        | Val  Loss: 1.5758 | Val  Acc: 0.9350
+ Site-amazon                        | Val  Loss: 1.5384 | Val  Acc: 0.9130
+ Site-webcam                        | Val  Loss: 1.7937 | Val  Acc: 0.8108
+ Site-webcam                        | Val  Loss: 1.4495 | Val  Acc: 0.9077
+ Site-webcam                        | Val  Loss: 1.7335 | Val  Acc: 0.8850
+ Site-dslr                          | Val  Loss: 1.6364 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 1.7004 | Val  Acc: 0.8471
+ Site-synthetic                     | Val  Loss: 2.7484 | Val  Acc: 0.3600
+Average Valid Accuracy: 0.8462
+============ Train epoch 14 ============
+ Site-amazon                        | Train Loss: 1.4644 | Train Acc: 0.9213
+ Site-amazon                        | Train Loss: 1.4109 | Train Acc: 0.9478
+ Site-amazon                        | Train Loss: 1.4339 | Train Acc: 0.9450
+ Site-amazon                        | Train Loss: 1.4853 | Train Acc: 0.9167
+ Site-amazon                        | Train Loss: 1.3666 | Train Acc: 0.9287
+ Site-webcam                        | Train Loss: 1.7212 | Train Acc: 0.8571
+ Site-webcam                        | Train Loss: 1.6437 | Train Acc: 0.9082
+ Site-webcam                        | Train Loss: 1.7302 | Train Acc: 0.8941
+ Site-dslr                          | Train Loss: 1.7803 | Train Acc: 0.9062
+ Site-dslr                          | Train Loss: 1.6665 | Train Acc: 0.8828
+ Site-synthetic                     | Train Loss: 2.5000 | Train Acc: 0.4911
+Average Train Accuracy: 0.8726
+ Site-amazon                        | Val  Loss: 1.3748 | Val  Acc: 0.9322
+ Site-amazon                        | Val  Loss: 1.4935 | Val  Acc: 0.9101
+ Site-amazon                        | Val  Loss: 1.5352 | Val  Acc: 0.9398
+ Site-amazon                        | Val  Loss: 1.4655 | Val  Acc: 0.9300
+ Site-amazon                        | Val  Loss: 1.4500 | Val  Acc: 0.9164
+ Site-webcam                        | Val  Loss: 1.6586 | Val  Acc: 0.8378
+ Site-webcam                        | Val  Loss: 1.4254 | Val  Acc: 0.8923
+ Site-webcam                        | Val  Loss: 1.6798 | Val  Acc: 0.9027
+ Site-dslr                          | Val  Loss: 1.6158 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 1.5496 | Val  Acc: 0.8941
+ Site-synthetic                     | Val  Loss: 2.5903 | Val  Acc: 0.3467
+Average Valid Accuracy: 0.8552
+ Best site-amazon                    | Epoch:14 | Val Acc: 0.9322
+ Best site-amazon                    | Epoch:14 | Val Acc: 0.9101
+ Best site-amazon                    | Epoch:14 | Val Acc: 0.9398
+ Best site-amazon                    | Epoch:14 | Val Acc: 0.9300
+ Best site-amazon                    | Epoch:14 | Val Acc: 0.9164
+ Best site-webcam                    | Epoch:14 | Val Acc: 0.8378
+ Best site-webcam                    | Epoch:14 | Val Acc: 0.8923
+ Best site-webcam                    | Epoch:14 | Val Acc: 0.9027
+ Best site-dslr                      | Epoch:14 | Val Acc: 0.9048
+ Best site-dslr                      | Epoch:14 | Val Acc: 0.8941
+ Best site-synthetic                 | Epoch:14 | Val Acc: 0.3467
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 15 ============
+ Site-amazon                        | Train Loss: 1.3933 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 1.2761 | Train Acc: 0.9403
+ Site-amazon                        | Train Loss: 1.3760 | Train Acc: 0.9400
+ Site-amazon                        | Train Loss: 1.3829 | Train Acc: 0.9067
+ Site-amazon                        | Train Loss: 1.3180 | Train Acc: 0.9332
+ Site-webcam                        | Train Loss: 1.7072 | Train Acc: 0.7857
+ Site-webcam                        | Train Loss: 1.4851 | Train Acc: 0.9184
+ Site-webcam                        | Train Loss: 1.6186 | Train Acc: 0.9353
+ Site-dslr                          | Train Loss: 1.6827 | Train Acc: 0.8750
+ Site-dslr                          | Train Loss: 1.6347 | Train Acc: 0.8750
+ Site-synthetic                     | Train Loss: 2.4475 | Train Acc: 0.4911
+Average Train Accuracy: 0.8687
+ Site-amazon                        | Val  Loss: 1.2117 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 1.4377 | Val  Acc: 0.8876
+ Site-amazon                        | Val  Loss: 1.4827 | Val  Acc: 0.9398
+ Site-amazon                        | Val  Loss: 1.3544 | Val  Acc: 0.9350
+ Site-amazon                        | Val  Loss: 1.3592 | Val  Acc: 0.9130
+ Site-webcam                        | Val  Loss: 1.5797 | Val  Acc: 0.8649
+ Site-webcam                        | Val  Loss: 1.3319 | Val  Acc: 0.8462
+ Site-webcam                        | Val  Loss: 1.6125 | Val  Acc: 0.8584
+ Site-dslr                          | Val  Loss: 1.4640 | Val  Acc: 0.9286
+ Site-dslr                          | Val  Loss: 1.4601 | Val  Acc: 0.8706
+ Site-synthetic                     | Val  Loss: 2.5480 | Val  Acc: 0.4667
+Average Valid Accuracy: 0.8615
+ Best site-amazon                    | Epoch:15 | Val Acc: 0.9661
+ Best site-amazon                    | Epoch:15 | Val Acc: 0.8876
+ Best site-amazon                    | Epoch:15 | Val Acc: 0.9398
+ Best site-amazon                    | Epoch:15 | Val Acc: 0.9350
+ Best site-amazon                    | Epoch:15 | Val Acc: 0.9130
+ Best site-webcam                    | Epoch:15 | Val Acc: 0.8649
+ Best site-webcam                    | Epoch:15 | Val Acc: 0.8462
+ Best site-webcam                    | Epoch:15 | Val Acc: 0.8584
+ Best site-dslr                      | Epoch:15 | Val Acc: 0.9286
+ Best site-dslr                      | Epoch:15 | Val Acc: 0.8706
+ Best site-synthetic                 | Epoch:15 | Val Acc: 0.4667
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 16 ============
+ Site-amazon                        | Train Loss: 1.2649 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 1.1959 | Train Acc: 0.9403
+ Site-amazon                        | Train Loss: 1.2082 | Train Acc: 0.9450
+ Site-amazon                        | Train Loss: 1.2968 | Train Acc: 0.9167
+ Site-amazon                        | Train Loss: 1.1487 | Train Acc: 0.9310
+ Site-webcam                        | Train Loss: 1.6053 | Train Acc: 0.7857
+ Site-webcam                        | Train Loss: 1.4435 | Train Acc: 0.8571
+ Site-webcam                        | Train Loss: 1.5215 | Train Acc: 0.9118
+ Site-dslr                          | Train Loss: 1.6198 | Train Acc: 0.9219
+ Site-dslr                          | Train Loss: 1.4844 | Train Acc: 0.9141
+ Site-synthetic                     | Train Loss: 2.4272 | Train Acc: 0.5179
+Average Train Accuracy: 0.8724
+ Site-amazon                        | Val  Loss: 1.1658 | Val  Acc: 0.9492
+ Site-amazon                        | Val  Loss: 1.3585 | Val  Acc: 0.8989
+ Site-amazon                        | Val  Loss: 1.4714 | Val  Acc: 0.9323
+ Site-amazon                        | Val  Loss: 1.2880 | Val  Acc: 0.9450
+ Site-amazon                        | Val  Loss: 1.2682 | Val  Acc: 0.9197
+ Site-webcam                        | Val  Loss: 1.4695 | Val  Acc: 0.8919
+ Site-webcam                        | Val  Loss: 1.1756 | Val  Acc: 0.8615
+ Site-webcam                        | Val  Loss: 1.4690 | Val  Acc: 0.9204
+ Site-dslr                          | Val  Loss: 1.4270 | Val  Acc: 0.8571
+ Site-dslr                          | Val  Loss: 1.4334 | Val  Acc: 0.9059
+ Site-synthetic                     | Val  Loss: 2.5606 | Val  Acc: 0.3733
+Average Valid Accuracy: 0.8596
+============ Train epoch 17 ============
+ Site-amazon                        | Train Loss: 1.1807 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 1.0620 | Train Acc: 0.9179
+ Site-amazon                        | Train Loss: 1.2572 | Train Acc: 0.9500
+ Site-amazon                        | Train Loss: 1.1875 | Train Acc: 0.9233
+ Site-amazon                        | Train Loss: 1.3731 | Train Acc: 0.9310
+ Site-webcam                        | Train Loss: 1.5425 | Train Acc: 0.8214
+ Site-webcam                        | Train Loss: 1.4343 | Train Acc: 0.9082
+ Site-webcam                        | Train Loss: 1.4408 | Train Acc: 0.8941
+ Site-dslr                          | Train Loss: 1.5320 | Train Acc: 0.9062
+ Site-dslr                          | Train Loss: 1.4065 | Train Acc: 0.8906
+ Site-synthetic                     | Train Loss: 2.3638 | Train Acc: 0.4732
+Average Train Accuracy: 0.8701
+ Site-amazon                        | Val  Loss: 1.1270 | Val  Acc: 0.9322
+ Site-amazon                        | Val  Loss: 1.2822 | Val  Acc: 0.9213
+ Site-amazon                        | Val  Loss: 1.4125 | Val  Acc: 0.9173
+ Site-amazon                        | Val  Loss: 1.1967 | Val  Acc: 0.9500
+ Site-amazon                        | Val  Loss: 1.1809 | Val  Acc: 0.9331
+ Site-webcam                        | Val  Loss: 1.4601 | Val  Acc: 0.8649
+ Site-webcam                        | Val  Loss: 1.0874 | Val  Acc: 0.9385
+ Site-webcam                        | Val  Loss: 1.4550 | Val  Acc: 0.8850
+ Site-dslr                          | Val  Loss: 1.3217 | Val  Acc: 0.8571
+ Site-dslr                          | Val  Loss: 1.3040 | Val  Acc: 0.9059
+ Site-synthetic                     | Val  Loss: 2.4719 | Val  Acc: 0.3600
+Average Valid Accuracy: 0.8605
+============ Train epoch 18 ============
+ Site-amazon                        | Train Loss: 1.1109 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 0.9536 | Train Acc: 0.9478
+ Site-amazon                        | Train Loss: 1.1012 | Train Acc: 0.9450
+ Site-amazon                        | Train Loss: 1.1217 | Train Acc: 0.9233
+ Site-amazon                        | Train Loss: 1.0643 | Train Acc: 0.9399
+ Site-webcam                        | Train Loss: 1.5038 | Train Acc: 0.8036
+ Site-webcam                        | Train Loss: 1.2962 | Train Acc: 0.8571
+ Site-webcam                        | Train Loss: 1.4200 | Train Acc: 0.8824
+ Site-dslr                          | Train Loss: 1.4868 | Train Acc: 0.8906
+ Site-dslr                          | Train Loss: 1.3427 | Train Acc: 0.9219
+ Site-synthetic                     | Train Loss: 2.3401 | Train Acc: 0.5089
+Average Train Accuracy: 0.8705
+ Site-amazon                        | Val  Loss: 0.9870 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 1.2253 | Val  Acc: 0.8876
+ Site-amazon                        | Val  Loss: 1.3412 | Val  Acc: 0.9098
+ Site-amazon                        | Val  Loss: 1.0731 | Val  Acc: 0.9300
+ Site-amazon                        | Val  Loss: 1.1267 | Val  Acc: 0.9298
+ Site-webcam                        | Val  Loss: 1.4213 | Val  Acc: 0.8378
+ Site-webcam                        | Val  Loss: 1.0170 | Val  Acc: 0.9077
+ Site-webcam                        | Val  Loss: 1.3268 | Val  Acc: 0.8850
+ Site-dslr                          | Val  Loss: 1.2090 | Val  Acc: 0.8810
+ Site-dslr                          | Val  Loss: 1.2749 | Val  Acc: 0.8824
+ Site-synthetic                     | Val  Loss: 2.4546 | Val  Acc: 0.4133
+Average Valid Accuracy: 0.8573
+============ Train epoch 19 ============
+ Site-amazon                        | Train Loss: 1.0753 | Train Acc: 0.9663
+ Site-amazon                        | Train Loss: 1.0424 | Train Acc: 0.9403
+ Site-amazon                        | Train Loss: 1.1139 | Train Acc: 0.9600
+ Site-amazon                        | Train Loss: 1.0343 | Train Acc: 0.9267
+ Site-amazon                        | Train Loss: 0.9755 | Train Acc: 0.9443
+ Site-webcam                        | Train Loss: 1.4212 | Train Acc: 0.8393
+ Site-webcam                        | Train Loss: 1.2675 | Train Acc: 0.9184
+ Site-webcam                        | Train Loss: 1.3340 | Train Acc: 0.8882
+ Site-dslr                          | Train Loss: 1.3891 | Train Acc: 0.9375
+ Site-dslr                          | Train Loss: 1.2645 | Train Acc: 0.9062
+ Site-synthetic                     | Train Loss: 2.2500 | Train Acc: 0.5446
+Average Train Accuracy: 0.8884
+ Site-amazon                        | Val  Loss: 0.9589 | Val  Acc: 0.9492
+ Site-amazon                        | Val  Loss: 1.1190 | Val  Acc: 0.8989
+ Site-amazon                        | Val  Loss: 1.1946 | Val  Acc: 0.9248
+ Site-amazon                        | Val  Loss: 1.0127 | Val  Acc: 0.9400
+ Site-amazon                        | Val  Loss: 1.0808 | Val  Acc: 0.9197
+ Site-webcam                        | Val  Loss: 1.3093 | Val  Acc: 0.8649
+ Site-webcam                        | Val  Loss: 0.9337 | Val  Acc: 0.9077
+ Site-webcam                        | Val  Loss: 1.2612 | Val  Acc: 0.9204
+ Site-dslr                          | Val  Loss: 1.1801 | Val  Acc: 0.9524
+ Site-dslr                          | Val  Loss: 1.2386 | Val  Acc: 0.8941
+ Site-synthetic                     | Val  Loss: 2.4849 | Val  Acc: 0.3733
+Average Valid Accuracy: 0.8678
+ Best site-amazon                    | Epoch:19 | Val Acc: 0.9492
+ Best site-amazon                    | Epoch:19 | Val Acc: 0.8989
+ Best site-amazon                    | Epoch:19 | Val Acc: 0.9248
+ Best site-amazon                    | Epoch:19 | Val Acc: 0.9400
+ Best site-amazon                    | Epoch:19 | Val Acc: 0.9197
+ Best site-webcam                    | Epoch:19 | Val Acc: 0.8649
+ Best site-webcam                    | Epoch:19 | Val Acc: 0.9077
+ Best site-webcam                    | Epoch:19 | Val Acc: 0.9204
+ Best site-dslr                      | Epoch:19 | Val Acc: 0.9524
+ Best site-dslr                      | Epoch:19 | Val Acc: 0.8941
+ Best site-synthetic                 | Epoch:19 | Val Acc: 0.3733
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 20 ============
+ Site-amazon                        | Train Loss: 0.9329 | Train Acc: 0.9663
+ Site-amazon                        | Train Loss: 0.9766 | Train Acc: 0.9552
+ Site-amazon                        | Train Loss: 1.0069 | Train Acc: 0.9650
+ Site-amazon                        | Train Loss: 0.9972 | Train Acc: 0.9467
+ Site-amazon                        | Train Loss: 0.8979 | Train Acc: 0.9421
+ Site-webcam                        | Train Loss: 1.3550 | Train Acc: 0.8036
+ Site-webcam                        | Train Loss: 1.1876 | Train Acc: 0.8980
+ Site-webcam                        | Train Loss: 1.3060 | Train Acc: 0.9059
+ Site-dslr                          | Train Loss: 1.3431 | Train Acc: 0.8750
+ Site-dslr                          | Train Loss: 1.2130 | Train Acc: 0.9062
+ Site-synthetic                     | Train Loss: 2.2438 | Train Acc: 0.5000
+Average Train Accuracy: 0.8785
+ Site-amazon                        | Val  Loss: 0.8666 | Val  Acc: 0.9831
+ Site-amazon                        | Val  Loss: 1.0771 | Val  Acc: 0.8764
+ Site-amazon                        | Val  Loss: 1.1461 | Val  Acc: 0.9098
+ Site-amazon                        | Val  Loss: 0.9670 | Val  Acc: 0.9250
+ Site-amazon                        | Val  Loss: 1.0105 | Val  Acc: 0.9231
+ Site-webcam                        | Val  Loss: 1.2059 | Val  Acc: 0.8649
+ Site-webcam                        | Val  Loss: 0.9065 | Val  Acc: 0.8769
+ Site-webcam                        | Val  Loss: 1.2161 | Val  Acc: 0.8850
+ Site-dslr                          | Val  Loss: 1.1210 | Val  Acc: 0.8810
+ Site-dslr                          | Val  Loss: 1.1531 | Val  Acc: 0.8941
+ Site-synthetic                     | Val  Loss: 2.4953 | Val  Acc: 0.3600
+Average Valid Accuracy: 0.8526
+============ Train epoch 21 ============
+ Site-amazon                        | Train Loss: 0.9490 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 1.0245 | Train Acc: 0.9403
+ Site-amazon                        | Train Loss: 0.9188 | Train Acc: 0.9600
+ Site-amazon                        | Train Loss: 0.9464 | Train Acc: 0.9333
+ Site-amazon                        | Train Loss: 0.8476 | Train Acc: 0.9488
+ Site-webcam                        | Train Loss: 1.3022 | Train Acc: 0.8036
+ Site-webcam                        | Train Loss: 1.1135 | Train Acc: 0.8776
+ Site-webcam                        | Train Loss: 1.2224 | Train Acc: 0.9000
+ Site-dslr                          | Train Loss: 1.2780 | Train Acc: 0.9062
+ Site-dslr                          | Train Loss: 1.1849 | Train Acc: 0.9375
+ Site-synthetic                     | Train Loss: 2.2376 | Train Acc: 0.4643
+Average Train Accuracy: 0.8751
+ Site-amazon                        | Val  Loss: 0.8277 | Val  Acc: 0.9322
+ Site-amazon                        | Val  Loss: 1.0105 | Val  Acc: 0.8989
+ Site-amazon                        | Val  Loss: 1.1111 | Val  Acc: 0.8947
+ Site-amazon                        | Val  Loss: 0.9020 | Val  Acc: 0.9500
+ Site-amazon                        | Val  Loss: 0.9461 | Val  Acc: 0.9197
+ Site-webcam                        | Val  Loss: 1.1712 | Val  Acc: 0.8378
+ Site-webcam                        | Val  Loss: 0.8341 | Val  Acc: 0.8769
+ Site-webcam                        | Val  Loss: 1.2104 | Val  Acc: 0.9204
+ Site-dslr                          | Val  Loss: 1.0100 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 1.0801 | Val  Acc: 0.8941
+ Site-synthetic                     | Val  Loss: 2.3928 | Val  Acc: 0.3733
+Average Valid Accuracy: 0.8548
+============ Train epoch 22 ============
+ Site-amazon                        | Train Loss: 0.7913 | Train Acc: 0.9775
+ Site-amazon                        | Train Loss: 0.8411 | Train Acc: 0.9403
+ Site-amazon                        | Train Loss: 0.9402 | Train Acc: 0.9300
+ Site-amazon                        | Train Loss: 0.8955 | Train Acc: 0.9467
+ Site-amazon                        | Train Loss: 0.8136 | Train Acc: 0.9465
+ Site-webcam                        | Train Loss: 1.2850 | Train Acc: 0.8214
+ Site-webcam                        | Train Loss: 1.1099 | Train Acc: 0.9082
+ Site-webcam                        | Train Loss: 1.2107 | Train Acc: 0.8647
+ Site-dslr                          | Train Loss: 1.2262 | Train Acc: 0.8906
+ Site-dslr                          | Train Loss: 1.1476 | Train Acc: 0.9062
+ Site-synthetic                     | Train Loss: 2.1889 | Train Acc: 0.5446
+Average Train Accuracy: 0.8797
+ Site-amazon                        | Val  Loss: 0.7447 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.9165 | Val  Acc: 0.9213
+ Site-amazon                        | Val  Loss: 1.1352 | Val  Acc: 0.9023
+ Site-amazon                        | Val  Loss: 0.8952 | Val  Acc: 0.9300
+ Site-amazon                        | Val  Loss: 0.8841 | Val  Acc: 0.9197
+ Site-webcam                        | Val  Loss: 1.0547 | Val  Acc: 0.8919
+ Site-webcam                        | Val  Loss: 0.7964 | Val  Acc: 0.8615
+ Site-webcam                        | Val  Loss: 1.0979 | Val  Acc: 0.8761
+ Site-dslr                          | Val  Loss: 1.0882 | Val  Acc: 0.8333
+ Site-dslr                          | Val  Loss: 0.9662 | Val  Acc: 0.9294
+ Site-synthetic                     | Val  Loss: 2.4837 | Val  Acc: 0.4000
+Average Valid Accuracy: 0.8574
+============ Train epoch 23 ============
+ Site-amazon                        | Train Loss: 0.8313 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 0.8643 | Train Acc: 0.9552
+ Site-amazon                        | Train Loss: 0.7597 | Train Acc: 0.9300
+ Site-amazon                        | Train Loss: 0.8227 | Train Acc: 0.9433
+ Site-amazon                        | Train Loss: 0.8331 | Train Acc: 0.9443
+ Site-webcam                        | Train Loss: 1.1819 | Train Acc: 0.8036
+ Site-webcam                        | Train Loss: 1.0135 | Train Acc: 0.8878
+ Site-webcam                        | Train Loss: 1.0639 | Train Acc: 0.8941
+ Site-dslr                          | Train Loss: 1.1134 | Train Acc: 0.8906
+ Site-dslr                          | Train Loss: 1.0796 | Train Acc: 0.8906
+ Site-synthetic                     | Train Loss: 2.2222 | Train Acc: 0.4732
+Average Train Accuracy: 0.8698
+ Site-amazon                        | Val  Loss: 0.7218 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.8955 | Val  Acc: 0.9101
+ Site-amazon                        | Val  Loss: 0.9709 | Val  Acc: 0.9098
+ Site-amazon                        | Val  Loss: 0.7907 | Val  Acc: 0.9400
+ Site-amazon                        | Val  Loss: 0.8335 | Val  Acc: 0.9164
+ Site-webcam                        | Val  Loss: 1.0397 | Val  Acc: 0.9189
+ Site-webcam                        | Val  Loss: 0.7617 | Val  Acc: 0.9231
+ Site-webcam                        | Val  Loss: 1.1151 | Val  Acc: 0.8850
+ Site-dslr                          | Val  Loss: 0.9686 | Val  Acc: 0.9524
+ Site-dslr                          | Val  Loss: 0.9682 | Val  Acc: 0.9176
+ Site-synthetic                     | Val  Loss: 2.3983 | Val  Acc: 0.4000
+Average Valid Accuracy: 0.8763
+ Best site-amazon                    | Epoch:23 | Val Acc: 0.9661
+ Best site-amazon                    | Epoch:23 | Val Acc: 0.9101
+ Best site-amazon                    | Epoch:23 | Val Acc: 0.9098
+ Best site-amazon                    | Epoch:23 | Val Acc: 0.9400
+ Best site-amazon                    | Epoch:23 | Val Acc: 0.9164
+ Best site-webcam                    | Epoch:23 | Val Acc: 0.9189
+ Best site-webcam                    | Epoch:23 | Val Acc: 0.9231
+ Best site-webcam                    | Epoch:23 | Val Acc: 0.8850
+ Best site-dslr                      | Epoch:23 | Val Acc: 0.9524
+ Best site-dslr                      | Epoch:23 | Val Acc: 0.9176
+ Best site-synthetic                 | Epoch:23 | Val Acc: 0.4000
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 24 ============
+ Site-amazon                        | Train Loss: 0.7305 | Train Acc: 0.9888
+ Site-amazon                        | Train Loss: 0.6417 | Train Acc: 0.9328
+ Site-amazon                        | Train Loss: 0.7484 | Train Acc: 0.9550
+ Site-amazon                        | Train Loss: 0.7811 | Train Acc: 0.9467
+ Site-amazon                        | Train Loss: 0.8707 | Train Acc: 0.9532
+ Site-webcam                        | Train Loss: 1.0979 | Train Acc: 0.8929
+ Site-webcam                        | Train Loss: 1.0281 | Train Acc: 0.8980
+ Site-webcam                        | Train Loss: 1.0814 | Train Acc: 0.9118
+ Site-dslr                          | Train Loss: 1.0388 | Train Acc: 0.9688
+ Site-dslr                          | Train Loss: 0.9968 | Train Acc: 0.9062
+ Site-synthetic                     | Train Loss: 2.1670 | Train Acc: 0.5089
+Average Train Accuracy: 0.8966
+ Site-amazon                        | Val  Loss: 0.6480 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.9049 | Val  Acc: 0.8764
+ Site-amazon                        | Val  Loss: 0.9027 | Val  Acc: 0.9098
+ Site-amazon                        | Val  Loss: 0.7796 | Val  Acc: 0.9550
+ Site-amazon                        | Val  Loss: 0.7864 | Val  Acc: 0.9365
+ Site-webcam                        | Val  Loss: 0.9933 | Val  Acc: 0.8919
+ Site-webcam                        | Val  Loss: 0.6569 | Val  Acc: 0.9077
+ Site-webcam                        | Val  Loss: 0.9988 | Val  Acc: 0.9204
+ Site-dslr                          | Val  Loss: 0.9579 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 0.9438 | Val  Acc: 0.8941
+ Site-synthetic                     | Val  Loss: 2.3622 | Val  Acc: 0.4133
+Average Valid Accuracy: 0.8705
+============ Train epoch 25 ============
+ Site-amazon                        | Train Loss: 0.7194 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 0.6161 | Train Acc: 0.9403
+ Site-amazon                        | Train Loss: 0.6484 | Train Acc: 0.9550
+ Site-amazon                        | Train Loss: 0.7944 | Train Acc: 0.9333
+ Site-amazon                        | Train Loss: 0.6804 | Train Acc: 0.9488
+ Site-webcam                        | Train Loss: 1.0393 | Train Acc: 0.8393
+ Site-webcam                        | Train Loss: 0.9271 | Train Acc: 0.9184
+ Site-webcam                        | Train Loss: 1.0368 | Train Acc: 0.8824
+ Site-dslr                          | Train Loss: 1.0501 | Train Acc: 0.9219
+ Site-dslr                          | Train Loss: 0.9817 | Train Acc: 0.8984
+ Site-synthetic                     | Train Loss: 2.0945 | Train Acc: 0.5000
+Average Train Accuracy: 0.8812
+ Site-amazon                        | Val  Loss: 0.6848 | Val  Acc: 0.9322
+ Site-amazon                        | Val  Loss: 0.8335 | Val  Acc: 0.8989
+ Site-amazon                        | Val  Loss: 0.8903 | Val  Acc: 0.9398
+ Site-amazon                        | Val  Loss: 0.7325 | Val  Acc: 0.9500
+ Site-amazon                        | Val  Loss: 0.7557 | Val  Acc: 0.9431
+ Site-webcam                        | Val  Loss: 1.0192 | Val  Acc: 0.8378
+ Site-webcam                        | Val  Loss: 0.6198 | Val  Acc: 0.9077
+ Site-webcam                        | Val  Loss: 0.9608 | Val  Acc: 0.9292
+ Site-dslr                          | Val  Loss: 0.9171 | Val  Acc: 0.8810
+ Site-dslr                          | Val  Loss: 0.8655 | Val  Acc: 0.9294
+ Site-synthetic                     | Val  Loss: 2.3472 | Val  Acc: 0.3600
+Average Valid Accuracy: 0.8645
+============ Train epoch 26 ============
+ Site-amazon                        | Train Loss: 0.6868 | Train Acc: 0.9775
+ Site-amazon                        | Train Loss: 0.5719 | Train Acc: 0.9552
+ Site-amazon                        | Train Loss: 0.6268 | Train Acc: 0.9550
+ Site-amazon                        | Train Loss: 0.7148 | Train Acc: 0.9267
+ Site-amazon                        | Train Loss: 0.6656 | Train Acc: 0.9332
+ Site-webcam                        | Train Loss: 1.0750 | Train Acc: 0.7857
+ Site-webcam                        | Train Loss: 0.8760 | Train Acc: 0.9082
+ Site-webcam                        | Train Loss: 0.9781 | Train Acc: 0.9000
+ Site-dslr                          | Train Loss: 0.9985 | Train Acc: 0.9375
+ Site-dslr                          | Train Loss: 0.9641 | Train Acc: 0.9219
+ Site-synthetic                     | Train Loss: 2.0515 | Train Acc: 0.5357
+Average Train Accuracy: 0.8851
+ Site-amazon                        | Val  Loss: 0.6320 | Val  Acc: 0.9492
+ Site-amazon                        | Val  Loss: 0.7780 | Val  Acc: 0.9101
+ Site-amazon                        | Val  Loss: 0.8233 | Val  Acc: 0.9474
+ Site-amazon                        | Val  Loss: 0.6767 | Val  Acc: 0.9450
+ Site-amazon                        | Val  Loss: 0.7254 | Val  Acc: 0.9431
+ Site-webcam                        | Val  Loss: 0.7806 | Val  Acc: 0.9189
+ Site-webcam                        | Val  Loss: 0.5984 | Val  Acc: 0.8923
+ Site-webcam                        | Val  Loss: 0.9178 | Val  Acc: 0.9115
+ Site-dslr                          | Val  Loss: 0.8620 | Val  Acc: 0.9286
+ Site-dslr                          | Val  Loss: 0.8527 | Val  Acc: 0.9176
+ Site-synthetic                     | Val  Loss: 2.4205 | Val  Acc: 0.3867
+Average Valid Accuracy: 0.8773
+ Best site-amazon                    | Epoch:26 | Val Acc: 0.9492
+ Best site-amazon                    | Epoch:26 | Val Acc: 0.9101
+ Best site-amazon                    | Epoch:26 | Val Acc: 0.9474
+ Best site-amazon                    | Epoch:26 | Val Acc: 0.9450
+ Best site-amazon                    | Epoch:26 | Val Acc: 0.9431
+ Best site-webcam                    | Epoch:26 | Val Acc: 0.9189
+ Best site-webcam                    | Epoch:26 | Val Acc: 0.8923
+ Best site-webcam                    | Epoch:26 | Val Acc: 0.9115
+ Best site-dslr                      | Epoch:26 | Val Acc: 0.9286
+ Best site-dslr                      | Epoch:26 | Val Acc: 0.9176
+ Best site-synthetic                 | Epoch:26 | Val Acc: 0.3867
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 27 ============
+ Site-amazon                        | Train Loss: 0.6891 | Train Acc: 0.9438
+ Site-amazon                        | Train Loss: 0.6974 | Train Acc: 0.9478
+ Site-amazon                        | Train Loss: 0.6717 | Train Acc: 0.9600
+ Site-amazon                        | Train Loss: 0.6625 | Train Acc: 0.9467
+ Site-amazon                        | Train Loss: 0.6013 | Train Acc: 0.9421
+ Site-webcam                        | Train Loss: 1.0070 | Train Acc: 0.8214
+ Site-webcam                        | Train Loss: 0.8882 | Train Acc: 0.8980
+ Site-webcam                        | Train Loss: 0.9196 | Train Acc: 0.8882
+ Site-dslr                          | Train Loss: 0.9933 | Train Acc: 0.9219
+ Site-dslr                          | Train Loss: 0.9286 | Train Acc: 0.8906
+ Site-synthetic                     | Train Loss: 2.0258 | Train Acc: 0.5893
+Average Train Accuracy: 0.8863
+ Site-amazon                        | Val  Loss: 0.5367 | Val  Acc: 0.9831
+ Site-amazon                        | Val  Loss: 0.7184 | Val  Acc: 0.9438
+ Site-amazon                        | Val  Loss: 0.8651 | Val  Acc: 0.9173
+ Site-amazon                        | Val  Loss: 0.6566 | Val  Acc: 0.9500
+ Site-amazon                        | Val  Loss: 0.6793 | Val  Acc: 0.9365
+ Site-webcam                        | Val  Loss: 0.8867 | Val  Acc: 0.8649
+ Site-webcam                        | Val  Loss: 0.5672 | Val  Acc: 0.8769
+ Site-webcam                        | Val  Loss: 0.8726 | Val  Acc: 0.9204
+ Site-dslr                          | Val  Loss: 0.8204 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 0.7882 | Val  Acc: 0.9294
+ Site-synthetic                     | Val  Loss: 2.3126 | Val  Acc: 0.4400
+Average Valid Accuracy: 0.8788
+ Best site-amazon                    | Epoch:27 | Val Acc: 0.9831
+ Best site-amazon                    | Epoch:27 | Val Acc: 0.9438
+ Best site-amazon                    | Epoch:27 | Val Acc: 0.9173
+ Best site-amazon                    | Epoch:27 | Val Acc: 0.9500
+ Best site-amazon                    | Epoch:27 | Val Acc: 0.9365
+ Best site-webcam                    | Epoch:27 | Val Acc: 0.8649
+ Best site-webcam                    | Epoch:27 | Val Acc: 0.8769
+ Best site-webcam                    | Epoch:27 | Val Acc: 0.9204
+ Best site-dslr                      | Epoch:27 | Val Acc: 0.9048
+ Best site-dslr                      | Epoch:27 | Val Acc: 0.9294
+ Best site-synthetic                 | Epoch:27 | Val Acc: 0.4400
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 28 ============
+ Site-amazon                        | Train Loss: 0.6111 | Train Acc: 0.9663
+ Site-amazon                        | Train Loss: 0.6141 | Train Acc: 0.9627
+ Site-amazon                        | Train Loss: 0.6637 | Train Acc: 0.9550
+ Site-amazon                        | Train Loss: 0.6213 | Train Acc: 0.9400
+ Site-amazon                        | Train Loss: 0.6461 | Train Acc: 0.9465
+ Site-webcam                        | Train Loss: 0.9337 | Train Acc: 0.8750
+ Site-webcam                        | Train Loss: 0.7950 | Train Acc: 0.8980
+ Site-webcam                        | Train Loss: 0.9220 | Train Acc: 0.8824
+ Site-dslr                          | Train Loss: 0.9388 | Train Acc: 0.9219
+ Site-dslr                          | Train Loss: 0.8639 | Train Acc: 0.9062
+ Site-synthetic                     | Train Loss: 2.0959 | Train Acc: 0.4821
+Average Train Accuracy: 0.8851
+ Site-amazon                        | Val  Loss: 0.5428 | Val  Acc: 0.9492
+ Site-amazon                        | Val  Loss: 0.7480 | Val  Acc: 0.8764
+ Site-amazon                        | Val  Loss: 0.8338 | Val  Acc: 0.9398
+ Site-amazon                        | Val  Loss: 0.6294 | Val  Acc: 0.9550
+ Site-amazon                        | Val  Loss: 0.6395 | Val  Acc: 0.9465
+ Site-webcam                        | Val  Loss: 0.8964 | Val  Acc: 0.8649
+ Site-webcam                        | Val  Loss: 0.5587 | Val  Acc: 0.8615
+ Site-webcam                        | Val  Loss: 0.8836 | Val  Acc: 0.9115
+ Site-dslr                          | Val  Loss: 0.8114 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 0.8037 | Val  Acc: 0.9059
+ Site-synthetic                     | Val  Loss: 2.3462 | Val  Acc: 0.3733
+Average Valid Accuracy: 0.8626
+============ Train epoch 29 ============
+ Site-amazon                        | Train Loss: 0.6299 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 0.6899 | Train Acc: 0.9478
+ Site-amazon                        | Train Loss: 0.6236 | Train Acc: 0.9450
+ Site-amazon                        | Train Loss: 0.6332 | Train Acc: 0.9233
+ Site-amazon                        | Train Loss: 0.6327 | Train Acc: 0.9488
+ Site-webcam                        | Train Loss: 1.0194 | Train Acc: 0.8036
+ Site-webcam                        | Train Loss: 0.7731 | Train Acc: 0.8980
+ Site-webcam                        | Train Loss: 0.8377 | Train Acc: 0.8941
+ Site-dslr                          | Train Loss: 0.8753 | Train Acc: 0.9062
+ Site-dslr                          | Train Loss: 0.8420 | Train Acc: 0.9062
+ Site-synthetic                     | Train Loss: 2.0234 | Train Acc: 0.5446
+Average Train Accuracy: 0.8793
+ Site-amazon                        | Val  Loss: 0.5007 | Val  Acc: 0.9492
+ Site-amazon                        | Val  Loss: 0.7082 | Val  Acc: 0.8989
+ Site-amazon                        | Val  Loss: 0.8187 | Val  Acc: 0.9323
+ Site-amazon                        | Val  Loss: 0.5355 | Val  Acc: 0.9650
+ Site-amazon                        | Val  Loss: 0.6136 | Val  Acc: 0.9398
+ Site-webcam                        | Val  Loss: 0.8885 | Val  Acc: 0.8919
+ Site-webcam                        | Val  Loss: 0.5659 | Val  Acc: 0.8923
+ Site-webcam                        | Val  Loss: 0.7684 | Val  Acc: 0.9381
+ Site-dslr                          | Val  Loss: 0.6783 | Val  Acc: 0.9286
+ Site-dslr                          | Val  Loss: 0.7503 | Val  Acc: 0.8706
+ Site-synthetic                     | Val  Loss: 2.3678 | Val  Acc: 0.4133
+Average Valid Accuracy: 0.8745
+============ Train epoch 30 ============
+ Site-amazon                        | Train Loss: 0.6994 | Train Acc: 0.9326
+ Site-amazon                        | Train Loss: 0.4973 | Train Acc: 0.9627
+ Site-amazon                        | Train Loss: 0.6040 | Train Acc: 0.9550
+ Site-amazon                        | Train Loss: 0.5830 | Train Acc: 0.9533
+ Site-amazon                        | Train Loss: 0.5159 | Train Acc: 0.9465
+ Site-webcam                        | Train Loss: 0.9065 | Train Acc: 0.8393
+ Site-webcam                        | Train Loss: 0.7925 | Train Acc: 0.8980
+ Site-webcam                        | Train Loss: 0.8681 | Train Acc: 0.9000
+ Site-dslr                          | Train Loss: 0.8614 | Train Acc: 0.9531
+ Site-dslr                          | Train Loss: 0.8269 | Train Acc: 0.9141
+ Site-synthetic                     | Train Loss: 1.9844 | Train Acc: 0.4911
+Average Train Accuracy: 0.8860
+ Site-amazon                        | Val  Loss: 0.5278 | Val  Acc: 0.9492
+ Site-amazon                        | Val  Loss: 0.6486 | Val  Acc: 0.8989
+ Site-amazon                        | Val  Loss: 0.6901 | Val  Acc: 0.9248
+ Site-amazon                        | Val  Loss: 0.5470 | Val  Acc: 0.9350
+ Site-amazon                        | Val  Loss: 0.5977 | Val  Acc: 0.9231
+ Site-webcam                        | Val  Loss: 0.8087 | Val  Acc: 0.8919
+ Site-webcam                        | Val  Loss: 0.5027 | Val  Acc: 0.9231
+ Site-webcam                        | Val  Loss: 0.8059 | Val  Acc: 0.9292
+ Site-dslr                          | Val  Loss: 0.7691 | Val  Acc: 0.8810
+ Site-dslr                          | Val  Loss: 0.7155 | Val  Acc: 0.9059
+ Site-synthetic                     | Val  Loss: 2.2654 | Val  Acc: 0.4533
+Average Valid Accuracy: 0.8741
+============ Train epoch 31 ============
+ Site-amazon                        | Train Loss: 0.5362 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 0.5361 | Train Acc: 0.9552
+ Site-amazon                        | Train Loss: 0.5212 | Train Acc: 0.9550
+ Site-amazon                        | Train Loss: 0.5932 | Train Acc: 0.9267
+ Site-amazon                        | Train Loss: 0.4766 | Train Acc: 0.9510
+ Site-webcam                        | Train Loss: 0.8919 | Train Acc: 0.8393
+ Site-webcam                        | Train Loss: 0.7472 | Train Acc: 0.9082
+ Site-webcam                        | Train Loss: 0.8147 | Train Acc: 0.8882
+ Site-dslr                          | Train Loss: 0.8833 | Train Acc: 0.9219
+ Site-dslr                          | Train Loss: 0.8353 | Train Acc: 0.8828
+ Site-synthetic                     | Train Loss: 1.9616 | Train Acc: 0.5982
+Average Train Accuracy: 0.8892
+ Site-amazon                        | Val  Loss: 0.4632 | Val  Acc: 0.9322
+ Site-amazon                        | Val  Loss: 0.5854 | Val  Acc: 0.8989
+ Site-amazon                        | Val  Loss: 0.6627 | Val  Acc: 0.9549
+ Site-amazon                        | Val  Loss: 0.5217 | Val  Acc: 0.9550
+ Site-amazon                        | Val  Loss: 0.5550 | Val  Acc: 0.9398
+ Site-webcam                        | Val  Loss: 0.8843 | Val  Acc: 0.8919
+ Site-webcam                        | Val  Loss: 0.4724 | Val  Acc: 0.9077
+ Site-webcam                        | Val  Loss: 0.8368 | Val  Acc: 0.8938
+ Site-dslr                          | Val  Loss: 0.7515 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 0.7093 | Val  Acc: 0.9176
+ Site-synthetic                     | Val  Loss: 2.1851 | Val  Acc: 0.4267
+Average Valid Accuracy: 0.8748
+============ Train epoch 32 ============
+ Site-amazon                        | Train Loss: 0.5387 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 0.5958 | Train Acc: 0.9701
+ Site-amazon                        | Train Loss: 0.5402 | Train Acc: 0.9400
+ Site-amazon                        | Train Loss: 0.5301 | Train Acc: 0.9367
+ Site-amazon                        | Train Loss: 0.4689 | Train Acc: 0.9421
+ Site-webcam                        | Train Loss: 0.9039 | Train Acc: 0.8393
+ Site-webcam                        | Train Loss: 0.7460 | Train Acc: 0.8980
+ Site-webcam                        | Train Loss: 0.7586 | Train Acc: 0.9118
+ Site-dslr                          | Train Loss: 0.8655 | Train Acc: 0.9219
+ Site-dslr                          | Train Loss: 0.6888 | Train Acc: 0.9141
+ Site-synthetic                     | Train Loss: 1.8998 | Train Acc: 0.5268
+Average Train Accuracy: 0.8869
+ Site-amazon                        | Val  Loss: 0.4219 | Val  Acc: 0.9492
+ Site-amazon                        | Val  Loss: 0.5851 | Val  Acc: 0.8989
+ Site-amazon                        | Val  Loss: 0.7212 | Val  Acc: 0.9398
+ Site-amazon                        | Val  Loss: 0.5469 | Val  Acc: 0.9600
+ Site-amazon                        | Val  Loss: 0.5360 | Val  Acc: 0.9431
+ Site-webcam                        | Val  Loss: 0.7231 | Val  Acc: 0.8919
+ Site-webcam                        | Val  Loss: 0.4885 | Val  Acc: 0.8462
+ Site-webcam                        | Val  Loss: 0.7594 | Val  Acc: 0.9292
+ Site-dslr                          | Val  Loss: 0.8158 | Val  Acc: 0.8333
+ Site-dslr                          | Val  Loss: 0.6113 | Val  Acc: 0.9176
+ Site-synthetic                     | Val  Loss: 2.2182 | Val  Acc: 0.4133
+Average Valid Accuracy: 0.8657
+============ Train epoch 33 ============
+ Site-amazon                        | Train Loss: 0.5318 | Train Acc: 0.9663
+ Site-amazon                        | Train Loss: 0.3965 | Train Acc: 0.9627
+ Site-amazon                        | Train Loss: 0.4522 | Train Acc: 0.9650
+ Site-amazon                        | Train Loss: 0.5426 | Train Acc: 0.9200
+ Site-amazon                        | Train Loss: 0.5365 | Train Acc: 0.9488
+ Site-webcam                        | Train Loss: 0.8919 | Train Acc: 0.8214
+ Site-webcam                        | Train Loss: 0.6521 | Train Acc: 0.9184
+ Site-webcam                        | Train Loss: 0.7876 | Train Acc: 0.9059
+ Site-dslr                          | Train Loss: 0.8093 | Train Acc: 0.9219
+ Site-dslr                          | Train Loss: 0.6977 | Train Acc: 0.9141
+ Site-synthetic                     | Train Loss: 2.0030 | Train Acc: 0.5357
+Average Train Accuracy: 0.8891
+ Site-amazon                        | Val  Loss: 0.3858 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.5276 | Val  Acc: 0.9326
+ Site-amazon                        | Val  Loss: 0.6368 | Val  Acc: 0.8872
+ Site-amazon                        | Val  Loss: 0.4575 | Val  Acc: 0.9600
+ Site-amazon                        | Val  Loss: 0.5345 | Val  Acc: 0.9231
+ Site-webcam                        | Val  Loss: 0.7437 | Val  Acc: 0.8378
+ Site-webcam                        | Val  Loss: 0.4258 | Val  Acc: 0.8923
+ Site-webcam                        | Val  Loss: 0.7853 | Val  Acc: 0.9115
+ Site-dslr                          | Val  Loss: 0.5956 | Val  Acc: 0.8810
+ Site-dslr                          | Val  Loss: 0.6928 | Val  Acc: 0.8941
+ Site-synthetic                     | Val  Loss: 2.3145 | Val  Acc: 0.3867
+Average Valid Accuracy: 0.8611
+============ Train epoch 34 ============
+ Site-amazon                        | Train Loss: 0.4868 | Train Acc: 0.9888
+ Site-amazon                        | Train Loss: 0.5349 | Train Acc: 0.9627
+ Site-amazon                        | Train Loss: 0.4907 | Train Acc: 0.9550
+ Site-amazon                        | Train Loss: 0.4939 | Train Acc: 0.9467
+ Site-amazon                        | Train Loss: 0.4793 | Train Acc: 0.9577
+ Site-webcam                        | Train Loss: 0.8511 | Train Acc: 0.8571
+ Site-webcam                        | Train Loss: 0.6626 | Train Acc: 0.9286
+ Site-webcam                        | Train Loss: 0.7087 | Train Acc: 0.9059
+ Site-dslr                          | Train Loss: 0.7574 | Train Acc: 0.9375
+ Site-dslr                          | Train Loss: 0.7080 | Train Acc: 0.8906
+ Site-synthetic                     | Train Loss: 2.0025 | Train Acc: 0.5089
+Average Train Accuracy: 0.8945
+ Site-amazon                        | Val  Loss: 0.3647 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.5705 | Val  Acc: 0.8876
+ Site-amazon                        | Val  Loss: 0.5952 | Val  Acc: 0.9398
+ Site-amazon                        | Val  Loss: 0.4770 | Val  Acc: 0.9650
+ Site-amazon                        | Val  Loss: 0.4904 | Val  Acc: 0.9331
+ Site-webcam                        | Val  Loss: 0.6312 | Val  Acc: 0.9730
+ Site-webcam                        | Val  Loss: 0.4426 | Val  Acc: 0.8923
+ Site-webcam                        | Val  Loss: 0.7447 | Val  Acc: 0.9204
+ Site-dslr                          | Val  Loss: 0.6228 | Val  Acc: 0.9524
+ Site-dslr                          | Val  Loss: 0.6185 | Val  Acc: 0.9294
+ Site-synthetic                     | Val  Loss: 2.2409 | Val  Acc: 0.4667
+Average Valid Accuracy: 0.8933
+ Best site-amazon                    | Epoch:34 | Val Acc: 0.9661
+ Best site-amazon                    | Epoch:34 | Val Acc: 0.8876
+ Best site-amazon                    | Epoch:34 | Val Acc: 0.9398
+ Best site-amazon                    | Epoch:34 | Val Acc: 0.9650
+ Best site-amazon                    | Epoch:34 | Val Acc: 0.9331
+ Best site-webcam                    | Epoch:34 | Val Acc: 0.9730
+ Best site-webcam                    | Epoch:34 | Val Acc: 0.8923
+ Best site-webcam                    | Epoch:34 | Val Acc: 0.9204
+ Best site-dslr                      | Epoch:34 | Val Acc: 0.9524
+ Best site-dslr                      | Epoch:34 | Val Acc: 0.9294
+ Best site-synthetic                 | Epoch:34 | Val Acc: 0.4667
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 35 ============
+ Site-amazon                        | Train Loss: 0.3926 | Train Acc: 0.9663
+ Site-amazon                        | Train Loss: 0.4459 | Train Acc: 0.9478
+ Site-amazon                        | Train Loss: 0.5339 | Train Acc: 0.9550
+ Site-amazon                        | Train Loss: 0.4603 | Train Acc: 0.9533
+ Site-amazon                        | Train Loss: 0.4277 | Train Acc: 0.9421
+ Site-webcam                        | Train Loss: 0.8670 | Train Acc: 0.8036
+ Site-webcam                        | Train Loss: 0.6133 | Train Acc: 0.9082
+ Site-webcam                        | Train Loss: 0.6849 | Train Acc: 0.8824
+ Site-dslr                          | Train Loss: 0.7360 | Train Acc: 0.9531
+ Site-dslr                          | Train Loss: 0.7764 | Train Acc: 0.8672
+ Site-synthetic                     | Train Loss: 1.9983 | Train Acc: 0.5179
+Average Train Accuracy: 0.8815
+ Site-amazon                        | Val  Loss: 0.3335 | Val  Acc: 0.9831
+ Site-amazon                        | Val  Loss: 0.4873 | Val  Acc: 0.9101
+ Site-amazon                        | Val  Loss: 0.5465 | Val  Acc: 0.9624
+ Site-amazon                        | Val  Loss: 0.4424 | Val  Acc: 0.9500
+ Site-amazon                        | Val  Loss: 0.4744 | Val  Acc: 0.9398
+ Site-webcam                        | Val  Loss: 0.6930 | Val  Acc: 0.8378
+ Site-webcam                        | Val  Loss: 0.3765 | Val  Acc: 0.9231
+ Site-webcam                        | Val  Loss: 0.6920 | Val  Acc: 0.9204
+ Site-dslr                          | Val  Loss: 0.6107 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 0.5420 | Val  Acc: 0.9294
+ Site-synthetic                     | Val  Loss: 2.1821 | Val  Acc: 0.4533
+Average Valid Accuracy: 0.8831
+============ Train epoch 36 ============
+ Site-amazon                        | Train Loss: 0.4211 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 0.3449 | Train Acc: 0.9552
+ Site-amazon                        | Train Loss: 0.4415 | Train Acc: 0.9450
+ Site-amazon                        | Train Loss: 0.4606 | Train Acc: 0.9467
+ Site-amazon                        | Train Loss: 0.3759 | Train Acc: 0.9555
+ Site-webcam                        | Train Loss: 0.8144 | Train Acc: 0.8214
+ Site-webcam                        | Train Loss: 0.6916 | Train Acc: 0.8878
+ Site-webcam                        | Train Loss: 0.6639 | Train Acc: 0.9118
+ Site-dslr                          | Train Loss: 0.7606 | Train Acc: 0.9062
+ Site-dslr                          | Train Loss: 0.6871 | Train Acc: 0.8594
+ Site-synthetic                     | Train Loss: 1.9565 | Train Acc: 0.5000
+Average Train Accuracy: 0.8767
+ Site-amazon                        | Val  Loss: 0.3426 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.5078 | Val  Acc: 0.9438
+ Site-amazon                        | Val  Loss: 0.6173 | Val  Acc: 0.9323
+ Site-amazon                        | Val  Loss: 0.4397 | Val  Acc: 0.9550
+ Site-amazon                        | Val  Loss: 0.4516 | Val  Acc: 0.9398
+ Site-webcam                        | Val  Loss: 0.6246 | Val  Acc: 0.8919
+ Site-webcam                        | Val  Loss: 0.3712 | Val  Acc: 0.9077
+ Site-webcam                        | Val  Loss: 0.6629 | Val  Acc: 0.9381
+ Site-dslr                          | Val  Loss: 0.6069 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 0.5435 | Val  Acc: 0.9176
+ Site-synthetic                     | Val  Loss: 2.3253 | Val  Acc: 0.4000
+Average Valid Accuracy: 0.8816
+============ Train epoch 37 ============
+ Site-amazon                        | Train Loss: 0.3544 | Train Acc: 0.9775
+ Site-amazon                        | Train Loss: 0.2912 | Train Acc: 0.9627
+ Site-amazon                        | Train Loss: 0.3699 | Train Acc: 0.9600
+ Site-amazon                        | Train Loss: 0.4353 | Train Acc: 0.9533
+ Site-amazon                        | Train Loss: 0.4011 | Train Acc: 0.9376
+ Site-webcam                        | Train Loss: 0.7780 | Train Acc: 0.8750
+ Site-webcam                        | Train Loss: 0.6660 | Train Acc: 0.8878
+ Site-webcam                        | Train Loss: 0.7275 | Train Acc: 0.8706
+ Site-dslr                          | Train Loss: 0.7435 | Train Acc: 0.8906
+ Site-dslr                          | Train Loss: 0.7070 | Train Acc: 0.8828
+ Site-synthetic                     | Train Loss: 1.8837 | Train Acc: 0.5268
+Average Train Accuracy: 0.8841
+ Site-amazon                        | Val  Loss: 0.3292 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.4932 | Val  Acc: 0.9213
+ Site-amazon                        | Val  Loss: 0.5350 | Val  Acc: 0.9323
+ Site-amazon                        | Val  Loss: 0.4607 | Val  Acc: 0.9600
+ Site-amazon                        | Val  Loss: 0.4455 | Val  Acc: 0.9365
+ Site-webcam                        | Val  Loss: 0.5311 | Val  Acc: 0.9189
+ Site-webcam                        | Val  Loss: 0.3743 | Val  Acc: 0.8769
+ Site-webcam                        | Val  Loss: 0.6537 | Val  Acc: 0.8850
+ Site-dslr                          | Val  Loss: 0.5186 | Val  Acc: 0.9524
+ Site-dslr                          | Val  Loss: 0.5612 | Val  Acc: 0.9176
+ Site-synthetic                     | Val  Loss: 2.1781 | Val  Acc: 0.4400
+Average Valid Accuracy: 0.8825
+============ Train epoch 38 ============
+ Site-amazon                        | Train Loss: 0.4233 | Train Acc: 0.9663
+ Site-amazon                        | Train Loss: 0.3475 | Train Acc: 0.9478
+ Site-amazon                        | Train Loss: 0.4197 | Train Acc: 0.9550
+ Site-amazon                        | Train Loss: 0.4446 | Train Acc: 0.9400
+ Site-amazon                        | Train Loss: 0.3698 | Train Acc: 0.9577
+ Site-webcam                        | Train Loss: 0.6807 | Train Acc: 0.8750
+ Site-webcam                        | Train Loss: 0.6014 | Train Acc: 0.8878
+ Site-webcam                        | Train Loss: 0.6924 | Train Acc: 0.9176
+ Site-dslr                          | Train Loss: 0.6791 | Train Acc: 0.9062
+ Site-dslr                          | Train Loss: 0.5935 | Train Acc: 0.9219
+ Site-synthetic                     | Train Loss: 1.9214 | Train Acc: 0.5089
+Average Train Accuracy: 0.8895
+ Site-amazon                        | Val  Loss: 0.3468 | Val  Acc: 0.9322
+ Site-amazon                        | Val  Loss: 0.4656 | Val  Acc: 0.9213
+ Site-amazon                        | Val  Loss: 0.4889 | Val  Acc: 0.9624
+ Site-amazon                        | Val  Loss: 0.3732 | Val  Acc: 0.9600
+ Site-amazon                        | Val  Loss: 0.4177 | Val  Acc: 0.9365
+ Site-webcam                        | Val  Loss: 0.6779 | Val  Acc: 0.9189
+ Site-webcam                        | Val  Loss: 0.3522 | Val  Acc: 0.9077
+ Site-webcam                        | Val  Loss: 0.6123 | Val  Acc: 0.9204
+ Site-dslr                          | Val  Loss: 0.5609 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 0.6092 | Val  Acc: 0.8824
+ Site-synthetic                     | Val  Loss: 2.1721 | Val  Acc: 0.4267
+Average Valid Accuracy: 0.8794
+============ Train epoch 39 ============
+ Site-amazon                        | Train Loss: 0.3181 | Train Acc: 1.0000
+ Site-amazon                        | Train Loss: 0.3289 | Train Acc: 0.9403
+ Site-amazon                        | Train Loss: 0.3590 | Train Acc: 0.9550
+ Site-amazon                        | Train Loss: 0.4216 | Train Acc: 0.9600
+ Site-amazon                        | Train Loss: 0.5063 | Train Acc: 0.9465
+ Site-webcam                        | Train Loss: 0.7118 | Train Acc: 0.8393
+ Site-webcam                        | Train Loss: 0.6324 | Train Acc: 0.8776
+ Site-webcam                        | Train Loss: 0.6693 | Train Acc: 0.9000
+ Site-dslr                          | Train Loss: 0.6486 | Train Acc: 0.9688
+ Site-dslr                          | Train Loss: 0.6228 | Train Acc: 0.8906
+ Site-synthetic                     | Train Loss: 1.9233 | Train Acc: 0.5089
+Average Train Accuracy: 0.8897
+ Site-amazon                        | Val  Loss: 0.3476 | Val  Acc: 0.9322
+ Site-amazon                        | Val  Loss: 0.4451 | Val  Acc: 0.9101
+ Site-amazon                        | Val  Loss: 0.5643 | Val  Acc: 0.9474
+ Site-amazon                        | Val  Loss: 0.4042 | Val  Acc: 0.9550
+ Site-amazon                        | Val  Loss: 0.4319 | Val  Acc: 0.9465
+ Site-webcam                        | Val  Loss: 0.6880 | Val  Acc: 0.8919
+ Site-webcam                        | Val  Loss: 0.3682 | Val  Acc: 0.8769
+ Site-webcam                        | Val  Loss: 0.5945 | Val  Acc: 0.9115
+ Site-dslr                          | Val  Loss: 0.4988 | Val  Acc: 0.9286
+ Site-dslr                          | Val  Loss: 0.4714 | Val  Acc: 0.9294
+ Site-synthetic                     | Val  Loss: 2.3011 | Val  Acc: 0.4667
+Average Valid Accuracy: 0.8815
+============ Train epoch 40 ============
+ Site-amazon                        | Train Loss: 0.3771 | Train Acc: 0.9663
+ Site-amazon                        | Train Loss: 0.3331 | Train Acc: 0.9627
+ Site-amazon                        | Train Loss: 0.3825 | Train Acc: 0.9650
+ Site-amazon                        | Train Loss: 0.4131 | Train Acc: 0.9467
+ Site-amazon                        | Train Loss: 0.3087 | Train Acc: 0.9666
+ Site-webcam                        | Train Loss: 0.8450 | Train Acc: 0.8214
+ Site-webcam                        | Train Loss: 0.5327 | Train Acc: 0.8980
+ Site-webcam                        | Train Loss: 0.6537 | Train Acc: 0.8824
+ Site-dslr                          | Train Loss: 0.5970 | Train Acc: 0.9062
+ Site-dslr                          | Train Loss: 0.6468 | Train Acc: 0.9141
+ Site-synthetic                     | Train Loss: 1.7892 | Train Acc: 0.5625
+Average Train Accuracy: 0.8902
+ Site-amazon                        | Val  Loss: 0.3154 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.4528 | Val  Acc: 0.9326
+ Site-amazon                        | Val  Loss: 0.5641 | Val  Acc: 0.9248
+ Site-amazon                        | Val  Loss: 0.3697 | Val  Acc: 0.9500
+ Site-amazon                        | Val  Loss: 0.3983 | Val  Acc: 0.9498
+ Site-webcam                        | Val  Loss: 0.5053 | Val  Acc: 0.9189
+ Site-webcam                        | Val  Loss: 0.3357 | Val  Acc: 0.9077
+ Site-webcam                        | Val  Loss: 0.5801 | Val  Acc: 0.9204
+ Site-dslr                          | Val  Loss: 0.5107 | Val  Acc: 0.9286
+ Site-dslr                          | Val  Loss: 0.5308 | Val  Acc: 0.9529
+ Site-synthetic                     | Val  Loss: 2.2916 | Val  Acc: 0.4267
+Average Valid Accuracy: 0.8890
+============ Train epoch 41 ============
+ Site-amazon                        | Train Loss: 0.3649 | Train Acc: 0.9775
+ Site-amazon                        | Train Loss: 0.3481 | Train Acc: 0.9627
+ Site-amazon                        | Train Loss: 0.3382 | Train Acc: 0.9650
+ Site-amazon                        | Train Loss: 0.3934 | Train Acc: 0.9333
+ Site-amazon                        | Train Loss: 0.4711 | Train Acc: 0.9443
+ Site-webcam                        | Train Loss: 0.6577 | Train Acc: 0.8929
+ Site-webcam                        | Train Loss: 0.5099 | Train Acc: 0.9184
+ Site-webcam                        | Train Loss: 0.6319 | Train Acc: 0.9176
+ Site-dslr                          | Train Loss: 0.6680 | Train Acc: 0.9219
+ Site-dslr                          | Train Loss: 0.5881 | Train Acc: 0.8984
+ Site-synthetic                     | Train Loss: 1.7805 | Train Acc: 0.5625
+Average Train Accuracy: 0.8995
+ Site-amazon                        | Val  Loss: 0.2598 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.4397 | Val  Acc: 0.8989
+ Site-amazon                        | Val  Loss: 0.4538 | Val  Acc: 0.9474
+ Site-amazon                        | Val  Loss: 0.3463 | Val  Acc: 0.9700
+ Site-amazon                        | Val  Loss: 0.3874 | Val  Acc: 0.9398
+ Site-webcam                        | Val  Loss: 0.6331 | Val  Acc: 0.8919
+ Site-webcam                        | Val  Loss: 0.3011 | Val  Acc: 0.9385
+ Site-webcam                        | Val  Loss: 0.5783 | Val  Acc: 0.9115
+ Site-dslr                          | Val  Loss: 0.6546 | Val  Acc: 0.8333
+ Site-dslr                          | Val  Loss: 0.4885 | Val  Acc: 0.9059
+ Site-synthetic                     | Val  Loss: 2.2034 | Val  Acc: 0.4267
+Average Valid Accuracy: 0.8754
+============ Train epoch 42 ============
+ Site-amazon                        | Train Loss: 0.3291 | Train Acc: 0.9888
+ Site-amazon                        | Train Loss: 0.2880 | Train Acc: 0.9478
+ Site-amazon                        | Train Loss: 0.3620 | Train Acc: 0.9600
+ Site-amazon                        | Train Loss: 0.3651 | Train Acc: 0.9700
+ Site-amazon                        | Train Loss: 0.3002 | Train Acc: 0.9644
+ Site-webcam                        | Train Loss: 0.7064 | Train Acc: 0.8571
+ Site-webcam                        | Train Loss: 0.5490 | Train Acc: 0.9184
+ Site-webcam                        | Train Loss: 0.5753 | Train Acc: 0.8941
+ Site-dslr                          | Train Loss: 0.6525 | Train Acc: 0.9219
+ Site-dslr                          | Train Loss: 0.5674 | Train Acc: 0.9141
+ Site-synthetic                     | Train Loss: 1.9170 | Train Acc: 0.5446
+Average Train Accuracy: 0.8983
+ Site-amazon                        | Val  Loss: 0.3175 | Val  Acc: 0.9492
+ Site-amazon                        | Val  Loss: 0.3946 | Val  Acc: 0.9551
+ Site-amazon                        | Val  Loss: 0.4512 | Val  Acc: 0.9474
+ Site-amazon                        | Val  Loss: 0.3666 | Val  Acc: 0.9550
+ Site-amazon                        | Val  Loss: 0.3955 | Val  Acc: 0.9431
+ Site-webcam                        | Val  Loss: 0.5873 | Val  Acc: 0.8919
+ Site-webcam                        | Val  Loss: 0.3143 | Val  Acc: 0.8923
+ Site-webcam                        | Val  Loss: 0.5468 | Val  Acc: 0.9115
+ Site-dslr                          | Val  Loss: 0.5103 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 0.4582 | Val  Acc: 0.9412
+ Site-synthetic                     | Val  Loss: 2.2204 | Val  Acc: 0.3733
+Average Valid Accuracy: 0.8786
+============ Train epoch 43 ============
+ Site-amazon                        | Train Loss: 0.3341 | Train Acc: 0.9663
+ Site-amazon                        | Train Loss: 0.2891 | Train Acc: 0.9776
+ Site-amazon                        | Train Loss: 0.3420 | Train Acc: 0.9700
+ Site-amazon                        | Train Loss: 0.3528 | Train Acc: 0.9567
+ Site-amazon                        | Train Loss: 0.3750 | Train Acc: 0.9621
+ Site-webcam                        | Train Loss: 0.7917 | Train Acc: 0.8036
+ Site-webcam                        | Train Loss: 0.4706 | Train Acc: 0.9184
+ Site-webcam                        | Train Loss: 0.5738 | Train Acc: 0.9118
+ Site-dslr                          | Train Loss: 0.6387 | Train Acc: 0.9062
+ Site-dslr                          | Train Loss: 0.5654 | Train Acc: 0.9062
+ Site-synthetic                     | Train Loss: 1.8154 | Train Acc: 0.5536
+Average Train Accuracy: 0.8939
+ Site-amazon                        | Val  Loss: 0.2393 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.3735 | Val  Acc: 0.9326
+ Site-amazon                        | Val  Loss: 0.4856 | Val  Acc: 0.9323
+ Site-amazon                        | Val  Loss: 0.3878 | Val  Acc: 0.9400
+ Site-amazon                        | Val  Loss: 0.3373 | Val  Acc: 0.9532
+ Site-webcam                        | Val  Loss: 0.4530 | Val  Acc: 0.9189
+ Site-webcam                        | Val  Loss: 0.3133 | Val  Acc: 0.9231
+ Site-webcam                        | Val  Loss: 0.5476 | Val  Acc: 0.9027
+ Site-dslr                          | Val  Loss: 0.5299 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 0.4953 | Val  Acc: 0.8706
+ Site-synthetic                     | Val  Loss: 2.3511 | Val  Acc: 0.4400
+Average Valid Accuracy: 0.8804
+============ Train epoch 44 ============
+ Site-amazon                        | Train Loss: 0.3170 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 0.2993 | Train Acc: 0.9627
+ Site-amazon                        | Train Loss: 0.3159 | Train Acc: 0.9650
+ Site-amazon                        | Train Loss: 0.3352 | Train Acc: 0.9500
+ Site-amazon                        | Train Loss: 0.2938 | Train Acc: 0.9555
+ Site-webcam                        | Train Loss: 0.5965 | Train Acc: 0.8750
+ Site-webcam                        | Train Loss: 0.4969 | Train Acc: 0.9082
+ Site-webcam                        | Train Loss: 0.5674 | Train Acc: 0.9059
+ Site-dslr                          | Train Loss: 0.5192 | Train Acc: 0.9219
+ Site-dslr                          | Train Loss: 0.5772 | Train Acc: 0.9141
+ Site-synthetic                     | Train Loss: 1.8168 | Train Acc: 0.5446
+Average Train Accuracy: 0.8962
+ Site-amazon                        | Val  Loss: 0.2305 | Val  Acc: 0.9831
+ Site-amazon                        | Val  Loss: 0.3881 | Val  Acc: 0.9213
+ Site-amazon                        | Val  Loss: 0.4129 | Val  Acc: 0.9549
+ Site-amazon                        | Val  Loss: 0.3087 | Val  Acc: 0.9650
+ Site-amazon                        | Val  Loss: 0.3534 | Val  Acc: 0.9398
+ Site-webcam                        | Val  Loss: 0.5173 | Val  Acc: 0.9459
+ Site-webcam                        | Val  Loss: 0.2984 | Val  Acc: 0.8769
+ Site-webcam                        | Val  Loss: 0.5200 | Val  Acc: 0.9292
+ Site-dslr                          | Val  Loss: 0.4177 | Val  Acc: 0.9524
+ Site-dslr                          | Val  Loss: 0.4750 | Val  Acc: 0.9176
+ Site-synthetic                     | Val  Loss: 2.3326 | Val  Acc: 0.4667
+Average Valid Accuracy: 0.8957
+ Best site-amazon                    | Epoch:44 | Val Acc: 0.9831
+ Best site-amazon                    | Epoch:44 | Val Acc: 0.9213
+ Best site-amazon                    | Epoch:44 | Val Acc: 0.9549
+ Best site-amazon                    | Epoch:44 | Val Acc: 0.9650
+ Best site-amazon                    | Epoch:44 | Val Acc: 0.9398
+ Best site-webcam                    | Epoch:44 | Val Acc: 0.9459
+ Best site-webcam                    | Epoch:44 | Val Acc: 0.8769
+ Best site-webcam                    | Epoch:44 | Val Acc: 0.9292
+ Best site-dslr                      | Epoch:44 | Val Acc: 0.9524
+ Best site-dslr                      | Epoch:44 | Val Acc: 0.9176
+ Best site-synthetic                 | Epoch:44 | Val Acc: 0.4667
+ Saving the local and server checkpoint to ../checkpoint/fed_modern_uneven_1.7_1/afl...
+============ Train epoch 45 ============
+ Site-amazon                        | Train Loss: 0.3294 | Train Acc: 0.9663
+ Site-amazon                        | Train Loss: 0.5344 | Train Acc: 0.9478
+ Site-amazon                        | Train Loss: 0.3336 | Train Acc: 0.9650
+ Site-amazon                        | Train Loss: 0.3467 | Train Acc: 0.9500
+ Site-amazon                        | Train Loss: 0.2821 | Train Acc: 0.9488
+ Site-webcam                        | Train Loss: 0.7456 | Train Acc: 0.8214
+ Site-webcam                        | Train Loss: 0.4385 | Train Acc: 0.9490
+ Site-webcam                        | Train Loss: 0.5588 | Train Acc: 0.9235
+ Site-dslr                          | Train Loss: 0.5800 | Train Acc: 0.9375
+ Site-dslr                          | Train Loss: 0.4934 | Train Acc: 0.9453
+ Site-synthetic                     | Train Loss: 1.8786 | Train Acc: 0.5357
+Average Train Accuracy: 0.8991
+ Site-amazon                        | Val  Loss: 0.2454 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.4251 | Val  Acc: 0.9101
+ Site-amazon                        | Val  Loss: 0.4130 | Val  Acc: 0.9549
+ Site-amazon                        | Val  Loss: 0.3072 | Val  Acc: 0.9700
+ Site-amazon                        | Val  Loss: 0.3078 | Val  Acc: 0.9632
+ Site-webcam                        | Val  Loss: 0.5821 | Val  Acc: 0.8919
+ Site-webcam                        | Val  Loss: 0.3219 | Val  Acc: 0.8923
+ Site-webcam                        | Val  Loss: 0.5859 | Val  Acc: 0.9027
+ Site-dslr                          | Val  Loss: 0.4226 | Val  Acc: 0.9524
+ Site-dslr                          | Val  Loss: 0.3702 | Val  Acc: 0.9529
+ Site-synthetic                     | Val  Loss: 2.1803 | Val  Acc: 0.4133
+Average Valid Accuracy: 0.8882
+============ Train epoch 46 ============
+ Site-amazon                        | Train Loss: 0.3526 | Train Acc: 0.9438
+ Site-amazon                        | Train Loss: 0.2433 | Train Acc: 0.9701
+ Site-amazon                        | Train Loss: 0.2601 | Train Acc: 0.9650
+ Site-amazon                        | Train Loss: 0.3388 | Train Acc: 0.9500
+ Site-amazon                        | Train Loss: 0.2512 | Train Acc: 0.9710
+ Site-webcam                        | Train Loss: 0.6317 | Train Acc: 0.8750
+ Site-webcam                        | Train Loss: 0.4821 | Train Acc: 0.8878
+ Site-webcam                        | Train Loss: 0.5681 | Train Acc: 0.9000
+ Site-dslr                          | Train Loss: 0.6061 | Train Acc: 0.8906
+ Site-dslr                          | Train Loss: 0.5200 | Train Acc: 0.9141
+ Site-synthetic                     | Train Loss: 1.8839 | Train Acc: 0.5089
+Average Train Accuracy: 0.8888
+ Site-amazon                        | Val  Loss: 0.2419 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.3380 | Val  Acc: 0.9213
+ Site-amazon                        | Val  Loss: 0.3570 | Val  Acc: 0.9549
+ Site-amazon                        | Val  Loss: 0.3140 | Val  Acc: 0.9500
+ Site-amazon                        | Val  Loss: 0.3225 | Val  Acc: 0.9532
+ Site-webcam                        | Val  Loss: 0.5647 | Val  Acc: 0.9189
+ Site-webcam                        | Val  Loss: 0.2895 | Val  Acc: 0.8923
+ Site-webcam                        | Val  Loss: 0.5373 | Val  Acc: 0.9292
+ Site-dslr                          | Val  Loss: 0.4089 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 0.4550 | Val  Acc: 0.9059
+ Site-synthetic                     | Val  Loss: 2.3467 | Val  Acc: 0.4267
+Average Valid Accuracy: 0.8839
+============ Train epoch 47 ============
+ Site-amazon                        | Train Loss: 0.2496 | Train Acc: 0.9775
+ Site-amazon                        | Train Loss: 0.2966 | Train Acc: 0.9552
+ Site-amazon                        | Train Loss: 0.2999 | Train Acc: 0.9600
+ Site-amazon                        | Train Loss: 0.3409 | Train Acc: 0.9433
+ Site-amazon                        | Train Loss: 0.3208 | Train Acc: 0.9599
+ Site-webcam                        | Train Loss: 0.7900 | Train Acc: 0.8036
+ Site-webcam                        | Train Loss: 0.5082 | Train Acc: 0.8980
+ Site-webcam                        | Train Loss: 0.5137 | Train Acc: 0.9118
+ Site-dslr                          | Train Loss: 0.5354 | Train Acc: 0.9062
+ Site-dslr                          | Train Loss: 0.5241 | Train Acc: 0.9062
+ Site-synthetic                     | Train Loss: 1.8187 | Train Acc: 0.4911
+Average Train Accuracy: 0.8830
+ Site-amazon                        | Val  Loss: 0.2443 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.3533 | Val  Acc: 0.9213
+ Site-amazon                        | Val  Loss: 0.4860 | Val  Acc: 0.9549
+ Site-amazon                        | Val  Loss: 0.3731 | Val  Acc: 0.9650
+ Site-amazon                        | Val  Loss: 0.2931 | Val  Acc: 0.9599
+ Site-webcam                        | Val  Loss: 0.5561 | Val  Acc: 0.9459
+ Site-webcam                        | Val  Loss: 0.3278 | Val  Acc: 0.9077
+ Site-webcam                        | Val  Loss: 0.4900 | Val  Acc: 0.9027
+ Site-dslr                          | Val  Loss: 0.5095 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 0.4673 | Val  Acc: 0.9294
+ Site-synthetic                     | Val  Loss: 2.2781 | Val  Acc: 0.4667
+Average Valid Accuracy: 0.8931
+============ Train epoch 48 ============
+ Site-amazon                        | Train Loss: 0.2663 | Train Acc: 0.9775
+ Site-amazon                        | Train Loss: 0.2729 | Train Acc: 0.9552
+ Site-amazon                        | Train Loss: 0.3443 | Train Acc: 0.9600
+ Site-amazon                        | Train Loss: 0.3472 | Train Acc: 0.9467
+ Site-amazon                        | Train Loss: 0.2435 | Train Acc: 0.9644
+ Site-webcam                        | Train Loss: 0.6161 | Train Acc: 0.8929
+ Site-webcam                        | Train Loss: 0.4401 | Train Acc: 0.9286
+ Site-webcam                        | Train Loss: 0.5050 | Train Acc: 0.9353
+ Site-dslr                          | Train Loss: 0.5481 | Train Acc: 0.8906
+ Site-dslr                          | Train Loss: 0.5170 | Train Acc: 0.9219
+ Site-synthetic                     | Train Loss: 1.7790 | Train Acc: 0.5446
+Average Train Accuracy: 0.9016
+ Site-amazon                        | Val  Loss: 0.2127 | Val  Acc: 0.9661
+ Site-amazon                        | Val  Loss: 0.3345 | Val  Acc: 0.9551
+ Site-amazon                        | Val  Loss: 0.4059 | Val  Acc: 0.9398
+ Site-amazon                        | Val  Loss: 0.2882 | Val  Acc: 0.9650
+ Site-amazon                        | Val  Loss: 0.3270 | Val  Acc: 0.9398
+ Site-webcam                        | Val  Loss: 0.4639 | Val  Acc: 0.8649
+ Site-webcam                        | Val  Loss: 0.3212 | Val  Acc: 0.8769
+ Site-webcam                        | Val  Loss: 0.5239 | Val  Acc: 0.9115
+ Site-dslr                          | Val  Loss: 0.4476 | Val  Acc: 0.9524
+ Site-dslr                          | Val  Loss: 0.4547 | Val  Acc: 0.8706
+ Site-synthetic                     | Val  Loss: 2.3747 | Val  Acc: 0.4533
+Average Valid Accuracy: 0.8814
+============ Train epoch 49 ============
+ Site-amazon                        | Train Loss: 0.2999 | Train Acc: 0.9551
+ Site-amazon                        | Train Loss: 0.2165 | Train Acc: 0.9701
+ Site-amazon                        | Train Loss: 0.2444 | Train Acc: 0.9700
+ Site-amazon                        | Train Loss: 0.2975 | Train Acc: 0.9700
+ Site-amazon                        | Train Loss: 0.2531 | Train Acc: 0.9555
+ Site-webcam                        | Train Loss: 0.5672 | Train Acc: 0.8571
+ Site-webcam                        | Train Loss: 0.4905 | Train Acc: 0.8878
+ Site-webcam                        | Train Loss: 0.5326 | Train Acc: 0.9294
+ Site-dslr                          | Train Loss: 0.5198 | Train Acc: 0.9219
+ Site-dslr                          | Train Loss: 0.4756 | Train Acc: 0.9219
+ Site-synthetic                     | Train Loss: 1.7819 | Train Acc: 0.5357
+Average Train Accuracy: 0.8977
+ Site-amazon                        | Val  Loss: 0.1860 | Val  Acc: 0.9831
+ Site-amazon                        | Val  Loss: 0.3118 | Val  Acc: 0.9326
+ Site-amazon                        | Val  Loss: 0.4015 | Val  Acc: 0.9624
+ Site-amazon                        | Val  Loss: 0.3439 | Val  Acc: 0.9600
+ Site-amazon                        | Val  Loss: 0.3211 | Val  Acc: 0.9532
+ Site-webcam                        | Val  Loss: 0.4362 | Val  Acc: 0.9459
+ Site-webcam                        | Val  Loss: 0.2664 | Val  Acc: 0.8923
+ Site-webcam                        | Val  Loss: 0.5070 | Val  Acc: 0.9027
+ Site-dslr                          | Val  Loss: 0.4194 | Val  Acc: 0.9048
+ Site-dslr                          | Val  Loss: 0.3926 | Val  Acc: 0.9412
+ Site-synthetic                     | Val  Loss: 2.1713 | Val  Acc: 0.4133
+Average Valid Accuracy: 0.8901
+===2023-08-04 15:27:32===
+===2023-08-04 15:27:36===
+===Setting===
+    dataset: modern
+    lr: 0.01
+    batch: 64
+    iters: 10
+    wk_iters: 1
+    si: False
+    domain_num: 4
+    quantile: 0
+    power_cs: 1
+    std_rw: False
+    gender_label: False
+    binary_race: False
+    save_iter: -1
+    mix5: False
+    power_relu: 1
+    Ea_val: False
+data_number=[89,134,200,300,449,56,98,170,64,128,112,
+client_nums=[5,3,2,1,]
+len_dataset=[1959,544,320,188,]
+domain number = 4
+Loading snapshots...
+ Test site-amazon                    (1)| Epoch:44 | Test Acc: 0.9709
+ Test site-webcam                    (3)| Epoch:44 | Test Acc: 0.9243
+ Test site-dslr                      (0)| Epoch:44 | Test Acc: 0.8765
+ Test site-synthetic                 (2)| Epoch:44 | Test Acc: 0.6086
+amazon: 0.9709, webcam: 0.9243, dslr: 0.8765, synthetic: 0.6086, 
+Average Test Accuracy(group): 0.8451, Average Test Accuracy(individual): 0.9081,
+domain std=0.1405, cluster std=0.1405, individual std=0.1010, 
