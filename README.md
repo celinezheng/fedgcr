@@ -1,4 +1,4 @@
-# FedBN: Federated Learning on Non-IID Features via Local Batch Normalization
+# FedGCR: Achieving Performance and Fairness for Federated Learning with Distinct Client Types via Group Customization and Reweighting
 This is the PyTorch implemention of our paper **FedGCR: Achieving Performance and Fairness for Federated Learning with
 Distinct Client Types via Group Customization and Reweighting** 
 ## Abstract
