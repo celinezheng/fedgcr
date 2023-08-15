@@ -55,12 +55,13 @@ def _hparams(algorithm, dataset, random_seed):
 
     _hparam('lr', 1e-3, lambda r: 10**r.uniform(-4.5, -2.5))
     _hparam('lr_classifier', 1e-3, lambda r: 1e-3)
-
+        
     if dataset in SMALL_IMAGES:
         _hparam('weight_decay', 0., lambda r: 0.)
     else:
         # _hparam('weight_decay', 1e-4, lambda r: 1e-4)
         _hparam('weight_decay', 1e-2, lambda r: 1e-2)
+    
 
     _hparam('batch_size', 12, lambda r: 12)
     return hparams

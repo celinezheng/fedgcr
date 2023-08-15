@@ -24,10 +24,66 @@ from utils import util
 from utils.weight_perturbation import WPOptim
 from utils.sam import SAM
 
+def test_score(server_model, test_loaders, datasets, best_epoch, gmap):
+    domain_test_accs = {}
+    cluster_test_accs = {}
+    individual_test_acc = []
+    if gmap:
+        for client_idx in gmap:
+            cluster_test_accs[gmap[client_idx]] = list()
+    for datasite in datasets:
+        domain_test_accs[datasite.split("_")[0]] = list()
+    for client_idx, datasite in enumerate(datasets):
+        domain_name = datasite.split("_")[0]
+        if datasite not in domain_test_accs or len(domain_test_accs[domain_name])==0:
+            _, test_acc = test(server_model, test_loaders[client_idx], loss_fun, device, prompt_bank)
+            domain_test_accs[domain_name].append(test_acc)
+            if gmap:
+                cluster_test_accs[gmap[client_idx]].append(test_acc)
+                group_info = f"({gmap[client_idx]})"
+            else:
+                group_info = f""
+            # print(' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
+            write_log(args, ' Test site-{:<25s} {}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, group_info, best_epoch, test_acc))
+        print(f"{datasite}, domain = {domain_name}")
+        individual_test_acc.append(domain_test_accs[domain_name][-1])
+    if gmap:
+        for gidx in gmap.values():
+            cluster_test_accs[gidx] = np.mean(cluster_test_accs[gidx], dtype=np.float64)
+    for name in domain_test_accs:
+        domain_test_accs[name] = np.mean(domain_test_accs[name], dtype=np.float64)
+    for name, acc in domain_test_accs.items():
+        write_log(args, f"{name}: {acc:.3f}, ")
+    write_log(args, "\n")
+    print(domain_test_accs)
+    cluster_test_accs = list(cluster_test_accs.values())
+    domain_test_accs = list(domain_test_accs.values())
+    if gmap: std_cluster = np.std(cluster_test_accs, dtype=np.float64)
+    else: std_cluster = -1
+    std_domain = np.std(domain_test_accs, dtype=np.float64)
+    std_individual = np.std(individual_test_acc, dtype=np.float64)
+    msg = f"Average Test Accuracy: {np.mean(domain_test_accs):.4f}, " \
+        + f"domain std={std_domain:.4f}, " \
+        + f"cluster std={std_cluster:.4f}, " \
+        + f"individual std={std_individual:.4f}, " 
+    write_log(args, f'{msg}\n')
+    # todo individual std
+    return domain_test_accs
+
 if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', action='store_true', help='whether to log')
+    parser.add_argument('--color_jitter', action='store_true', help='whether to color_jitter for fairface')
+    parser.add_argument('--debug', action='store_true', help='whether to debug for inference/test')
+    parser.add_argument('--save_all_gmap', action='store_true', help='whether to save_all_gmap')
+    parser.add_argument('--freeze_ckpt', action='store_true', help='whether to freeze_ckpt')
+    parser.add_argument('--std_rw', action='store_true', help='divide ni with domain std over performance')
+    parser.add_argument('--quan', type=float, default=0, help='whether to minimize client with loss smaller than 0.5 quantile')
+    parser.add_argument('--small_test', action='store_true', help='whether to test small cluster')
+    parser.add_argument('--split_test', action='store_true', help='whether to test split testing set')
+    parser.add_argument('--binary_race', action='store_true', help='whether to test binary_race race distribution and find under-represented white people.')
+    parser.add_argument('--gender_label', action='store_true', help='whether to predict gender')
     parser.add_argument('--tune', action='store_true', help='whether to tune hparams')
     parser.add_argument('--si', action='store_true', help='whether to use si only')
     parser.add_argument('--sam', action='store_true', help='whether to use sam optimizer')
@@ -50,12 +106,15 @@ if __name__ == '__main__':
     parser.add_argument('--num_classes', type = int, default=10, help ='number of classes')
     parser.add_argument('--seed', type = int, default=1, help ='random seed')
     parser.add_argument('--model', type = str, default='prompt', help='prompt | vit-linear')
+    parser.add_argument("--gender_dis", choices=['iid', 'gender', 'gender_age', 'random_dis'], default='random_dis', help="gender distribution of each client")
+    parser.add_argument('--cluster_num', type = int, default=-1, help ='cluster number')
     parser.add_argument('--target_domain', type = str, default='Clipart', help='Clipart, Infograph, ...')
     parser.add_argument('--hparams', type=str,
         help='JSON-serialized hparams dict')
     parser.add_argument('--hparams_seed', type=int, default=0,
         help='Seed for random hparams (0 means "default hparams")')
     parser.add_argument('--expname', type=str, default='prompt-sim')
+    parser.add_argument('--gmap_path', type=str, default='none')
     parser.add_argument('--ratio', type=float, default=1.0)
     args = parser.parse_args()
     seed = args.seed
@@ -64,18 +123,39 @@ if __name__ == '__main__':
     torch.cuda.manual_seed_all(seed) 
     random.seed(seed)
     exp_folder = f'fed_{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
-    if args.tune:
-        exp_folder += '_tune'
+    if args.dataset.lower()[:8]=='fairface':
+        cluster_num = args.cluster_num if args.mode.lower()=='ccop' else -1
+        if args.gender_dis != 'iid':
+            domain_num = args.cluster_num
+            exp_folder += f"_{args.gender_dis}_cluster_{cluster_num}"
+        elif args.cluster_num != -1:
+            domain_num = args.cluster_num
+            exp_folder += f"_cluster_{cluster_num}"
+        else:
+            args.cluster_num = domain_num
+    
+    if args.small_test:  exp_folder += f"_small_test"
+    if args.gender_label: exp_folder += "_gender_label"
+    if args.binary_race: exp_folder += "_binary_race"
+    if args.sam: exp_folder += f"_sam"
+    if args.color_jitter:  exp_folder += f"_color_jitter"
+
     args.save_path = os.path.join(args.save_path, exp_folder)
     if not os.path.exists(args.save_path):
         os.makedirs(args.save_path)
     SAVE_PATH = os.path.join(args.save_path, f'{args.mode}')
-    if args.dg:
-        SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_{args.target_domain}')
-    if args.tune:
-        SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_tune_{args.lambda_con}')
+    if args.sam:
+        SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_sam_{args.sam}')
     if 'ccop' in args.mode.lower():
-        SAVE_PATH = os.path.join(args.save_path, f'{args.mode}_q={args.q}')
+        SAVE_PATH += f"_q={args.q}"
+    GMAP_SAVE_PATH = args.gmap_path
+    if GMAP_SAVE_PATH == 'none':
+        GMAP_SAVE_PATH = f"{SAVE_PATH}_gmap"
+        if args.mode.lower()!='ccop':
+            GMAP_SAVE_PATH = GMAP_SAVE_PATH.replace(args.mode, f'ccop_q={args.q}')
+        GMAP_SAVE_PATH = GMAP_SAVE_PATH.replace('cluster_-1', f"cluster_{args.cluster_num}")
+        
+    print(GMAP_SAVE_PATH)
 
     write_log(args, '==={}===\n'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     write_log(args, '===Setting===\n')
@@ -117,9 +197,9 @@ if __name__ == '__main__':
     prompt_bank = None
     # setup model
     if args.mode.lower() == 'doprompt':
-        server_model = DoPrompt(num_classes=args.num_classes, num_domains=client_num, hparams=hparams).to(device)
+        server_model = DoPrompt(num_classes=args.num_classes, num_domains=client_num, hparams=hparams)
     elif args.mode.lower() == 'fedprompt':
-        server_model = FedPrompt(num_classes=args.num_classes, hparams=hparams, lambda_con=args.lambda_con).to(device)
+        server_model = FedPrompt(num_classes=args.num_classes, hparams=hparams, lambda_con=args.lambda_con)
         prompt_bank = nn.Parameter(
             torch.empty(domain_num, 4, 768, requires_grad=False).normal_(std=0.02)
         ).to(device)
@@ -134,14 +214,14 @@ if __name__ == '__main__':
         prompt_bank = util.random_replace(all_pi, prompt_bank)
         print(prompt_bank.shape)
     elif args.mode.lower() in ['cocoop', 'nova', 'ccop']:
-        server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams).to(device)
+        server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams)
     elif args.mode.lower() in ['full']:
         model_type="sup_vitb16_imagenet21k"
-        server_model = PromptViT(model_type=model_type, args=args).to(device)
+        server_model = PromptViT(model_type=model_type, args=args)
     # fedavg, ablation
     else:
         model_type="sup_vitb16_imagenet21k"
-        server_model = PromptViT(model_type=model_type, args=args).to(device)
+        server_model = PromptViT(model_type=model_type, args=args)
         for name, param in server_model.named_parameters():
             if 'prompt' not in name and 'head' not in name:
                 param.requires_grad = False
@@ -172,46 +252,32 @@ if __name__ == '__main__':
     loss_fun = nn.CrossEntropyLoss()
 
     # each local client model
-    models = [copy.deepcopy(server_model).to(device) for _ in range(client_num)]
+    models = [copy.deepcopy(server_model) for _ in range(client_num)]
     best_changed = False
-
+    try:
+        gmap_ckpt = torch.load(GMAP_SAVE_PATH)
+        gmap = gmap_ckpt['gmap']
+    except:
+        gmap = None
+    
     if args.test:
         write_log(args, 'Loading snapshots...\n')
         checkpoint = torch.load(SAVE_PATH)
+        best_epoch, best_acc = checkpoint['best_epoch'], checkpoint['best_acc']
         server_model.load_state_dict(checkpoint['server_model'])
         test_accs = {}
         if args.mode.lower() in ['fedbn', 'solo']:
             for client_idx in range(domain_num):
                 models[client_idx].load_state_dict(checkpoint['model_{}'.format(client_idx)])
-            if args.dg:
-                for client_idx, datasite in enumerate(datasets):
-                    _, test_acc = test(models[client_idx], target_loader, loss_fun, device, prompt_bank)
-                    test_accs[datasite] = test_acc
-                    write_log(args, ' Test site-{:<16s} -> {}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, args.target_domain, checkpoint['best_epoch'], test_acc))
-                    # print(' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
-            else:
-                for client_idx, datasite in enumerate(datasets):
-                    if datasite in test_accs: continue
-                    _, test_acc = test(models[client_idx], test_loaders[client_idx], loss_fun, device, prompt_bank)
-                    test_accs[datasite] = test_acc
-                    # print(' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
-                    write_log(args, ' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, checkpoint['best_epoch'], test_acc))
+            for client_idx, datasite in enumerate(datasets):
+                if datasite in test_accs: continue
+                _, test_acc = test(models[client_idx], test_loaders[client_idx], loss_fun, device, prompt_bank)
+                test_accs[datasite] = test_acc
+                write_log(args, ' Test site-{:<25s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, best_epoch, test_acc))
+            test_accs = list(test_accs.values())
+            write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
         else:
-            test_accs = {}
-            best_changed = False
-            if args.dg:
-                _, test_acc = test(server_model, target_loader, loss_fun, device, prompt_bank)
-                write_log(args, f'Test Accuracy of {args.target_domain}: {test_acc:.4f}\n')
-                test_accs[args.target_domain] = test_acc
-            else:
-                for client_idx, datasite in enumerate(datasets):
-                    if datasite in test_accs: continue
-                    _, test_acc = test(server_model, test_loaders[client_idx], loss_fun, device, prompt_bank)
-                    test_accs[datasite] = test_acc
-                    # print(' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
-                    write_log(args, ' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, checkpoint['best_epoch'], test_acc))
-        test_accs = list(test_accs.values())
-        write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
+            test_accs = test_score(server_model, test_loaders, datasets, best_epoch, gmap)
         exit(0)
 
     if args.resume:
@@ -329,43 +395,23 @@ if __name__ == '__main__':
                     
             # Record best
             if args.mode.lower() in ['nova', 'ccop', 'ablation']:
-                if args.sam: threshold = 30
-                elif args.dataset.lower()=='fairface': threshold = 90
-                else: threshold = 45
-                cnt = [0 for _ in range(domain_num)]
-                accs = [0 for _ in range(domain_num)]
-                agg = 0
-                domain_cnt = 0
-                for client_idx in range(client_num):
-                    accs[gmap[client_idx]] += val_acc_list[client_idx]
-                    cnt[gmap[client_idx]] += 1
-                for di in range(domain_num):
-                    if cnt[di]==0:continue
-                    domain_cnt+=1
-                    agg += (accs[di]/cnt[di])
-                agg /= domain_cnt
-                write_log(args, 'Aggregated Acc | Val Acc: {:.4f}\n'.format(agg))
-                # if agg > best_agg:
+                if args.sam or args.dataset.lower() != 'digit': threshold = args.iters - 10
+                else: threshold = args.iters - 5
+                threshold = max(10, threshold)
+                if args.debug: threshold = 0
                 if np.mean(val_acc_list) > np.mean(best_acc):
-                    best_agg = agg
                     best_epoch = a_iter
                     best_changed=True
                     for client_idx in range(client_num):
                         best_acc[client_idx] = val_acc_list[client_idx]
-                        write_log(args, ' Best site-{:<16s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
+                        group_info = f"({gmap[client_idx]})" if args.mode.lower()=='ccop' else ""
+                        write_log(args, ' Best site-{:<25s}{:<4s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], group_info, best_epoch, best_acc[client_idx]))
                 if ((a_iter+1)*(wi+1)) > threshold:
-                    test_accs = {}
-                    for client_idx, datasite in enumerate(datasets):
-                        if datasite in test_accs: continue
-                        _, test_acc = test(server_model, test_loaders[client_idx], loss_fun, device, prompt_bank)
-                        test_accs[datasite] = test_acc
-                        # print(' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
-                        write_log(args, ' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, best_epoch, test_acc))
-                    test_accs = list(test_accs.values())
+                    test_accs = test_score(server_model, test_loaders, datasets, best_epoch, gmap)
                     if np.mean(test_accs) > np.mean(best_test):
                         best_changed = True
                         best_epoch = a_iter
-                        for i in range(len(best_test)):
+                        for i in range(len(test_accs)):
                             best_test[i] = test_accs[i]
                     else:
                         best_changed = False
@@ -378,7 +424,13 @@ if __name__ == '__main__':
                     # print(' Best site-{:<16s}| Epoch:{} | Val Acc: {:.4f}'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
                     write_log(args, ' Best site-{:<16s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
                 best_agg = np.mean(best_acc)
-                   
+            if args.mode.lower()=='ccop' and GMAP_SAVE_PATH != 'none' and (best_changed or args.save_all_gmap):
+                write_log(args, ' Saving the gmap checkpoint to {}...\n'.format(GMAP_SAVE_PATH))
+                torch.save({
+                    'a_iter': a_iter, 
+                    'gmap': gmap
+                }, GMAP_SAVE_PATH)
+            best_changed = a_iter==args.save_iter or (best_changed and not args.freeze_ckpt)
             if best_changed:  
                 best_changed = False
                 # print(' Saving the local and server checkpoint to {}...'.format(SAVE_PATH))
@@ -419,19 +471,11 @@ if __name__ == '__main__':
                 # todo save gmap
                 else:
                     if ((a_iter+1)*(wi+1)) % 10 == 0:
-                        test_accs = {}
-                        for client_idx, datasite in enumerate(datasets):
-                            if datasite in test_accs: continue
-                            _, test_acc = test(server_model, test_loaders[client_idx], loss_fun, device, prompt_bank)
-                            test_accs[datasite] = test_acc
-                            # print(' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}'.format(datasite, best_epoch, test_acc))
-                            write_log(args, ' Test site-{:<16s}| Epoch:{} | Test Acc: {:.4f}\n'.format(datasite, best_epoch, test_acc))
-                        test_accs = list(test_accs.values())
-
+                        test_accs = test_score(server_model, test_loaders, datasets, best_epoch, gmap)
                         if np.mean(test_accs) > np.mean(best_test):
-                            for i in range(domain_num):
+                            best_epoch = a_iter
+                            for i in range(len(test_accs)):
                                 best_test[i] = test_accs[i]
-                        write_log(args, f'Average Test Accuracy: {np.mean(test_accs):.4f}\n')
                    
                     torch.save({
                         'server_model': server_model.state_dict(),

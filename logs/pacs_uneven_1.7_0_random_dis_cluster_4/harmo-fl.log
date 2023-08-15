@@ -1,0 +1,1471 @@
+===2023-08-10 22:52:05===
+===Setting===
+    dataset: pacs
+    lr: 0.01
+    batch: 64
+    iters: 50
+    wk_iters: 1
+    si: False
+    domain_num: 4
+    quantile: 0
+    power_cs: 1
+    std_rw: False
+    gender_label: False
+    binary_race: False
+    save_iter: -1
+    mix5: False
+    power_relu: 1
+    Ea_val: False
+data_number=[45,68,102,153,229,42,95,213,34,172,121,
+client_nums=[5,3,2,1,]
+len_dataset=[1000,588,345,202,]
+domain number = 4
+============ Train epoch 0 ============
+ Site-photo                         | Train Loss: 1.0937 | Train Acc: 0.9778
+ Site-photo                         | Train Loss: 1.0495 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 1.0501 | Train Acc: 0.9706
+ Site-photo                         | Train Loss: 1.0731 | Train Acc: 0.9739
+ Site-photo                         | Train Loss: 1.0725 | Train Acc: 0.9869
+ Site-art_painting                  | Train Loss: 1.5521 | Train Acc: 0.6429
+ Site-art_painting                  | Train Loss: 1.4414 | Train Acc: 0.7789
+ Site-art_painting                  | Train Loss: 1.4124 | Train Acc: 0.7887
+ Site-cartoon                       | Train Loss: 1.6044 | Train Acc: 0.7059
+ Site-cartoon                       | Train Loss: 1.6087 | Train Acc: 0.5872
+ Site-sketch                        | Train Loss: 1.7690 | Train Acc: 0.4380
+Average Train Accuracy: 0.8046
+ Site-photo                         | Val  Loss: 1.0605 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 1.0559 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 1.0475 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 1.0536 | Val  Acc: 0.9706
+ Site-photo                         | Val  Loss: 1.0488 | Val  Acc: 0.9803
+ Site-art_painting                  | Val  Loss: 1.4249 | Val  Acc: 0.7857
+ Site-art_painting                  | Val  Loss: 1.4553 | Val  Acc: 0.7143
+ Site-art_painting                  | Val  Loss: 1.4463 | Val  Acc: 0.7535
+ Site-cartoon                       | Val  Loss: 1.5640 | Val  Acc: 0.6957
+ Site-cartoon                       | Val  Loss: 1.6084 | Val  Acc: 0.6087
+ Site-sketch                        | Val  Loss: 1.8179 | Val  Acc: 0.3750
+Average Valid Accuracy: 0.8063
+ Best site-photo                     | Epoch:0 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:0 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:0 | Val Acc: 0.9853
+ Best site-photo                     | Epoch:0 | Val Acc: 0.9706
+ Best site-photo                     | Epoch:0 | Val Acc: 0.9803
+ Best site-art_painting              | Epoch:0 | Val Acc: 0.7857
+ Best site-art_painting              | Epoch:0 | Val Acc: 0.7143
+ Best site-art_painting              | Epoch:0 | Val Acc: 0.7535
+ Best site-cartoon                   | Epoch:0 | Val Acc: 0.6957
+ Best site-cartoon                   | Epoch:0 | Val Acc: 0.6087
+ Best site-sketch                    | Epoch:0 | Val Acc: 0.3750
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 1 ============
+ Site-photo                         | Train Loss: 0.5543 | Train Acc: 0.9778
+ Site-photo                         | Train Loss: 0.5792 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.5182 | Train Acc: 0.9902
+ Site-photo                         | Train Loss: 0.5612 | Train Acc: 0.9739
+ Site-photo                         | Train Loss: 0.5594 | Train Acc: 0.9825
+ Site-art_painting                  | Train Loss: 1.2971 | Train Acc: 0.6667
+ Site-art_painting                  | Train Loss: 1.0737 | Train Acc: 0.8211
+ Site-art_painting                  | Train Loss: 1.1041 | Train Acc: 0.8169
+ Site-cartoon                       | Train Loss: 1.3321 | Train Acc: 0.7059
+ Site-cartoon                       | Train Loss: 1.3309 | Train Acc: 0.6744
+ Site-sketch                        | Train Loss: 1.6249 | Train Acc: 0.5620
+Average Train Accuracy: 0.8338
+ Site-photo                         | Val  Loss: 0.4904 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.5077 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.4481 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.5226 | Val  Acc: 0.9804
+ Site-photo                         | Val  Loss: 0.5059 | Val  Acc: 0.9868
+ Site-art_painting                  | Val  Loss: 0.9835 | Val  Acc: 0.8571
+ Site-art_painting                  | Val  Loss: 1.0853 | Val  Acc: 0.8095
+ Site-art_painting                  | Val  Loss: 1.0656 | Val  Acc: 0.8380
+ Site-cartoon                       | Val  Loss: 1.2367 | Val  Acc: 0.8696
+ Site-cartoon                       | Val  Loss: 1.3245 | Val  Acc: 0.7130
+ Site-sketch                        | Val  Loss: 1.7062 | Val  Acc: 0.4875
+Average Valid Accuracy: 0.8675
+ Best site-photo                     | Epoch:1 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:1 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:1 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:1 | Val Acc: 0.9804
+ Best site-photo                     | Epoch:1 | Val Acc: 0.9868
+ Best site-art_painting              | Epoch:1 | Val Acc: 0.8571
+ Best site-art_painting              | Epoch:1 | Val Acc: 0.8095
+ Best site-art_painting              | Epoch:1 | Val Acc: 0.8380
+ Best site-cartoon                   | Epoch:1 | Val Acc: 0.8696
+ Best site-cartoon                   | Epoch:1 | Val Acc: 0.7130
+ Best site-sketch                    | Epoch:1 | Val Acc: 0.4875
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 2 ============
+ Site-photo                         | Train Loss: 0.2902 | Train Acc: 0.9778
+ Site-photo                         | Train Loss: 0.2020 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.2666 | Train Acc: 0.9804
+ Site-photo                         | Train Loss: 0.2912 | Train Acc: 0.9739
+ Site-photo                         | Train Loss: 0.2598 | Train Acc: 0.9956
+ Site-art_painting                  | Train Loss: 1.0729 | Train Acc: 0.7143
+ Site-art_painting                  | Train Loss: 0.8192 | Train Acc: 0.8526
+ Site-art_painting                  | Train Loss: 0.7708 | Train Acc: 0.8920
+ Site-cartoon                       | Train Loss: 1.2399 | Train Acc: 0.5294
+ Site-cartoon                       | Train Loss: 1.1405 | Train Acc: 0.6977
+ Site-sketch                        | Train Loss: 1.5076 | Train Acc: 0.5785
+Average Train Accuracy: 0.8357
+ Site-photo                         | Val  Loss: 0.2294 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.2379 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.1929 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.2578 | Val  Acc: 0.9804
+ Site-photo                         | Val  Loss: 0.2488 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.6320 | Val  Acc: 0.8929
+ Site-art_painting                  | Val  Loss: 0.7488 | Val  Acc: 0.8889
+ Site-art_painting                  | Val  Loss: 0.8415 | Val  Acc: 0.8451
+ Site-cartoon                       | Val  Loss: 1.0368 | Val  Acc: 0.7826
+ Site-cartoon                       | Val  Loss: 1.1293 | Val  Acc: 0.7217
+ Site-sketch                        | Val  Loss: 1.6197 | Val  Acc: 0.4875
+Average Valid Accuracy: 0.8720
+ Best site-photo                     | Epoch:2 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:2 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:2 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:2 | Val Acc: 0.9804
+ Best site-photo                     | Epoch:2 | Val Acc: 0.9934
+ Best site-art_painting              | Epoch:2 | Val Acc: 0.8929
+ Best site-art_painting              | Epoch:2 | Val Acc: 0.8889
+ Best site-art_painting              | Epoch:2 | Val Acc: 0.8451
+ Best site-cartoon                   | Epoch:2 | Val Acc: 0.7826
+ Best site-cartoon                   | Epoch:2 | Val Acc: 0.7217
+ Best site-sketch                    | Epoch:2 | Val Acc: 0.4875
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 3 ============
+ Site-photo                         | Train Loss: 0.1572 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.1081 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.1397 | Train Acc: 0.9902
+ Site-photo                         | Train Loss: 0.1507 | Train Acc: 0.9869
+ Site-photo                         | Train Loss: 0.1390 | Train Acc: 0.9913
+ Site-art_painting                  | Train Loss: 0.9012 | Train Acc: 0.7857
+ Site-art_painting                  | Train Loss: 0.7029 | Train Acc: 0.8526
+ Site-art_painting                  | Train Loss: 0.6855 | Train Acc: 0.9249
+ Site-cartoon                       | Train Loss: 1.0679 | Train Acc: 0.6471
+ Site-cartoon                       | Train Loss: 1.0090 | Train Acc: 0.7267
+ Site-sketch                        | Train Loss: 1.4135 | Train Acc: 0.5289
+Average Train Accuracy: 0.8577
+ Site-photo                         | Val  Loss: 0.1136 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.1223 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0940 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.1541 | Val  Acc: 0.9804
+ Site-photo                         | Val  Loss: 0.1446 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.5471 | Val  Acc: 0.8929
+ Site-art_painting                  | Val  Loss: 0.7105 | Val  Acc: 0.8571
+ Site-art_painting                  | Val  Loss: 0.6433 | Val  Acc: 0.8803
+ Site-cartoon                       | Val  Loss: 0.9095 | Val  Acc: 0.7826
+ Site-cartoon                       | Val  Loss: 0.9998 | Val  Acc: 0.7739
+ Site-sketch                        | Val  Loss: 1.4809 | Val  Acc: 0.4750
+Average Valid Accuracy: 0.8746
+ Best site-photo                     | Epoch:3 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:3 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:3 | Val Acc: 0.9853
+ Best site-photo                     | Epoch:3 | Val Acc: 0.9804
+ Best site-photo                     | Epoch:3 | Val Acc: 0.9934
+ Best site-art_painting              | Epoch:3 | Val Acc: 0.8929
+ Best site-art_painting              | Epoch:3 | Val Acc: 0.8571
+ Best site-art_painting              | Epoch:3 | Val Acc: 0.8803
+ Best site-cartoon                   | Epoch:3 | Val Acc: 0.7826
+ Best site-cartoon                   | Epoch:3 | Val Acc: 0.7739
+ Best site-sketch                    | Epoch:3 | Val Acc: 0.4750
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 4 ============
+ Site-photo                         | Train Loss: 0.1013 | Train Acc: 0.9778
+ Site-photo                         | Train Loss: 0.1099 | Train Acc: 0.9853
+ Site-photo                         | Train Loss: 0.0929 | Train Acc: 0.9804
+ Site-photo                         | Train Loss: 0.0933 | Train Acc: 0.9804
+ Site-photo                         | Train Loss: 0.0970 | Train Acc: 0.9869
+ Site-art_painting                  | Train Loss: 0.8764 | Train Acc: 0.7143
+ Site-art_painting                  | Train Loss: 0.5603 | Train Acc: 0.9158
+ Site-art_painting                  | Train Loss: 0.6415 | Train Acc: 0.8826
+ Site-cartoon                       | Train Loss: 0.9460 | Train Acc: 0.7059
+ Site-cartoon                       | Train Loss: 0.8940 | Train Acc: 0.7616
+ Site-sketch                        | Train Loss: 1.3364 | Train Acc: 0.5785
+Average Train Accuracy: 0.8609
+ Site-photo                         | Val  Loss: 0.0642 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0699 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0671 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.1041 | Val  Acc: 0.9804
+ Site-photo                         | Val  Loss: 0.0879 | Val  Acc: 0.9868
+ Site-art_painting                  | Val  Loss: 0.4296 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.5563 | Val  Acc: 0.9206
+ Site-art_painting                  | Val  Loss: 0.5269 | Val  Acc: 0.8944
+ Site-cartoon                       | Val  Loss: 0.7699 | Val  Acc: 0.8261
+ Site-cartoon                       | Val  Loss: 0.9252 | Val  Acc: 0.7391
+ Site-sketch                        | Val  Loss: 1.4216 | Val  Acc: 0.5375
+Average Valid Accuracy: 0.8940
+ Best site-photo                     | Epoch:4 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:4 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:4 | Val Acc: 0.9853
+ Best site-photo                     | Epoch:4 | Val Acc: 0.9804
+ Best site-photo                     | Epoch:4 | Val Acc: 0.9868
+ Best site-art_painting              | Epoch:4 | Val Acc: 0.9643
+ Best site-art_painting              | Epoch:4 | Val Acc: 0.9206
+ Best site-art_painting              | Epoch:4 | Val Acc: 0.8944
+ Best site-cartoon                   | Epoch:4 | Val Acc: 0.8261
+ Best site-cartoon                   | Epoch:4 | Val Acc: 0.7391
+ Best site-sketch                    | Epoch:4 | Val Acc: 0.5375
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 5 ============
+ Site-photo                         | Train Loss: 0.0667 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0386 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0469 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0686 | Train Acc: 0.9869
+ Site-photo                         | Train Loss: 0.0504 | Train Acc: 0.9913
+ Site-art_painting                  | Train Loss: 0.7959 | Train Acc: 0.7857
+ Site-art_painting                  | Train Loss: 0.5844 | Train Acc: 0.8526
+ Site-art_painting                  | Train Loss: 0.4544 | Train Acc: 0.9343
+ Site-cartoon                       | Train Loss: 0.9533 | Train Acc: 0.6471
+ Site-cartoon                       | Train Loss: 0.8045 | Train Acc: 0.7616
+ Site-sketch                        | Train Loss: 1.2832 | Train Acc: 0.5455
+Average Train Accuracy: 0.8641
+ Site-photo                         | Val  Loss: 0.0352 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0315 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0427 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0598 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0684 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.3793 | Val  Acc: 0.9286
+ Site-art_painting                  | Val  Loss: 0.4947 | Val  Acc: 0.9048
+ Site-art_painting                  | Val  Loss: 0.4501 | Val  Acc: 0.9225
+ Site-cartoon                       | Val  Loss: 0.7939 | Val  Acc: 0.7826
+ Site-cartoon                       | Val  Loss: 0.8449 | Val  Acc: 0.7739
+ Site-sketch                        | Val  Loss: 1.4167 | Val  Acc: 0.4875
+Average Valid Accuracy: 0.8881
+============ Train epoch 6 ============
+ Site-photo                         | Train Loss: 0.0399 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0186 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0409 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0721 | Train Acc: 0.9869
+ Site-photo                         | Train Loss: 0.0483 | Train Acc: 0.9869
+ Site-art_painting                  | Train Loss: 0.6449 | Train Acc: 0.8095
+ Site-art_painting                  | Train Loss: 0.5094 | Train Acc: 0.8737
+ Site-art_painting                  | Train Loss: 0.4465 | Train Acc: 0.9249
+ Site-cartoon                       | Train Loss: 0.8431 | Train Acc: 0.7353
+ Site-cartoon                       | Train Loss: 0.7655 | Train Acc: 0.7500
+ Site-sketch                        | Train Loss: 1.2435 | Train Acc: 0.5455
+Average Train Accuracy: 0.8739
+ Site-photo                         | Val  Loss: 0.0157 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0190 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0379 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0511 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0612 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.3622 | Val  Acc: 0.8929
+ Site-art_painting                  | Val  Loss: 0.4077 | Val  Acc: 0.8889
+ Site-art_painting                  | Val  Loss: 0.3878 | Val  Acc: 0.9296
+ Site-cartoon                       | Val  Loss: 0.7567 | Val  Acc: 0.7391
+ Site-cartoon                       | Val  Loss: 0.8085 | Val  Acc: 0.8087
+ Site-sketch                        | Val  Loss: 1.4439 | Val  Acc: 0.4625
+Average Valid Accuracy: 0.8810
+============ Train epoch 7 ============
+ Site-photo                         | Train Loss: 0.0543 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0211 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0342 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0788 | Train Acc: 0.9804
+ Site-photo                         | Train Loss: 0.0415 | Train Acc: 0.9956
+ Site-art_painting                  | Train Loss: 0.6298 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.5184 | Train Acc: 0.8632
+ Site-art_painting                  | Train Loss: 0.3866 | Train Acc: 0.9437
+ Site-cartoon                       | Train Loss: 0.7406 | Train Acc: 0.7647
+ Site-cartoon                       | Train Loss: 0.7744 | Train Acc: 0.7616
+ Site-sketch                        | Train Loss: 1.2271 | Train Acc: 0.5455
+Average Train Accuracy: 0.8807
+ Site-photo                         | Val  Loss: 0.0092 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0166 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0148 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0387 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0329 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.2339 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.3700 | Val  Acc: 0.9683
+ Site-art_painting                  | Val  Loss: 0.3567 | Val  Acc: 0.8944
+ Site-cartoon                       | Val  Loss: 0.6061 | Val  Acc: 0.8696
+ Site-cartoon                       | Val  Loss: 0.7558 | Val  Acc: 0.8000
+ Site-sketch                        | Val  Loss: 1.4440 | Val  Acc: 0.4750
+Average Valid Accuracy: 0.9056
+ Best site-photo                     | Epoch:7 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:7 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:7 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:7 | Val Acc: 0.9902
+ Best site-photo                     | Epoch:7 | Val Acc: 1.0000
+ Best site-art_painting              | Epoch:7 | Val Acc: 0.9643
+ Best site-art_painting              | Epoch:7 | Val Acc: 0.9683
+ Best site-art_painting              | Epoch:7 | Val Acc: 0.8944
+ Best site-cartoon                   | Epoch:7 | Val Acc: 0.8696
+ Best site-cartoon                   | Epoch:7 | Val Acc: 0.8000
+ Best site-sketch                    | Epoch:7 | Val Acc: 0.4750
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 8 ============
+ Site-photo                         | Train Loss: 0.0408 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0087 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0295 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0611 | Train Acc: 0.9739
+ Site-photo                         | Train Loss: 0.0352 | Train Acc: 0.9956
+ Site-art_painting                  | Train Loss: 0.6782 | Train Acc: 0.7857
+ Site-art_painting                  | Train Loss: 0.3997 | Train Acc: 0.9263
+ Site-art_painting                  | Train Loss: 0.3407 | Train Acc: 0.9155
+ Site-cartoon                       | Train Loss: 0.7724 | Train Acc: 0.7353
+ Site-cartoon                       | Train Loss: 0.6966 | Train Acc: 0.7907
+ Site-sketch                        | Train Loss: 1.1785 | Train Acc: 0.5455
+Average Train Accuracy: 0.8790
+ Site-photo                         | Val  Loss: 0.0123 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0120 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0352 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0378 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0405 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.2541 | Val  Acc: 0.9286
+ Site-art_painting                  | Val  Loss: 0.3740 | Val  Acc: 0.9206
+ Site-art_painting                  | Val  Loss: 0.3903 | Val  Acc: 0.9225
+ Site-cartoon                       | Val  Loss: 0.6353 | Val  Acc: 0.8261
+ Site-cartoon                       | Val  Loss: 0.7346 | Val  Acc: 0.8174
+ Site-sketch                        | Val  Loss: 1.3251 | Val  Acc: 0.5000
+Average Valid Accuracy: 0.8986
+============ Train epoch 9 ============
+ Site-photo                         | Train Loss: 0.0273 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0068 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0188 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0455 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0174 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.6063 | Train Acc: 0.8095
+ Site-art_painting                  | Train Loss: 0.4284 | Train Acc: 0.9158
+ Site-art_painting                  | Train Loss: 0.2936 | Train Acc: 0.9437
+ Site-cartoon                       | Train Loss: 0.8155 | Train Acc: 0.7059
+ Site-cartoon                       | Train Loss: 0.6679 | Train Acc: 0.8023
+ Site-sketch                        | Train Loss: 1.1934 | Train Acc: 0.5207
+Average Train Accuracy: 0.8810
+ Site-photo                         | Val  Loss: 0.0088 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0098 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0049 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0344 | Val  Acc: 0.9804
+ Site-photo                         | Val  Loss: 0.0249 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.3656 | Val  Acc: 0.9286
+ Site-art_painting                  | Val  Loss: 0.3509 | Val  Acc: 0.9365
+ Site-art_painting                  | Val  Loss: 0.3167 | Val  Acc: 0.9225
+ Site-cartoon                       | Val  Loss: 0.4964 | Val  Acc: 0.9130
+ Site-cartoon                       | Val  Loss: 0.7037 | Val  Acc: 0.8087
+ Site-sketch                        | Val  Loss: 1.4590 | Val  Acc: 0.4875
+Average Valid Accuracy: 0.9070
+ Best site-photo                     | Epoch:9 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:9 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:9 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:9 | Val Acc: 0.9804
+ Best site-photo                     | Epoch:9 | Val Acc: 1.0000
+ Best site-art_painting              | Epoch:9 | Val Acc: 0.9286
+ Best site-art_painting              | Epoch:9 | Val Acc: 0.9365
+ Best site-art_painting              | Epoch:9 | Val Acc: 0.9225
+ Best site-cartoon                   | Epoch:9 | Val Acc: 0.9130
+ Best site-cartoon                   | Epoch:9 | Val Acc: 0.8087
+ Best site-sketch                    | Epoch:9 | Val Acc: 0.4875
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 10 ============
+ Site-photo                         | Train Loss: 0.0400 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0157 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0223 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0323 | Train Acc: 0.9869
+ Site-photo                         | Train Loss: 0.0103 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.6066 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.4167 | Train Acc: 0.9158
+ Site-art_painting                  | Train Loss: 0.3244 | Train Acc: 0.9531
+ Site-cartoon                       | Train Loss: 0.8016 | Train Acc: 0.7059
+ Site-cartoon                       | Train Loss: 0.6346 | Train Acc: 0.8430
+ Site-sketch                        | Train Loss: 1.1493 | Train Acc: 0.5868
+Average Train Accuracy: 0.8932
+ Site-photo                         | Val  Loss: 0.0057 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0059 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0240 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0292 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0488 | Val  Acc: 0.9868
+ Site-art_painting                  | Val  Loss: 0.2565 | Val  Acc: 0.8929
+ Site-art_painting                  | Val  Loss: 0.3657 | Val  Acc: 0.9365
+ Site-art_painting                  | Val  Loss: 0.2810 | Val  Acc: 0.9296
+ Site-cartoon                       | Val  Loss: 0.4514 | Val  Acc: 0.9130
+ Site-cartoon                       | Val  Loss: 0.7498 | Val  Acc: 0.7565
+ Site-sketch                        | Val  Loss: 1.3158 | Val  Acc: 0.4875
+Average Valid Accuracy: 0.8980
+============ Train epoch 11 ============
+ Site-photo                         | Train Loss: 0.0292 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0038 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0209 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0250 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0308 | Train Acc: 0.9956
+ Site-art_painting                  | Train Loss: 0.6346 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.4507 | Train Acc: 0.8842
+ Site-art_painting                  | Train Loss: 0.2692 | Train Acc: 0.9624
+ Site-cartoon                       | Train Loss: 0.7640 | Train Acc: 0.7353
+ Site-cartoon                       | Train Loss: 0.6716 | Train Acc: 0.8023
+ Site-sketch                        | Train Loss: 1.1254 | Train Acc: 0.6281
+Average Train Accuracy: 0.8941
+ Site-photo                         | Val  Loss: 0.0052 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0051 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0432 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0306 | Val  Acc: 0.9804
+ Site-photo                         | Val  Loss: 0.0271 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1998 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.2900 | Val  Acc: 0.9365
+ Site-art_painting                  | Val  Loss: 0.2441 | Val  Acc: 0.9366
+ Site-cartoon                       | Val  Loss: 0.3609 | Val  Acc: 1.0000
+ Site-cartoon                       | Val  Loss: 0.6726 | Val  Acc: 0.7739
+ Site-sketch                        | Val  Loss: 1.3009 | Val  Acc: 0.5250
+Average Valid Accuracy: 0.9184
+ Best site-photo                     | Epoch:11 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:11 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:11 | Val Acc: 0.9853
+ Best site-photo                     | Epoch:11 | Val Acc: 0.9804
+ Best site-photo                     | Epoch:11 | Val Acc: 1.0000
+ Best site-art_painting              | Epoch:11 | Val Acc: 0.9643
+ Best site-art_painting              | Epoch:11 | Val Acc: 0.9365
+ Best site-art_painting              | Epoch:11 | Val Acc: 0.9366
+ Best site-cartoon                   | Epoch:11 | Val Acc: 1.0000
+ Best site-cartoon                   | Epoch:11 | Val Acc: 0.7739
+ Best site-sketch                    | Epoch:11 | Val Acc: 0.5250
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 12 ============
+ Site-photo                         | Train Loss: 0.0320 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0107 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0338 | Train Acc: 0.9902
+ Site-photo                         | Train Loss: 0.0314 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0256 | Train Acc: 0.9956
+ Site-art_painting                  | Train Loss: 0.6222 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.3458 | Train Acc: 0.9158
+ Site-art_painting                  | Train Loss: 0.3041 | Train Acc: 0.9484
+ Site-cartoon                       | Train Loss: 0.6969 | Train Acc: 0.7941
+ Site-cartoon                       | Train Loss: 0.5948 | Train Acc: 0.8372
+ Site-sketch                        | Train Loss: 1.1292 | Train Acc: 0.5702
+Average Train Accuracy: 0.8980
+ Site-photo                         | Val  Loss: 0.0039 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0039 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0262 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0264 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0182 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.2411 | Val  Acc: 0.9286
+ Site-art_painting                  | Val  Loss: 0.2537 | Val  Acc: 0.9524
+ Site-art_painting                  | Val  Loss: 0.2676 | Val  Acc: 0.9225
+ Site-cartoon                       | Val  Loss: 0.3959 | Val  Acc: 0.9130
+ Site-cartoon                       | Val  Loss: 0.6119 | Val  Acc: 0.8348
+ Site-sketch                        | Val  Loss: 1.2257 | Val  Acc: 0.5750
+Average Valid Accuracy: 0.9183
+============ Train epoch 13 ============
+ Site-photo                         | Train Loss: 0.0321 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0036 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0085 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0550 | Train Acc: 0.9804
+ Site-photo                         | Train Loss: 0.0063 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.5932 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.3446 | Train Acc: 0.9263
+ Site-art_painting                  | Train Loss: 0.2640 | Train Acc: 0.9343
+ Site-cartoon                       | Train Loss: 0.7645 | Train Acc: 0.7353
+ Site-cartoon                       | Train Loss: 0.5689 | Train Acc: 0.8314
+ Site-sketch                        | Train Loss: 1.1003 | Train Acc: 0.6033
+Average Train Accuracy: 0.8949
+ Site-photo                         | Val  Loss: 0.0021 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0035 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0068 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0342 | Val  Acc: 0.9804
+ Site-photo                         | Val  Loss: 0.0294 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.2260 | Val  Acc: 0.9286
+ Site-art_painting                  | Val  Loss: 0.2552 | Val  Acc: 0.9365
+ Site-art_painting                  | Val  Loss: 0.2431 | Val  Acc: 0.9437
+ Site-cartoon                       | Val  Loss: 0.3879 | Val  Acc: 0.8696
+ Site-cartoon                       | Val  Loss: 0.5998 | Val  Acc: 0.8000
+ Site-sketch                        | Val  Loss: 1.2023 | Val  Acc: 0.5875
+Average Valid Accuracy: 0.9127
+============ Train epoch 14 ============
+ Site-photo                         | Train Loss: 0.0256 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0026 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0092 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0533 | Train Acc: 0.9804
+ Site-photo                         | Train Loss: 0.0111 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.5367 | Train Acc: 0.8571
+ Site-art_painting                  | Train Loss: 0.3613 | Train Acc: 0.9158
+ Site-art_painting                  | Train Loss: 0.2277 | Train Acc: 0.9437
+ Site-cartoon                       | Train Loss: 0.7445 | Train Acc: 0.7647
+ Site-cartoon                       | Train Loss: 0.5353 | Train Acc: 0.8314
+ Site-sketch                        | Train Loss: 1.0502 | Train Acc: 0.6281
+Average Train Accuracy: 0.9019
+ Site-photo                         | Val  Loss: 0.0021 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0033 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0085 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0295 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0176 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1217 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.2090 | Val  Acc: 0.9683
+ Site-art_painting                  | Val  Loss: 0.2499 | Val  Acc: 0.9366
+ Site-cartoon                       | Val  Loss: 0.3792 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.6608 | Val  Acc: 0.8348
+ Site-sketch                        | Val  Loss: 1.2452 | Val  Acc: 0.6125
+Average Valid Accuracy: 0.9330
+ Best site-photo                     | Epoch:14 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:14 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:14 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:14 | Val Acc: 0.9902
+ Best site-photo                     | Epoch:14 | Val Acc: 1.0000
+ Best site-art_painting              | Epoch:14 | Val Acc: 0.9643
+ Best site-art_painting              | Epoch:14 | Val Acc: 0.9683
+ Best site-art_painting              | Epoch:14 | Val Acc: 0.9366
+ Best site-cartoon                   | Epoch:14 | Val Acc: 0.9565
+ Best site-cartoon                   | Epoch:14 | Val Acc: 0.8348
+ Best site-sketch                    | Epoch:14 | Val Acc: 0.6125
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 15 ============
+ Site-photo                         | Train Loss: 0.0143 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.2496 | Train Acc: 0.9853
+ Site-photo                         | Train Loss: 0.0444 | Train Acc: 0.9902
+ Site-photo                         | Train Loss: 0.0214 | Train Acc: 0.9869
+ Site-photo                         | Train Loss: 0.0172 | Train Acc: 0.9956
+ Site-art_painting                  | Train Loss: 0.6234 | Train Acc: 0.7857
+ Site-art_painting                  | Train Loss: 0.3754 | Train Acc: 0.8842
+ Site-art_painting                  | Train Loss: 0.2390 | Train Acc: 0.9624
+ Site-cartoon                       | Train Loss: 0.7011 | Train Acc: 0.7353
+ Site-cartoon                       | Train Loss: 0.5881 | Train Acc: 0.8198
+ Site-sketch                        | Train Loss: 1.0876 | Train Acc: 0.5950
+Average Train Accuracy: 0.8855
+ Site-photo                         | Val  Loss: 0.0017 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0026 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0358 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0217 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0307 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1367 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.2071 | Val  Acc: 0.9365
+ Site-art_painting                  | Val  Loss: 0.2177 | Val  Acc: 0.9577
+ Site-cartoon                       | Val  Loss: 0.4441 | Val  Acc: 0.8696
+ Site-cartoon                       | Val  Loss: 0.6308 | Val  Acc: 0.8087
+ Site-sketch                        | Val  Loss: 1.0700 | Val  Acc: 0.6125
+Average Valid Accuracy: 0.9237
+============ Train epoch 16 ============
+ Site-photo                         | Train Loss: 0.0199 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0026 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0128 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0178 | Train Acc: 0.9869
+ Site-photo                         | Train Loss: 0.0073 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.6566 | Train Acc: 0.7619
+ Site-art_painting                  | Train Loss: 0.2722 | Train Acc: 0.9368
+ Site-art_painting                  | Train Loss: 0.2176 | Train Acc: 0.9484
+ Site-cartoon                       | Train Loss: 0.6765 | Train Acc: 0.8529
+ Site-cartoon                       | Train Loss: 0.4892 | Train Acc: 0.8547
+ Site-sketch                        | Train Loss: 1.0397 | Train Acc: 0.5950
+Average Train Accuracy: 0.9033
+ Site-photo                         | Val  Loss: 0.0021 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0022 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0014 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0124 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0107 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1246 | Val  Acc: 0.9286
+ Site-art_painting                  | Val  Loss: 0.2138 | Val  Acc: 0.9683
+ Site-art_painting                  | Val  Loss: 0.3230 | Val  Acc: 0.9366
+ Site-cartoon                       | Val  Loss: 0.3373 | Val  Acc: 0.9130
+ Site-cartoon                       | Val  Loss: 0.5652 | Val  Acc: 0.8348
+ Site-sketch                        | Val  Loss: 1.1564 | Val  Acc: 0.6000
+Average Valid Accuracy: 0.9256
+============ Train epoch 17 ============
+ Site-photo                         | Train Loss: 0.0159 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0031 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0380 | Train Acc: 0.9902
+ Site-photo                         | Train Loss: 0.0500 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0269 | Train Acc: 0.9913
+ Site-art_painting                  | Train Loss: 0.5935 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.4150 | Train Acc: 0.8842
+ Site-art_painting                  | Train Loss: 0.2287 | Train Acc: 0.9718
+ Site-cartoon                       | Train Loss: 0.6424 | Train Acc: 0.7941
+ Site-cartoon                       | Train Loss: 0.5130 | Train Acc: 0.8605
+ Site-sketch                        | Train Loss: 0.9862 | Train Acc: 0.6364
+Average Train Accuracy: 0.9050
+ Site-photo                         | Val  Loss: 0.0015 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0023 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0312 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0277 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0245 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.1746 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.2278 | Val  Acc: 0.9841
+ Site-art_painting                  | Val  Loss: 0.1914 | Val  Acc: 0.9648
+ Site-cartoon                       | Val  Loss: 0.3000 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.6018 | Val  Acc: 0.8261
+ Site-sketch                        | Val  Loss: 1.2007 | Val  Acc: 0.6000
+Average Valid Accuracy: 0.9364
+ Best site-photo                     | Epoch:17 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:17 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:17 | Val Acc: 0.9853
+ Best site-photo                     | Epoch:17 | Val Acc: 0.9902
+ Best site-photo                     | Epoch:17 | Val Acc: 0.9934
+ Best site-art_painting              | Epoch:17 | Val Acc: 1.0000
+ Best site-art_painting              | Epoch:17 | Val Acc: 0.9841
+ Best site-art_painting              | Epoch:17 | Val Acc: 0.9648
+ Best site-cartoon                   | Epoch:17 | Val Acc: 0.9565
+ Best site-cartoon                   | Epoch:17 | Val Acc: 0.8261
+ Best site-sketch                    | Epoch:17 | Val Acc: 0.6000
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 18 ============
+ Site-photo                         | Train Loss: 0.0139 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0014 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0060 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0401 | Train Acc: 0.9869
+ Site-photo                         | Train Loss: 0.0032 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.5853 | Train Acc: 0.8095
+ Site-art_painting                  | Train Loss: 0.3585 | Train Acc: 0.8947
+ Site-art_painting                  | Train Loss: 0.1925 | Train Acc: 0.9812
+ Site-cartoon                       | Train Loss: 0.6463 | Train Acc: 0.8529
+ Site-cartoon                       | Train Loss: 0.5180 | Train Acc: 0.8721
+ Site-sketch                        | Train Loss: 1.0635 | Train Acc: 0.6033
+Average Train Accuracy: 0.9092
+ Site-photo                         | Val  Loss: 0.0011 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0015 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0159 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0149 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0171 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1734 | Val  Acc: 0.9286
+ Site-art_painting                  | Val  Loss: 0.2098 | Val  Acc: 0.9683
+ Site-art_painting                  | Val  Loss: 0.2211 | Val  Acc: 0.9366
+ Site-cartoon                       | Val  Loss: 0.2819 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.5264 | Val  Acc: 0.8348
+ Site-sketch                        | Val  Loss: 1.1674 | Val  Acc: 0.6625
+Average Valid Accuracy: 0.9339
+============ Train epoch 19 ============
+ Site-photo                         | Train Loss: 0.0115 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0129 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0057 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0245 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0142 | Train Acc: 0.9913
+ Site-art_painting                  | Train Loss: 0.5108 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.2711 | Train Acc: 0.9158
+ Site-art_painting                  | Train Loss: 0.1992 | Train Acc: 0.9671
+ Site-cartoon                       | Train Loss: 0.6841 | Train Acc: 0.7647
+ Site-cartoon                       | Train Loss: 0.5176 | Train Acc: 0.8488
+ Site-sketch                        | Train Loss: 0.9711 | Train Acc: 0.6942
+Average Train Accuracy: 0.9099
+ Site-photo                         | Val  Loss: 0.0018 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0018 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0330 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0111 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0257 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.0925 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1851 | Val  Acc: 0.9683
+ Site-art_painting                  | Val  Loss: 0.2942 | Val  Acc: 0.9577
+ Site-cartoon                       | Val  Loss: 0.3007 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.5521 | Val  Acc: 0.7913
+ Site-sketch                        | Val  Loss: 1.1332 | Val  Acc: 0.5750
+Average Valid Accuracy: 0.9304
+============ Train epoch 20 ============
+ Site-photo                         | Train Loss: 0.0156 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0019 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0061 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0155 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0080 | Train Acc: 0.9956
+ Site-art_painting                  | Train Loss: 0.7106 | Train Acc: 0.8095
+ Site-art_painting                  | Train Loss: 0.2914 | Train Acc: 0.9368
+ Site-art_painting                  | Train Loss: 0.2054 | Train Acc: 0.9812
+ Site-cartoon                       | Train Loss: 0.6364 | Train Acc: 0.8235
+ Site-cartoon                       | Train Loss: 0.4543 | Train Acc: 0.8779
+ Site-sketch                        | Train Loss: 0.9984 | Train Acc: 0.6364
+Average Train Accuracy: 0.9146
+ Site-photo                         | Val  Loss: 0.0013 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0016 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0382 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0219 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0152 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.1043 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1848 | Val  Acc: 0.9841
+ Site-art_painting                  | Val  Loss: 0.1672 | Val  Acc: 0.9718
+ Site-cartoon                       | Val  Loss: 0.2998 | Val  Acc: 1.0000
+ Site-cartoon                       | Val  Loss: 0.5032 | Val  Acc: 0.8783
+ Site-sketch                        | Val  Loss: 1.2391 | Val  Acc: 0.5875
+Average Valid Accuracy: 0.9414
+ Best site-photo                     | Epoch:20 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:20 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:20 | Val Acc: 0.9853
+ Best site-photo                     | Epoch:20 | Val Acc: 0.9902
+ Best site-photo                     | Epoch:20 | Val Acc: 0.9934
+ Best site-art_painting              | Epoch:20 | Val Acc: 0.9643
+ Best site-art_painting              | Epoch:20 | Val Acc: 0.9841
+ Best site-art_painting              | Epoch:20 | Val Acc: 0.9718
+ Best site-cartoon                   | Epoch:20 | Val Acc: 1.0000
+ Best site-cartoon                   | Epoch:20 | Val Acc: 0.8783
+ Best site-sketch                    | Epoch:20 | Val Acc: 0.5875
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 21 ============
+ Site-photo                         | Train Loss: 0.0112 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0222 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0047 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0362 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0049 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.5810 | Train Acc: 0.7857
+ Site-art_painting                  | Train Loss: 0.3037 | Train Acc: 0.9368
+ Site-art_painting                  | Train Loss: 0.2344 | Train Acc: 0.9577
+ Site-cartoon                       | Train Loss: 0.6320 | Train Acc: 0.8235
+ Site-cartoon                       | Train Loss: 0.4788 | Train Acc: 0.8605
+ Site-sketch                        | Train Loss: 1.0523 | Train Acc: 0.5702
+Average Train Accuracy: 0.9025
+ Site-photo                         | Val  Loss: 0.0012 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0014 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0386 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0178 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0181 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.1269 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.2241 | Val  Acc: 0.9365
+ Site-art_painting                  | Val  Loss: 0.1698 | Val  Acc: 0.9577
+ Site-cartoon                       | Val  Loss: 0.3889 | Val  Acc: 0.8696
+ Site-cartoon                       | Val  Loss: 0.5487 | Val  Acc: 0.8609
+ Site-sketch                        | Val  Loss: 1.1139 | Val  Acc: 0.6375
+Average Valid Accuracy: 0.9269
+============ Train epoch 22 ============
+ Site-photo                         | Train Loss: 0.0076 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0020 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0075 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0230 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0036 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.5225 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.2903 | Train Acc: 0.9368
+ Site-art_painting                  | Train Loss: 0.1898 | Train Acc: 0.9624
+ Site-cartoon                       | Train Loss: 0.5893 | Train Acc: 0.7647
+ Site-cartoon                       | Train Loss: 0.4985 | Train Acc: 0.8488
+ Site-sketch                        | Train Loss: 0.9991 | Train Acc: 0.6198
+Average Train Accuracy: 0.9054
+ Site-photo                         | Val  Loss: 0.0023 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0018 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0411 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0121 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0048 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1180 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1328 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1727 | Val  Acc: 0.9718
+ Site-cartoon                       | Val  Loss: 0.3936 | Val  Acc: 0.8696
+ Site-cartoon                       | Val  Loss: 0.5608 | Val  Acc: 0.8348
+ Site-sketch                        | Val  Loss: 1.2424 | Val  Acc: 0.6250
+Average Valid Accuracy: 0.9319
+============ Train epoch 23 ============
+ Site-photo                         | Train Loss: 0.0147 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0029 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0036 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0341 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0096 | Train Acc: 0.9956
+ Site-art_painting                  | Train Loss: 0.6663 | Train Acc: 0.7619
+ Site-art_painting                  | Train Loss: 0.2972 | Train Acc: 0.9263
+ Site-art_painting                  | Train Loss: 0.2136 | Train Acc: 0.9484
+ Site-cartoon                       | Train Loss: 0.6470 | Train Acc: 0.7941
+ Site-cartoon                       | Train Loss: 0.4454 | Train Acc: 0.8488
+ Site-sketch                        | Train Loss: 0.9650 | Train Acc: 0.6198
+Average Train Accuracy: 0.8990
+ Site-photo                         | Val  Loss: 0.0013 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0019 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0009 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0091 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0140 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1214 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1429 | Val  Acc: 0.9841
+ Site-art_painting                  | Val  Loss: 0.1706 | Val  Acc: 0.9507
+ Site-cartoon                       | Val  Loss: 0.3150 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.5210 | Val  Acc: 0.8957
+ Site-sketch                        | Val  Loss: 1.2456 | Val  Acc: 0.6250
+Average Valid Accuracy: 0.9465
+ Best site-photo                     | Epoch:23 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:23 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:23 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:23 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:23 | Val Acc: 1.0000
+ Best site-art_painting              | Epoch:23 | Val Acc: 1.0000
+ Best site-art_painting              | Epoch:23 | Val Acc: 0.9841
+ Best site-art_painting              | Epoch:23 | Val Acc: 0.9507
+ Best site-cartoon                   | Epoch:23 | Val Acc: 0.9565
+ Best site-cartoon                   | Epoch:23 | Val Acc: 0.8957
+ Best site-sketch                    | Epoch:23 | Val Acc: 0.6250
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 24 ============
+ Site-photo                         | Train Loss: 0.0212 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0010 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0041 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0173 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0066 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.6739 | Train Acc: 0.7857
+ Site-art_painting                  | Train Loss: 0.2920 | Train Acc: 0.9474
+ Site-art_painting                  | Train Loss: 0.1978 | Train Acc: 0.9671
+ Site-cartoon                       | Train Loss: 0.5731 | Train Acc: 0.8235
+ Site-cartoon                       | Train Loss: 0.4649 | Train Acc: 0.8605
+ Site-sketch                        | Train Loss: 0.9911 | Train Acc: 0.6694
+Average Train Accuracy: 0.9134
+ Site-photo                         | Val  Loss: 0.0010 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0017 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0046 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0155 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0051 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.0960 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1880 | Val  Acc: 0.9524
+ Site-art_painting                  | Val  Loss: 0.1822 | Val  Acc: 0.9437
+ Site-cartoon                       | Val  Loss: 0.2872 | Val  Acc: 0.9130
+ Site-cartoon                       | Val  Loss: 0.5180 | Val  Acc: 0.8783
+ Site-sketch                        | Val  Loss: 1.2974 | Val  Acc: 0.5875
+Average Valid Accuracy: 0.9341
+============ Train epoch 25 ============
+ Site-photo                         | Train Loss: 0.0130 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0043 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0044 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0058 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0038 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.5874 | Train Acc: 0.7857
+ Site-art_painting                  | Train Loss: 0.2847 | Train Acc: 0.9053
+ Site-art_painting                  | Train Loss: 0.1375 | Train Acc: 0.9859
+ Site-cartoon                       | Train Loss: 0.6115 | Train Acc: 0.7941
+ Site-cartoon                       | Train Loss: 0.4440 | Train Acc: 0.8837
+ Site-sketch                        | Train Loss: 0.9515 | Train Acc: 0.6446
+Average Train Accuracy: 0.9090
+ Site-photo                         | Val  Loss: 0.0014 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0014 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0080 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0071 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0051 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1129 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1862 | Val  Acc: 0.9524
+ Site-art_painting                  | Val  Loss: 0.1343 | Val  Acc: 0.9718
+ Site-cartoon                       | Val  Loss: 0.3305 | Val  Acc: 0.9130
+ Site-cartoon                       | Val  Loss: 0.5682 | Val  Acc: 0.8174
+ Site-sketch                        | Val  Loss: 1.1430 | Val  Acc: 0.5750
+Average Valid Accuracy: 0.9267
+============ Train epoch 26 ============
+ Site-photo                         | Train Loss: 0.0145 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0015 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0111 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0259 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0111 | Train Acc: 0.9913
+ Site-art_painting                  | Train Loss: 0.5853 | Train Acc: 0.8095
+ Site-art_painting                  | Train Loss: 0.2139 | Train Acc: 0.9579
+ Site-art_painting                  | Train Loss: 0.1897 | Train Acc: 0.9577
+ Site-cartoon                       | Train Loss: 0.6599 | Train Acc: 0.8529
+ Site-cartoon                       | Train Loss: 0.4564 | Train Acc: 0.8837
+ Site-sketch                        | Train Loss: 0.9577 | Train Acc: 0.6612
+Average Train Accuracy: 0.9189
+ Site-photo                         | Val  Loss: 0.0083 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0020 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0008 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0074 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0376 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.1428 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1815 | Val  Acc: 0.9524
+ Site-art_painting                  | Val  Loss: 0.2483 | Val  Acc: 0.9648
+ Site-cartoon                       | Val  Loss: 0.3212 | Val  Acc: 0.8696
+ Site-cartoon                       | Val  Loss: 0.5136 | Val  Acc: 0.8609
+ Site-sketch                        | Val  Loss: 1.1602 | Val  Acc: 0.6375
+Average Valid Accuracy: 0.9312
+============ Train epoch 27 ============
+ Site-photo                         | Train Loss: 0.0131 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0010 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0034 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0071 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0157 | Train Acc: 0.9913
+ Site-art_painting                  | Train Loss: 0.4879 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.2335 | Train Acc: 0.9789
+ Site-art_painting                  | Train Loss: 0.1492 | Train Acc: 0.9671
+ Site-cartoon                       | Train Loss: 0.6613 | Train Acc: 0.8235
+ Site-cartoon                       | Train Loss: 0.4874 | Train Acc: 0.8663
+ Site-sketch                        | Train Loss: 1.0082 | Train Acc: 0.6281
+Average Train Accuracy: 0.9171
+ Site-photo                         | Val  Loss: 0.0011 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0014 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0233 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0041 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0120 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1619 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1947 | Val  Acc: 0.9365
+ Site-art_painting                  | Val  Loss: 0.2698 | Val  Acc: 0.9718
+ Site-cartoon                       | Val  Loss: 0.3081 | Val  Acc: 0.8696
+ Site-cartoon                       | Val  Loss: 0.5663 | Val  Acc: 0.8348
+ Site-sketch                        | Val  Loss: 1.1101 | Val  Acc: 0.6875
+Average Valid Accuracy: 0.9318
+============ Train epoch 28 ============
+ Site-photo                         | Train Loss: 0.0094 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0026 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0070 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0035 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0067 | Train Acc: 0.9956
+ Site-art_painting                  | Train Loss: 0.6386 | Train Acc: 0.7857
+ Site-art_painting                  | Train Loss: 0.2618 | Train Acc: 0.9789
+ Site-art_painting                  | Train Loss: 0.1567 | Train Acc: 0.9812
+ Site-cartoon                       | Train Loss: 0.5711 | Train Acc: 0.8529
+ Site-cartoon                       | Train Loss: 0.4331 | Train Acc: 0.8547
+ Site-sketch                        | Train Loss: 1.0263 | Train Acc: 0.6446
+Average Train Accuracy: 0.9176
+ Site-photo                         | Val  Loss: 0.0741 | Val  Acc: 0.9667
+ Site-photo                         | Val  Loss: 0.0057 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0182 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0110 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0091 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.0991 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.2476 | Val  Acc: 0.9365
+ Site-art_painting                  | Val  Loss: 0.1749 | Val  Acc: 0.9577
+ Site-cartoon                       | Val  Loss: 0.2558 | Val  Acc: 0.9130
+ Site-cartoon                       | Val  Loss: 0.5554 | Val  Acc: 0.8174
+ Site-sketch                        | Val  Loss: 1.2455 | Val  Acc: 0.6125
+Average Valid Accuracy: 0.9230
+============ Train epoch 29 ============
+ Site-photo                         | Train Loss: 0.0116 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0013 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0065 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0068 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0045 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.5034 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.2757 | Train Acc: 0.9263
+ Site-art_painting                  | Train Loss: 0.1946 | Train Acc: 0.9718
+ Site-cartoon                       | Train Loss: 0.6339 | Train Acc: 0.8235
+ Site-cartoon                       | Train Loss: 0.4592 | Train Acc: 0.8547
+ Site-sketch                        | Train Loss: 0.9203 | Train Acc: 0.6860
+Average Train Accuracy: 0.9178
+ Site-photo                         | Val  Loss: 0.0020 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0016 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0370 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0066 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0057 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1501 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1373 | Val  Acc: 0.9841
+ Site-art_painting                  | Val  Loss: 0.1950 | Val  Acc: 0.9507
+ Site-cartoon                       | Val  Loss: 0.2557 | Val  Acc: 0.9130
+ Site-cartoon                       | Val  Loss: 0.5594 | Val  Acc: 0.8609
+ Site-sketch                        | Val  Loss: 1.1942 | Val  Acc: 0.5875
+Average Valid Accuracy: 0.9314
+============ Train epoch 30 ============
+ Site-photo                         | Train Loss: 0.0092 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0011 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0204 | Train Acc: 0.9902
+ Site-photo                         | Train Loss: 0.0067 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0057 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.6264 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.1870 | Train Acc: 0.9684
+ Site-art_painting                  | Train Loss: 0.1623 | Train Acc: 0.9577
+ Site-cartoon                       | Train Loss: 0.5805 | Train Acc: 0.8824
+ Site-cartoon                       | Train Loss: 0.3926 | Train Acc: 0.8895
+ Site-sketch                        | Train Loss: 0.9067 | Train Acc: 0.6777
+Average Train Accuracy: 0.9272
+ Site-photo                         | Val  Loss: 0.0009 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0012 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0112 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0212 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0207 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1117 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1614 | Val  Acc: 0.9841
+ Site-art_painting                  | Val  Loss: 0.1627 | Val  Acc: 0.9789
+ Site-cartoon                       | Val  Loss: 0.3080 | Val  Acc: 0.9130
+ Site-cartoon                       | Val  Loss: 0.5068 | Val  Acc: 0.8696
+ Site-sketch                        | Val  Loss: 1.0810 | Val  Acc: 0.5375
+Average Valid Accuracy: 0.9326
+============ Train epoch 31 ============
+ Site-photo                         | Train Loss: 0.0089 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0008 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0129 | Train Acc: 0.9902
+ Site-photo                         | Train Loss: 0.0146 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0037 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.5141 | Train Acc: 0.8095
+ Site-art_painting                  | Train Loss: 0.2888 | Train Acc: 0.9158
+ Site-art_painting                  | Train Loss: 0.1627 | Train Acc: 0.9812
+ Site-cartoon                       | Train Loss: 0.6414 | Train Acc: 0.7941
+ Site-cartoon                       | Train Loss: 0.3866 | Train Acc: 0.9012
+ Site-sketch                        | Train Loss: 0.9238 | Train Acc: 0.6777
+Average Train Accuracy: 0.9148
+ Site-photo                         | Val  Loss: 0.0010 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0012 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0221 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0092 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0241 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1060 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1602 | Val  Acc: 0.9683
+ Site-art_painting                  | Val  Loss: 0.2386 | Val  Acc: 0.9789
+ Site-cartoon                       | Val  Loss: 0.2470 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.4739 | Val  Acc: 0.8522
+ Site-sketch                        | Val  Loss: 1.1627 | Val  Acc: 0.6250
+Average Valid Accuracy: 0.9391
+============ Train epoch 32 ============
+ Site-photo                         | Train Loss: 0.0069 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0044 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0096 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0226 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0015 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.5249 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.2093 | Train Acc: 0.9158
+ Site-art_painting                  | Train Loss: 0.1415 | Train Acc: 0.9718
+ Site-cartoon                       | Train Loss: 0.5850 | Train Acc: 0.8824
+ Site-cartoon                       | Train Loss: 0.4428 | Train Acc: 0.9012
+ Site-sketch                        | Train Loss: 0.9743 | Train Acc: 0.6529
+Average Train Accuracy: 0.9228
+ Site-photo                         | Val  Loss: 0.0009 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0010 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0248 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0086 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0218 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.2572 | Val  Acc: 0.9286
+ Site-art_painting                  | Val  Loss: 0.1919 | Val  Acc: 0.9365
+ Site-art_painting                  | Val  Loss: 0.1870 | Val  Acc: 0.9648
+ Site-cartoon                       | Val  Loss: 0.2637 | Val  Acc: 0.9130
+ Site-cartoon                       | Val  Loss: 0.4611 | Val  Acc: 0.8609
+ Site-sketch                        | Val  Loss: 1.1189 | Val  Acc: 0.5875
+Average Valid Accuracy: 0.9251
+============ Train epoch 33 ============
+ Site-photo                         | Train Loss: 0.0064 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0013 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0021 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0448 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0021 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.6175 | Train Acc: 0.7857
+ Site-art_painting                  | Train Loss: 0.2448 | Train Acc: 0.9789
+ Site-art_painting                  | Train Loss: 0.1685 | Train Acc: 0.9765
+ Site-cartoon                       | Train Loss: 0.6045 | Train Acc: 0.8235
+ Site-cartoon                       | Train Loss: 0.4373 | Train Acc: 0.8895
+ Site-sketch                        | Train Loss: 0.9635 | Train Acc: 0.6364
+Average Train Accuracy: 0.9167
+ Site-photo                         | Val  Loss: 0.0011 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0013 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0146 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0186 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0162 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.2490 | Val  Acc: 0.9286
+ Site-art_painting                  | Val  Loss: 0.1092 | Val  Acc: 0.9841
+ Site-art_painting                  | Val  Loss: 0.1281 | Val  Acc: 0.9718
+ Site-cartoon                       | Val  Loss: 0.2564 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.4517 | Val  Acc: 0.8696
+ Site-sketch                        | Val  Loss: 1.1982 | Val  Acc: 0.5500
+Average Valid Accuracy: 0.9300
+============ Train epoch 34 ============
+ Site-photo                         | Train Loss: 0.0110 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0011 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0031 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0089 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0033 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.6267 | Train Acc: 0.7857
+ Site-art_painting                  | Train Loss: 0.1991 | Train Acc: 0.9789
+ Site-art_painting                  | Train Loss: 0.1550 | Train Acc: 0.9624
+ Site-cartoon                       | Train Loss: 0.6261 | Train Acc: 0.8235
+ Site-cartoon                       | Train Loss: 0.4053 | Train Acc: 0.8895
+ Site-sketch                        | Train Loss: 0.9196 | Train Acc: 0.6529
+Average Train Accuracy: 0.9176
+ Site-photo                         | Val  Loss: 0.0017 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0021 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0304 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0077 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0236 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.0872 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1199 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1591 | Val  Acc: 0.9507
+ Site-cartoon                       | Val  Loss: 0.2410 | Val  Acc: 1.0000
+ Site-cartoon                       | Val  Loss: 0.4608 | Val  Acc: 0.8870
+ Site-sketch                        | Val  Loss: 1.1381 | Val  Acc: 0.5750
+Average Valid Accuracy: 0.9453
+============ Train epoch 35 ============
+ Site-photo                         | Train Loss: 0.0053 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0034 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0020 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0417 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0019 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.6201 | Train Acc: 0.7857
+ Site-art_painting                  | Train Loss: 0.3070 | Train Acc: 0.9263
+ Site-art_painting                  | Train Loss: 0.1384 | Train Acc: 0.9859
+ Site-cartoon                       | Train Loss: 0.5767 | Train Acc: 0.8235
+ Site-cartoon                       | Train Loss: 0.4198 | Train Acc: 0.8779
+ Site-sketch                        | Train Loss: 0.9840 | Train Acc: 0.6198
+Average Train Accuracy: 0.9102
+ Site-photo                         | Val  Loss: 0.0016 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0011 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0325 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0060 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0020 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1387 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1217 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1502 | Val  Acc: 0.9789
+ Site-cartoon                       | Val  Loss: 0.2987 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.4419 | Val  Acc: 0.8870
+ Site-sketch                        | Val  Loss: 1.1921 | Val  Acc: 0.5875
+Average Valid Accuracy: 0.9418
+============ Train epoch 36 ============
+ Site-photo                         | Train Loss: 0.0197 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0134 | Train Acc: 0.9853
+ Site-photo                         | Train Loss: 0.0023 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0089 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0020 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.4943 | Train Acc: 0.8571
+ Site-art_painting                  | Train Loss: 0.2797 | Train Acc: 0.9579
+ Site-art_painting                  | Train Loss: 0.1380 | Train Acc: 0.9765
+ Site-cartoon                       | Train Loss: 0.6225 | Train Acc: 0.7647
+ Site-cartoon                       | Train Loss: 0.4127 | Train Acc: 0.8953
+ Site-sketch                        | Train Loss: 0.9028 | Train Acc: 0.6612
+Average Train Accuracy: 0.9180
+ Site-photo                         | Val  Loss: 0.0014 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0013 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0046 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0031 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0041 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.0565 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1451 | Val  Acc: 0.9524
+ Site-art_painting                  | Val  Loss: 0.1218 | Val  Acc: 0.9859
+ Site-cartoon                       | Val  Loss: 0.2325 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.4429 | Val  Acc: 0.8783
+ Site-sketch                        | Val  Loss: 1.0659 | Val  Acc: 0.6500
+Average Valid Accuracy: 0.9476
+ Best site-photo                     | Epoch:36 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:36 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:36 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:36 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:36 | Val Acc: 1.0000
+ Best site-art_painting              | Epoch:36 | Val Acc: 1.0000
+ Best site-art_painting              | Epoch:36 | Val Acc: 0.9524
+ Best site-art_painting              | Epoch:36 | Val Acc: 0.9859
+ Best site-cartoon                   | Epoch:36 | Val Acc: 0.9565
+ Best site-cartoon                   | Epoch:36 | Val Acc: 0.8783
+ Best site-sketch                    | Epoch:36 | Val Acc: 0.6500
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 37 ============
+ Site-photo                         | Train Loss: 0.0066 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0008 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0014 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0259 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0018 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.5156 | Train Acc: 0.7857
+ Site-art_painting                  | Train Loss: 0.2559 | Train Acc: 0.9474
+ Site-art_painting                  | Train Loss: 0.1468 | Train Acc: 0.9671
+ Site-cartoon                       | Train Loss: 0.5824 | Train Acc: 0.7941
+ Site-cartoon                       | Train Loss: 0.4087 | Train Acc: 0.8837
+ Site-sketch                        | Train Loss: 0.9302 | Train Acc: 0.6364
+Average Train Accuracy: 0.9098
+ Site-photo                         | Val  Loss: 0.0021 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0016 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0233 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0085 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0116 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1246 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1510 | Val  Acc: 0.9524
+ Site-art_painting                  | Val  Loss: 0.2486 | Val  Acc: 0.9507
+ Site-cartoon                       | Val  Loss: 0.2288 | Val  Acc: 1.0000
+ Site-cartoon                       | Val  Loss: 0.4243 | Val  Acc: 0.8696
+ Site-sketch                        | Val  Loss: 1.0655 | Val  Acc: 0.5625
+Average Valid Accuracy: 0.9350
+============ Train epoch 38 ============
+ Site-photo                         | Train Loss: 0.0084 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0019 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0434 | Train Acc: 0.9902
+ Site-photo                         | Train Loss: 0.0254 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0021 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.6018 | Train Acc: 0.7857
+ Site-art_painting                  | Train Loss: 0.2690 | Train Acc: 0.9263
+ Site-art_painting                  | Train Loss: 0.1357 | Train Acc: 0.9906
+ Site-cartoon                       | Train Loss: 0.6089 | Train Acc: 0.8529
+ Site-cartoon                       | Train Loss: 0.4185 | Train Acc: 0.8721
+ Site-sketch                        | Train Loss: 0.8952 | Train Acc: 0.6694
+Average Train Accuracy: 0.9170
+ Site-photo                         | Val  Loss: 0.0008 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0012 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0083 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0048 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0025 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.0891 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1677 | Val  Acc: 0.9206
+ Site-art_painting                  | Val  Loss: 0.1328 | Val  Acc: 0.9648
+ Site-cartoon                       | Val  Loss: 0.1994 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.4580 | Val  Acc: 0.8783
+ Site-sketch                        | Val  Loss: 1.1574 | Val  Acc: 0.6375
+Average Valid Accuracy: 0.9403
+============ Train epoch 39 ============
+ Site-photo                         | Train Loss: 0.0048 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0017 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0026 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0663 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0016 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.6207 | Train Acc: 0.8095
+ Site-art_painting                  | Train Loss: 0.2039 | Train Acc: 0.9579
+ Site-art_painting                  | Train Loss: 0.1452 | Train Acc: 0.9577
+ Site-cartoon                       | Train Loss: 0.6172 | Train Acc: 0.8235
+ Site-cartoon                       | Train Loss: 0.4033 | Train Acc: 0.8663
+ Site-sketch                        | Train Loss: 0.8357 | Train Acc: 0.7686
+Average Train Accuracy: 0.9252
+ Site-photo                         | Val  Loss: 0.0006 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0024 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0232 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0060 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0199 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.1134 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1432 | Val  Acc: 0.9841
+ Site-art_painting                  | Val  Loss: 0.0984 | Val  Acc: 0.9859
+ Site-cartoon                       | Val  Loss: 0.2213 | Val  Acc: 1.0000
+ Site-cartoon                       | Val  Loss: 0.4389 | Val  Acc: 0.8870
+ Site-sketch                        | Val  Loss: 1.1124 | Val  Acc: 0.6250
+Average Valid Accuracy: 0.9477
+ Best site-photo                     | Epoch:39 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:39 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:39 | Val Acc: 0.9853
+ Best site-photo                     | Epoch:39 | Val Acc: 1.0000
+ Best site-photo                     | Epoch:39 | Val Acc: 0.9934
+ Best site-art_painting              | Epoch:39 | Val Acc: 0.9643
+ Best site-art_painting              | Epoch:39 | Val Acc: 0.9841
+ Best site-art_painting              | Epoch:39 | Val Acc: 0.9859
+ Best site-cartoon                   | Epoch:39 | Val Acc: 1.0000
+ Best site-cartoon                   | Epoch:39 | Val Acc: 0.8870
+ Best site-sketch                    | Epoch:39 | Val Acc: 0.6250
+ Saving the local and server checkpoint to ../checkpoint/fed_pacs_uneven_1.7_0/harmo-fl...
+============ Train epoch 40 ============
+ Site-photo                         | Train Loss: 0.0071 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0006 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0027 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0121 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0037 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.4847 | Train Acc: 0.8571
+ Site-art_painting                  | Train Loss: 0.2297 | Train Acc: 0.9579
+ Site-art_painting                  | Train Loss: 0.1651 | Train Acc: 0.9718
+ Site-cartoon                       | Train Loss: 0.6456 | Train Acc: 0.7941
+ Site-cartoon                       | Train Loss: 0.3769 | Train Acc: 0.8895
+ Site-sketch                        | Train Loss: 0.9156 | Train Acc: 0.6942
+Average Train Accuracy: 0.9235
+ Site-photo                         | Val  Loss: 0.0006 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0011 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0319 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0161 | Val  Acc: 0.9902
+ Site-photo                         | Val  Loss: 0.0290 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1622 | Val  Acc: 0.9286
+ Site-art_painting                  | Val  Loss: 0.1858 | Val  Acc: 0.9524
+ Site-art_painting                  | Val  Loss: 0.1163 | Val  Acc: 0.9930
+ Site-cartoon                       | Val  Loss: 0.2485 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.4413 | Val  Acc: 0.8696
+ Site-sketch                        | Val  Loss: 1.0990 | Val  Acc: 0.6375
+Average Valid Accuracy: 0.9375
+============ Train epoch 41 ============
+ Site-photo                         | Train Loss: 0.0091 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0006 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0179 | Train Acc: 0.9902
+ Site-photo                         | Train Loss: 0.0270 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0019 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.5228 | Train Acc: 0.8571
+ Site-art_painting                  | Train Loss: 0.2237 | Train Acc: 0.9684
+ Site-art_painting                  | Train Loss: 0.1650 | Train Acc: 0.9812
+ Site-cartoon                       | Train Loss: 0.5688 | Train Acc: 0.8235
+ Site-cartoon                       | Train Loss: 0.3774 | Train Acc: 0.9128
+ Site-sketch                        | Train Loss: 0.8945 | Train Acc: 0.7025
+Average Train Accuracy: 0.9299
+ Site-photo                         | Val  Loss: 0.0006 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0009 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0006 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0055 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0159 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1109 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1577 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1819 | Val  Acc: 0.9859
+ Site-cartoon                       | Val  Loss: 0.2558 | Val  Acc: 0.9130
+ Site-cartoon                       | Val  Loss: 0.4448 | Val  Acc: 0.8783
+ Site-sketch                        | Val  Loss: 1.3055 | Val  Acc: 0.6250
+Average Valid Accuracy: 0.9424
+============ Train epoch 42 ============
+ Site-photo                         | Train Loss: 0.0057 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0011 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0029 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0156 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0014 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.4804 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.2251 | Train Acc: 0.9474
+ Site-art_painting                  | Train Loss: 0.1473 | Train Acc: 0.9765
+ Site-cartoon                       | Train Loss: 0.5713 | Train Acc: 0.7941
+ Site-cartoon                       | Train Loss: 0.3783 | Train Acc: 0.9070
+ Site-sketch                        | Train Loss: 0.8900 | Train Acc: 0.6612
+Average Train Accuracy: 0.9200
+ Site-photo                         | Val  Loss: 0.0010 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0007 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0028 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0044 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0016 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1247 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1497 | Val  Acc: 0.9841
+ Site-art_painting                  | Val  Loss: 0.1854 | Val  Acc: 0.9648
+ Site-cartoon                       | Val  Loss: 0.2292 | Val  Acc: 1.0000
+ Site-cartoon                       | Val  Loss: 0.5257 | Val  Acc: 0.8609
+ Site-sketch                        | Val  Loss: 1.1145 | Val  Acc: 0.5750
+Average Valid Accuracy: 0.9441
+============ Train epoch 43 ============
+ Site-photo                         | Train Loss: 0.0077 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0008 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0044 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0155 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0019 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.5457 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.2706 | Train Acc: 0.9368
+ Site-art_painting                  | Train Loss: 0.1737 | Train Acc: 0.9577
+ Site-cartoon                       | Train Loss: 0.5958 | Train Acc: 0.8235
+ Site-cartoon                       | Train Loss: 0.3669 | Train Acc: 0.9128
+ Site-sketch                        | Train Loss: 0.9162 | Train Acc: 0.6529
+Average Train Accuracy: 0.9191
+ Site-photo                         | Val  Loss: 0.0009 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0009 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0007 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0050 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0129 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.1670 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1862 | Val  Acc: 0.9524
+ Site-art_painting                  | Val  Loss: 0.1420 | Val  Acc: 0.9859
+ Site-cartoon                       | Val  Loss: 0.2316 | Val  Acc: 1.0000
+ Site-cartoon                       | Val  Loss: 0.4177 | Val  Acc: 0.9217
+ Site-sketch                        | Val  Loss: 1.1159 | Val  Acc: 0.5875
+Average Valid Accuracy: 0.9459
+============ Train epoch 44 ============
+ Site-photo                         | Train Loss: 0.0148 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0017 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0232 | Train Acc: 0.9902
+ Site-photo                         | Train Loss: 0.0316 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0019 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.7991 | Train Acc: 0.8095
+ Site-art_painting                  | Train Loss: 0.2474 | Train Acc: 0.9579
+ Site-art_painting                  | Train Loss: 0.1362 | Train Acc: 0.9859
+ Site-cartoon                       | Train Loss: 0.6011 | Train Acc: 0.7647
+ Site-cartoon                       | Train Loss: 0.3964 | Train Acc: 0.9070
+ Site-sketch                        | Train Loss: 0.9295 | Train Acc: 0.6777
+Average Train Accuracy: 0.9169
+ Site-photo                         | Val  Loss: 0.0022 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0007 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0193 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0096 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0276 | Val  Acc: 0.9868
+ Site-art_painting                  | Val  Loss: 0.1636 | Val  Acc: 0.9286
+ Site-art_painting                  | Val  Loss: 0.1490 | Val  Acc: 0.9841
+ Site-art_painting                  | Val  Loss: 0.1111 | Val  Acc: 0.9859
+ Site-cartoon                       | Val  Loss: 0.2026 | Val  Acc: 1.0000
+ Site-cartoon                       | Val  Loss: 0.4708 | Val  Acc: 0.8957
+ Site-sketch                        | Val  Loss: 1.1644 | Val  Acc: 0.6125
+Average Valid Accuracy: 0.9435
+============ Train epoch 45 ============
+ Site-photo                         | Train Loss: 0.0065 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0015 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0021 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0205 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0068 | Train Acc: 0.9956
+ Site-art_painting                  | Train Loss: 0.6956 | Train Acc: 0.7619
+ Site-art_painting                  | Train Loss: 0.2174 | Train Acc: 0.9368
+ Site-art_painting                  | Train Loss: 0.1496 | Train Acc: 0.9718
+ Site-cartoon                       | Train Loss: 0.5242 | Train Acc: 0.8529
+ Site-cartoon                       | Train Loss: 0.3642 | Train Acc: 0.9070
+ Site-sketch                        | Train Loss: 0.9190 | Train Acc: 0.6777
+Average Train Accuracy: 0.9179
+ Site-photo                         | Val  Loss: 0.0008 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0015 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0008 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0139 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0078 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.1815 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1608 | Val  Acc: 0.9683
+ Site-art_painting                  | Val  Loss: 0.1294 | Val  Acc: 0.9789
+ Site-cartoon                       | Val  Loss: 0.2294 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.4035 | Val  Acc: 0.9130
+ Site-sketch                        | Val  Loss: 1.1503 | Val  Acc: 0.6125
+Average Valid Accuracy: 0.9443
+============ Train epoch 46 ============
+ Site-photo                         | Train Loss: 0.0082 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0007 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0021 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0314 | Train Acc: 0.9869
+ Site-photo                         | Train Loss: 0.0014 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.6514 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.2128 | Train Acc: 0.9789
+ Site-art_painting                  | Train Loss: 0.1538 | Train Acc: 0.9859
+ Site-cartoon                       | Train Loss: 0.5664 | Train Acc: 0.7647
+ Site-cartoon                       | Train Loss: 0.3723 | Train Acc: 0.8953
+ Site-sketch                        | Train Loss: 0.9510 | Train Acc: 0.6529
+Average Train Accuracy: 0.9180
+ Site-photo                         | Val  Loss: 0.0008 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0011 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0107 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0053 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0127 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1017 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.0982 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1063 | Val  Acc: 0.9859
+ Site-cartoon                       | Val  Loss: 0.2332 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.4847 | Val  Acc: 0.8783
+ Site-sketch                        | Val  Loss: 1.1689 | Val  Acc: 0.6125
+Average Valid Accuracy: 0.9471
+============ Train epoch 47 ============
+ Site-photo                         | Train Loss: 0.0061 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0007 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0223 | Train Acc: 0.9902
+ Site-photo                         | Train Loss: 0.0181 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0032 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.6046 | Train Acc: 0.8333
+ Site-art_painting                  | Train Loss: 0.1912 | Train Acc: 0.9789
+ Site-art_painting                  | Train Loss: 0.1804 | Train Acc: 0.9718
+ Site-cartoon                       | Train Loss: 0.6168 | Train Acc: 0.8235
+ Site-cartoon                       | Train Loss: 0.3487 | Train Acc: 0.8953
+ Site-sketch                        | Train Loss: 0.9125 | Train Acc: 0.6612
+Average Train Accuracy: 0.9231
+ Site-photo                         | Val  Loss: 0.0008 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0017 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0045 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0024 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0082 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1077 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.1580 | Val  Acc: 0.9524
+ Site-art_painting                  | Val  Loss: 0.1299 | Val  Acc: 0.9718
+ Site-cartoon                       | Val  Loss: 0.2826 | Val  Acc: 0.9565
+ Site-cartoon                       | Val  Loss: 0.4673 | Val  Acc: 0.8870
+ Site-sketch                        | Val  Loss: 1.1213 | Val  Acc: 0.6250
+Average Valid Accuracy: 0.9415
+============ Train epoch 48 ============
+ Site-photo                         | Train Loss: 0.0077 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0020 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0018 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0226 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0012 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.7708 | Train Acc: 0.7143
+ Site-art_painting                  | Train Loss: 0.2424 | Train Acc: 0.9474
+ Site-art_painting                  | Train Loss: 0.1335 | Train Acc: 0.9859
+ Site-cartoon                       | Train Loss: 0.5014 | Train Acc: 0.8824
+ Site-cartoon                       | Train Loss: 0.3448 | Train Acc: 0.9477
+ Site-sketch                        | Train Loss: 0.7864 | Train Acc: 0.7107
+Average Train Accuracy: 0.9256
+ Site-photo                         | Val  Loss: 0.0016 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0008 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0387 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0042 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0209 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.0685 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1555 | Val  Acc: 1.0000
+ Site-art_painting                  | Val  Loss: 0.1776 | Val  Acc: 0.9577
+ Site-cartoon                       | Val  Loss: 0.2968 | Val  Acc: 0.9130
+ Site-cartoon                       | Val  Loss: 0.4671 | Val  Acc: 0.8870
+ Site-sketch                        | Val  Loss: 1.0876 | Val  Acc: 0.5750
+Average Valid Accuracy: 0.9380
+============ Train epoch 49 ============
+ Site-photo                         | Train Loss: 0.0108 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0014 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0029 | Train Acc: 1.0000
+ Site-photo                         | Train Loss: 0.0110 | Train Acc: 0.9935
+ Site-photo                         | Train Loss: 0.0016 | Train Acc: 1.0000
+ Site-art_painting                  | Train Loss: 0.5176 | Train Acc: 0.8095
+ Site-art_painting                  | Train Loss: 0.2411 | Train Acc: 0.9474
+ Site-art_painting                  | Train Loss: 0.1621 | Train Acc: 0.9765
+ Site-cartoon                       | Train Loss: 0.6358 | Train Acc: 0.8235
+ Site-cartoon                       | Train Loss: 0.3657 | Train Acc: 0.9244
+ Site-sketch                        | Train Loss: 0.8452 | Train Acc: 0.6942
+Average Train Accuracy: 0.9245
+ Site-photo                         | Val  Loss: 0.0006 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0011 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0194 | Val  Acc: 0.9853
+ Site-photo                         | Val  Loss: 0.0042 | Val  Acc: 1.0000
+ Site-photo                         | Val  Loss: 0.0218 | Val  Acc: 0.9934
+ Site-art_painting                  | Val  Loss: 0.1311 | Val  Acc: 0.9643
+ Site-art_painting                  | Val  Loss: 0.2050 | Val  Acc: 0.9524
+ Site-art_painting                  | Val  Loss: 0.1284 | Val  Acc: 0.9789
+ Site-cartoon                       | Val  Loss: 0.2439 | Val  Acc: 1.0000
+ Site-cartoon                       | Val  Loss: 0.4470 | Val  Acc: 0.8870
+ Site-sketch                        | Val  Loss: 1.0865 | Val  Acc: 0.6625
+Average Valid Accuracy: 0.9476
+===2023-08-11 00:08:27===
+===2023-08-11 00:08:42===
+===Setting===
+    dataset: pacs
+    lr: 0.01
+    batch: 64
+    iters: 10
+    wk_iters: 1
+    si: False
+    domain_num: 4
+    quantile: 0
+    power_cs: 1
+    std_rw: False
+    gender_label: False
+    binary_race: False
+    save_iter: -1
+    mix5: False
+    power_relu: 1
+    Ea_val: False
+data_number=[45,68,102,153,229,42,95,213,34,172,121,
+client_nums=[5,3,2,1,]
+len_dataset=[1000,588,345,202,]
+domain number = 4
+Loading snapshots...
+ Test site-photo                     | Epoch:39 | Test Acc: 1.0000
+ Test site-art_painting              | Epoch:39 | Test Acc: 0.9050
+ Test site-cartoon                   | Epoch:39 | Test Acc: 0.8149
+ Test site-sketch                    | Epoch:39 | Test Acc: 0.6061
+photo: 1.0000, art_painting: 0.9050, cartoon: 0.8149, sketch: 0.6061, 
+Average Test Accuracy(group): 0.8315, Average Test Accuracy(individual): 0.9046,
+domain std=0.1457, cluster std=-1.0000, individual std=0.1170, 

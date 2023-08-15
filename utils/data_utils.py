@@ -10,36 +10,43 @@ from PIL import Image
 import os
 
 class DigitsDataset(Dataset):
-    def __init__(self, data_path, channels, percent=0.1, filename=None, train=True, transform=None):
+    def __init__(self, data_path, channels, percent=0.1, filename=None, train=True, transform=None, split_test=False):
         if filename is None:
             if train:
                 if percent >= 0.1:
                     for part in range(int(percent*10)):
                         if part == 0:
-                            self.images, self.labels = np.load(os.path.join(data_path, 'partitions/train_part{}.pkl'.format(part)), allow_pickle=True)
+                            self.paths, self.labels = np.load(os.path.join(data_path, 'partitions/train_part{}.pkl'.format(part)), allow_pickle=True)
                         else:
-                            images, labels = np.load(os.path.join(data_path, 'partitions/train_part{}.pkl'.format(part)), allow_pickle=True)
-                            self.images = np.concatenate([self.images,images], axis=0)
+                            paths, labels = np.load(os.path.join(data_path, 'partitions/train_part{}.pkl'.format(part)), allow_pickle=True)
+                            self.paths = np.concatenate([self.paths,paths], axis=0)
                             self.labels = np.concatenate([self.labels,labels], axis=0)
                 else:
-                    self.images, self.labels = np.load(os.path.join(data_path, 'partitions/train_part0.pkl'), allow_pickle=True)
-                    data_len = int(self.images.shape[0] * percent*10)
-                    self.images = self.images[:data_len]
+                    self.paths, self.labels = np.load(os.path.join(data_path, 'partitions/train_part0.pkl'), allow_pickle=True)
+                    data_len = int(self.paths.shape[0] * percent*10)
+                    self.paths = self.paths[:data_len]
                     self.labels = self.labels[:data_len]
             else:
-                self.images, self.labels = np.load(os.path.join(data_path, 'test.pkl'), allow_pickle=True)
+                self.paths, self.labels = np.load(os.path.join(data_path, 'test.pkl'), allow_pickle=True)
         else:
-            self.images, self.labels = np.load(os.path.join(data_path, filename), allow_pickle=True)
+            self.paths, self.labels = np.load(os.path.join(data_path, filename), allow_pickle=True)
 
         self.transform = transform
         self.channels = channels
         self.labels = self.labels.astype(np.longlong).squeeze()
+        if split_test:
+            self.paths, self.labels = self.shuffle_order()
+    
+    def shuffle_order(self):
+        randomize = np.arange(len(self.labels))
+        np.random.shuffle(randomize)
+        return self.paths[randomize], self.labels[randomize]
 
     def __len__(self):
-        return self.images.shape[0]
+        return self.paths.shape[0]
 
     def __getitem__(self, idx):
-        image = self.images[idx]
+        image = self.paths[idx]
         label = self.labels[idx]
         if self.channels == 1:
             image = Image.fromarray(image, mode='L')
@@ -53,18 +60,23 @@ class DigitsDataset(Dataset):
 
         return image, label
 
-
-class OfficeDataset(Dataset):
+class PACSDataset(Dataset):
     def __init__(self, base_path, site, train=True, transform=None):
         if train:
-            self.paths, self.text_labels = np.load('../../data/office_caltech_10/{}_train.pkl'.format(site), allow_pickle=True)
+            self.paths, self.text_labels = np.load('../../data/PACS/pkls/{}_train.pkl'.format(site), allow_pickle=True)
         else:
-            self.paths, self.text_labels = np.load('../../data/office_caltech_10/{}_test.pkl'.format(site), allow_pickle=True)
+            self.paths, self.text_labels = np.load('../../data/PACS/pkls/{}_test.pkl'.format(site), allow_pickle=True)
             
-        label_dict={'back_pack':0, 'bike':1, 'calculator':2, 'headphones':3, 'keyboard':4, 'laptop_computer':5, 'monitor':6, 'mouse':7, 'mug':8, 'projector':9}
-        self.labels = [label_dict[text] for text in self.text_labels]
+        self.paths = np.asarray(self.paths)
+        self.labels = np.asarray(self.text_labels).astype(np.longlong).squeeze()
         self.transform = transform
-        self.base_path = base_path if base_path is not None else '../../data'
+        self.base_path = base_path if base_path is not None else '../data'
+        self.paths, self.labels = self.shuffle_order()
+    
+    def shuffle_order(self):
+        randomize = np.arange(len(self.labels))
+        np.random.shuffle(randomize)
+        return self.paths[randomize], self.labels[randomize]
 
     def __len__(self):
         return len(self.labels)
@@ -82,9 +94,8 @@ class OfficeDataset(Dataset):
 
         return image, label
 
-
 class DomainNetDataset(Dataset):
-    def __init__(self, base_path, site, train=True, transform=None):
+    def __init__(self, base_path, site, train=True, transform=None, split_test=False):
         if train:
             self.paths, self.text_labels = np.load('../../data/DomainNet/{}_train.pkl'.format(site), allow_pickle=True)
         else:
@@ -93,65 +104,17 @@ class DomainNetDataset(Dataset):
         label_dict = {'bird':0, 'feather':1, 'headphones':2, 'ice_cream':3, 'teapot':4, 'tiger':5, 'whale':6, 'windmill':7, 'wine_glass':8, 'zebra':9}     
         
         self.labels = [label_dict[text] for text in self.text_labels]
+        self.labels = np.asarray(self.labels).astype(np.longlong).squeeze()
         self.transform = transform
         self.base_path = base_path if base_path is not None else '../../data'
-
-    def __len__(self):
-        return len(self.labels)
-
-    def __getitem__(self, idx):
-        img_path = os.path.join(self.base_path, self.paths[idx])
-        label = self.labels[idx]
-        image = Image.open(img_path)
-        
-        if len(image.split()) != 3:
-            image = transforms.Grayscale(num_output_channels=3)(image)
-
-        if self.transform is not None:
-            image = self.transform(image)
-
-        return image, label
-
-class FairFaceIIDDataset(Dataset):
-    def __init__(self, args, base_path, site, train=True, transform=None):
-        if train:
-            self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{args.gender_dis}/{site}_train.pkl', allow_pickle=True)
-        else:
-            self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{args.gender_dis}/{site}_test.pkl', allow_pickle=True)
-        
-        self.path = np.asarray(self.paths)
-        self.labels = np.asarray(self.labels).astype(np.float16)
-        self.transform = transform
-        self.base_path = base_path if base_path is not None else '../../data'
-
-    def __len__(self):
-        return len(self.labels)
-
-    def __getitem__(self, idx):
-        img_path = os.path.join(self.base_path, self.paths[idx])
-        label = self.labels[idx]
-        image = Image.open(img_path)
-        
-        if len(image.split()) != 3:
-            image = transforms.Grayscale(num_output_channels=3)(image)
-
-        if self.transform is not None:
-            image = self.transform(image)
-
-        return image, label
-
-class FairFaceGenderDataset(Dataset):
-    def __init__(self, distribution_mode, base_path, site, client_idx, train=True, transform=None):
-        if train:
-            self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{distribution_mode}/{site}_train_{client_idx}.pkl', allow_pickle=True)
-        else:
-            self.paths, self.gender, self.labels = np.load(f'../../data/FairFace/pkl/{distribution_mode}/{site}_test_{client_idx}.pkl', allow_pickle=True)
-        
-        self.path = np.asarray(self.paths)
-        self.labels = np.asarray(self.labels).astype(np.float16)
-        self.transform = transform
-        self.base_path = base_path if base_path is not None else '../../data'
-
+        if split_test:
+            self.paths, self.labels = self.shuffle_order()
+    
+    def shuffle_order(self):
+        randomize = np.arange(len(self.labels))
+        np.random.shuffle(randomize)
+        return self.paths[randomize], self.labels[randomize]
+ 
     def __len__(self):
         return len(self.labels)
 
