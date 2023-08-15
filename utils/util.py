@@ -3,7 +3,7 @@ import sys, os
 import torch
 import torchvision.transforms as transforms
 import torch.utils.data as data
-from utils.data_utils import DomainNetDataset, DigitsDataset, PACSDataset, FairFaceIIDDataset, FairFaceGenderDataset, FairFaceBinaryDataset
+from utils.data_utils import DomainNetDataset, DigitsDataset, PACSDataset
 import math
 import torch.nn.functional as tf
 import numpy as np
@@ -1117,15 +1117,15 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-        elif args.mode.lower() in ['ccop', 'ablation', 'only_dcnet']:
+        elif args.mode.lower() in ['fedgcr', 'ablation', 'only_dcnet']:
             multi = 100
             q = args.q
-            if args.mode.lower() in ['only_dcnet', 'ccop']:
+            if args.mode.lower() in ['only_dcnet', 'fedgcr']:
                 gmap, cnt, cluster_pis = cluster_avg_feat(args, all_pi, domain_num)
             else:
                 gmap, cnt = cluster(args, all_feat, domain_num)
             new_weights = [wi for wi in client_weights]
-            if args.mode.lower() in ['ccop', 'ablation']:
+            if args.mode.lower() in ['fedgcr', 'ablation']:
                 gsize = [0 for _ in range(domain_num)]
                 gloss = [1e-10 for _ in range(domain_num)]
                 for i in range(client_num):
