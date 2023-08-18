@@ -397,10 +397,10 @@ def prepare_pacs_uneven(args):
     client_nums = {}
     if args.shuffle:
         decay_order = [
-        'photo',
         'art_painting',
+        'photo',
+        'sketch',
         'cartoon',
-        'sketch'
         ]
     else:
         decay_order = [
