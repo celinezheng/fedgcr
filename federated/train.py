@@ -16,7 +16,7 @@ import time
 import copy
 import random
 import numpy as np
-from utils.doprompt import GCR
+from utils.doprompt import CoCoOP
 from domainbed import hparams_registry, misc
 import json
 from utils.util import train, test, communication, train_fedprox, prepare_data, train_fedprompt, write_log, train_GCR, agg_rep, train_harmofl, train_sam, train_fedmix
@@ -104,7 +104,7 @@ if __name__ == '__main__':
     parser.add_argument('--w_con', type=float, default=0.1, help='lambda for contrastive loss')
     parser.add_argument('--lr', type=float, default=1e-2, help='learning rate')
     parser.add_argument('--q', type = float, default=1, help ='q value for fairness')
-    parser.add_argument('--test_freq', type = int, default=10, help ='test_freq')
+    parser.add_argument('--test_freq', type = int, default=50, help ='test_freq')
     parser.add_argument('--batch', type = int, default=32, help ='batch size')
     parser.add_argument('--iters', type = int, default=50, help = 'iterations for communication')
     parser.add_argument('--wk_iters', type = int, default=1, help = 'optimization iters in local worker between communication')
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     torch.manual_seed(seed)    
     torch.cuda.manual_seed_all(seed) 
     random.seed(seed)
-    args.save_all_gmap = args.save_all_gmap and args.mode.lower()=='fedgcr'
+    args.save_all_gmap = args.save_all_gmap and args.mode.lower()=='ccop'
     if args.dataset.lower()[:6] == 'domain':
         # name of each datasets
         domain_num = 6
@@ -150,7 +150,7 @@ if __name__ == '__main__':
     
     exp_folder = f'fed_{args.dataset}_{args.expname}_{args.ratio}_{args.seed}'
     if args.cluster_num != -1:
-        cluster_num = args.cluster_num if args.mode.lower() in ['fedgcr', 'ablation'] else -1
+        cluster_num = args.cluster_num if args.mode.lower() in ['ccop', 'ablation'] else -1
         domain_num = args.cluster_num
         exp_folder += f"_cluster_{cluster_num}"
     else:
@@ -165,7 +165,7 @@ if __name__ == '__main__':
         os.makedirs(args.save_path)
     SAVE_PATH = os.path.join(args.save_path, f'{args.mode}')
     
-    if 'fedgcr' in args.mode.lower():
+    if 'ccop' in args.mode.lower():
         SAVE_PATH += f"_q={args.q}"
         if 'gmm' not in args.cluster.lower(): 
             SAVE_PATH += f"_{args.cluster.lower()}"
@@ -175,7 +175,7 @@ if __name__ == '__main__':
     GMAP_SAVE_PATH = args.gmap_path
     if GMAP_SAVE_PATH == 'none':
         GMAP_SAVE_PATH = f"{SAVE_PATH}_gmap"
-        if args.mode.lower()!='fedgcr':
+        if args.mode.lower()!='ccop':
             GMAP_SAVE_PATH = GMAP_SAVE_PATH.replace(args.mode, f'fedgcr_q={args.q}')
         GMAP_SAVE_PATH = GMAP_SAVE_PATH.replace('cluster_-1', f"cluster_{args.cluster_num}")
         
@@ -207,8 +207,8 @@ if __name__ == '__main__':
     write_log(args, f"domain number = {domain_num}\n")
     prompt_bank = None
     # setup model
-    if args.mode.lower() in ['fedgcr', 'only_dcnet']:
-        server_model = GCR(num_classes=args.num_classes, hparams=hparams)
+    if args.mode.lower() in ['ccop', 'only_dcnet']:
+        server_model = CoCoOP(num_classes=args.num_classes, hparams=hparams)
     elif args.mode.lower() in ['full']:
         model_type="sup_vitb16_imagenet21k"
         server_model = PromptViT(model_type=model_type, args=args)
@@ -287,7 +287,7 @@ if __name__ == '__main__':
             write_log(args, "============ Train epoch {} ============\n".format(wi + a_iter * args.wk_iters)) 
 
             for client_idx, model in enumerate(models):
-                if args.mode.lower() in ['fedgcr', 'only_dcnet']:
+                if args.mode.lower() in ['ccop', 'only_dcnet']:
                     if len(gmap) == 0: 
                         gidx = -1
                         pre_feat = None
@@ -328,7 +328,7 @@ if __name__ == '__main__':
                 else:
                     train_loss, train_acc = train(model, train_loaders[client_idx], optimizers[client_idx], loss_fun, device)
                     train_losses[client_idx] = train_loss
-        if args.mode.lower() in ['only_dcnet', 'fedgcr']:
+        if args.mode.lower() in ['only_dcnet', 'ccop']:
             for key in server_model.state_dict().keys():
                 if 'prompt' in key or 'meta_net' in key:
                     pre_glob.state_dict()[key].data.copy_(server_model.state_dict()[key])
@@ -343,7 +343,7 @@ if __name__ == '__main__':
         with torch.no_grad():
             # Aggregation
             if args.mode.lower() != 'solo':
-                if args.mode.lower() in ['fedgcr', 'ablation']:
+                if args.mode.lower() in ['ccop', 'ablation']:
                     print(Eas)
                 # server_model, models, prompt_bank, gmap, cluster_pis = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, pre_clusters, all_feat, all_pi, prompt_bank)
                 server_model, models, prompt_bank, gmap, cluster_pis = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, all_feat, all_pi, prompt_bank)
@@ -354,7 +354,7 @@ if __name__ == '__main__':
                 train_loss, train_acc = test(model, train_loaders[client_idx], loss_fun, device, prompt_bank)
                 train_acc_list[client_idx] = train_acc
                 Eas[client_idx] = int(multi / train_loss)
-                group_info = f"({gmap[client_idx]})" if args.mode.lower() in ['fedgcr', 'ablation'] else ""
+                group_info = f"({gmap[client_idx]})" if args.mode.lower() in ['ccop', 'ablation'] else ""
                 write_log(args, ' Site-{:<25s} {:<4s}| Train Loss: {:.4f} | Train Acc: {:.4f}\n'.format(datasets[client_idx], group_info, train_loss, train_acc))
             write_log(args, f'Average Train Accuracy: {np.mean(train_acc_list):.4f}\n')
             save_criteria = train_acc_list
@@ -365,7 +365,7 @@ if __name__ == '__main__':
                     best_epoch = a_iter
                     best_changed=True
                     write_log(args, ' Best site-{:<25s} | Epoch:{} | Val Acc: {:.4f}\n'.format(datasets[client_idx], best_epoch, best_acc[client_idx]))
-            if args.mode.lower()=='fedgcr' and GMAP_SAVE_PATH != 'none' and (best_changed or args.save_all_gmap):
+            if args.mode.lower()=='ccop' and GMAP_SAVE_PATH != 'none' and (best_changed or args.save_all_gmap):
                 write_log(args, ' Saving the gmap checkpoint to {}...\n'.format(GMAP_SAVE_PATH))
                 torch.save({
                     'a_iter': a_iter, 

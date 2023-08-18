@@ -104,7 +104,8 @@ class PrependPrompt():
     def __exit__(self, exc_type, exc_value, exc_traceback):
         self.hook.remove()
 
-class GCR(ERM):
+# class GCR(ERM):
+class CoCoOP(ERM):
     def __init__(self, input_shape=(3, 224, 224), num_classes=10, hparams=None):
         super().__init__(input_shape, num_classes, 1, hparams)
         self.hidden_dim = self.featurizer.network.hidden_dim

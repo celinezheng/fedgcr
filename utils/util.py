@@ -397,17 +397,17 @@ def prepare_pacs_uneven(args):
     client_nums = {}
     if args.shuffle:
         decay_order = [
-        'photo',
         'art_painting',
+        'photo',
+        'sketch',
         'cartoon',
-        'sketch'
         ]
     else:
         decay_order = [
         'photo',
         'art_painting',
         'cartoon',
-        'sketch'
+        'sketch',
         ]
 
     if 'uneven' in args.expname.lower():
@@ -453,8 +453,10 @@ def prepare_pacs_uneven(args):
         all_len = len_dataset[key] * args.percent
         all_train_len = int(all_len * 0.6)
         all_val_len = int(all_len * 0.4)
+        all_test_len = len(test_sets[key])
         cur_dataset_len = len_dataset[key]
         train_begin = 0
+        test_begin = 0
         valid_begin = -all_val_len
         if value==1 or 'uneven' not in args.expname: 
             client_decay = decay_speed
@@ -465,11 +467,19 @@ def prepare_pacs_uneven(args):
         else:
             partition_num = (np.float_power(client_decay, value)-1) / (client_decay - 1)
         
-        test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
+        if not args.split_test:
+            test_loader = torch.utils.data.DataLoader(test_sets[key], batch_size=1, shuffle=False)
         for j in range(value):
             train_len = int(all_train_len * np.float_power(client_decay, j) / partition_num)
             val_len = int(all_val_len * np.float_power(client_decay, j) / partition_num)
-            datasets.append(key)
+            if args.split_test:
+                datasets.append(f'{key}-{j}')
+                test_len = int(all_test_len * np.float_power(decay_speed, j) / partition_num)
+                cur_testset = torch.utils.data.Subset(test_sets[key], list(range(all_test_len))[test_begin : test_begin+test_len])
+                test_loader = torch.utils.data.DataLoader(cur_testset, batch_size=1, shuffle=False)
+                test_begin += test_len
+            else:
+                datasets.append(key)
             cur_trainset = torch.utils.data.Subset(train_sets[key], list(range(all_train_len))[train_begin : train_begin+train_len])
             cur_valset = torch.utils.data.Subset(train_sets[key], list(range(cur_dataset_len))[-valid_begin : -valid_begin+val_len])
             train_loader = torch.utils.data.DataLoader(cur_trainset, batch_size=args.batch, shuffle=True)
@@ -1117,15 +1127,15 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                     server_model.state_dict()[key].data.copy_(temp)
                     for client_idx in range(client_num):
                         models[client_idx].state_dict()[key].data.copy_(server_model.state_dict()[key])
-        elif args.mode.lower() in ['fedgcr', 'ablation', 'only_dcnet']:
+        elif args.mode.lower() in ['ccop', 'ablation', 'only_dcnet']:
             multi = 100
             q = args.q
-            if args.mode.lower() in ['only_dcnet', 'fedgcr']:
+            if args.mode.lower() in ['only_dcnet', 'ccop']:
                 gmap, cnt, cluster_pis = cluster_avg_feat(args, all_pi, domain_num)
             else:
                 gmap, cnt = cluster(args, all_feat, domain_num)
             new_weights = [wi for wi in client_weights]
-            if args.mode.lower() in ['fedgcr', 'ablation']:
+            if args.mode.lower() in ['ccop', 'ablation']:
                 gsize = [0 for _ in range(domain_num)]
                 gloss = [1e-10 for _ in range(domain_num)]
                 for i in range(client_num):
