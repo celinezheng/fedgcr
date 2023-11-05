@@ -101,6 +101,7 @@ if __name__ == '__main__':
     parser.add_argument('--split_test', action='store_true', help='whether to test split testing set')
     parser.add_argument('--si', action='store_true', help='whether to use si only')
     parser.add_argument('--test', action='store_true', help ='test the pretrained model')
+    parser.add_argument('--beta', type=float, default=0.5, help='hyper-parameter for individual and group-wise fairness trade-off')
     parser.add_argument('--w_con', type=float, default=0.1, help='lambda for contrastive loss')
     parser.add_argument('--lr', type=float, default=1e-2, help='learning rate')
     parser.add_argument('--q', type = float, default=1, help ='q value for fairness')
@@ -270,6 +271,13 @@ if __name__ == '__main__':
     all_pi = None
     # average along clusters
     cluster_pis = None
+    # gifair
+    weights = np.array(client_weights)
+    lambda_max = min(weights/(client_num - 1))
+    r = np.linspace(-(client_num - 1), client_num - 1, num=client_num)
+    weights_gi = np.zeros(client_num)
+    coeff = 0.1
+
     for a_iter in range(start_iter, args.iters):
         print(best_test)
         if args.mode.lower() == 'harmo-fl':
@@ -346,6 +354,10 @@ if __name__ == '__main__':
                 if args.mode.lower() in ['fedgcr', 'ablation']:
                     print(Eas)
                 # server_model, models, prompt_bank, gmap, cluster_pis = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, pre_clusters, all_feat, all_pi, prompt_bank)
+                if args.mode.lower() == 'gifair':
+                    weights_gi[np.argsort(train_losses)] = r
+                    client_weights = [weights[i] + coeff * lambda_max * weights_gi[i] \
+                                for i in range(client_num)]
                 server_model, models, prompt_bank, gmap, cluster_pis = communication(args, len(gmap), server_model, models, client_weights, sum_len, client_num, domain_num, Eas, train_losses, a_iter, datasets, all_feat, all_pi, prompt_bank)
                 
             # Report loss after aggregation
