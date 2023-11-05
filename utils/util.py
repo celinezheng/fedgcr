@@ -1137,7 +1137,7 @@ def communication(args, group_cnt, server_model, models, client_weights, sum_len
                         gloss[i] /= gsize[i]
                 all_weight = 0
                 power_decay = 0.9
-                base = 0.5
+                base = args.beta
                 powerI = base + (1-base) * np.float_power(power_decay, a_iter+1)
                 powerC = 1 - powerI
                 print("========")
